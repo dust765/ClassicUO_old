@@ -20,11 +20,116 @@ alt="chat on Discord"></a>
 # Project dust765
 This project is to address a problem constructed within the toxicity of this community. This is to show the community, open source projects are not meant for cliques and high school drama but rather the expansion of something greater, innovation. -A penny for your thoughts, the adder that prays beneath the rose.
 
-# Features
+# art / hue changes
 
-Most features in the options or macros need no explanation.
+Stealth footsteps color
 
-Razor lasttarget string - set this to the same lasttarget overhead string as set in Razor, so the ClassicUO lasttarget will be the same as in Razor.
+Energy Bolt - art and color
+
+Gold - art and color
+
+Tree to stumps / tiles and color
+
+Blockers to stumps / tiles and color
+
+# visual helpers
+
+Highlight tiles at range
+
+Highlight tiles at range if spell is up
+
+Preview fields and wall of stone
+
+Glowing weapons
+
+Color own aura by HP
+
+Highlight lasttarget (more colors and options)
+
+# healthbar
+
+highlight lasttarget healthbar
+
+color border by state
+
+flashing outline (many options)
+
+# cursor
+
+Show spell on cursor (and runout countdown)
+
+# overhead / underchar (start)
+
+Distance
+
+Summon timer (also on healthbar)
+
+Peace timer (also on healthbar)
+
+Hamstrung timer (also on healthbar)
+
+# healthbar
+
+old healthbars
+
+mana / stamina lines, for self and party, 
+
+bigger version and transparency
+
+
+# misc
+
+Inferno bridge solver
+
+Offscreen targeting
+
+Razor lasttarget sync (Razor lasttarget string - set this to the same lasttarget overhead string as set in Razor, so the ClassicUO lasttarget will be the same as in Razor.)
+
+Black Outline for statics
+
+Ignore stamina check
+
+# macros
+
+ObjectInfo (-info command)
+
+GrabFriendlyBars, GrabEnemyBars, GrabPartyAllyBars (grab all bars with hotkey)
+
+AutoPot (one pot button)
+
+OpenCorpses (open corpses in 2 tiles)
+
+DefendSelfKey, DefendPartyKey (clever defend self or party)
+
+HighlightTileAtRange (toggle)
+
+LastTargetRC (LastTarget with RangeCheck)
+
+HideX (removes a game object)
+
+HealOnHPChange (keep pressed, casts greater heal as soon as HP change)
+
+HarmOnSwing (keep pressed, casts harm as soon as a swinganimation is issued from server)
+
+EquipManager (fast equip)
+
+SetTargetClientSide (set target client side only)
+
+UCCLinesToggleLT , UCCLinesToggleHM (toggle)
+
+CureGH (cure or gheal)
+
+AutoMeditate (toggle)
+
+CustomInterrupt (interrupt current spellcast)
+
+SetMimic_PlayerSerial (set master)
+
+OpenCorpsesSafe (open corpses in 2 tiles safe to loot)
+
+OpenJournal2 (open second journal)
+
+# Note
 
 While there is a toggle in options for offscreen targeting, it has no use and is always enabled.
 
@@ -49,6 +154,32 @@ Armorer Guild -  Auto rearm after being disarmed.
 Thiefes Guild - Disables any actions when hidden.
 
 Mages Guild - Disables any actions when a spellcursor is up.
+
+# other UI
+
+bandage gump (bandage timer UI)
+
+texture manager (arrow or halo on mobiles)
+
+wireframe view
+
+hue impassable tiles
+
+# commands
+
+type command in chat
+
+-mimic (mimic casting of master)
+
+-marker X Y (add world marker)
+
+aut add marker for T-Maps
+
+-df (defender)
+
+-automed (auto meditate)
+
+-engage (auto pathfind and attack lasttarget)
 
 
 # Added files
