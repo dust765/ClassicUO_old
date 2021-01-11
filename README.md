@@ -20,6 +20,10 @@ alt="chat on Discord"></a>
 # Project dust765
 This project is to address a problem constructed within the toxicity of this community. This is to show the community, open source projects are not meant for cliques and high school drama but rather the expansion of something greater, innovation. -A penny for your thoughts, the adder that prays beneath the rose.
 
+# feature showcase
+
+[Video Part 1 on d.tube](https://d.tube/#!/v/projectdust765/QmQbGMiorgjJEmZbnpr6UdFzzcbcKR5AHAVKJP13jG81CT)
+
 # art / hue changes
 
 Stealth footsteps color
