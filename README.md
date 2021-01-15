@@ -24,6 +24,8 @@ This project is to address a problem constructed within the toxicity of this com
 
 [Video Part 1 on d.tube](https://d.tube/#!/v/projectdust765/QmQbGMiorgjJEmZbnpr6UdFzzcbcKR5AHAVKJP13jG81CT)
 
+[Video Part 2 on d.tube](https://d.tube/#!/v/projectdust765/QmT6KmkPNp2cJUSNFgAwZb2H77fbrMny3cAav4XZF3zJLm)
+
 # art / hue changes
 
 Stealth footsteps color
@@ -870,6 +872,8 @@ comments:
 /src/Network/PacketHandlers.cs	4407
 
 /src/Network/PacketHandlers.cs	4419
+
+/src/Network/PacketHandlers.cs	5092
 
 /src/Network/Plugin.cs	436
 

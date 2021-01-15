@@ -314,6 +314,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
             if (ProfileManager.CurrentProfile.SpecialSetLastTargetCliloc)
             {
                 TargetManager.LastTargetInfo.Serial = target;
+                TargetManager.LastTargetInfo.SetEntity(target);
             }
         }
 

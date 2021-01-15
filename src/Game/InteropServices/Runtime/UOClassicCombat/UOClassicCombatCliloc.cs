@@ -304,7 +304,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 }
             }
         }
-        public void OnOwnCharacterAnimation(uint action)
+        public void OnOwnCharacterAnimation(ushort action)
         {
             UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
 
@@ -315,6 +315,15 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 UOClassicCombatBuffbar?.ClilocTriggerSwing();
                 UOClassicCombatCollection._HarmOnSwingTrigger = true;
             }
+            return;
+        }
+        public void OnOwnCharacterAnimationNew(ushort action, ushort type)
+        {
+            UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
+
+            UOClassicCombatBuffbar?.ClilocTriggerSwing();
+            UOClassicCombatCollection._HarmOnSwingTrigger = true;
+
             return;
         }
     }

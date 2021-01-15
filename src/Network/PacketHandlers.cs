@@ -3417,7 +3417,7 @@ namespace ClassicUO.Network
             if (text.StartsWith("*pacified"))
                 UOClassicCombatCollection.SetPeaceTime(text, serial);
 
-            if (text.Equals(ProfileManager.CurrentProfile.SpecialSetLastTargetClilocText.ToString()))
+            if (text.StartsWith(ProfileManager.CurrentProfile.SpecialSetLastTargetClilocText.ToString()))
                 UOClassicCombatCollection.SpecialSetLastTargetCliloc(serial);
             // ## BEGIN - END ## //
 
@@ -5088,6 +5088,11 @@ namespace ClassicUO.Network
             }
 
             mobile.AnimationFromServer = true;
+
+            // ## BEGIN - END ## //
+            if (mobile == World.Player && type == 0)
+                World.UOClassicCombatCliloc.OnOwnCharacterAnimationNew(action, type);
+            // ## BEGIN - END ## //
         }
 
         private static void KREncryptionResponse(ref PacketBufferReader p)
