@@ -300,8 +300,6 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 //HALO TEXTURE
 
                 //ARROW TEXTURE
-                if (!IsHalosEnabled)
-                    return;
                 
                 //CALC MOBILE HEIGHT FROM ANIMATION
                 AnimationsLoader.Instance.GetAnimationDimensions(mobile.AnimIndex,
