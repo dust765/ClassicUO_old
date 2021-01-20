@@ -198,7 +198,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                     {
                         GameActions.LastSpellIndexCursor = SpellDefinition.WordToTargettype[key].ID;
 
-                        break; //GET OUT OF LOOP
+                        //break; //DONT BREAK LOOP BECAUSE OF IN NOX / IN NOX GRAV
                     }
                 }
             }

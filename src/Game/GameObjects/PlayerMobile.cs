@@ -1374,7 +1374,7 @@ namespace ClassicUO.Game.GameObjects
         {
             foreach (var c in World.Items.Where(t => t.Graphic == 0x2006 && t.Distance <= range))
             {
-                if (c.LootFlag == (ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Gray | ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Green | ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Red))
+                if (c.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Gray || LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Green || LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Red)
                 {
                     ManualOpenedCorpses.Add(c.Serial);
                     GameActions.DoubleClickQueued(c.Serial); 

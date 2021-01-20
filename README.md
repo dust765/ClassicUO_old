@@ -26,6 +26,8 @@ This project is to address a problem constructed within the toxicity of this com
 
 [Video Part 2 on d.tube](https://d.tube/#!/v/projectdust765/QmT6KmkPNp2cJUSNFgAwZb2H77fbrMny3cAav4XZF3zJLm)
 
+[Video Part 3 on d.tube](https://d.tube/#!/v/projectdust765/QmbQJsHyVY5hreADsr9y1JguX78LGrSPmmaRSsQcWrkXPz)
+
 # art / hue changes
 
 Stealth footsteps color
