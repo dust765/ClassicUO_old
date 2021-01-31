@@ -112,7 +112,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                     return;
                 }
             }
-            if (text == "Their attack disarms you!")
+            if (text.StartsWith("Their attack disarms you!"))
             {
                 UOClassicCombatSelf?.ClilocTriggerGotDisarmed();
                 UOClassicCombatBuffbar?.ClilocTriggerGotDisarmed();
@@ -120,7 +120,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
             }
 
             //GOT HAMSTRUNG
-            if (text == "Their attack hamstrings you!")
+            if (text.StartsWith("Their attack hamstrings you!"))
             {
                 UOClassicCombatSelf?.ClilocTriggerGotHamstrung();
                 UOClassicCombatBuffbar?.ClilocTriggerGotHamstrung();
@@ -128,39 +128,39 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
             }
 
             //DISARM
-            if (text == "You will now attempt to disarm your opponents.")
+            if (text.StartsWith("You will now attempt to disarm your opponents."))
             {
                 UOClassicCombatSelf?.ClilocTriggerDisarmON();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmON();
                 return;
             }
-            if (text == "You refrain from making disarm attempts.")
+            if (text.StartsWith("You refrain from making disarm attempts."))
             {
                 UOClassicCombatSelf?.ClilocTriggerDisarmOFF();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmOFF();
                 return;
             }
             //SUCCESSFUL DISARM MSGES
-            if (text == "Your strike disarms your target!")
+            if (text.StartsWith("Your strike disarms your target!"))
             {
                 UOClassicCombatSelf?.ClilocTriggerDisarmStriked();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmStriked();
                 return;
             }
-            if (text == "You successfully disarm your opponent!")
+            if (text.StartsWith("You successfully disarm your opponent!"))
             {
                 UOClassicCombatSelf?.ClilocTriggerDisarmStriked();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmStriked();
                 return;
             }
             //FAILED DISARM MSGES
-            if (text == "You fail to disarm your opponent.")
+            if (text.StartsWith("You fail to disarm your opponent."))
             {
                 UOClassicCombatSelf?.ClilocTriggerDisarmFailed();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmFailed();
                 return;
             }
-            if (text == "You failed in your attempt do disarm.")
+            if (text.StartsWith("You failed in your attempt do disarm."))
             {
                 UOClassicCombatSelf?.ClilocTriggerDisarmFailed();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmFailed();
@@ -168,25 +168,25 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
             }
 
             //HAMSTRING
-            if (text == "You will now attempt to hamstring your opponents.")
+            if (text.StartsWith("You will now attempt to hamstring your opponents."))
             {
                 UOClassicCombatSelf?.ClilocTriggerHamstringON();
                 UOClassicCombatBuffbar?.ClilocTriggerHamstringON();
                 return;
             }
-            if (text == "You refrain from making hamstring attempts.")
+            if (text.StartsWith("You refrain from making hamstring attempts."))
             {
                 UOClassicCombatSelf?.ClilocTriggerHamstringOFF();
                 UOClassicCombatBuffbar?.ClilocTriggerHamstringOFF();
                 return;
             }
-            if (text == "Your attack hamstrings your target!")
+            if (text.StartsWith("Your attack hamstrings your target!"))
             {
                 UOClassicCombatSelf?.ClilocTriggerHamstringStriked();
                 UOClassicCombatBuffbar?.ClilocTriggerHamstringStriked();
                 return;
             }
-            if (text == "You fail to hamstring your opponent.")
+            if (text.StartsWith("You fail to hamstring your opponent."))
             {
                 UOClassicCombatSelf?.ClilocTriggerHamstringFailed();
                 UOClassicCombatBuffbar?.ClilocTriggerHamstringFailed();
@@ -194,12 +194,12 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
             }
 
             //TRACKING
-            if (text == "You begin hunting.")
+            if (text.StartsWith("You begin hunting."))
             {
                 UOClassicCombatSelf?.ClilocTriggerTrackingON();
                 return;
             }
-            if (text == "You stop hunting.")
+            if (text.StartsWith("You stop hunting."))
             {
                 UOClassicCombatSelf?.ClilocTriggerTrackingOFF();
                 return;
@@ -209,7 +209,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 UOClassicCombatSelf?.ClilocTriggerTrackingActive();
                 return;
             }
-            if (text == "Your target is too far away to continue tracking.")
+            if (text.StartsWith("Your target is too far away to continue tracking."))
             {
                 UOClassicCombatSelf?.ClilocTriggerTrackingInActive();
                 return;
@@ -252,17 +252,17 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 UOClassicCombatSelf?.ClilocTriggerFSHamstrungRefreshpot();
                 return;
             }
-            if (text == "You are already at full health.")
+            if (text.StartsWith("You are already at full health."))
             {
                 UOClassicCombatSelf?.ClilocTriggerFSFullHP();
                 return;
             }
-            if (text == "You are not poisoned.")
+            if (text.StartsWith("You are not poisoned."))
             {
                 UOClassicCombatSelf?.ClilocTriggerFSNoPoison();
                 return;
             }
-            if (text == "You decide against drinking this potion, as you are already at full stamina.")
+            if (text.StartsWith("You decide against drinking this potion, as you are already at full stamina."))
             {
                 UOClassicCombatSelf?.ClilocTriggerFSFullStamina();
                 return;
