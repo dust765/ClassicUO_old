@@ -233,7 +233,8 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccDisarmStrikeCooldown, _uccDisarmAttemptCooldown, _uccHamstringStrikeCooldown, _uccHamstringAttemptCooldown, _uccDisarmedCooldown, _uccHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
         private Checkbox _uccEnableBuffbar, _uccSwing, _uccDoD, _uccGotD, _uccDoH, _uccGotH, _uccClilocTrigger, _uccMacroTrigger, _uccLocked;
         private Checkbox _uccEnableLines;
-        private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled; //##TEXTUREMANAGER##//
+        private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _transparentHouses, _invisibleHouses; //##TEXTUREMANAGER##//
+        private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ;
         private Checkbox _uccEnableAL, _uccEnableGridLootColoring, _uccBEnableLootAboveID;
         private InputField _uccLootDelay, _uccPurgeDelay, _uccQueueSpeed;
         private InputField _uccLootAboveID, _uccSL_Gray, _uccSL_Blue, _uccSL_Green, _uccSL_Red;
@@ -3252,7 +3253,9 @@ namespace ClassicUO.Game.UI.Gumps
             section2.Add(_textureManagerArrowsEnabled = AddCheckBox(null, "Enable TextureManager Arrows", ProfileManager.CurrentProfile.TextureManagerArrows, startX, startY));
             startY += _textureManagerArrowsEnabled.Height + 2;
 
-            section2.Add(_wireframeView = AddCheckBox(null, "Enable WireFrame view", ProfileManager.CurrentProfile.WireFrameView, startX, startY));
+            section2.Add(AddLabel(null, "Not texture manager dependant:", startX, startY));
+
+            section2.Add(_wireframeView = AddCheckBox(null, "Enable WireFrame view (restart needed)", ProfileManager.CurrentProfile.WireFrameView, startX, startY));
             startY += _wireframeView.Height + 2;
 
             section2.Add(_hueImpassableView = AddCheckBox(null, "Hue impassable Tiles", ProfileManager.CurrentProfile.HueImpassableView, startX, startY));
@@ -3261,6 +3264,22 @@ namespace ClassicUO.Game.UI.Gumps
             section2.Add(_hueImpassableViewColorPickerBox = AddColorBox(null, startX, startY, ProfileManager.CurrentProfile.HueImpassableViewHue, ""));
             startY += _hueImpassableViewColorPickerBox.Height + 2;
             section2.AddRight(AddLabel(null, "Hue", 0, 0), 2);
+
+            section2.Add(_transparentHouses = AddCheckBox(null, "Transparent Houses (Z level):", ProfileManager.CurrentProfile.TransparentHousesEnabled, startX, startY));
+            startY += _transparentHouses.Height + 2;
+
+            section2.Add(_transparentHousesZ = AddHSlider(null, 1, 100, ProfileManager.CurrentProfile.TransparentHousesZ, startX, startY, 200));
+            startY += _transparentHousesZ.Height + 2;
+
+            section2.Add(AddLabel(null, "Transparency:", startX, startY));
+            section2.Add(_transparentHousesTransparency = AddHSlider(null, 1, 9, ProfileManager.CurrentProfile.TransparentHousesTransparency, startX, startY, 200));
+            startY += _transparentHousesTransparency.Height + 2;
+
+            section2.Add(_invisibleHouses = AddCheckBox(null, "Invisible Houses (Z level):", ProfileManager.CurrentProfile.InvisibleHousesEnabled, startX, startY));
+            startY += _invisibleHouses.Height + 2;
+
+            section2.Add(_invisibleHousesZ = AddHSlider(null, 1, 100, ProfileManager.CurrentProfile.InvisibleHousesZ, startX, startY, 200));
+            startY += _invisibleHousesZ.Height + 2;
 
             SettingsSection section3 = AddSettingsSection(box, "-----MISC-----");
             section3.Y = section2.Bounds.Bottom + 40;

@@ -173,6 +173,8 @@ wireframe view
 
 hue impassable tiles
 
+transparent / invisible house by Z level
+
 # commands
 
 type command in chat
@@ -382,6 +384,10 @@ comments:
 /src/Game/GameObjects/Views/MultiView.cs	120
 
 /src/Game/GameObjects/Views/MultiView.cs	147
+
+/src/Game/GameObjects/Views/MultiView.cs	162
+
+/src/Game/GameObjects/Views/MultiView.cs	180
 
 /src/Game/GameObjects/Views/StaticView.cs	25
 

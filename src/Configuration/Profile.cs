@@ -427,6 +427,11 @@ namespace ClassicUO.Configuration
         public ushort HueImpassableViewHue { get; set; } = 0x0044;
         public bool TextureManagerHalos { get; set; } // Halos
         public bool TextureManagerArrows { get; set; } // Arrows
+        public bool TransparentHousesEnabled { get; set; } = false;
+        public int TransparentHousesZ { get; set; }
+        public int TransparentHousesTransparency { get; set; }
+        public bool InvisibleHousesEnabled { get; set; } = false;
+        public int InvisibleHousesZ { get; set; }
         // ## BEGIN - END ## //
 
         public bool ShowJournalClient { get; set; } = true;
