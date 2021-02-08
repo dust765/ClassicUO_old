@@ -4614,6 +4614,12 @@ namespace ClassicUO.Game.UI.Gumps
             ProfileManager.CurrentProfile.TextureManagerArrows = _textureManagerArrowsEnabled.IsChecked;
             ProfileManager.CurrentProfile.TextureManagerHalos = _textureManagerHalosEnabled.IsChecked;
 
+            ProfileManager.CurrentProfile.TransparentHousesEnabled = _transparentHouses.IsChecked;
+            ProfileManager.CurrentProfile.TransparentHousesZ = _transparentHousesZ.Value;
+            ProfileManager.CurrentProfile.TransparentHousesTransparency = _transparentHousesTransparency.Value;
+            ProfileManager.CurrentProfile.InvisibleHousesEnabled = _invisibleHouses.IsChecked;
+            ProfileManager.CurrentProfile.InvisibleHousesZ = _invisibleHousesZ.Value;
+
             int.TryParse(_pullFriendlyBarsX.Text, out int pullFriendlyBarsX);
             int.TryParse(_pullFriendlyBarsY.Text, out int pullFriendlyBarsY);
             ProfileManager.CurrentProfile.PullFriendlyBars = new Point(pullFriendlyBarsX, pullFriendlyBarsY);
