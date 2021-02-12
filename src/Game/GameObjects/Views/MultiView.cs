@@ -162,20 +162,13 @@ namespace ClassicUO.Game.GameObjects
             // ## BEGIN - END ## //
             if (ProfileManager.CurrentProfile.TransparentHousesEnabled)
             {
-                if (ItemData.IsWall && (Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ)
-                    HueVector.Z = (float)ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
-
-                if (ItemData.IsSurface && (Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ)
+                if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ)
                     HueVector.Z = (float)ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
             }
-
-            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled)
+            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled && (Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ)
             {
-                if (ItemData.IsWall && (Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ)
-                    HueVector.Z = 1f;
-
-                if (ItemData.IsSurface && (Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ)
-                    HueVector.Z = 1f;
+                //DO NOT DRAW IT
+                return false;
             }
             // ## BEGIN - END ## //
 

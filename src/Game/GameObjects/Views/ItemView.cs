@@ -168,6 +168,19 @@ namespace ClassicUO.Game.GameObjects
                 HueVector.Z = 0.5f;
             }
 
+            // ## BEGIN - END ## //
+            if (ProfileManager.CurrentProfile.TransparentHousesEnabled)
+            {
+                if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ)
+                    HueVector.Z = (float)ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
+            }
+            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled && (Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ)
+            {
+                //DO NOT DRAW IT
+                return false;
+            }
+            // ## BEGIN - END ## //
+
             DrawStaticAnimated(batcher, graphic, posX, posY, ref HueVector, ref DrawTransparent, false);
 
             if (SelectedObject.Object == this || TargetManager.TargetingState == CursorTarget.MultiPlacement)

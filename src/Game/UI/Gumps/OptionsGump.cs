@@ -3265,7 +3265,7 @@ namespace ClassicUO.Game.UI.Gumps
             startY += _hueImpassableViewColorPickerBox.Height + 2;
             section2.AddRight(AddLabel(null, "Hue", 0, 0), 2);
 
-            section2.Add(_transparentHouses = AddCheckBox(null, "Transparent Houses (Z level):", ProfileManager.CurrentProfile.TransparentHousesEnabled, startX, startY));
+            section2.Add(_transparentHouses = AddCheckBox(null, "Transparent Houses and Items (Z level):", ProfileManager.CurrentProfile.TransparentHousesEnabled, startX, startY));
             startY += _transparentHouses.Height + 2;
 
             section2.Add(_transparentHousesZ = AddHSlider(null, 1, 100, ProfileManager.CurrentProfile.TransparentHousesZ, startX, startY, 200));
@@ -3275,7 +3275,7 @@ namespace ClassicUO.Game.UI.Gumps
             section2.Add(_transparentHousesTransparency = AddHSlider(null, 1, 9, ProfileManager.CurrentProfile.TransparentHousesTransparency, startX, startY, 200));
             startY += _transparentHousesTransparency.Height + 2;
 
-            section2.Add(_invisibleHouses = AddCheckBox(null, "Invisible Houses (Z level):", ProfileManager.CurrentProfile.InvisibleHousesEnabled, startX, startY));
+            section2.Add(_invisibleHouses = AddCheckBox(null, "Invisible Houses and Items (Z level):", ProfileManager.CurrentProfile.InvisibleHousesEnabled, startX, startY));
             startY += _invisibleHouses.Height + 2;
 
             section2.Add(_invisibleHousesZ = AddHSlider(null, 1, 100, ProfileManager.CurrentProfile.InvisibleHousesZ, startX, startY, 200));
