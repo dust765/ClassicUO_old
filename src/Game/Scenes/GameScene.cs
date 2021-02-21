@@ -238,6 +238,15 @@ namespace ClassicUO.Game.Scenes
                 });
 
             }
+            if (ProfileManager.CurrentProfile.UOClassicCombatLTBar)
+            {
+                UIManager.Add(new UOClassicCombatLTBar
+                {
+                    X = ProfileManager.CurrentProfile.UOClassicCombatLTBarLocation.X,
+                    Y = ProfileManager.CurrentProfile.UOClassicCombatLTBarLocation.Y
+                });
+
+            }
             if (ProfileManager.CurrentProfile.BandageGump)
             {
                 UIManager.Add(new BandageGump());

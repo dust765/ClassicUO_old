@@ -232,7 +232,7 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _uccEnableSelf, _uccBandiesPoison, _uccNoRefreshPotAfterHamstrung;
         private InputField _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccDisarmStrikeCooldown, _uccDisarmAttemptCooldown, _uccHamstringStrikeCooldown, _uccHamstringAttemptCooldown, _uccDisarmedCooldown, _uccHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
         private Checkbox _uccEnableBuffbar, _uccSwing, _uccDoD, _uccGotD, _uccDoH, _uccGotH, _uccClilocTrigger, _uccMacroTrigger, _uccLocked;
-        private Checkbox _uccEnableLines;
+        private Checkbox _uccEnableLines, _uccEnableLTBar;
         private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _transparentHouses, _invisibleHouses; //##TEXTUREMANAGER##//
         private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ;
         private Checkbox _uccEnableAL, _uccEnableGridLootColoring, _uccBEnableLootAboveID;
@@ -3195,6 +3195,10 @@ namespace ClassicUO.Game.UI.Gumps
 
             SettingsSection section = AddSettingsSection(box, "-----UI / Gumps-----");
 
+            section.Add(_uccEnableLTBar = AddCheckBox(null, "Enable UCC - LastTarget Bar", ProfileManager.CurrentProfile.UOClassicCombatLTBar, startX, startY));
+            startY += _uccEnableLTBar.Height + 2;
+            section.Add(AddLabel(null, "(Doubleklick to lock in place)", startX, startY));
+
             section.Add(_bandageGump = AddCheckBox(null, "Show gump when using bandages", ProfileManager.CurrentProfile.BandageGump, startX, startY));
             startY += _highlightContainersWhenMouseIsOver.Height + 2;
 
@@ -4493,6 +4497,31 @@ namespace ClassicUO.Game.UI.Gumps
                 }
 
                 ProfileManager.CurrentProfile.UOClassicCombatSelf = _uccEnableSelf.IsChecked;
+            }
+            //
+            if (ProfileManager.CurrentProfile.UOClassicCombatLTBar != _uccEnableLTBar.IsChecked)
+            {
+                UOClassicCombatLTBar UOClassicCombatLTBar = UIManager.GetGump<UOClassicCombatLTBar>();
+
+                if (_uccEnableLTBar.IsChecked)
+                {
+                    if (UOClassicCombatLTBar != null)
+                        UOClassicCombatLTBar.Dispose();
+
+                    UOClassicCombatLTBar = new UOClassicCombatLTBar
+                    {
+                        X = ProfileManager.CurrentProfile.UOClassicCombatLTBarLocation.X,
+                        Y = ProfileManager.CurrentProfile.UOClassicCombatLTBarLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatLTBar);
+                }
+                else
+                {
+                    if (UOClassicCombatLTBar != null)
+                        UOClassicCombatLTBar.Dispose();
+                }
+
+                ProfileManager.CurrentProfile.UOClassicCombatLTBar = _uccEnableLTBar.IsChecked;
             }
 
             ProfileManager.CurrentProfile.UOClassicCombatSelf_ActionCooldown = uint.Parse(_uccActionCooldown.Text);

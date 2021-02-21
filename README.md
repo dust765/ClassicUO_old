@@ -165,6 +165,8 @@ Mages Guild - Disables any actions when a spellcursor is up.
 
 # other UI
 
+sticky last target healthbar (healthbar that always will be your last targets healthbar)
+
 bandage gump (bandage timer UI)
 
 texture manager (arrow or halo on mobiles)

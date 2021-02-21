@@ -389,6 +389,10 @@ namespace ClassicUO.Configuration
         public bool UOClassicCombatBuffbar_DoHEnabled { get; set; } = false;
         public bool UOClassicCombatBuffbar_GotHEnabled { get; set; } = false;
         public bool UOClassicCombatBuffbar_Locked { get; set; } = true;
+        // LT BAR
+        public bool UOClassicCombatLTBar { get; set; } = false;
+        public Point UOClassicCombatLTBarLocation { get; set; } = new Point(25, 25);
+        public bool UOClassicCombatLTBar_Locked { get; set; } = false;
         // LINES
         public bool UOClassicCombatLines { get; set; } = false;
         public Point UOClassicCombatLinesLocation { get; set; } = new Point(25, 25);
