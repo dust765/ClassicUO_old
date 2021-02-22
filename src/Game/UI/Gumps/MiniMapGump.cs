@@ -1,26 +1,36 @@
 ﻿#region license
 
-// Copyright (C) 2020 ClassicUO Development Community on Github
+// Copyright (c) 2021, andreakarasho
+// All rights reserved.
 // 
-// This project is an alternative client for the game Ultima Online.
-// The goal of this is to develop a lightweight client considering
-// new technologies.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//    This product includes software developed by andreakarasho - https://github.com/andreakarasho
+// 4. Neither the name of the copyright holder nor the
+//    names of its contributors may be used to endorse or promote products
+//    derived from this software without specific prior written permission.
 // 
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-// 
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-// 
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #endregion
 
+using System;
 using System.IO;
 using System.Xml;
 using ClassicUO.Game.Data;
@@ -44,6 +54,7 @@ namespace ClassicUO.Game.UI.Gumps
         private long _timeMS;
         private bool _useLargeMap;
         private ushort _x, _y;
+        private static readonly uint[][] _blankGumpsPixels = new uint[4][];
 
         public MiniMapGump() : base(0, 0)
         {
@@ -54,19 +65,6 @@ namespace ClassicUO.Game.UI.Gumps
 
 
         public override GumpType GumpType => GumpType.MiniMap;
-
-        public override void Save(BinaryWriter writer)
-        {
-            base.Save(writer);
-            writer.Write(_useLargeMap);
-        }
-
-        public override void Restore(BinaryReader reader)
-        {
-            base.Restore(reader);
-            _useLargeMap = reader.ReadBoolean();
-            CreateMap();
-        }
 
         public override void Save(XmlTextWriter writer)
         {
@@ -84,6 +82,19 @@ namespace ClassicUO.Game.UI.Gumps
         private void CreateMap()
         {
             _gumpTexture = GumpsLoader.Instance.GetTexture(_useLargeMap ? (ushort) 5011 : (ushort) 5010);
+
+            int index = _useLargeMap ? 1 : 0;
+
+            if (_blankGumpsPixels[index] == null)
+            {
+                uint[] data = _gumpTexture.Data;
+
+                _blankGumpsPixels[index] = new uint[data.Length];
+                _blankGumpsPixels[index + 2] = new uint[data.Length];
+
+                data.CopyTo(_blankGumpsPixels[index], 0);
+            }
+
             Width = _gumpTexture.Width;
             Height = _gumpTexture.Height;
             CreateMiniMapTexture(true);
@@ -182,12 +193,29 @@ namespace ClassicUO.Game.UI.Gumps
 
                     ShaderHueTranslator.GetHueVector(ref HueVector, Notoriety.GetHue(mob.NotorietyFlag));
 
-                    batcher.Draw2D(mobilesTextureDot, x + w + gx, y + h + gy, 2, 2, ref HueVector);
+                    batcher.Draw2D
+                    (
+                        mobilesTextureDot,
+                        x + w + gx,
+                        y + h + gy,
+                        2,
+                        2,
+                        ref HueVector
+                    );
                 }
 
                 //DRAW DOT OF PLAYER
                 ResetHueVector();
-                batcher.Draw2D(SolidColorTextureCache.GetTexture(Color.White), x + w, y + h, 2, 2, ref HueVector);
+
+                batcher.Draw2D
+                (
+                    SolidColorTextureCache.GetTexture(Color.White),
+                    x + w,
+                    y + h,
+                    2,
+                    2,
+                    ref HueVector
+                );
             }
 
             return base.Draw(batcher, x, y);
@@ -210,7 +238,7 @@ namespace ClassicUO.Game.UI.Gumps
             CreateMap();
         }
 
-        private void CreateMiniMapTexture(bool force = false)
+        private unsafe void CreateMiniMapTexture(bool force = false)
         {
             if (_gumpTexture == null || _gumpTexture.IsDisposed)
             {
@@ -256,12 +284,17 @@ namespace ClassicUO.Game.UI.Gumps
 
             int maxBlockIndex = World.Map.BlocksCount;
             int mapBlockHeight = MapLoader.Instance.MapBlocksSize[World.MapIndex, 1];
-            uint[] data = GumpsLoader.Instance.GetGumpPixels(_useLargeMap ? (uint) 5011 : 5010, out _, out _);
+            int index = _useLargeMap ? 1 : 0;
 
-            Point[] table = new Point[2]
-            {
-                new Point(0, 0), new Point(0, 1)
-            };
+            _blankGumpsPixels[index].CopyTo(_blankGumpsPixels[index + 2], 0);
+          
+            uint[] data = _blankGumpsPixels[index + 2];
+
+            Point* table = stackalloc Point[2];
+            table[0].X = 0;
+            table[0].Y = 0;
+            table[1].X = 0;
+            table[1].Y = 1;
 
             for (int i = minBlockX; i <= maxBlockX; i++)
             {
@@ -339,17 +372,24 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (island && color > 0x4000)
                             {
-                                color = HuesLoader.Instance.GetColor16
-                                (
-                                    16384, (ushort) (color - 0x4000)
-                                ); //28672 is an arbitrary position in hues.mul, is the 14 position in the range
+                                color = HuesLoader.Instance.GetColor16(16384, (ushort) (color - 0x4000)); //28672 is an arbitrary position in hues.mul, is the 14 position in the range
                             }
                             else
                             {
                                 color = HuesLoader.Instance.GetRadarColorData(color);
                             }
 
-                            CreatePixels(data, 0x8000 | color, gx, gy, Width, Height, table, tableSize);
+                            CreatePixels
+                            (
+                                data,
+                                0x8000 | color,
+                                gx,
+                                gy,
+                                Width,
+                                Height,
+                                table,
+                                tableSize
+                            );
                         }
                     }
                 }
@@ -363,7 +403,7 @@ namespace ClassicUO.Game.UI.Gumps
             _mapTexture.PushData(data);
         }
 
-        private void CreatePixels
+        private unsafe void CreatePixels
         (
             uint[] data,
             int color,
@@ -371,7 +411,7 @@ namespace ClassicUO.Game.UI.Gumps
             int y,
             int w,
             int h,
-            Point[] table,
+            Point* table,
             int count
         )
         {
@@ -381,7 +421,6 @@ namespace ClassicUO.Game.UI.Gumps
             for (int i = 0; i < count; i++)
             {
                 px += table[i].X;
-
                 py += table[i].Y;
 
                 int gx = px;

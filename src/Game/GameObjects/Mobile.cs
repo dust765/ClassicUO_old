@@ -1,23 +1,32 @@
 #region license
 
-// Copyright (C) 2020 ClassicUO Development Community on Github
+// Copyright (c) 2021, andreakarasho
+// All rights reserved.
 // 
-// This project is an alternative client for the game Ultima Online.
-// The goal of this is to develop a lightweight client considering
-// new technologies.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//    This product includes software developed by andreakarasho - https://github.com/andreakarasho
+// 4. Neither the name of the copyright holder nor the
+//    names of its contributors may be used to endorse or promote products
+//    derived from this software without specific prior written permission.
 // 
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-// 
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-// 
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #endregion
 
@@ -39,7 +48,8 @@ namespace ClassicUO.Game.GameObjects
     {
         private static readonly QueuedPool<Mobile> _pool = new QueuedPool<Mobile>
         (
-            Constants.PREDICTABLE_CHUNKS, mobile =>
+            Constants.PREDICTABLE_CHUNKS,
+            mobile =>
             {
                 mobile.IsDestroyed = false;
                 mobile.Graphic = 0;
@@ -94,6 +104,8 @@ namespace ClassicUO.Game.GameObjects
                 mobile.Next = null;
                 mobile.Previous = null;
                 mobile.Name = null;
+                
+                mobile.HitsRequested = false;
 
                 mobile.CalculateRandomIdleTime();
             }
@@ -138,8 +150,7 @@ namespace ClassicUO.Game.GameObjects
 
         public bool IsDead
         {
-            get => Graphic == 0x0192 || Graphic == 0x0193 || Graphic >= 0x025F && Graphic <= 0x0260 ||
-                   Graphic == 0x2B6 || Graphic == 0x02B7 || _isDead;
+            get => Graphic == 0x0192 || Graphic == 0x0193 || Graphic >= 0x025F && Graphic <= 0x0260 || Graphic == 0x2B6 || Graphic == 0x02B7 || _isDead;
             set => _isDead = value;
         }
 
@@ -151,10 +162,7 @@ namespace ClassicUO.Game.GameObjects
             set { }
         }
 
-        public bool IsHuman => Graphic >= 0x0190 && Graphic <= 0x0193 || Graphic >= 0x00B7 && Graphic <= 0x00BA ||
-                               Graphic >= 0x025D && Graphic <= 0x0260 || Graphic == 0x029A || Graphic == 0x029B ||
-                               Graphic == 0x02B6 || Graphic == 0x02B7 || Graphic == 0x03DB || Graphic == 0x03DF ||
-                               Graphic == 0x03E2 || Graphic == 0x02E8 || Graphic == 0x02E9 || Graphic == 0x04E5;
+        public bool IsHuman => Graphic >= 0x0190 && Graphic <= 0x0193 || Graphic >= 0x00B7 && Graphic <= 0x00BA || Graphic >= 0x025D && Graphic <= 0x0260 || Graphic == 0x029A || Graphic == 0x029B || Graphic == 0x02B6 || Graphic == 0x02B7 || Graphic == 0x03DB || Graphic == 0x03DF || Graphic == 0x03E2 || Graphic == 0x02E8 || Graphic == 0x02E9 || Graphic == 0x04E5;
 
         public bool IsGargoyle => Client.Version >= ClientVersion.CV_7000 && Graphic == 0x029A || Graphic == 0x029B;
 
@@ -393,8 +401,7 @@ namespace ClassicUO.Game.GameObjects
 
                 ANIMATION_GROUPS_TYPE type = AnimationsLoader.Instance.DataIndex[graphic].Type;
 
-                if (AnimationsLoader.Instance.DataIndex[graphic].IsUOP &&
-                    !AnimationsLoader.Instance.DataIndex[graphic].IsValidMUL)
+                if (AnimationsLoader.Instance.DataIndex[graphic].IsUOP && !AnimationsLoader.Instance.DataIndex[graphic].IsValidMUL)
                 {
                     // do nothing ?
                 }
@@ -500,8 +507,7 @@ namespace ClassicUO.Game.GameObjects
 
                 if (isLowExtended && AnimationGroup == 18)
                 {
-                    if (!AnimationsLoader.Instance.IsAnimationExists(graphic, 18) &&
-                        AnimationsLoader.Instance.IsAnimationExists(graphic, 17))
+                    if (!AnimationsLoader.Instance.IsAnimationExists(graphic, 18) && AnimationsLoader.Instance.IsAnimationExists(graphic, 17))
                     {
                         AnimationGroup = GetReplacedObjectAnimation(graphic, 17);
                     }
@@ -629,16 +635,14 @@ namespace ClassicUO.Game.GameObjects
                 {
                     ushort hue = 0;
 
-                    AnimationDirection direction = AnimationsLoader.Instance.GetBodyAnimationGroup                                                                       (ref id, ref animGroup, ref hue, true)
-                                                                   .Direction[dir];
+                    AnimationDirection direction = AnimationsLoader.Instance.GetBodyAnimationGroup(ref id, ref animGroup, ref hue, true).Direction[dir];
 
                     if (direction != null && (direction.FrameCount == 0 || direction.Frames == null))
                     {
                         AnimationsLoader.Instance.LoadAnimationFrames(id, animGroup, dir, ref direction);
                     }
 
-                    if (direction != null &&
-                        (direction.Address != 0 && direction.Size != 0 && direction.FileIndex != -1 || direction.IsUOP))
+                    if (direction != null && direction.FrameCount != 0)
                     {
                         direction.LastAccessTime = Time.Ticks;
                         int fc = direction.FrameCount;
@@ -776,31 +780,17 @@ namespace ClassicUO.Game.GameObjects
                     }
 
                     int delay = (int) Time.Ticks - (int) LastStepTime;
-
-                    bool mounted = IsMounted || SpeedMode == CharacterSpeedType.FastUnmount ||
-                                   SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying;
-
+                    bool mounted = IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying;
                     bool run = step.Run;
 
-                    // seems like it makes characterd naked for some reason
-                    if (Serial != World.Player && Steps.Count > 1)
+                    // Client auto movements sync. 
+                    // When server sends more than 1 packet in an amount of time less than 100ms if mounted (or 200ms if walking mount)
+                    // we need to remove the "teleport" effect.
+                    // When delay == 0 means that we received multiple movement packets in a single frame, so the patch becomes quite useless.
+                    if (!mounted && Serial != World.Player && Steps.Count > 1 && delay > 0)
                     {
-                        if (run)
-                        {
-                            if (delay <= MovementSpeed.STEP_DELAY_MOUNT_RUN)
-                            {
-                                mounted = true;
-                            }
-                        }
-                        else
-                        {
-                            if (delay <= MovementSpeed.STEP_DELAY_MOUNT_WALK)
-                            {
-                                mounted = true;
-                            }
-                        }
+                        mounted = delay <= (run ? MovementSpeed.STEP_DELAY_MOUNT_RUN : MovementSpeed.STEP_DELAY_MOUNT_WALK);
                     }
-
 
                     int maxDelay = MovementSpeed.TimeToCompleteMovement(run, mounted) - (int) Client.Game.FrameDelay[1];
 
@@ -874,8 +864,7 @@ namespace ClassicUO.Game.GameObjects
 
                                     for (int i = 0; i < count; i++)
                                     {
-                                        World.Player.Walker.StepInfos[sequence - 1] =
-                                            World.Player.Walker.StepInfos[sequence];
+                                        World.Player.Walker.StepInfos[sequence - 1] = World.Player.Walker.StepInfos[sequence];
 
                                         sequence++;
                                     }
@@ -933,8 +922,7 @@ namespace ClassicUO.Game.GameObjects
             {
                 int result = 0;
 
-                if (IsHuman && !IsMounted && !IsFlying && !TestStepNoChangeDirection
-                    (this, GetGroupForAnimation(this, isParent: true)))
+                if (IsHuman && !IsMounted && !IsFlying && !TestStepNoChangeDirection(this, GetGroupForAnimation(this, isParent: true)))
                 {
                     GameObject start = this;
 
@@ -1005,7 +993,19 @@ namespace ClassicUO.Game.GameObjects
                                 case 0x0CF4:
                                 case 0x0CF6:
                                 case 0x0CF7:
+                                case 0x0E50:
+                                case 0x0E51:
+                                case 0x0E52:
+                                case 0x0E53:
+                                case 0x1049:
+                                case 0x104A:
                                 case 0x11FC:
+                                case 0x1207:
+                                case 0x1208:
+                                case 0x1209:
+                                case 0x120A:
+                                case 0x120B:
+                                case 0x120C:
                                 case 0x1218:
                                 case 0x1219:
                                 case 0x121A:
@@ -1048,48 +1048,71 @@ namespace ClassicUO.Game.GameObjects
                                 case 0x3089:
                                 case 0x308A:
                                 case 0x308B:
+                                case 0x319A:
+                                case 0x319B:
                                 case 0x35ED:
                                 case 0x35EE:
                                 case 0x3DFF:
                                 case 0x3E00:
+                                case 0x4023:
+                                case 0x4024:
+                                case 0x4027:
+                                case 0x4028:
+                                case 0x4029:
+                                case 0x402A:
+                                case 0x4BDC:
+                                case 0x4C1B:
+                                case 0x4C1E:
+                                case 0x4C80:
+                                case 0x4C81:
+                                case 0x4C82:
+                                case 0x4C83:
+                                case 0x4C84:
+                                case 0x4C85:
+                                case 0x4C86:
+                                case 0x4C87:
+                                case 0x4C88:
+                                case 0x4C89:
+                                case 0x4C8A:
+                                case 0x4C8B:
+                                case 0x4C8C:
                                 case 0x4C8D:
                                 case 0x4C8E:
                                 case 0x4C8F:
-                                case 0x4C1E:
-                                case 0xA05F:
-                                case 0xA05E:
-                                case 0xA05D:
-                                case 0xA05C:
-                                case 0x9EA2:
-                                case 0x9EA1:
+                                case 0x4DE0:
+                                case 0x63BC:
+                                case 0x63BD:
+                                case 0x63C3:
+                                case 0x63C4:
+                                case 0x996C:
+                                case 0x9977:
+                                case 0x9C57:
+                                case 0x9C58:
+                                case 0x9C59:
+                                case 0x9C5A:
+                                case 0x9C5D:
+                                case 0x9C5E:
+                                case 0x9C5F:
+                                case 0x9C60:
+                                case 0x9C61:
+                                case 0x9C62:
+                                case 0x9E8E:
+                                case 0x9E8F:
+                                case 0x9E90:
+                                case 0x9E91:
                                 case 0x9E9F:
                                 case 0x9EA0:
-                                case 0x9E91:
-                                case 0x9E90:
-                                case 0x9E8F:
-                                case 0x9E8E:
-                                case 0x9C62:
-                                case 0x9C61:
-                                case 0x9C60:
-                                case 0x9C5F:
-                                case 0x9C5E:
-                                case 0x9C5D:
-                                case 0x9C5A:
-                                case 0x9C59:
-                                case 0x9C58:
-                                case 0x9C57:
-                                case 0x402A:
-                                case 0x4029:
-                                case 0x4028:
-                                case 0x4027:
-                                case 0x4023:
-                                case 0x4024:
-                                case 0x4C1B:
-                                case 0x7132:
-                                case 0x71C2:
-                                case 0x9977:
-                                case 0x996C:
-                                    //case 0x4C1F:
+                                case 0x9EA1:
+                                case 0x9EA2:
+                                case 0xA05C:
+                                case 0xA05D:
+                                case 0xA05E:
+                                case 0xA05F:
+                                case 0xA211:
+                                case 0xA4EA:
+                                case 0xA4EB:
+                                case 0xA586:
+                                case 0xA587:
 
                                     for (int i = 0; i < AnimationsLoader.Instance.SittingInfos.Length; i++)
                                     {
@@ -1152,10 +1175,19 @@ namespace ClassicUO.Game.GameObjects
 
             AnimationsLoader.Instance.GetAnimationDimensions
             (
-                AnimIndex, GetGraphicForAnimation(),
-                /*(byte) m.GetDirectionForAnimation()*/ 0,
-                /*Mobile.GetGroupForAnimation(m, isParent:true)*/ 0, IsMounted,
-                /*(byte) m.AnimIndex*/ 0, out _, out int centerY, out _, out int height
+                AnimIndex,
+                GetGraphicForAnimation(),
+                /*(byte) m.GetDirectionForAnimation()*/
+                0,
+                /*Mobile.GetGroupForAnimation(m, isParent:true)*/
+                0,
+                IsMounted,
+                /*(byte) m.AnimIndex*/
+                0,
+                out _,
+                out int centerY,
+                out _,
+                out int height
             );
 
             p.X += (int) Offset.X + 22;

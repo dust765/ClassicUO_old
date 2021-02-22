@@ -1,23 +1,32 @@
 #region license
 
-// Copyright (C) 2020 ClassicUO Development Community on Github
+// Copyright (c) 2021, andreakarasho
+// All rights reserved.
 // 
-// This project is an alternative client for the game Ultima Online.
-// The goal of this is to develop a lightweight client considering
-// new technologies.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//    This product includes software developed by andreakarasho - https://github.com/andreakarasho
+// 4. Neither the name of the copyright holder nor the
+//    names of its contributors may be used to endorse or promote products
+//    derived from this software without specific prior written permission.
 // 
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-// 
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-// 
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #endregion
 
@@ -179,12 +188,7 @@ namespace ClassicUO.Configuration
         public int DragSelectModifierKey { get; set; } // 0 = none, 1 = control, 2 = shift
         public bool OverrideContainerLocation { get; set; }
 
-        public int
-            OverrideContainerLocationSetting
-        {
-            get;
-            set;
-        } // 0 = container position, 1 = top right of screen, 2 = last dragged position, 3 = remember every container
+        public int OverrideContainerLocationSetting { get; set; } // 0 = container position, 1 = top right of screen, 2 = last dragged position, 3 = remember every container
 
         public Point OverrideContainerLocationPosition { get; set; } = new Point(200, 200);
         public bool DragSelectHumanoidsOnly { get; set; }
@@ -435,125 +439,7 @@ namespace ClassicUO.Configuration
         {
             List<Gump> gumps = new List<Gump>();
 
-
-            // #########################################################
-            // [FILE_FIX]
-            // TODO: this code is a workaround to port old macros to the new xml system.
-            string skillsGroupsPath = Path.Combine(path, "skillsgroups.bin");
-
-            if (File.Exists(skillsGroupsPath))
-            {
-                try
-                {
-                    using (BinaryReader reader = new BinaryReader(File.OpenRead(skillsGroupsPath)))
-                    {
-                        int version = reader.ReadInt32();
-
-                        int groupCount = reader.ReadInt32();
-
-                        for (int i = 0; i < groupCount; i++)
-                        {
-                            int entriesCount = reader.ReadInt32();
-                            string groupName = reader.ReadUTF8String(reader.ReadInt32());
-
-                            SkillsGroup g = new SkillsGroup();
-                            g.Name = groupName;
-
-                            for (int j = 0; j < entriesCount; j++)
-                            {
-                                byte idx = (byte) reader.ReadInt32();
-                                g.Add(idx);
-                            }
-
-                            g.Sort();
-
-                            SkillsGroupManager.Add(g);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    SkillsGroupManager.MakeDefault();
-                    Log.Error(e.StackTrace);
-                }
-
-
-                SkillsGroupManager.Save();
-
-                try
-                {
-                    File.Delete(skillsGroupsPath);
-                }
-                catch
-                {
-                }
-            }
-
-            string binpath = Path.Combine(path, "gumps.bin");
-
-            if (File.Exists(binpath))
-            {
-                using (BinaryReader reader = new BinaryReader(File.OpenRead(binpath)))
-                {
-                    if (reader.BaseStream.Position + 12 < reader.BaseStream.Length)
-                    {
-                        GumpsVersion = reader.ReadUInt32();
-                        uint empty = reader.ReadUInt32();
-
-                        int count = reader.ReadInt32();
-
-                        for (int i = 0; i < count; i++)
-                        {
-                            try
-                            {
-                                int typeLen = reader.ReadUInt16();
-                                string typeName = reader.ReadUTF8String(typeLen);
-                                int x = reader.ReadInt32();
-                                int y = reader.ReadInt32();
-
-                                Type type = Type.GetType(typeName, true);
-                                Gump gump = (Gump) Activator.CreateInstance(type);
-                                gump.Restore(reader);
-                                gump.X = x;
-                                gump.Y = y;
-
-                                //gump.SetInScreen();
-
-                                if (gump.LocalSerial != 0)
-                                {
-                                    UIManager.SavePosition(gump.LocalSerial, new Point(x, y));
-                                }
-
-                                if (!gump.IsDisposed)
-                                {
-                                    gumps.Add(gump);
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                Log.Error(e.StackTrace);
-                            }
-                        }
-                    }
-                }
-
-                SaveGumps(path);
-
-                gumps.Clear();
-
-                try
-                {
-                    File.Delete(binpath);
-                }
-                catch
-                {
-                }
-            }
-            // #########################################################
-
-
             // load skillsgroup
-            //SkillsGroupManager.Load();
             SkillsGroupManager.Load();
 
             // load gumps
@@ -801,8 +687,7 @@ namespace ClassicUO.Configuration
 
                                     if (!gump.IsDisposed)
                                     {
-                                        if (UIManager.AnchorManager[gump] == null && ancoGroup.IsEmptyDirection
-                                            (matrix_x, matrix_y))
+                                        if (UIManager.AnchorManager[gump] == null && ancoGroup.IsEmptyDirection(matrix_x, matrix_y))
                                         {
                                             gumps.Add(gump);
                                             UIManager.AnchorManager[gump] = ancoGroup;

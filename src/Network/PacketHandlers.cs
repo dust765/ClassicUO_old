@@ -1,29 +1,39 @@
 #region license
 
-// Copyright (C) 2020 ClassicUO Development Community on Github
+// Copyright (c) 2021, andreakarasho
+// All rights reserved.
 // 
-// This project is an alternative client for the game Ultima Online.
-// The goal of this is to develop a lightweight client considering
-// new technologies.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//    This product includes software developed by andreakarasho - https://github.com/andreakarasho
+// 4. Neither the name of the copyright holder nor the
+//    names of its contributors may be used to endorse or promote products
+//    derived from this software without specific prior written permission.
 // 
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-// 
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-// 
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #endregion
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using ClassicUO.Configuration;
 using ClassicUO.Game;
@@ -205,7 +215,6 @@ namespace ClassicUO.Network
             Handlers.Add(0x85, ReceiveLoginRejection);
             Handlers.Add(0x53, ReceiveLoginRejection);
         }
-
 
 
         public static void SendMegaClilocRequests()
@@ -429,9 +438,11 @@ namespace ClassicUO.Network
                             {
                                 GameActions.Print
                                 (
-                                    string.Format
-                                        (ResGeneral.Your0HasChangedBy1ItIsNow2, ResGeneral.Strength, deltaStr, str),
-                                    0x0170, MessageType.System, 3, false
+                                    string.Format(ResGeneral.Your0HasChangedBy1ItIsNow2, ResGeneral.Strength, deltaStr, str),
+                                    0x0170,
+                                    MessageType.System,
+                                    3,
+                                    false
                                 );
                             }
 
@@ -439,9 +450,11 @@ namespace ClassicUO.Network
                             {
                                 GameActions.Print
                                 (
-                                    string.Format
-                                        (ResGeneral.Your0HasChangedBy1ItIsNow2, ResGeneral.Dexterity, deltaDex, dex),
-                                    0x0170, MessageType.System, 3, false
+                                    string.Format(ResGeneral.Your0HasChangedBy1ItIsNow2, ResGeneral.Dexterity, deltaDex, dex),
+                                    0x0170,
+                                    MessageType.System,
+                                    3,
+                                    false
                                 );
                             }
 
@@ -449,10 +462,11 @@ namespace ClassicUO.Network
                             {
                                 GameActions.Print
                                 (
-                                    string.Format
-                                    (
-                                        ResGeneral.Your0HasChangedBy1ItIsNow2, ResGeneral.Intelligence, deltaInt, intell
-                                    ), 0x0170, MessageType.System, 3, false
+                                    string.Format(ResGeneral.Your0HasChangedBy1ItIsNow2, ResGeneral.Intelligence, deltaInt, intell),
+                                    0x0170,
+                                    MessageType.System,
+                                    3,
+                                    false
                                 );
                             }
                         }
@@ -506,44 +520,31 @@ namespace ClassicUO.Network
 
                         if (type >= 6)
                         {
-                            World.Player.MaxPhysicResistence =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.MaxPhysicResistence = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.MaxFireResistence =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.MaxFireResistence = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.MaxColdResistence =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.MaxColdResistence = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.MaxPoisonResistence =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.MaxPoisonResistence = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.MaxEnergyResistence =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.MaxEnergyResistence = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.DefenseChanceIncrease =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.DefenseChanceIncrease = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.MaxDefenseChanceIncrease =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.MaxDefenseChanceIncrease = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.HitChanceIncrease =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.HitChanceIncrease = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.SwingSpeedIncrease =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.SwingSpeedIncrease = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.DamageIncrease =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.DamageIncrease = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.LowerReagentCost =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.LowerReagentCost = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.SpellDamageIncrease =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.SpellDamageIncrease = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
-                            World.Player.FasterCastRecovery =
-                                p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
+                            World.Player.FasterCastRecovery = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
 
                             World.Player.FasterCasting = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
                             World.Player.LowerManaCost = p.Position + 2 > p.Length ? (short) 0 : (short) p.ReadUShort();
@@ -725,7 +726,19 @@ namespace ClassicUO.Network
 
             UpdateGameObject
             (
-                serial, graphic, graphicInc, count, x, y, z, (Direction) direction, hue, (Flags) flags, count, type, 1
+                serial,
+                graphic,
+                graphicInc,
+                count,
+                x,
+                y,
+                z,
+                (Direction) direction,
+                hue,
+                (Flags) flags,
+                count,
+                type,
+                1
             );
         }
 
@@ -733,8 +746,7 @@ namespace ClassicUO.Network
         {
             if (ProfileManager.CurrentProfile == null)
             {
-                ProfileManager.Load
-                    (World.ServerName, LoginScene.Account, Settings.GlobalSettings.LastCharacterName.Trim());
+                ProfileManager.Load(World.ServerName, LoginScene.Account, Settings.GlobalSettings.LastCharacterName.Trim());
             }
 
             if (World.Player != null)
@@ -776,14 +788,7 @@ namespace ClassicUO.Network
             {
                 if (ProfileManager.CurrentProfile != null)
                 {
-                    NetClient.Socket.Send
-                    (
-                        new PGameWindowSize
-                        (
-                            (uint) ProfileManager.CurrentProfile.GameWindowSize.X,
-                            (uint) ProfileManager.CurrentProfile.GameWindowSize.Y
-                        )
-                    );
+                    NetClient.Socket.Send(new PGameWindowSize((uint) ProfileManager.CurrentProfile.GameWindowSize.X, (uint) ProfileManager.CurrentProfile.GameWindowSize.Y));
                 }
 
                 NetClient.Socket.Send(new PLanguage("ENU"));
@@ -826,8 +831,7 @@ namespace ClassicUO.Network
                 text = string.Empty;
             }
 
-            if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF &&
-                name.StartsWith("SYSTEM"))
+            if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF && name.StartsWith("SYSTEM"))
             {
                 NetClient.Socket.Send(new PACKTalk());
 
@@ -836,8 +840,7 @@ namespace ClassicUO.Network
 
             TextType text_type = TextType.SYSTEM;
 
-            if (type == MessageType.System || serial == 0xFFFF_FFFF || serial == 0 ||
-                name.ToLower() == "system" && entity == null)
+            if (type == MessageType.System || serial == 0xFFFF_FFFF || serial == 0 || name.ToLower() == "system" && entity == null)
             {
                 // do nothing
             }
@@ -852,7 +855,16 @@ namespace ClassicUO.Network
             }
 
 
-            MessageManager.HandleMessage(entity, text, name, hue, type, (byte) font, text_type);
+            MessageManager.HandleMessage
+            (
+                entity,
+                text,
+                name,
+                hue,
+                type,
+                (byte) font,
+                text_type
+            );
         }
 
         private static void DeleteObject(ref PacketBufferReader p)
@@ -912,8 +924,7 @@ namespace ClassicUO.Network
 
                     UIManager.GetGump<ContainerGump>(cont)?.RequestUpdateContents();
 
-                    if (top != null && top.Graphic == 0x2006 && (ProfileManager.CurrentProfile.GridLootType == 1 ||
-                                                                 ProfileManager.CurrentProfile.GridLootType == 2))
+                    if (top != null && top.Graphic == 0x2006 && (ProfileManager.CurrentProfile.GridLootType == 1 || ProfileManager.CurrentProfile.GridLootType == 2))
                     {
                         UIManager.GetGump<GridLootGump>(cont)?.RequestUpdateContents();
                     }
@@ -1008,7 +1019,19 @@ namespace ClassicUO.Network
             Direction direction = (Direction) p.ReadByte();
             sbyte z = p.ReadSByte();
 
-            UpdatePlayer(serial, graphic, graphic_inc, hue, flags, x, y, z, serverID, direction);
+            UpdatePlayer
+            (
+                serial,
+                graphic,
+                graphic_inc,
+                hue,
+                flags,
+                x,
+                y,
+                z,
+                serverID,
+                direction
+            );
         }
 
         private static void DenyWalk(ref PacketBufferReader p)
@@ -1112,14 +1135,39 @@ namespace ClassicUO.Network
             if (!SerialHelper.IsValid(source) || !SerialHelper.IsValid(dest))
             {
                 effect = new MovingEffect
-                    (source, dest, sourceX, sourceY, sourceZ, destX, destY, destZ, graphic, hue, true, 5)
-                    {
-                        Duration = Time.Ticks + 5000
-                    };
+                (
+                    source,
+                    dest,
+                    sourceX,
+                    sourceY,
+                    sourceZ,
+                    destX,
+                    destY,
+                    destZ,
+                    graphic,
+                    hue,
+                    true,
+                    5
+                )
+                {
+                    Duration = Time.Ticks + 5000
+                };
             }
             else
             {
-                effect = new DragEffect(source, dest, sourceX, sourceY, sourceZ, destX, destY, destZ, graphic, hue)
+                effect = new DragEffect
+                (
+                    source,
+                    dest,
+                    sourceX,
+                    sourceY,
+                    sourceZ,
+                    destX,
+                    destY,
+                    destZ,
+                    graphic,
+                    hue
+                )
                 {
                     Duration = Time.Ticks + 5000
                 };
@@ -1211,7 +1259,16 @@ namespace ClassicUO.Network
                     {
                         Item it = (Item) first;
 
-                        gump.AddItem(it.Serial, it.Graphic, it.Hue, it.Amount, it.Price, it.Name, false);
+                        gump.AddItem
+                        (
+                            it.Serial,
+                            it.Graphic,
+                            it.Hue,
+                            it.Amount,
+                            it.Price,
+                            it.Name,
+                            false
+                        );
 
                         if (reverse)
                         {
@@ -1230,8 +1287,7 @@ namespace ClassicUO.Network
 
                 if (item != null)
                 {
-                    if (item.IsCorpse && (ProfileManager.CurrentProfile.GridLootType == 1 ||
-                                          ProfileManager.CurrentProfile.GridLootType == 2))
+                    if (item.IsCorpse && (ProfileManager.CurrentProfile.GridLootType == 1 || ProfileManager.CurrentProfile.GridLootType == 2))
                     {
                         //UIManager.GetGump<GridLootGump>(serial)?.Dispose();
                         //UIManager.Add(new GridLootGump(serial));
@@ -1248,8 +1304,7 @@ namespace ClassicUO.Network
                     int x, y;
 
                     // TODO: check client version ?
-                    if (Client.Version >= Data.ClientVersion.CV_706000 && ProfileManager.CurrentProfile != null &&
-                        ProfileManager.CurrentProfile.UseLargeContainerGumps)
+                    if (Client.Version >= Data.ClientVersion.CV_706000 && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.UseLargeContainerGumps)
                     {
                         GumpsLoader loader = GumpsLoader.Instance;
 
@@ -1401,7 +1456,16 @@ namespace ClassicUO.Network
             uint containerSerial = p.ReadUInt();
             ushort hue = p.ReadUShort();
 
-            AddItemToContainer(serial, graphic, amount, x, y, hue, containerSerial);
+            AddItemToContainer
+            (
+                serial,
+                graphic,
+                amount,
+                x,
+                y,
+                hue,
+                containerSerial
+            );
         }
 
         private static void DenyMoveItem(ref PacketBufferReader p)
@@ -1431,8 +1495,13 @@ namespace ClassicUO.Network
 
                             AddItemToContainer
                             (
-                                ItemHold.Serial, ItemHold.Graphic, ItemHold.TotalAmount, ItemHold.X, ItemHold.Y,
-                                ItemHold.Hue, ItemHold.Container
+                                ItemHold.Serial,
+                                ItemHold.Graphic,
+                                ItemHold.TotalAmount,
+                                ItemHold.X,
+                                ItemHold.Y,
+                                ItemHold.Hue,
+                                ItemHold.Container
                             );
 
                             UIManager.GetGump<ContainerGump>(ItemHold.Container)?.RequestUpdateContents();
@@ -1508,7 +1577,12 @@ namespace ClassicUO.Network
             {
                 MessageManager.HandleMessage
                 (
-                    null, ServerErrorMessages.GetError(p.ID, code), string.Empty, 0x03b2, MessageType.System, 3,
+                    null,
+                    ServerErrorMessages.GetError(p.ID, code),
+                    string.Empty,
+                    0x03b2,
+                    MessageType.System,
+                    3,
                     TextType.SYSTEM
                 );
             }
@@ -1671,9 +1745,7 @@ namespace ClassicUO.Network
 
             const int TIME_TURN_TO_LASTTARGET = 2000;
 
-            if (TargetManager.LastAttack == defenders && World.Player.InWarMode &&
-                World.Player.Walker.LastStepRequestTime + TIME_TURN_TO_LASTTARGET < Time.Ticks &&
-                World.Player.Steps.Count == 0)
+            if (TargetManager.LastAttack == defenders && World.Player.InWarMode && World.Player.Walker.LastStepRequestTime + TIME_TURN_TO_LASTTARGET < Time.Ticks && World.Player.Steps.Count == 0)
             {
                 Mobile enemy = World.Mobiles.Get(defenders);
 
@@ -1695,7 +1767,6 @@ namespace ClassicUO.Network
 
         private static void Unknown_0x32(ref PacketBufferReader p)
         {
-
         }
 
         private static void UpdateSkills(ref PacketBufferReader p)
@@ -1726,8 +1797,7 @@ namespace ClassicUO.Network
 
                 SkillsLoader.Instance.SortedSkills.AddRange(SkillsLoader.Instance.Skills);
 
-                SkillsLoader.Instance.SortedSkills.Sort
-                    ((a, b) => string.Compare(a.Name, b.Name, StringComparison.InvariantCulture));
+                SkillsLoader.Instance.SortedSkills.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.InvariantCulture));
             }
             else
             {
@@ -1817,19 +1887,22 @@ namespace ClassicUO.Network
                             {
                                 float change = realVal / 10.0f - skill.Value;
 
-                                if (change != 0.0f && !float.IsNaN(change) && 
-                                    ProfileManager.CurrentProfile != null && 
-                                    ProfileManager.CurrentProfile.ShowSkillsChangedMessage && 
-                                    Math.Abs(change) >= ProfileManager.CurrentProfile.ShowSkillsChangedDeltaValue)
+                                if (change != 0.0f && !float.IsNaN(change) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ShowSkillsChangedMessage && Math.Abs(change) >= ProfileManager.CurrentProfile.ShowSkillsChangedDeltaValue)
                                 {
                                     GameActions.Print
                                     (
                                         string.Format
                                         (
-                                            ResGeneral.YourSkillIn0Has1By2ItIsNow3, skill.Name,
-                                            change < 0 ? ResGeneral.Decreased : ResGeneral.Increased, Math.Abs(change),
+                                            ResGeneral.YourSkillIn0Has1By2ItIsNow3,
+                                            skill.Name,
+                                            change < 0 ? ResGeneral.Decreased : ResGeneral.Increased,
+                                            Math.Abs(change),
                                             skill.Value + change
-                                        ), 0x58, MessageType.System, 3, false
+                                        ),
+                                        0x58,
+                                        MessageType.System,
+                                        3,
+                                        false
                                     );
                                 }
                             }
@@ -1902,7 +1975,16 @@ namespace ClassicUO.Network
                     }
                 }
 
-                AddItemToContainer(serial, graphic, amount, x, y, hue, containerSerial);
+                AddItemToContainer
+                (
+                    serial,
+                    graphic,
+                    amount,
+                    x,
+                    y,
+                    hue,
+                    containerSerial
+                );
             }
         }
 
@@ -2090,7 +2172,15 @@ namespace ClassicUO.Network
                     case 0:
                         if (showMessage)
                         {
-                            GameActions.Print(ResGeneral.ItBeginsToRain, 1154, MessageType.System, 3, false);
+                            GameActions.Print
+                            (
+                                ResGeneral.ItBeginsToRain,
+                                1154,
+                                MessageType.System,
+                                3,
+                                false
+                            );
+
                             weather.CurrentWeather = 0;
                         }
 
@@ -2099,7 +2189,15 @@ namespace ClassicUO.Network
                     case 1:
                         if (showMessage)
                         {
-                            GameActions.Print(ResGeneral.AFierceStormApproaches, 1154, MessageType.System, 3, false);
+                            GameActions.Print
+                            (
+                                ResGeneral.AFierceStormApproaches,
+                                1154,
+                                MessageType.System,
+                                3,
+                                false
+                            );
+
                             weather.CurrentWeather = 1;
                         }
 
@@ -2108,7 +2206,15 @@ namespace ClassicUO.Network
                     case 2:
                         if (showMessage)
                         {
-                            GameActions.Print(ResGeneral.ItBeginsToSnow, 1154, MessageType.System, 3, false);
+                            GameActions.Print
+                            (
+                                ResGeneral.ItBeginsToSnow,
+                                1154,
+                                MessageType.System,
+                                3,
+                                false
+                            );
+
                             weather.CurrentWeather = 2;
                         }
 
@@ -2117,7 +2223,15 @@ namespace ClassicUO.Network
                     case 3:
                         if (showMessage)
                         {
-                            GameActions.Print(ResGeneral.AStormIsBrewing, 1154, MessageType.System, 3, false);
+                            GameActions.Print
+                            (
+                                ResGeneral.AStormIsBrewing,
+                                1154,
+                                MessageType.System,
+                                3,
+                                false
+                            );
+
                             weather.CurrentWeather = 3;
                         }
 
@@ -2169,10 +2283,7 @@ namespace ClassicUO.Network
                         }
                         else
                         {
-                            Log.Error
-                            (
-                                "BOOKGUMP: The server is sending a page number GREATER than the allowed number of pages in BOOK!"
-                            );
+                            Log.Error("BOOKGUMP: The server is sending a page number GREATER than the allowed number of pages in BOOK!");
                         }
                     }
 
@@ -2186,10 +2297,7 @@ namespace ClassicUO.Network
                 }
                 else
                 {
-                    Log.Error
-                    (
-                        "BOOKGUMP: The server is sending a page number GREATER than the allowed number of pages in BOOK!"
-                    );
+                    Log.Error("BOOKGUMP: The server is sending a page number GREATER than the allowed number of pages in BOOK!");
                 }
             }
 
@@ -2214,8 +2322,12 @@ namespace ClassicUO.Network
 
             mobile.SetAnimation
             (
-                Mobile.GetReplacedObjectAnimation(mobile.Graphic, action), delay, (byte) frame_count,
-                (byte) repeat_count, repeat, forward
+                Mobile.GetReplacedObjectAnimation(mobile.Graphic, action),
+                delay,
+                (byte) frame_count,
+                (byte) repeat_count,
+                repeat,
+                forward
             );
 
             mobile.AnimationFromServer = true;
@@ -2265,16 +2377,45 @@ namespace ClassicUO.Network
             ushort hue = 0;
             GraphicEffectBlendMode blendmode = 0;
 
-            if (p.ID != 0x70)
+            if (p.ID == 0x70)
             {
-                hue = (ushort) p.ReadUInt();
-                blendmode = (GraphicEffectBlendMode) (p.ReadUInt() % 7);
+                if (speed > 20)
+                {
+                    speed = (byte)(speed - 20);
+                }
+
+                speed = (byte)(20 - speed);
+            }
+            else
+            {
+                hue = (ushort)p.ReadUInt();
+                blendmode = (GraphicEffectBlendMode)(p.ReadUInt() % 7);
+
+                if (speed > 7)
+                {
+                    speed = 7;
+                }
             }
 
             World.AddEffect
             (
-                type, source, target, graphic, hue, srcX, srcY, srcZ, targetX, targetY, targetZ, speed, duration,
-                fixedDirection, doesExplode, false, blendmode
+                type,
+                source,
+                target,
+                graphic,
+                hue,
+                srcX,
+                srcY,
+                srcZ,
+                targetX,
+                targetY,
+                targetZ,
+                speed,
+                duration,
+                fixedDirection,
+                doesExplode,
+                false,
+                blendmode
             );
         }
 
@@ -2394,8 +2535,15 @@ namespace ClassicUO.Network
                         UIManager.Add
                         (
                             new BulletinBoardItem
-                                (boardSerial, serial, poster, subject, dataTime, msg.TrimStart(), variant)
-                                { X = 40, Y = 40 }
+                            (
+                                boardSerial,
+                                serial,
+                                poster,
+                                subject,
+                                dataTime,
+                                msg.TrimStart(),
+                                variant
+                            ) { X = 40, Y = 40 }
                         );
                     }
                 }
@@ -2549,11 +2697,6 @@ namespace ClassicUO.Network
                 return;
             }
 
-            if (!mobile.Exists)
-            {
-                GameActions.RequestMobileStatus(mobile);
-            }
-
             ushort graphic = p.ReadUShort();
             ushort x = p.ReadUShort();
             ushort y = p.ReadUShort();
@@ -2575,7 +2718,22 @@ namespace ClassicUO.Network
             }
             else
             {
-                UpdateGameObject(serial, graphic, 0, 0, x, y, z, direction, hue, flags, 0, 1, 1);
+                UpdateGameObject
+                (
+                    serial,
+                    graphic,
+                    0,
+                    0,
+                    x,
+                    y,
+                    z,
+                    direction,
+                    hue,
+                    flags,
+                    0,
+                    1,
+                    1
+                );
             }
         }
 
@@ -2608,7 +2766,22 @@ namespace ClassicUO.Network
             }
             else
             {
-                UpdateGameObject(serial, graphic, 0, 0, x, y, z, direction, hue, flags, 0, 0, 1);
+                UpdateGameObject
+                (
+                    serial,
+                    graphic,
+                    0,
+                    0,
+                    x,
+                    y,
+                    z,
+                    direction,
+                    hue,
+                    flags,
+                    0,
+                    0,
+                    1
+                );
             }
 
             Entity obj = World.Get(serial);
@@ -2736,7 +2909,7 @@ namespace ClassicUO.Network
                     ushort hue = p.ReadUShort();
                     name = p.ReadASCII(p.ReadByte());
 
-                    Rectangle rect = ArtLoader.Instance.GetTexture(graphic).Bounds;
+                    Rectangle rect = ArtLoader.Instance.GetTexture(graphic)?.Bounds ?? Rectangle.Empty;
 
                     if (rect.Width != 0 && rect.Height != 0)
                     {
@@ -2751,7 +2924,15 @@ namespace ClassicUO.Network
                             posY = (47 - posY) >> 1;
                         }
 
-                        gump.AddItem(graphic, hue, name, posX, posY, i + 1);
+                        gump.AddItem
+                        (
+                            graphic,
+                            hue,
+                            name,
+                            posX,
+                            posY,
+                            i + 1
+                        );
 
                         posX += rect.Width;
                     }
@@ -2920,16 +3101,49 @@ namespace ClassicUO.Network
                 if (MultiMapLoader.Instance.HasFacet(facet))
                 {
                     gump.SetMapTexture
-                        (MultiMapLoader.Instance.LoadFacet(facet, width, height, startX, startY, endX, endY));
+                    (
+                        MultiMapLoader.Instance.LoadFacet
+                        (
+                            facet,
+                            width,
+                            height,
+                            startX,
+                            startY,
+                            endX,
+                            endY
+                        )
+                    );
                 }
                 else
                 {
-                    gump.SetMapTexture(MultiMapLoader.Instance.LoadMap(width, height, startX, startY, endX, endY));
+                    gump.SetMapTexture
+                    (
+                        MultiMapLoader.Instance.LoadMap
+                        (
+                            width,
+                            height,
+                            startX,
+                            startY,
+                            endX,
+                            endY
+                        )
+                    );
                 }
             }
             else
             {
-                gump.SetMapTexture(MultiMapLoader.Instance.LoadMap(width, height, startX, startY, endX, endY));
+                gump.SetMapTexture
+                (
+                    MultiMapLoader.Instance.LoadMap
+                    (
+                        width,
+                        height,
+                        startX,
+                        startY,
+                        endX,
+                        endY
+                    )
+                );
             }
 
             UIManager.Add(gump);
@@ -2967,7 +3181,15 @@ namespace ClassicUO.Network
 
                 UIManager.Add
                 (
-                    new ModernBookGump(serial, page_count, title, author, editable, oldpacket)
+                    new ModernBookGump
+                    (
+                        serial,
+                        page_count,
+                        title,
+                        author,
+                        editable,
+                        oldpacket
+                    )
                     {
                         X = 100,
                         Y = 100
@@ -2999,7 +3221,14 @@ namespace ClassicUO.Network
             int x = (Client.Game.Window.ClientBounds.Width >> 1) - (rect.Width >> 1);
             int y = (Client.Game.Window.ClientBounds.Height >> 1) - (rect.Height >> 1);
 
-            ColorPickerGump gump = new ColorPickerGump(serial, graphic, x, y, null);
+            ColorPickerGump gump = new ColorPickerGump
+            (
+                serial,
+                graphic,
+                x,
+                y,
+                null
+            );
 
             UIManager.Add(gump);
         }
@@ -3064,7 +3293,16 @@ namespace ClassicUO.Network
             ushort yOff = p.ReadUShort();
             ushort zOff = p.ReadUShort();
             ushort hue = p.ReadUShort();
-            TargetManager.SetTargetingMulti(targID, multiID, xOff, yOff, zOff, hue);
+
+            TargetManager.SetTargetingMulti
+            (
+                targID,
+                multiID,
+                xOff,
+                yOff,
+                zOff,
+                hue
+            );
         }
 
         private static void ASCIIPrompt(ref PacketBufferReader p)
@@ -3136,7 +3374,16 @@ namespace ClassicUO.Network
                 //if (string.IsNullOrEmpty(item.Name))
                 //    item.Name = name;
 
-                gump.AddItem(serial, graphic, hue, amount, price, name, fromcliloc);
+                gump.AddItem
+                (
+                    serial,
+                    graphic,
+                    hue,
+                    amount,
+                    price,
+                    name,
+                    fromcliloc
+                );
             }
 
             UIManager.Add(gump);
@@ -3216,8 +3463,7 @@ namespace ClassicUO.Network
             }
 
             uint tip = p.ReadUInt();
-            string str = p.ReadASCII(p.ReadUShort())?
-                          .Replace('\r', '\n');
+            string str = p.ReadASCII(p.ReadUShort())?.Replace('\r', '\n');
 
             int x = 20;
             int y = 20;
@@ -3228,27 +3474,30 @@ namespace ClassicUO.Network
                 y = 100;
             }
 
-            UIManager.Add(new TipNoticeGump(tip, flag, str)
-            {
-                X = x,
-                Y = y
-            });
+            UIManager.Add
+            (
+                new TipNoticeGump(tip, flag, str)
+                {
+                    X = x,
+                    Y = y
+                }
+            );
         }
 
         private static void AttackCharacter(ref PacketBufferReader p)
         {
             uint serial = p.ReadUInt();
 
-            if (TargetManager.LastAttack != serial && World.InGame)
-            {
-                if (SerialHelper.IsValid(TargetManager.LastAttack))
-                {
-                    GameActions.SendCloseStatus(TargetManager.LastAttack);
-                }
+            //if (TargetManager.LastAttack != serial && World.InGame)
+            //{
 
-                TargetManager.LastAttack = serial;
-                GameActions.RequestMobileStatus(TargetManager.LastAttack);
-            }
+
+
+            //}
+
+            GameActions.SendCloseStatus(TargetManager.LastAttack);
+            TargetManager.LastAttack = serial;
+            GameActions.RequestMobileStatus(serial);
         }
 
         private static void TextEntryDialog(ref PacketBufferReader p)
@@ -3273,10 +3522,20 @@ namespace ClassicUO.Network
             string desc = p.ReadASCII(descLen);
 
             TextEntryDialogGump gump = new TextEntryDialogGump
-                (serial, 143, 172, variant, (int) maxLength, text, desc, buttonID, parentID)
-                {
-                    CanCloseWithRightClick = haveCancel
-                };
+            (
+                serial,
+                143,
+                172,
+                variant,
+                (int) maxLength,
+                text,
+                desc,
+                buttonID,
+                parentID
+            )
+            {
+                CanCloseWithRightClick = haveCancel
+            };
 
             UIManager.Add(gump);
         }
@@ -3320,8 +3579,7 @@ namespace ClassicUO.Network
             string lang = p.ReadASCII(4);
             string name = p.ReadASCII();
 
-            if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF &&
-                name.ToLower() == "system")
+            if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF && name.ToLower() == "system")
             {
                 byte[] buffer =
                 {
@@ -3350,8 +3608,7 @@ namespace ClassicUO.Network
             {
                 text_type = TextType.GUILD_ALLY;
             }
-            else if (type == MessageType.System || serial == 0xFFFF_FFFF || serial == 0 ||
-                     name.ToLower() == "system" && entity == null)
+            else if (type == MessageType.System || serial == 0xFFFF_FFFF || serial == 0 || name.ToLower() == "system" && entity == null)
             {
                 // do nothing
             }
@@ -3366,7 +3623,17 @@ namespace ClassicUO.Network
             }
 
             MessageManager.HandleMessage
-                (entity, text, name, hue, type, ProfileManager.CurrentProfile.ChatFont, text_type, true, lang);
+            (
+                entity,
+                text,
+                name,
+                hue,
+                type,
+                ProfileManager.CurrentProfile.ChatFont,
+                text_type,
+                true,
+                lang
+            );
         }
 
         private static void DisplayDeath(ref PacketBufferReader p)
@@ -3443,7 +3710,15 @@ namespace ClassicUO.Network
                 index += length;
             }
 
-            CreateGump(sender, gumpID, x, y, cmd, lines);
+            CreateGump
+            (
+                sender,
+                gumpID,
+                x,
+                y,
+                cmd,
+                lines
+            );
         }
 
         private static void ChatMessage(ref PacketBufferReader p)
@@ -3516,11 +3791,7 @@ namespace ClassicUO.Network
 
                     UIManager.GetGump<ChatGump>()?.UpdateConference();
 
-                    GameActions.Print
-                    (
-                        string.Format(ResGeneral.YouHaveJoinedThe0Channel, channelName),
-                        ProfileManager.CurrentProfile.ChatMessageHue, MessageType.Regular, 1
-                    );
+                    GameActions.Print(string.Format(ResGeneral.YouHaveJoinedThe0Channel, channelName), ProfileManager.CurrentProfile.ChatMessageHue, MessageType.Regular, 1);
 
                     break;
 
@@ -3528,11 +3799,7 @@ namespace ClassicUO.Network
                     p.Skip(4);
                     channelName = p.ReadUnicode();
 
-                    GameActions.Print
-                    (
-                        string.Format(ResGeneral.YouHaveLeftThe0Channel, channelName),
-                        ProfileManager.CurrentProfile.ChatMessageHue, MessageType.Regular, 1
-                    );
+                    GameActions.Print(string.Format(ResGeneral.YouHaveLeftThe0Channel, channelName), ProfileManager.CurrentProfile.ChatMessageHue, MessageType.Regular, 1);
 
                     break;
 
@@ -3556,8 +3823,7 @@ namespace ClassicUO.Network
                     }
 
                     //Color c = new Color(49, 82, 156, 0);
-                    GameActions.Print
-                        ($"{username}: {msgSent}", ProfileManager.CurrentProfile.ChatMessageHue, MessageType.Regular, 1);
+                    GameActions.Print($"{username}: {msgSent}", ProfileManager.CurrentProfile.ChatMessageHue, MessageType.Regular, 1);
 
                     break;
 
@@ -3623,7 +3889,17 @@ namespace ClassicUO.Network
 
             UIManager.GetGump<ProfileGump>(serial)?.Dispose();
 
-            UIManager.Add(new ProfileGump(serial, header, footer, body, serial == World.Player.Serial));
+            UIManager.Add
+            (
+                new ProfileGump
+                (
+                    serial,
+                    header,
+                    footer,
+                    body,
+                    serial == World.Player.Serial
+                )
+            );
         }
 
         private static void EnableLockedFeatures(ref PacketBufferReader p)
@@ -3841,7 +4117,16 @@ namespace ClassicUO.Network
                         }
 
                         MessageManager.HandleMessage
-                            (item, str, item.Name, 0x3B2, MessageType.Regular, 3, TextType.OBJECT, true);
+                        (
+                            item,
+                            str,
+                            item.Name,
+                            0x3B2,
+                            MessageType.Regular,
+                            3,
+                            TextType.OBJECT,
+                            true
+                        );
                     }
 
                     str = string.Empty;
@@ -3917,7 +4202,14 @@ namespace ClassicUO.Network
                     {
                         MessageManager.HandleMessage
                         (
-                            item, strBuffer.ToString(), item.Name, 0x3B2, MessageType.Regular, 3, TextType.OBJECT, true
+                            item,
+                            strBuffer.ToString(),
+                            item.Name,
+                            0x3B2,
+                            MessageType.Regular,
+                            3,
+                            TextType.OBJECT,
+                            true
                         );
                     }
 
@@ -3963,7 +4255,7 @@ namespace ClassicUO.Network
                             {
                                 StatusGumpBase.GetStatusGump()?.Dispose();
                             }
-                            
+
                             break;
 
                         case 8: // char profile
@@ -4145,8 +4437,7 @@ namespace ClassicUO.Network
                         World.HouseManager.Remove(serial);
                     }
 
-                    if (!World.HouseManager.TryGetHouse(serial, out House house) || !house.IsCustom ||
-                        house.Revision != revision)
+                    if (!World.HouseManager.TryGetHouse(serial, out House house) || !house.IsCustom || house.Revision != revision)
                     {
                         NetClient.Socket.Send(new PCustomHouseDataRequest(serial));
                     }
@@ -4242,19 +4533,25 @@ namespace ClassicUO.Network
                     ushort spell = p.ReadUShort();
                     bool active = p.ReadBool();
 
-                    UseSpellButtonGump g = UIManager.GetGump<UseSpellButtonGump>(spell);
-
-                    if (g != null)
+                    foreach (Gump g in UIManager.Gumps)
                     {
-                        if (active)
+                        if (!g.IsDisposed && g.IsVisible)
                         {
-                            g.Hue = 38;
-                            World.ActiveSpellIcons.Add(spell);
-                        }
-                        else
-                        {
-                            g.Hue = 0;
-                            World.ActiveSpellIcons.Remove(spell);
+                            if (g is UseSpellButtonGump spellButton && spellButton.SpellID == spell)
+                            {
+                                if (active)
+                                {
+                                    spellButton.Hue = 38;
+                                    World.ActiveSpellIcons.Add(spell);
+                                }
+                                else
+                                {
+                                    spellButton.Hue = 0;
+                                    World.ActiveSpellIcons.Remove(spell);
+                                }
+
+                                break;
+                            }
                         }
                     }
 
@@ -4399,7 +4696,7 @@ namespace ClassicUO.Network
 
             TextType text_type = TextType.SYSTEM;
 
-            if (serial == 0xFFFF_FFFF || serial == 0 || !string.IsNullOrEmpty(name) && name.ToLower() == "system")
+            if (serial == 0xFFFF_FFFF || serial == 0 || !string.IsNullOrEmpty(name) && string.Equals(name, "system", StringComparison.InvariantCultureIgnoreCase))
             {
                 // do nothing
             }
@@ -4414,7 +4711,17 @@ namespace ClassicUO.Network
                 }
             }
 
-            MessageManager.HandleMessage(entity, text, name, hue, type, (byte) font, text_type, true);
+            MessageManager.HandleMessage
+            (
+                entity,
+                text,
+                name,
+                hue,
+                type,
+                (byte) font,
+                text_type,
+                true
+            );
         }
 
         private static void UnicodePrompt(ref PacketBufferReader p)
@@ -4493,7 +4800,7 @@ namespace ClassicUO.Network
                 entity = World.Items.Get(serial);
             }
 
-            List<string> list = new List<string>();
+            List<(int, string)> list = new List<(int, string)>();
 
             while (p.Position < p.Length)
             {
@@ -4515,6 +4822,10 @@ namespace ClassicUO.Network
 
                 string str = ClilocLoader.Instance.Translate(cliloc, argument, true);
 
+                if (str == null)
+                {
+                    continue;
+                }
 
                 // horrible fix for (Imbued) hue
                 if (Client.Version >= Data.ClientVersion.CV_60143 && cliloc == 1080418)
@@ -4526,9 +4837,7 @@ namespace ClassicUO.Network
 
                 for (int i = 0; i < list.Count; i++)
                 {
-                    string tempstr = list[i];
-
-                    if (tempstr == str)
+                    if (list[i].Item1 == cliloc && string.Equals(list[i].Item2, str, StringComparison.Ordinal))
                     {
                         list.RemoveAt(i);
 
@@ -4536,7 +4845,7 @@ namespace ClassicUO.Network
                     }
                 }
 
-                list.Add(str);
+                list.Add((cliloc, str));
             }
 
             Item container = null;
@@ -4550,8 +4859,7 @@ namespace ClassicUO.Network
 
             if (container != null)
             {
-                inBuyList = container.Layer == Layer.ShopBuy || container.Layer == Layer.ShopBuyRestock ||
-                            container.Layer == Layer.ShopSell;
+                inBuyList = container.Layer == Layer.ShopBuy || container.Layer == Layer.ShopBuyRestock || container.Layer == Layer.ShopSell;
             }
 
 
@@ -4562,8 +4870,10 @@ namespace ClassicUO.Network
 
             if (list.Count != 0)
             {
-                foreach (string str in list)
+                foreach (var s in list)
                 {
+                    string str = s.Item2;
+
                     if (first)
                     {
                         name = str;
@@ -4601,15 +4911,30 @@ namespace ClassicUO.Network
 
         private static unsafe void ReadUnsafeCustomHouseData
         (
-            byte[] source, int sourcePosition, int dlen, int clen, int planeZ, int planeMode, short minX, short minY,
-            short maxY, ref RawList<CustomBuildObject> list
+            byte[] source,
+            int sourcePosition,
+            int dlen,
+            int clen,
+            int planeZ,
+            int planeMode,
+            short minX,
+            short minY,
+            short maxY,
+            ref RawList<CustomBuildObject> list
         )
         {
             byte* decompressedBytes = stackalloc byte[dlen];
 
             fixed (byte* srcPtr = &source[sourcePosition])
             {
-                ZLib.Decompress((IntPtr) srcPtr, clen, 0, (IntPtr) decompressedBytes, dlen);
+                ZLib.Decompress
+                (
+                    (IntPtr) srcPtr,
+                    clen,
+                    0,
+                    (IntPtr) decompressedBytes,
+                    dlen
+                );
             }
 
             _reader.SetData(decompressedBytes, dlen);
@@ -4758,8 +5083,7 @@ namespace ClassicUO.Network
 
             if (minX == 0 && minY == 0 && maxY == 0 && multi.Value.Width == 0)
             {
-                Log.Warn
-                    ("[CustomHouse (0xD8) - Invalid multi dimentions. Maybe missing some installation required files");
+                Log.Warn("[CustomHouse (0xD8) - Invalid multi dimentions. Maybe missing some installation required files");
 
                 return;
             }
@@ -4784,7 +5108,18 @@ namespace ClassicUO.Network
                 }
 
                 ReadUnsafeCustomHouseData
-                    (p.Buffer, p.Position, dlen, clen, planeZ, planeMode, minX, minY, maxY, ref list);
+                (
+                    p.Buffer,
+                    p.Position,
+                    dlen,
+                    clen,
+                    planeZ,
+                    planeMode,
+                    minX,
+                    minY,
+                    maxY,
+                    ref list
+                );
 
                 p.Skip(clen);
             }
@@ -4841,7 +5176,15 @@ namespace ClassicUO.Network
             {
                 fixed (byte* srcPtr = &p.Buffer[p.Position], destPtr = decData)
                 {
-                    ZLib.Decompress((IntPtr) srcPtr, (int) clen, 0, (IntPtr) destPtr, dlen);
+                    ZLib.Decompress
+                    (
+                        (IntPtr) srcPtr,
+                        (int) clen,
+                        0,
+                        (IntPtr) destPtr,
+                        dlen
+                    );
+
                     layout = Encoding.UTF8.GetString(destPtr, dlen);
                 }
             }
@@ -4861,21 +5204,29 @@ namespace ClassicUO.Network
                 {
                     fixed (byte* srcPtr = &p.Buffer[p.Position], destPtr = decData)
                     {
-                        ZLib.Decompress((IntPtr) srcPtr, (int) clen, 0, (IntPtr) destPtr, dlen);
+                        ZLib.Decompress
+                        (
+                            (IntPtr) srcPtr,
+                            (int) clen,
+                            0,
+                            (IntPtr) destPtr,
+                            dlen
+                        );
                     }
                 }
 
                 p.Skip((int) clen);
 
-                for (int i = 0, index = 0; i < linesNum; i++)
+                for (int i = 0, index = 0; i < linesNum && index < dlen; i++)
                 {
                     int length = ((decData[index++] << 8) | decData[index++]) << 1;
-
                     int true_length = 0;
 
-                    while (true_length < length)
+                    for (int k = 0; k < length && true_length < length && index + true_length < dlen; ++k, true_length += 2)
                     {
-                        if (((decData[index + true_length++] << 8) | decData[index + true_length++]) << 1 == '\0')
+                        ushort c = (ushort)(((decData[index + true_length] << 8) | decData[index + true_length + 1]) << 1);
+
+                        if (c == '\0')
                         {
                             break;
                         }
@@ -4887,7 +5238,15 @@ namespace ClassicUO.Network
                 }
             }
 
-            CreateGump(sender, gumpID, (int) x, (int) y, layout, lines);
+            CreateGump
+            (
+                sender,
+                gumpID,
+                (int) x,
+                (int) y,
+                layout,
+                lines
+            );
         }
 
         private static void UpdateMobileStatus(ref PacketBufferReader p)
@@ -4914,9 +5273,7 @@ namespace ClassicUO.Network
             uint serial = p.ReadUInt();
             BuffIconType ic = (BuffIconType) p.ReadUShort();
 
-            ushort iconID = (ushort) ic >= BUFF_ICON_START_NEW ?
-                (ushort) (ic - (BUFF_ICON_START_NEW - 125)) :
-                (ushort) ((ushort) ic - BUFF_ICON_START);
+            ushort iconID = (ushort) ic >= BUFF_ICON_START_NEW ? (ushort) (ic - (BUFF_ICON_START_NEW - 125)) : (ushort) ((ushort) ic - BUFF_ICON_START);
 
             if (iconID < BuffTable.Table.Length)
             {
@@ -5070,7 +5427,17 @@ namespace ClassicUO.Network
                             byte map = p.ReadByte();
                             int hits = type == 1 ? 0 : p.ReadByte();
 
-                            World.WMapManager.AddOrUpdate(serial, x, y, hits, map, type == 0x02, null, true);
+                            World.WMapManager.AddOrUpdate
+                            (
+                                serial,
+                                x,
+                                y,
+                                hits,
+                                map,
+                                type == 0x02,
+                                null,
+                                true
+                            );
                         }
                     }
 
@@ -5123,7 +5490,22 @@ namespace ClassicUO.Network
 
             if (serial != World.Player)
             {
-                UpdateGameObject(serial, graphic, graphicInc, amount, x, y, z, dir, hue, flags, unk, type, unk2);
+                UpdateGameObject
+                (
+                    serial,
+                    graphic,
+                    graphicInc,
+                    amount,
+                    x,
+                    y,
+                    z,
+                    dir,
+                    hue,
+                    flags,
+                    unk,
+                    type,
+                    unk2
+                );
 
 
                 if (graphic == 0x2006 && ProfileManager.CurrentProfile.AutoOpenCorpses)
@@ -5133,7 +5515,19 @@ namespace ClassicUO.Network
             }
             else if (p.ID == 0xF7)
             {
-                UpdatePlayer(serial, graphic, graphicInc, hue, flags, x, y, z, 0, dir);
+                UpdatePlayer
+                (
+                    serial,
+                    graphic,
+                    graphicInc,
+                    hue,
+                    flags,
+                    x,
+                    y,
+                    z,
+                    0,
+                    dir
+                );
             }
         }
 
@@ -5175,7 +5569,16 @@ namespace ClassicUO.Network
 
             if (smooth)
             {
-                BoatMovingManager.AddStep(serial, boatSpeed, movingDirection, facingDirection, x, y, (sbyte) z);
+                BoatMovingManager.AddStep
+                (
+                    serial,
+                    boatSpeed,
+                    movingDirection,
+                    facingDirection,
+                    x,
+                    y,
+                    (sbyte) z
+                );
             }
             else
             {
@@ -5245,7 +5648,14 @@ namespace ClassicUO.Network
 
                 if (smooth)
                 {
-                    BoatMovingManager.PushItemToList(serial, cSerial, x - cx, y - cy, (sbyte) (z - cz));
+                    BoatMovingManager.PushItemToList
+                    (
+                        serial,
+                        cSerial,
+                        x - cx,
+                        y - cy,
+                        (sbyte) (z - cz)
+                    );
                 }
                 else
                 {
@@ -5253,15 +5663,35 @@ namespace ClassicUO.Network
                     {
                         UpdatePlayer
                         (
-                            cSerial, ent.Graphic, 0, ent.Hue, ent.Flags, cx, cy, (sbyte) cz, 0, World.Player.Direction
+                            cSerial,
+                            ent.Graphic,
+                            0,
+                            ent.Hue,
+                            ent.Flags,
+                            cx,
+                            cy,
+                            (sbyte) cz,
+                            0,
+                            World.Player.Direction
                         );
                     }
                     else
                     {
                         UpdateGameObject
                         (
-                            cSerial, ent.Graphic, 0, 0, cx, cy, (sbyte) cz,
-                            SerialHelper.IsMobile(ent) ? ent.Direction : 0, ent.Hue, ent.Flags, 0, 0, 1
+                            cSerial,
+                            ent.Graphic,
+                            0,
+                            (ushort) (ent.Graphic == 0x2006 ? ((Item) ent).Amount : 0),
+                            cx,
+                            cy,
+                            (sbyte) cz,
+                            SerialHelper.IsMobile(ent) ? ent.Direction : 0,
+                            ent.Hue,
+                            ent.Flags,
+                            0,
+                            0,
+                            1
                         );
                     }
                 }
@@ -5371,7 +5801,15 @@ namespace ClassicUO.Network
 
 
         private static void AddItemToContainer
-            (uint serial, ushort graphic, ushort amount, ushort x, ushort y, ushort hue, uint containerSerial)
+        (
+            uint serial,
+            ushort graphic,
+            ushort amount,
+            ushort x,
+            ushort y,
+            ushort hue,
+            uint containerSerial
+        )
         {
             if (ItemHold.Serial == serial)
             {
@@ -5380,6 +5818,7 @@ namespace ClassicUO.Network
                     Console.WriteLine("ADD ITEM TO CONTAINER -- CLEAR HOLD");
                     ItemHold.Clear();
                 }
+
                 //else if (ItemHold.Graphic == graphic && ItemHold.Amount == amount &&
                 //         ItemHold.Container == containerSerial)
                 //{
@@ -5463,8 +5902,7 @@ namespace ClassicUO.Network
                         {
                             GridLootGump grid_gump = UIManager.GetGump<GridLootGump>(containerSerial);
 
-                            if (grid_gump == null && SerialHelper.IsValid
-                                (_requestedGridLoot) && _requestedGridLoot == containerSerial)
+                            if (grid_gump == null && SerialHelper.IsValid(_requestedGridLoot) && _requestedGridLoot == containerSerial)
                             {
                                 grid_gump = new GridLootGump(_requestedGridLoot);
                                 UIManager.Add(grid_gump);
@@ -5492,8 +5930,19 @@ namespace ClassicUO.Network
 
         private static void UpdateGameObject
         (
-            uint serial, ushort graphic, byte graphic_inc, ushort count, ushort x, ushort y, sbyte z,
-            Direction direction, ushort hue, Flags flagss, int UNK, byte type, ushort UNK_2
+            uint serial,
+            ushort graphic,
+            byte graphic_inc,
+            ushort count,
+            ushort x,
+            ushort y,
+            sbyte z,
+            Direction direction,
+            ushort hue,
+            Flags flagss,
+            int UNK,
+            byte type,
+            ushort UNK_2
         )
         {
             Mobile mobile = null;
@@ -5587,8 +6036,7 @@ namespace ClassicUO.Network
                 {
                     item.IsMulti = true;
 
-                    item.WantUpdateMulti =
-                        (graphic & 0x3FFF) != item.Graphic || item.X != x || item.Y != y || item.Z != z;
+                    item.WantUpdateMulti = (graphic & 0x3FFF) != item.Graphic || item.X != x || item.Y != y || item.Z != z;
 
                     item.Graphic = (ushort) (graphic & 0x3FFF);
                 }
@@ -5641,7 +6089,14 @@ namespace ClassicUO.Network
                         mobile.ClearSteps();
                     }
 
-                    if (!mobile.EnqueueStep(x, y, z, cleaned_dir, isrun))
+                    if (!mobile.EnqueueStep
+                    (
+                        x,
+                        y,
+                        z,
+                        cleaned_dir,
+                        isrun
+                    ))
                     {
                         mobile.X = x;
                         mobile.Y = y;
@@ -5677,13 +6132,21 @@ namespace ClassicUO.Network
 
             if (mobile != null)
             {
-                if (created /*|| mobile.HitsMax == 0*/)
-                {
-                    GameActions.RequestMobileStatus(serial);
-                }
-
                 mobile.AddToTile();
                 mobile.UpdateScreenPosition();
+
+                if (created)
+                {
+                    // This is actually a way to get all Hp from all new mobiles.
+                    // Real UO client does it only when LastAttack == serial.
+                    // We force to close suddenly.
+                    GameActions.RequestMobileStatus(serial);
+
+                    //if (TargetManager.LastAttack != serial)
+                    //{
+                    //    GameActions.SendCloseStatus(serial);
+                    //}
+                }
             }
             else
             {
@@ -5710,8 +6173,16 @@ namespace ClassicUO.Network
 
         private static void UpdatePlayer
         (
-            uint serial, ushort graphic, byte graph_inc, ushort hue, Flags flags, ushort x, ushort y, sbyte z,
-            ushort serverID, Direction direction
+            uint serial,
+            ushort graphic,
+            byte graph_inc,
+            ushort hue,
+            Flags flags,
+            ushort x,
+            ushort y,
+            sbyte z,
+            ushort serverID,
+            Direction direction
         )
         {
             if (serial == World.Player)
@@ -5807,7 +6278,15 @@ namespace ClassicUO.Network
             container.Items = remove_unequipped ? new_first : null;
         }
 
-        private static Control CreateGump(uint sender, uint gumpID, int x, int y, string layout, string[] lines)
+        private static Gump CreateGump
+        (
+            uint sender,
+            uint gumpID,
+            int x,
+            int y,
+            string layout,
+            string[] lines
+        )
         {
             List<string> cmdlist = _parser.GetTokens(layout);
             int cmdlen = cmdlist.Count;
@@ -5874,392 +6353,379 @@ namespace ClassicUO.Network
                     continue;
                 }
 
-                switch (gparams[0].ToLower())
+                string entry = gparams[0];
+
+                if (string.Equals(entry, "button", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    case "button":
-                        gump.Add(new Button(gparams), page);
+                    gump.Add(new Button(gparams), page);
+                }
+                else if (string.Equals(entry, "buttontileart", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add(new ButtonTileArt(gparams), page);
+                }
+                else if (string.Equals(entry, "checkertrans", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    applyCheckerTrans = true;
+                    gump.Add(new CheckerTrans(gparams), page);
+                }
+                else if (string.Equals(entry, "croppedtext", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add(new CroppedText(gparams, lines), page);
+                }
+                else if (string.Equals(entry, "gumppic", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    GumpPic pic = new GumpPic(gparams);
 
-                        break;
+                    if (gparams.Count >= 6 && gparams[5].IndexOf("virtuegumpitem", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                    {
+                        pic.ContainsByBounds = true;
+                        pic.IsVirtue = true;
 
-                    case "buttontileart":
+                        string s, lvl;
 
-                        gump.Add(new ButtonTileArt(gparams), page);
-
-                        break;
-
-                    case "checkertrans":
-                        applyCheckerTrans = true;
-                        gump.Add(new CheckerTrans(gparams), page);
-
-                        break;
-
-                    case "croppedtext":
-                        gump.Add(new CroppedText(gparams, lines), page);
-
-                        break;
-
-                    case "gumppic":
-
-                        GumpPic pic = new GumpPic(gparams);
-
-                        if (gparams.Count >= 6 && gparams[5].IndexOf("virtuegumpitem", StringComparison.InvariantCultureIgnoreCase) >= 0)
+                        switch (pic.Hue)
                         {
-                            pic.ContainsByBounds = true;
-                            pic.IsVirtue = true;
+                            case 2403:
+                                lvl = "";
 
-                            string s, lvl;
+                                break;
 
-                            switch (pic.Hue)
-                            {
-                                case 2403:
-                                    lvl = "";
+                            case 1154:
+                            case 1547:
+                            case 2213:
+                            case 235:
+                            case 18:
+                            case 2210:
+                            case 1348:
+                                lvl = "Seeker of ";
 
-                                    break;
+                                break;
 
-                                case 1154:
-                                case 1547:
-                                case 2213:
-                                case 235:
-                                case 18:
-                                case 2210:
-                                case 1348:
+                            case 2404:
+                            case 1552:
+                            case 2216:
+                            case 2302:
+                            case 2118:
+                            case 618:
+                            case 2212:
+                            case 1352:
+                                lvl = "Follower of ";
+
+                                break;
+
+                            case 43:
+                            case 53:
+                            case 1153:
+                            case 33:
+                            case 318:
+                            case 67:
+                            case 98:
+                                lvl = "Knight of ";
+
+                                break;
+
+                            case 2406:
+                                if (pic.Graphic == 0x6F)
+                                {
                                     lvl = "Seeker of ";
-
-                                    break;
-
-                                case 2404:
-                                case 1552:
-                                case 2216:
-                                case 2302:
-                                case 2118:
-                                case 618:
-                                case 2212:
-                                case 1352:
-                                    lvl = "Follower of ";
-
-                                    break;
-
-                                case 43:
-                                case 53:
-                                case 1153:
-                                case 33:
-                                case 318:
-                                case 67:
-                                case 98:
+                                }
+                                else
+                                {
                                     lvl = "Knight of ";
+                                }
 
-                                    break;
+                                break;
 
-                                case 2406:
-                                    if (pic.Graphic == 0x6F)
-                                    {
-                                        lvl = "Seeker of ";
-                                    }
-                                    else
-                                    {
-                                        lvl = "Knight of ";
-                                    }
+                            default:
+                                lvl = "";
 
-                                    break;
-
-                                default:
-                                    lvl = "";
-
-                                    break;
-                            }
-
-                            switch (pic.Graphic)
-                            {
-                                case 0x69:
-                                    s = ClilocLoader.Instance.GetString(1051000 + 2);
-
-                                    break;
-
-                                case 0x6A:
-                                    s = ClilocLoader.Instance.GetString(1051000 + 7);
-
-                                    break;
-
-                                case 0x6B:
-                                    s = ClilocLoader.Instance.GetString(1051000 + 5);
-
-                                    break;
-
-                                case 0x6D:
-                                    s = ClilocLoader.Instance.GetString(1051000 + 6);
-
-                                    break;
-
-                                case 0x6E:
-                                    s = ClilocLoader.Instance.GetString(1051000 + 1);
-
-                                    break;
-
-                                case 0x6F:
-                                    s = ClilocLoader.Instance.GetString(1051000 + 3);
-
-                                    break;
-
-                                case 0x70:
-                                    s = ClilocLoader.Instance.GetString(1051000 + 4);
-
-                                    break;
-
-                                case 0x6C:
-                                default:
-                                    s = ClilocLoader.Instance.GetString(1051000);
-
-                                    break;
-                            }
-
-                            if (string.IsNullOrEmpty(s))
-                            {
-                                s = "Unknown virtue";
-                            }
-
-                            pic.SetTooltip(lvl + s, 100);
+                                break;
                         }
 
-                        gump.Add(pic, page);
+                        switch (pic.Graphic)
+                        {
+                            case 0x69:
+                                s = ClilocLoader.Instance.GetString(1051000 + 2);
 
-                        break;
+                                break;
 
-                    case "gumppictiled":
-                        gump.Add(new GumpPicTiled(gparams), page);
+                            case 0x6A:
+                                s = ClilocLoader.Instance.GetString(1051000 + 7);
 
-                        break;
+                                break;
 
-                    case "htmlgump":
-                        gump.Add(new HtmlControl(gparams, lines), page);
+                            case 0x6B:
+                                s = ClilocLoader.Instance.GetString(1051000 + 5);
 
-                        break;
+                                break;
 
-                    case "xmfhtmlgump":
-                        gump.Add
-                        (
-                            new HtmlControl
+                            case 0x6D:
+                                s = ClilocLoader.Instance.GetString(1051000 + 6);
+
+                                break;
+
+                            case 0x6E:
+                                s = ClilocLoader.Instance.GetString(1051000 + 1);
+
+                                break;
+
+                            case 0x6F:
+                                s = ClilocLoader.Instance.GetString(1051000 + 3);
+
+                                break;
+
+                            case 0x70:
+                                s = ClilocLoader.Instance.GetString(1051000 + 4);
+
+                                break;
+
+                            case 0x6C:
+                            default:
+                                s = ClilocLoader.Instance.GetString(1051000);
+
+                                break;
+                        }
+
+                        if (string.IsNullOrEmpty(s))
+                        {
+                            s = "Unknown virtue";
+                        }
+
+                        pic.SetTooltip(lvl + s, 100);
+                    }
+
+                    gump.Add(pic, page);
+                }
+                else if (string.Equals(entry, "gumppictiled", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add(new GumpPicTiled(gparams), page);
+                }
+                else if (string.Equals(entry, "htmlgump", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add(new HtmlControl(gparams, lines), page);
+                }
+                else if (string.Equals(entry, "xmfhtmlgump", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add
+                    (
+                        new HtmlControl
                             (
-                                int.Parse(gparams[1]), int.Parse(gparams[2]), int.Parse(gparams[3]),
-                                int.Parse(gparams[4]), int.Parse(gparams[6]) == 1, int.Parse(gparams[7]) != 0,
+                                int.Parse(gparams[1]),
+                                int.Parse(gparams[2]),
+                                int.Parse(gparams[3]),
+                                int.Parse(gparams[4]),
+                                int.Parse(gparams[6]) == 1,
+                                int.Parse(gparams[7]) != 0,
                                 gparams[6] != "0" && gparams[7] == "2",
-                                ClilocLoader.Instance.GetString(int.Parse(gparams[5].Replace("#", ""))), 0, true
-                            ) { IsFromServer = true }, page
-                        );
+                                ClilocLoader.Instance.GetString(int.Parse(gparams[5].Replace("#", ""))),
+                                0,
+                                true
+                            )
+                            { IsFromServer = true },
+                        page
+                    );
+                }
+                else if (string.Equals(entry, "xmfhtmlgumpcolor", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    int color = int.Parse(gparams[8]);
 
-                        break;
+                    if (color == 0x7FFF)
+                    {
+                        color = 0x00FFFFFF;
+                    }
 
-                    case "xmfhtmlgumpcolor":
-                        int color = int.Parse(gparams[8]);
-
-                        if (color == 0x7FFF)
-                        {
-                            color = 0x00FFFFFF;
-                        }
-
-                        gump.Add
-                        (
-                            new HtmlControl
+                    gump.Add
+                    (
+                        new HtmlControl
                             (
-                                int.Parse(gparams[1]), int.Parse(gparams[2]), int.Parse(gparams[3]),
-                                int.Parse(gparams[4]), int.Parse(gparams[6]) == 1, int.Parse(gparams[7]) != 0,
+                                int.Parse(gparams[1]),
+                                int.Parse(gparams[2]),
+                                int.Parse(gparams[3]),
+                                int.Parse(gparams[4]),
+                                int.Parse(gparams[6]) == 1,
+                                int.Parse(gparams[7]) != 0,
                                 gparams[6] != "0" && gparams[7] == "2",
-                                ClilocLoader.Instance.GetString(int.Parse(gparams[5].Replace("#", ""))), color, true
-                            ) { IsFromServer = true }, page
-                        );
+                                ClilocLoader.Instance.GetString(int.Parse(gparams[5].Replace("#", ""))),
+                                color,
+                                true
+                            )
+                            { IsFromServer = true },
+                        page
+                    );
+                }
+                else if (string.Equals(entry, "xmfhtmltok", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    int color = int.Parse(gparams[7]);
 
-                        break;
+                    if (color == 0x7FFF)
+                    {
+                        color = 0x00FFFFFF;
+                    }
 
-                    case "xmfhtmltok":
-                        color = int.Parse(gparams[7]);
+                    StringBuilder sb = null;
 
-                        if (color == 0x7FFF)
+                    if (gparams.Count >= 9)
+                    {
+                        sb = new StringBuilder();
+
+                        for (int i = 9; i < gparams.Count; i++)
                         {
-                            color = 0x00FFFFFF;
+                            sb.Append('\t');
+                            sb.Append(gparams[i]);
                         }
+                    }
 
-                        StringBuilder sb = null;
-
-                        if (gparams.Count >= 9)
-                        {
-                            sb = new StringBuilder();
-
-                            for (int i = 9; i < gparams.Count; i++)
-                            {
-                                sb.Append('\t');
-                                sb.Append(gparams[i]);
-                            }
-                        }
-
-                        gump.Add
-                        (
-                            new HtmlControl
+                    gump.Add
+                    (
+                        new HtmlControl
                             (
-                                int.Parse(gparams[1]), int.Parse(gparams[2]), int.Parse(gparams[3]),
-                                int.Parse(gparams[4]), int.Parse(gparams[5]) == 1, int.Parse(gparams[6]) != 0,
+                                int.Parse(gparams[1]),
+                                int.Parse(gparams[2]),
+                                int.Parse(gparams[3]),
+                                int.Parse(gparams[4]),
+                                int.Parse(gparams[5]) == 1,
+                                int.Parse(gparams[6]) != 0,
                                 gparams[5] != "0" && gparams[6] == "2",
-                                sb == null ?
-                                    ClilocLoader.Instance.GetString(int.Parse(gparams[8].Replace("#", ""))) :
-                                    ClilocLoader.Instance.Translate
-                                    (
-                                        int.Parse(gparams[8].Replace("#", "")),
-                                        sb.ToString().Trim('@').Replace('@', '\t')
-                                    ), color, true
-                            ) { IsFromServer = true }, page
-                        );
+                                sb == null ? ClilocLoader.Instance.GetString(int.Parse(gparams[8].Replace("#", ""))) : ClilocLoader.Instance.Translate(int.Parse(gparams[8].Replace("#", "")), sb.ToString().Trim('@').Replace('@', '\t')),
+                                color,
+                                true
+                            )
+                            { IsFromServer = true },
+                        page
+                    );
+                }
+                else if (string.Equals(entry, "page", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (gparams.Count >= 2)
+                    {
+                        page = int.Parse(gparams[1]);
+                    }
+                }
+                else if (string.Equals(entry, "resizepic", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add(new ResizePic(gparams), page);
+                }
+                else if (string.Equals(entry, "text", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (gparams.Count >= 5)
+                    {
+                        gump.Add(new Label(gparams, lines), page);
+                    }
+                }
+                else if (string.Equals(entry, "textentrylimited", StringComparison.InvariantCultureIgnoreCase) ||
+                         string.Equals(entry, "textentry", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    StbTextBox textBox = new StbTextBox(gparams, lines);
 
-                        break;
+                    if (!textBoxFocused)
+                    {
+                        textBox.SetKeyboardFocus();
+                        textBoxFocused = true;
+                    }
 
-                    case "page":
+                    gump.Add(textBox, page);
+                }
+                else if (string.Equals(entry, "tilepichue", StringComparison.InvariantCultureIgnoreCase) ||
+                         string.Equals(entry, "tilepic", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add(new StaticPic(gparams), page);
+                }
+                else if (string.Equals(entry, "noclose", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.CanCloseWithRightClick = false;
+                }
+                else if (string.Equals(entry, "nodispose", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.CanCloseWithEsc = false;
+                }
+                else if (string.Equals(entry, "nomove", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.BlockMovement = true;
+                }
+                else if (string.Equals(entry, "group", StringComparison.InvariantCultureIgnoreCase) ||
+                         string.Equals(entry, "endgroup", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    group++;
+                }
+                else if (string.Equals(entry, "radio", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add(new RadioButton(group, gparams, lines), page);
+                }
+                else if (string.Equals(entry, "checkbox", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.Add(new Checkbox(gparams, lines), page);
+                }
+                else if (string.Equals(entry, "tooltip", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    string text = null;
 
-                        if (gparams.Count >= 2)
+                    if (gparams.Count > 2 && gparams[2].Length != 0)
+                    {
+                        string args = gparams[2];
+
+                        for (int i = 3; i < gparams.Count; i++)
                         {
-                            page = int.Parse(gparams[1]);
+                            args += '\t' + gparams[i];
                         }
 
-                        break;
-
-                    case "resizepic":
-                        gump.Add(new ResizePic(gparams), page);
-
-                        break;
-
-                    case "text":
-                        if (gparams.Count >= 5)
+                        if (args.Length == 0)
                         {
-                            gump.Add(new Label(gparams, lines), page);
+                            text = ClilocLoader.Instance.GetString(int.Parse(gparams[1]));
+                            Log.Error($"String '{args}' too short, something wrong with gump tooltip: {text}");
                         }
-
-                        break;
-
-                    case "textentrylimited":
-                    case "textentry":
-                        StbTextBox textBox = new StbTextBox(gparams, lines);
-
-                        if (!textBoxFocused)
+                        else
                         {
-                            textBox.SetKeyboardFocus();
-                            textBoxFocused = true;
+                            text = ClilocLoader.Instance.Translate(int.Parse(gparams[1]), args, true);
                         }
+                    }
+                    else
+                    {
+                        text = ClilocLoader.Instance.GetString(int.Parse(gparams[1]));
+                    }
 
-                        gump.Add(textBox, page);
+                    Control last = gump.Children.Count != 0 ? gump.Children[gump.Children.Count - 1] : null;
 
-                        break;
-
-                    case "tilepichue":
-                    case "tilepic":
-                        gump.Add(new StaticPic(gparams), page);
-
-                        break;
-
-                    case "noclose":
-                        gump.CanCloseWithRightClick = false;
-
-                        break;
-
-                    case "nodispose":
-                        gump.CanCloseWithEsc = false;
-
-                        break;
-
-                    case "nomove":
-                        gump.BlockMovement = true;
-
-                        break;
-
-                    case "group":
-                    case "endgroup":
-                        group++;
-
-                        break;
-
-                    case "radio":
-                        gump.Add(new RadioButton(group, gparams, lines), page);
-
-                        break;
-
-                    case "checkbox":
-                        gump.Add(new Checkbox(gparams, lines), page);
-
-                        break;
-
-                    case "tooltip":
-
-                        if (World.ClientFeatures.TooltipsEnabled)
+                    if (last != null)
+                    {
+                        if (last.HasTooltip)
                         {
-                            string text = null;
-
-                            if (gparams.Count > 2 && gparams[2].Length != 0)
+                            if (last.Tooltip is string s)
                             {
-                                string args = gparams[2];
-
-                                for (int i = 3; i < gparams.Count; i++)
-                                {
-                                    args += '\t' + gparams[i];
-                                }
-
-                                if (args.Length == 0)
-                                {
-                                    text = ClilocLoader.Instance.GetString(int.Parse(gparams[1]));
-                                    Log.Error($"String '{args}' too short, something wrong with gump tooltip: {text}");
-                                }
-                                else
-                                {
-                                    text = ClilocLoader.Instance.Translate(int.Parse(gparams[1]), args, true);
-                                }
-                            }
-                            else
-                            {
-                                text = ClilocLoader.Instance.GetString(int.Parse(gparams[1]));
-                            }
-
-                            Control last = gump.Children.Count != 0 ? gump.Children[gump.Children.Count - 1] : null;
-
-                            if (last != null)
-                            {
-                                if (last.HasTooltip)
-                                {
-                                    if (last.Tooltip is string s)
-                                    {
-                                        s += '\n' + text;
-                                        last.SetTooltip(s);
-                                    }
-                                }
-                                else
-                                {
-                                    last.SetTooltip(text);
-                                }
+                                s += '\n' + text;
+                                last.SetTooltip(s);
                             }
                         }
-
-                        break;
-
-                    case "itemproperty":
-
-                        if (World.ClientFeatures.TooltipsEnabled && gump.Children.Count != 0)
+                        else
                         {
-                            gump.Children[gump.Children.Count - 1].SetTooltip(SerialHelper.Parse(gparams[1]));
-
-                            if (uint.TryParse
-                                (gparams[1], out uint s) && (!World.OPL.TryGetRevision(s, out uint rev) || rev == 0))
-                            {
-                                AddMegaClilocRequest(s);
-                            }
+                            last.SetTooltip(text);
                         }
 
-                        break;
+                        last.Priority = ClickPriority.High;
+                    }
+                }
+                else if (string.Equals(entry, "itemproperty", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (World.ClientFeatures.TooltipsEnabled && gump.Children.Count != 0)
+                    {
+                        gump.Children[gump.Children.Count - 1].SetTooltip(SerialHelper.Parse(gparams[1]));
 
-                    case "noresize": break;
+                        if (uint.TryParse(gparams[1], out uint s) && (!World.OPL.TryGetRevision(s, out uint rev) || rev == 0))
+                        {
+                            AddMegaClilocRequest(s);
+                        }
+                    }
+                }
+                else if (string.Equals(entry, "noresize", StringComparison.InvariantCultureIgnoreCase))
+                {
 
-                    case "mastergump":
-
-                        gump.MasterGumpSerial = gparams.Count > 0 ? SerialHelper.Parse(gparams[1]) : 0;
-
-                        break;
-
-                    default:
-                        Log.Warn(gparams[0]);
-
-                        break;
+                }
+                else if (string.Equals(entry, "mastergump", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    gump.MasterGumpSerial = gparams.Count > 0 ? SerialHelper.Parse(gparams[1]) : 0;
+                }
+                else
+                {
+                    Log.Warn(gparams[0]);
                 }
             }
 
