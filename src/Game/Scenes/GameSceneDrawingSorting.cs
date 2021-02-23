@@ -32,6 +32,9 @@
 
 using System;
 using ClassicUO.Configuration;
+// ## BEGIN - END ## //
+using ClassicUO.Game.InteropServices.Runtime.UOClassicCombat;
+// ## BEGIN - END ## //
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -389,10 +392,23 @@ namespace ClassicUO.Game.Scenes
                         }
 
                         //we avoid to hide impassable foliage or bushes, if present...
+
+                        // ## BEGIN - END ## //    ORIG
+                        /*
                         if (ProfileManager.CurrentProfile.TreeToStumps && itemData.IsFoliage && !itemData.IsMultiMovable && !(obj is Multi) || ProfileManager.CurrentProfile.HideVegetation && (obj is Multi mm && mm.IsVegetation || obj is Static st && st.IsVegetation))
                         {
                             continue;
                         }
+                        */
+                        // ## BEGIN - END ## //
+                        if (obj is Static st)
+                        {
+                            st = UOClassicCombatCollection.GSDSFilters(st);
+                        }
+                        if ((ProfileManager.CurrentProfile.TreeType != 0 && itemData.IsFoliage && !itemData.IsMultiMovable && !(obj is Multi)) ||
+                            (ProfileManager.CurrentProfile.HideVegetation && ((obj is Multi mm && mm.IsVegetation) || (obj is Static sta && sta.IsVegetation))))
+                            continue;
+                        // ## BEGIN - END ## //
 
                         //if (HeightChecks <= 0 && (!itemData.IsBridge || ((itemData.Flags & TileFlag.StairBack | TileFlag.StairRight) != 0) || itemData.IsWall))
                     {

@@ -32,6 +32,10 @@
 
 using System;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## //
+using ClassicUO.Game.InteropServices.Runtime.UOClassicCombat;
+using ClassicUO.Configuration;
+// ## BEGIN - END ## //
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
 using ClassicUO.Game.UI.Gumps;
@@ -98,6 +102,10 @@ namespace ClassicUO.Game.GameObjects
                 i.AllowedToDraw = true;
                 
                 i.HitsRequested = false;
+
+                // ## BEGIN - END ## // 
+                i.LootFlag = 0;
+                // ## BEGIN - END ## //
             }
         );
 
@@ -121,18 +129,35 @@ namespace ClassicUO.Game.GameObjects
                     return _displayedGraphic.Value;
                 }
 
+                // ## BEGIN - END ## //  ORIG
+                //if (IsCoin)
+                //{
+                //    if (Amount > 5)
+                //        return (ushort) (Graphic + 2);
+                //    if (Amount > 1)
+                //        return (ushort) (Graphic + 1);
+                //}
+                // ## BEGIN - END ## // 
                 if (IsCoin)
                 {
-                    if (Amount > 5)
+                    if (ProfileManager.CurrentProfile.GoldType == 0) // normal
                     {
-                        return (ushort) (Graphic + 2);
+                        if (Amount > 5)
+                            return (ushort) (Graphic + 2);
+                        if (Amount > 1)
+                            return (ushort) (Graphic + 1);
+                    }
+                    else
+                    {
+                        Graphic = UOClassicCombatCollection.GoldArt(Graphic);
                     }
 
-                    if (Amount > 1)
+                    if (ProfileManager.CurrentProfile.ColorGold)
                     {
-                        return (ushort) (Graphic + 1);
+                        Hue = UOClassicCombatCollection.GoldHue(Hue);
                     }
                 }
+                // ## BEGIN - END ## //
                 else if (IsMulti)
                 {
                     return MultiGraphic;
@@ -1039,6 +1064,13 @@ namespace ClassicUO.Game.GameObjects
 
                     //if (corpseGraphic != id && corpseGraphic != 0) 
                     //    id = corpseGraphic;
+
+                    // ## BEGIN - END ## //
+                    ushort corpseGraphic = AnimationsLoader.Instance.DataIndex[id].CorpseGraphic;
+
+                    if (corpseGraphic != id && corpseGraphic != 0) 
+                        id = corpseGraphic;
+                    // ## BEGIN - END ## //
 
                     bool mirror = false;
                     AnimationsLoader.Instance.GetAnimDirection(ref dir, ref mirror);

@@ -32,6 +32,9 @@
 
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+// ## BEGIN - END ## //
+using ClassicUO.Game.InteropServices.Runtime.UOClassicCombat;
+// ## BEGIN - END ## //
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.IO.Resources;
@@ -135,6 +138,10 @@ namespace ClassicUO.Game.Map
                                 staticObject.X = (ushort) (bx + sb->X);
                                 staticObject.Y = (ushort) (by + sb->Y);
                                 staticObject.Z = sb->Z;
+                                // ## BEGIN - END ## // 
+                                if (UOClassicCombatCollection.InfernoBridgeSolver(staticObject.X, staticObject.Y))
+                                    staticObject.Hue = 0x44;
+                                // ## BEGIN - END ## //
                                 staticObject.UpdateScreenPosition();
 
                                 AddGameObject(staticObject, sb->X, sb->Y);

@@ -35,6 +35,9 @@ using System.Collections.Generic;
 using ClassicUO.Configuration;
 using ClassicUO.Data;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## //
+using ClassicUO.Game.InteropServices.Runtime.UOClassicCombat;
+// ## BEGIN - END ## //
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
 using ClassicUO.IO.Resources;
@@ -54,6 +57,12 @@ namespace ClassicUO.Game.GameObjects
         private static int _startCharacterFeetY;
         private static int _characterFrameHeight;
 
+        // ## BEGIN - END ## //
+        public RenderedText RangeTexture { get; set; }
+        public RenderedText SummonTexture { get; set; }
+        public RenderedText PeaceTexture { get; set; }
+        public RenderedText HamstrungTexture { get; set; }
+        // ## BEGIN - END ## //
 
         public override bool Draw(UltimaBatcher2D batcher, int posX, int posY)
         {
@@ -78,6 +87,14 @@ namespace ClassicUO.Game.GameObjects
 
             if (AuraManager.IsEnabled)
             {
+                // ## BEGIN - END ## //
+                if (this == World.Player && ProfileManager.CurrentProfile.OwnAuraByHP)
+                {
+                    ushort color = UOClassicCombatCollection.OwnAuraColorByHP();
+                    AuraManager.Draw(batcher, drawX, drawY, color);
+                }
+                else
+                // ## BEGIN - END ## //
                 AuraManager.Draw(batcher, drawX, drawY, ProfileManager.CurrentProfile.PartyAura && World.Party.Contains(this) ? ProfileManager.CurrentProfile.PartyAuraHue : Notoriety.GetHue(NotorietyFlag));
             }
 
@@ -92,8 +109,21 @@ namespace ClassicUO.Game.GameObjects
 
             if (ProfileManager.CurrentProfile.HighlightGameObjects && SelectedObject.LastObject == this)
             {
-                _viewHue = Constants.HIGHLIGHT_CURRENT_OBJECT_HUE;
-                HueVector.Y = 1;
+                // ## BEGIN - END ## // ORIG
+                //_viewHue = Constants.HIGHLIGHT_CURRENT_OBJECT_HUE;
+                //HueVector.Y = 1;
+
+                // ## BEGIN - END ## //
+                Item item = World.Items.Get(Serial);
+
+                if (this == item)
+                {
+                    _viewHue = Constants.HIGHLIGHT_CURRENT_OBJECT_HUE;
+                    HueVector.Y = 1;
+                }
+                else
+                    _viewHue = Notoriety.GetHue(NotorietyFlag);
+                // ## BEGIN - END ## //
             }
             else if (SelectedObject.HealthbarObject == this)
             {
@@ -155,6 +185,26 @@ namespace ClassicUO.Game.GameObjects
                 }
             }
 
+            // ## BEGIN - END ## //
+            if (ProfileManager.CurrentProfile.HighlightLastTargetType != 0 && World.Get(TargetManager.LastTargetInfo.Serial) == this)
+            {
+                _viewHue = UOClassicCombatCollection.LastTargetHue(this, _viewHue);
+                HueVector.Y = 1;
+                //if (this == TargetManager.LastTarget)
+                //{
+                //    UIManager.SetTargetLineGump(this);
+                //    //needHpLine = true;
+                //}
+            }
+            if (ProfileManager.CurrentProfile.PreviewFields)
+            {
+                if (UOClassicCombatCollection.MobileFieldPreview(this))
+                {
+                    _viewHue = 0x0040;
+                    HueVector.Y = 1;
+                }
+            }
+            // ## BEGIN - END ## //
 
             ProcessSteps(out byte dir);
             byte layerDir = dir;
@@ -344,6 +394,14 @@ namespace ClassicUO.Game.GameObjects
                         if (item.ItemData.AnimID != 0)
                         {
                             graphic = item.ItemData.AnimID;
+
+                            // ## BEGIN - END ## //
+                            if (ProfileManager.CurrentProfile.GlowingWeaponsType != 0)
+                            {
+                                if (graphic >= 0x263 && graphic <= 0x28D) // all weps
+                                    item.Hue = UOClassicCombatCollection.WeaponsHue(item.Hue);
+                            }
+                            // ## BEGIN - END ## //
 
                             if (isGargoyle)
                             {
@@ -626,6 +684,14 @@ namespace ClassicUO.Game.GameObjects
                             partialHue = false;
                         }
                     }
+
+                    // ## BEGIN - END ## //
+                    if (ProfileManager.CurrentProfile.GlowingWeaponsType != 0)
+                    {
+                        if (id >= 0x263 && id <= 0x28D) // all weps
+                            hue = UOClassicCombatCollection.WeaponsHue(hue);
+                    }
+                    // ## BEGIN - END ## //
 
                     ResetHueVector();
                     ShaderHueTranslator.GetHueVector(ref HueVector, hue, partialHue, alpha);

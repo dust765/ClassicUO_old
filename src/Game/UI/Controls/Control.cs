@@ -33,6 +33,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+// ## BEGIN - END ## //
+using ClassicUO.Game.GameObjects;
+// ## BEGIN - END ## //
 using ClassicUO.Game.Managers;
 using ClassicUO.Input;
 using ClassicUO.Renderer;
@@ -76,6 +79,11 @@ namespace ClassicUO.Game.UI.Controls
         public uint ServerSerial { get; set; }
 
         public uint LocalSerial { get; set; }
+
+        // ## BEGIN - END ## //
+        public Entity LocalEntity { get; set; }
+
+        // ## BEGIN - END ## //
 
         public bool IsFromServer { get; set; }
 
@@ -364,7 +372,7 @@ namespace ClassicUO.Game.UI.Controls
 
         private void DrawDebug(UltimaBatcher2D batcher, int x, int y)
         {
-            if (IsVisible && CUOEnviroment.Debug)
+            if (/*IsVisible && */CUOEnviroment.Debug) // ## BEGIN - END ## //
             {
                 ResetHueVector();
 

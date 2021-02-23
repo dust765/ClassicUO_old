@@ -56,6 +56,9 @@ namespace ClassicUO.Game.UI.Gumps
         WorldMap,
 
         Debug,
-        NetStats
+        NetStats,
+        // ## BEGIN - END ## // 
+        Journal2
+        // ## BEGIN - END ## // 
     }
 }
