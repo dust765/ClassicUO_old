@@ -440,6 +440,7 @@ namespace ClassicUO.Configuration
         public int TransparentHousesTransparency { get; set; }
         public bool InvisibleHousesEnabled { get; set; } = false;
         public int InvisibleHousesZ { get; set; }
+        public bool IgnoreCoTEnabled { get; set; } = false;
         // ## BEGIN - END ## //
 
         public bool ShowJournalClient { get; set; } = true;

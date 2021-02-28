@@ -33,6 +33,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using ClassicUO.Configuration;
+// ## BEGIN - END ## //
+using ClassicUO.Game.Data;
+using ClassicUO.Game.InteropServices.Runtime.UOClassicCombat;
+// ## BEGIN - END ## //
 using ClassicUO.IO;
 using ClassicUO.IO.Resources;
 using ClassicUO.Renderer;
@@ -352,6 +356,15 @@ namespace ClassicUO.Game.GameObjects
                 texture.Ticks = Time.Ticks;
                 index = ref ArtLoader.Instance.GetValidRefEntry(graphic + 0x4000);
 
+                // ## BEGIN - END ## //
+                if (ProfileManager.CurrentProfile.IgnoreCoTEnabled)
+                {
+                    if (StaticFilters.IsIgnoreCoT(graphic) || ProfileManager.CurrentProfile.TreeType == 1 && graphic == UOClassicCombatCollection.TREE_REPLACE_GRAPHIC || ProfileManager.CurrentProfile.TreeType == 2 & graphic == UOClassicCombatCollection.TREE_REPLACE_GRAPHIC_TILE)
+                    {
+                        transparent = false;
+                    }
+                }
+                // ## BEGIN - END ## //
                 if (transparent)
                 {
                     int maxDist = ProfileManager.CurrentProfile.CircleOfTransparencyRadius + 22;

@@ -177,6 +177,8 @@ hue impassable tiles
 
 transparent / invisible house and items by Z level from player
 
+ignore list for circle of transparency (txt file created in your /Data/Client folder)
+
 # commands
 
 type command in chat
@@ -236,6 +238,22 @@ comments:
 /src/Game/Constants.cs	31
 
 /src/Game/Constants.cs	78
+
+/src/Game/Data/StaticFilters.cs 51
+
+/src/Game/Data/StaticFilters.cs 56
+
+/src/Game/Data/StaticFilters.cs 65
+
+/src/Game/Data/StaticFilters.cs 67
+
+/src/Game/Data/StaticFilters.cs 80
+
+/src/Game/Data/StaticFilters.cs 119
+
+/src/Game/Data/StaticFilters.cs 407
+
+/src/Game/Data/StaticFilters.cs 412
 
 /src/Game/GameActions.cs	45
 
@@ -429,9 +447,17 @@ comments:
 
 /src/Game/GameObjects/Views/TileView.cs	145
 
+/src/Game/GameObjects/Views/View.cs	36
+
+/src/Game/GameObjects/Views/View.cs	39
+
 /src/Game/GameObjects/Views/View.cs	151
 
 /src/Game/GameObjects/Views/View.cs	191
+
+/src/Game/GameObjects/Views/View.cs	359
+
+/src/Game/GameObjects/Views/View.cs	367
 
 /src/Game/Managers/CommandManager.cs	26
 
