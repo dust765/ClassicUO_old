@@ -1,23 +1,32 @@
 ﻿#region license
 
-// Copyright (C) 2020 ClassicUO Development Community on Github
+// Copyright (c) 2021, andreakarasho
+// All rights reserved.
 // 
-// This project is an alternative client for the game Ultima Online.
-// The goal of this is to develop a lightweight client considering
-// new technologies.
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+// 1. Redistributions of source code must retain the above copyright
+//    notice, this list of conditions and the following disclaimer.
+// 2. Redistributions in binary form must reproduce the above copyright
+//    notice, this list of conditions and the following disclaimer in the
+//    documentation and/or other materials provided with the distribution.
+// 3. All advertising materials mentioning features or use of this software
+//    must display the following acknowledgement:
+//    This product includes software developed by andreakarasho - https://github.com/andreakarasho
+// 4. Neither the name of the copyright holder nor the
+//    names of its contributors may be used to endorse or promote products
+//    derived from this software without specific prior written permission.
 // 
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-// 
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-// 
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
+// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #endregion
 
@@ -37,7 +46,7 @@ using ClassicUO.Utility.Collections;
 
 namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## // 
 {
-    internal class JournalGump2 : Gump
+    internal class JournalGump2 : Gump // ## BEGIN - END ## // 
     {
         private const int _diffY = 22;
         private readonly ExpandableScroll _background;
@@ -72,7 +81,15 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
 
             Add
             (
-                darkMode = new Checkbox(0x00D2, 0x00D3, str, 6, 0x0288, false)
+                darkMode = new Checkbox
+                (
+                    0x00D2,
+                    0x00D3,
+                    str,
+                    6,
+                    0x0288,
+                    false
+                )
                 {
                     X = _background.Width - width - 2,
                     Y = _diffY + 7,
@@ -93,7 +110,13 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
             Add
             (
                 _journalEntries = new RenderedTextList
-                    (25, _diffY + 36, _background.Width - (_scrollBar.Width >> 1) - 5, 200, _scrollBar)
+                (
+                    25,
+                    _diffY + 36,
+                    _background.Width - (_scrollBar.Width >> 1) - 5,
+                    200,
+                    _scrollBar
+                )
             );
 
             Add(_scrollBar);
@@ -106,32 +129,64 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
             int dist = 75; // 85
             byte font = 6; // 1
 
-            _filters_chekboxes[0] = new Checkbox(0x00D2, 0x00D3, "System", font, 0x0386, false)
+            _filters_chekboxes[0] = new Checkbox
+            (
+                0x00D2,
+                0x00D3,
+                "System",
+                font,
+                0x0386,
+                false
+            )
             {
                 X = cx,
                 LocalSerial = 1,
-                IsChecked = ProfileManager.CurrentProfile.ShowJournal2System
+                IsChecked = ProfileManager.CurrentProfile.ShowJournalSystem
             };
 
-            _filters_chekboxes[1] = new Checkbox(0x00D2, 0x00D3, "Objects", font, 0x0386, false)
+            _filters_chekboxes[1] = new Checkbox
+            (
+                0x00D2,
+                0x00D3,
+                "Objects",
+                font,
+                0x0386,
+                false
+            )
             {
                 X = cx + dist,
                 LocalSerial = 2,
-                IsChecked = ProfileManager.CurrentProfile.ShowJournal2Objects
+                IsChecked = ProfileManager.CurrentProfile.ShowJournalObjects
             };
 
-            _filters_chekboxes[2] = new Checkbox(0x00D2, 0x00D3, "Client", font, 0x0386, false)
+            _filters_chekboxes[2] = new Checkbox
+            (
+                0x00D2,
+                0x00D3,
+                "Client",
+                font,
+                0x0386,
+                false
+            )
             {
                 X = cx + dist * 2,
                 LocalSerial = 0,
-                IsChecked = ProfileManager.CurrentProfile.ShowJournal2Client
+                IsChecked = ProfileManager.CurrentProfile.ShowJournalClient
             };
 
-            _filters_chekboxes[3] = new Checkbox(0x00D2, 0x00D3, "Guild", font, 0x0386, false)
+            _filters_chekboxes[3] = new Checkbox
+            (
+                0x00D2,
+                0x00D3,
+                "Guild",
+                font,
+                0x0386,
+                false
+            )
             {
                 X = cx + dist * 3,
                 LocalSerial = 3,
-                IsChecked = ProfileManager.CurrentProfile.ShowJournal2GuildAlly
+                IsChecked = ProfileManager.CurrentProfile.ShowJournalGuildAlly
             };
 
             void on_check_box(object sender, EventArgs e)
@@ -143,22 +198,22 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
                     switch ((TextType) c.LocalSerial)
                     {
                         case TextType.CLIENT:
-                            ProfileManager.CurrentProfile.ShowJournal2Client = c.IsChecked;
+                            ProfileManager.CurrentProfile.ShowJournalClient = c.IsChecked;
 
                             break;
 
                         case TextType.SYSTEM:
-                            ProfileManager.CurrentProfile.ShowJournal2System = c.IsChecked;
+                            ProfileManager.CurrentProfile.ShowJournalSystem = c.IsChecked;
 
                             break;
 
                         case TextType.OBJECT:
-                            ProfileManager.CurrentProfile.ShowJournal2Objects = c.IsChecked;
+                            ProfileManager.CurrentProfile.ShowJournalObjects = c.IsChecked;
 
                             break;
 
                         case TextType.GUILD_ALLY:
-                            ProfileManager.CurrentProfile.ShowJournal2GuildAlly = c.IsChecked;
+                            ProfileManager.CurrentProfile.ShowJournalGuildAlly = c.IsChecked;
 
                             break;
                     }
@@ -176,7 +231,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
             World.Journal.EntryAdded += AddJournalEntry;
         }
 
-        public override GumpType GumpType => GumpType.Journal2;
+        public override GumpType GumpType => GumpType.Journal;
 
         public ushort Hue
         {
@@ -244,32 +299,15 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
         {
             string text = $"{(entry.Name != string.Empty ? $"{entry.Name}: " : string.Empty)}{entry.Text}";
 
-            _journalEntries.AddEntry(text, entry.Font, entry.Hue, entry.IsUnicode, entry.Time, entry.TextType);
-        }
-
-        public override void Save(BinaryWriter writer)
-        {
-            base.Save(writer);
-            writer.Write(_background.SpecialHeight);
-            writer.Write(IsMinimized);
-        }
-
-        public override void Restore(BinaryReader reader)
-        {
-            base.Restore(reader);
-
-            if (Profile.GumpsVersion == 2)
-            {
-                reader.ReadUInt32();
-                _isMinimized = reader.ReadBoolean();
-            }
-
-            _background.Height = _background.SpecialHeight = reader.ReadInt32();
-
-            if (Profile.GumpsVersion >= 3)
-            {
-                _isMinimized = reader.ReadBoolean();
-            }
+            _journalEntries.AddEntry
+            (
+                text,
+                entry.Font,
+                entry.Hue,
+                entry.IsUnicode,
+                entry.Time,
+                entry.TextType
+            );
         }
 
         public override void Save(XmlTextWriter writer)
@@ -374,8 +412,32 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
                         if (yy < 0)
                         {
                             // this entry starts above the renderable area, but exists partially within it.
-                            hour.Draw(batcher, hour.Width, hour.Height, mx, y, t.Width, t.Height + yy, 0, -yy);
-                            t.Draw(batcher, t.Width, t.Height, mx + hour.Width, y, t.Width, t.Height + yy, 0, -yy);
+                            hour.Draw
+                            (
+                                batcher,
+                                hour.Width,
+                                hour.Height,
+                                mx,
+                                y,
+                                t.Width,
+                                t.Height + yy,
+                                0,
+                                -yy
+                            );
+
+                            t.Draw
+                            (
+                                batcher,
+                                t.Width,
+                                t.Height,
+                                mx + hour.Width,
+                                y,
+                                t.Width,
+                                t.Height + yy,
+                                0,
+                                -yy
+                            );
+
                             my += t.Height + yy;
                         }
                         else
@@ -393,11 +455,29 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
                         int yyy = maxheight - height;
 
                         hour.Draw
-                            (batcher, hour.Width, hour.Height, mx, y + _scrollBar.Height - yyy, t.Width, yyy, 0, 0);
+                        (
+                            batcher,
+                            hour.Width,
+                            hour.Height,
+                            mx,
+                            y + _scrollBar.Height - yyy,
+                            t.Width,
+                            yyy,
+                            0,
+                            0
+                        );
 
                         t.Draw
                         (
-                            batcher, t.Width, t.Height, mx + hour.Width, y + _scrollBar.Height - yyy, t.Width, yyy, 0, 0
+                            batcher,
+                            t.Width,
+                            t.Height,
+                            mx + hour.Width,
+                            y + _scrollBar.Height - yyy,
+                            t.Width,
+                            yyy,
+                            0,
+                            0
                         );
 
                         // can't fit any more entries - so we break!
@@ -475,12 +555,24 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
                     _text_types.RemoveFromFront();
                 }
 
-                RenderedText h = RenderedText.Create($"{time:t} ", 1150, 1, true, FontStyle.BlackBorder);
+                RenderedText h = RenderedText.Create
+                (
+                    $"{time:t} ",
+                    1150,
+                    1,
+                    true,
+                    FontStyle.BlackBorder
+                );
+
                 _hours.AddToBack(h);
 
                 RenderedText rtext = RenderedText.Create
                 (
-                    text, hue, (byte) font, isUnicode, FontStyle.Indention | FontStyle.BlackBorder,
+                    text,
+                    hue,
+                    (byte) font,
+                    isUnicode,
+                    FontStyle.Indention | FontStyle.BlackBorder,
                     maxWidth: Width - (18 + h.Width)
                 );
 
@@ -498,22 +590,22 @@ namespace ClassicUO.Game.InteropServices.Runtime.External // ## BEGIN - END ## /
 
             private static bool CanBeDrawn(TextType type)
             {
-                if (type == TextType.CLIENT && !ProfileManager.CurrentProfile.ShowJournal2Client)
+                if (type == TextType.CLIENT && !ProfileManager.CurrentProfile.ShowJournalClient)
                 {
                     return false;
                 }
 
-                if (type == TextType.SYSTEM && !ProfileManager.CurrentProfile.ShowJournal2System)
+                if (type == TextType.SYSTEM && !ProfileManager.CurrentProfile.ShowJournalSystem)
                 {
                     return false;
                 }
 
-                if (type == TextType.OBJECT && !ProfileManager.CurrentProfile.ShowJournal2Objects)
+                if (type == TextType.OBJECT && !ProfileManager.CurrentProfile.ShowJournalObjects)
                 {
                     return false;
                 }
 
-                if (type == TextType.GUILD_ALLY && !ProfileManager.CurrentProfile.ShowJournal2GuildAlly)
+                if (type == TextType.GUILD_ALLY && !ProfileManager.CurrentProfile.ShowJournalGuildAlly)
                 {
                     return false;
                 }

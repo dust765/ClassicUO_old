@@ -340,7 +340,52 @@ namespace ClassicUO.Resources {
                 return ResourceManager.GetString("AutoOpenDoors", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BackpackStyle.
+        /// </summary>
+        public static string BackpackStyle {
+            get {
+                return ResourceManager.GetString("BackpackStyle", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to BackpackStyle_Default.
+        /// </summary>
+        public static string BackpackStyle_Default {
+            get {
+                return ResourceManager.GetString("BackpackStyle_Default", resourceCulture);
+            }
+        }
         
+        /// <summary>
+        ///   Looks up a localized string similar to BackpackStyle_GhoulSkin.
+        /// </summary>
+        public static string BackpackStyle_GhoulSkin {
+            get {
+                return ResourceManager.GetString("BackpackStyle_GhoulSkin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BackpackStyle_PolarBear.
+        /// </summary>
+        public static string BackpackStyle_PolarBear {
+            get {
+                return ResourceManager.GetString("BackpackStyle_PolarBear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BackpackStyle_Suede.
+        /// </summary>
+        public static string BackpackStyle_Suede {
+            get {
+                return ResourceManager.GetString("BackpackStyle_Suede", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Backup.
         /// </summary>
@@ -349,7 +394,7 @@ namespace ClassicUO.Resources {
                 return ResourceManager.GetString("Backup", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Base.
         /// </summary>
@@ -2452,7 +2497,7 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}has invited you to join a party..
+        ///   Looks up a localized string similar to {0} has invited you to join a party..
         /// </summary>
         public static string P0HasInvitedYouToParty {
             get {
