@@ -230,6 +230,9 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
 
                 Mobile mobile = entity as Mobile;
 
+                if (mobile == null)
+                    return;
+
                 if (mobile.IsDead || mobile.IsDestroyed || mobile.Hits == 0)
                     hits = 0;
 

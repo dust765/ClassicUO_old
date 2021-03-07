@@ -676,8 +676,10 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 return;
 
             //FAILSAFES
-            if (_tickStartAutoBandage + 20000 >= Time.Ticks)
+            if ((Time.Ticks - _tickStartAutoBandage) > 20000 && _tickStartAutoBandage != 0)
+            {
                 _tickStartAutoBandage = 0;
+            }
 
             //UI PART
             //UPDATE UI
