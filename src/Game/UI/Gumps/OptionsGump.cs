@@ -187,7 +187,7 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccDisarmStrikeCooldown, _uccDisarmAttemptCooldown, _uccHamstringStrikeCooldown, _uccHamstringAttemptCooldown, _uccDisarmedCooldown, _uccHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
         private Checkbox _uccEnableBuffbar, _uccSwing, _uccDoD, _uccGotD, _uccDoH, _uccGotH, _uccClilocTrigger, _uccMacroTrigger, _uccLocked;
         private Checkbox _uccEnableLines, _uccEnableLTBar;
-        private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _transparentHouses, _invisibleHouses, _ignoreCoT; //##TEXTUREMANAGER##//
+        private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap; //##TEXTUREMANAGER##//
         private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ;
         private Checkbox _uccEnableAL, _uccEnableGridLootColoring, _uccBEnableLootAboveID;
         private InputField _uccLootDelay, _uccPurgeDelay, _uccQueueSpeed;
@@ -4494,6 +4494,9 @@ namespace ClassicUO.Game.UI.Gumps
             section2.Add(_ignoreCoT = AddCheckBox(null, "Enable ignorelist for circle of transparency:", ProfileManager.CurrentProfile.IgnoreCoTEnabled, startX, startY));
             startY += _ignoreCoT.Height + 2;
 
+            section2.Add(_showDeathOnWorldmap = AddCheckBox(null, "Show death location on world map for 5min:", ProfileManager.CurrentProfile.ShowDeathOnWorldmap, startX, startY));
+            startY += _showDeathOnWorldmap.Height + 2;
+
             SettingsSection section3 = AddSettingsSection(box, "-----MISC-----");
             section3.Y = section2.Bounds.Bottom + 40;
 
@@ -5848,6 +5851,7 @@ namespace ClassicUO.Game.UI.Gumps
             ProfileManager.CurrentProfile.InvisibleHousesEnabled = _invisibleHouses.IsChecked;
             ProfileManager.CurrentProfile.InvisibleHousesZ = _invisibleHousesZ.Value;
             ProfileManager.CurrentProfile.IgnoreCoTEnabled = _ignoreCoT.IsChecked;
+            ProfileManager.CurrentProfile.ShowDeathOnWorldmap = _showDeathOnWorldmap.IsChecked;
 
             int.TryParse(_pullFriendlyBarsX.Text, out int pullFriendlyBarsX);
             int.TryParse(_pullFriendlyBarsY.Text, out int pullFriendlyBarsY);

@@ -179,6 +179,8 @@ transparent / invisible house and items by Z level from player
 
 ignore list for circle of transparency (txt file created in your /Data/Client folder)
 
+show death location on wordlmap
+
 # commands
 
 type command in chat
@@ -888,6 +890,10 @@ comments:
 /src/Network/PacketHandlers.cs	833
 
 /src/Network/PacketHandlers.cs	849
+
+/src/Network/PacketHandlers.cs	1655
+
+/src/Network/PacketHandlers.cs	1659
 
 /src/Network/PacketHandlers.cs	2055
 

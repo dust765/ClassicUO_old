@@ -53,6 +53,9 @@ namespace ClassicUO.Game.GameObjects
 
         // ## BEGIN - END ## //
         public BandageGump BandageTimer; //##BandageGump##//
+        public int DeathX = 0;
+        public int DeathY = 0;
+        public uint DeathTick = 0;
         // ## BEGIN - END ## //
 
         public PlayerMobile(uint serial) : base(serial)
