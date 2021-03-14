@@ -22,11 +22,11 @@ This project is to address a problem constructed within the toxicity of this com
 
 # feature showcase
 
-[Video Part 1 on d.tube](https://d.tube/#!/v/projectdust765/QmQbGMiorgjJEmZbnpr6UdFzzcbcKR5AHAVKJP13jG81CT)
+[Video Part 1 on MetaCafe]( https://www.metacafe.com/watch/12177837/project-dust765/)
 
-[Video Part 2 on d.tube](https://d.tube/#!/v/projectdust765/QmT6KmkPNp2cJUSNFgAwZb2H77fbrMny3cAav4XZF3zJLm)
+[Video Part 2 on MetaCafe](https://www.metacafe.com/watch/12177839/project-dust765-2/)
 
-[Video Part 3 on d.tube](https://d.tube/#!/v/projectdust765/QmbQJsHyVY5hreADsr9y1JguX78LGrSPmmaRSsQcWrkXPz)
+[Video Part 3 on MetaCafe](https://www.metacafe.com/watch/12177847/project-dust765-3/)
 
 # art / hue changes
 
