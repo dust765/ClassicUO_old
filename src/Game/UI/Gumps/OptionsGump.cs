@@ -197,6 +197,9 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _bandageGump, _wireframeView, _hueImpassableView, _autoWorldmapMarker;
         private InputField _bandageGumpOffsetX, _bandageGumpOffsetY;
 
+        //##-RESERVED-##//
+        private Checkbox _showHPLineInNOH;
+
         //##GrabBars##//
         private InputField _pullFriendlyBarsX, _pullFriendlyBarsY, _pullFriendlyBarsFinalLocationX, _pullFriendlyBarsFinalLocationY;
         private InputField _pullEnemyBarsX, _pullEnemyBarsY, _pullEnemyBarsFinalLocationX, _pullEnemyBarsFinalLocationY;
@@ -4519,6 +4522,9 @@ namespace ClassicUO.Game.UI.Gumps
             section4.Y = section3.Bounds.Bottom + 40;
             startY = section3.Bounds.Bottom + 40;
 
+            section4.Add(_showHPLineInNOH = AddCheckBox(null, "Show HPLine in NameOverheadGump:", ProfileManager.CurrentProfile.ShowHPLineInNOH, startX, startY));
+            startY += _showHPLineInNOH.Height + 2;
+
             SettingsSection section5 = AddSettingsSection(box, "-----Automations-----");
             section5.Y = section4.Bounds.Bottom + 40;
             startY = section4.Bounds.Bottom + 40;
@@ -5852,6 +5858,8 @@ namespace ClassicUO.Game.UI.Gumps
             ProfileManager.CurrentProfile.InvisibleHousesZ = _invisibleHousesZ.Value;
             ProfileManager.CurrentProfile.IgnoreCoTEnabled = _ignoreCoT.IsChecked;
             ProfileManager.CurrentProfile.ShowDeathOnWorldmap = _showDeathOnWorldmap.IsChecked;
+
+            ProfileManager.CurrentProfile.ShowHPLineInNOH = _showHPLineInNOH.IsChecked;
 
             int.TryParse(_pullFriendlyBarsX.Text, out int pullFriendlyBarsX);
             int.TryParse(_pullFriendlyBarsY.Text, out int pullFriendlyBarsY);

@@ -181,6 +181,8 @@ ignore list for circle of transparency (txt file created in your /Data/Client fo
 
 show death location on wordlmap
 
+hp line in nameoverheads
+
 # commands
 
 type command in chat
@@ -780,6 +782,18 @@ comments:
 /src/Game/UI/Gumps/Login/LoginGump.cs	343
 
 /src/Game/UI/Gumps/Login/LoginGump.cs	353
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	55
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	122
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	151
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	191
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	613
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	662
 
 /src/Game/UI/Gumps/OptionsGump.cs	31
 

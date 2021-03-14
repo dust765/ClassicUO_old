@@ -442,6 +442,7 @@ namespace ClassicUO.Configuration
         public int InvisibleHousesZ { get; set; }
         public bool IgnoreCoTEnabled { get; set; } = false;
         public bool ShowDeathOnWorldmap { get; set; } = false;
+        public bool ShowHPLineInNOH { get; set; } = false;
         // ## BEGIN - END ## //
 
         public bool ShowJournalClient { get; set; } = true;
