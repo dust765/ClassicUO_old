@@ -611,53 +611,56 @@ namespace ClassicUO.Game.UI.Gumps
                     _background.Hue = _renderedText.Hue = entity is Mobile m ? Notoriety.GetHue(m.NotorietyFlag) : (ushort)0x0481;
                 }
                 // ## BEGIN - END ## //
-                if (ProfileManager.CurrentProfile.ShowHPLineInNOH)
+                if (_hpLineBorder != null)
                 {
-                    Mobile mobile = entity as Mobile;
-
-                    if (mobile != null)
+                    if (ProfileManager.CurrentProfile.ShowHPLineInNOH)
                     {
-                        //SET FIXED WIDTH
-                        _hpLineBorder.X = _hpLineRed.X = _hpLine.X = _background.X;
-                        _hpLineBorder.Y = _hpLineRed.Y = _hpLine.Y = _background.Y;
-                        _hpLineBorder.LineWidth = _hpLineRed.LineWidth = /*_hpLine.LineWidth =*/ _background.Width;
+                        Mobile mobile = entity as Mobile;
 
-                        //SET HP WIDTH
-                        int hits = CalculatePercents(entity.HitsMax, entity.Hits, _background.Width);
+                        if (mobile != null)
+                        {
+                            //SET FIXED WIDTH
+                            _hpLineBorder.X = _hpLineRed.X = _hpLine.X = _background.X;
+                            _hpLineBorder.Y = _hpLineRed.Y = _hpLine.Y = _background.Y;
+                            _hpLineBorder.LineWidth = _hpLineRed.LineWidth = /*_hpLine.LineWidth =*/ _background.Width;
 
-                        if (hits != _hpLine.LineWidth)
-                        {
-                            _hpLine.LineWidth = hits;
-                        }
+                            //SET HP WIDTH
+                            int hits = CalculatePercents(entity.HitsMax, entity.Hits, _background.Width);
 
-                        //SET COLOR BORDER AND LINE
-                        if (mobile.IsPoisoned)
-                        {
-                            _hpLine.LineColor = HPB_COLOR_POISON;
-                        }
-                        else if (mobile.IsParalyzed)
-                        {
-                            _hpLine.LineColor = HPB_COLOR_PARA;
-                        }
-                        else if (mobile.IsYellowHits)
-                        {
-                            _hpLine.LineColor = HPB_COLOR_YELLOW;
-                        }
-                        else if (mobile.HamstrungTime > 0)
-                        {
-                            _hpLine.LineColor = HPB_COLOR_ORANGE;
-                        }
-                        else
-                        {
-                            _hpLine.LineColor = HPB_COLOR_BLUE;
+                            if (hits != _hpLine.LineWidth)
+                            {
+                                _hpLine.LineWidth = hits;
+                            }
+
+                            //SET COLOR BORDER AND LINE
+                            if (mobile.IsPoisoned)
+                            {
+                                _hpLine.LineColor = HPB_COLOR_POISON;
+                            }
+                            else if (mobile.IsParalyzed)
+                            {
+                                _hpLine.LineColor = HPB_COLOR_PARA;
+                            }
+                            else if (mobile.IsYellowHits)
+                            {
+                                _hpLine.LineColor = HPB_COLOR_YELLOW;
+                            }
+                            else if (mobile.HamstrungTime > 0)
+                            {
+                                _hpLine.LineColor = HPB_COLOR_ORANGE;
+                            }
+                            else
+                            {
+                                _hpLine.LineColor = HPB_COLOR_BLUE;
+                            }
                         }
                     }
-                }
-                else
-                {
-                    _hpLineBorder.X = _hpLineRed.X = _hpLine.X = _background.X;
-                    _hpLineBorder.Y = _hpLineRed.Y = _hpLine.Y = _background.Y;
-                    _hpLineBorder.LineWidth = _hpLineRed.LineWidth = _hpLine.LineWidth = 0;
+                    else
+                    {
+                        _hpLineBorder.X = _hpLineRed.X = _hpLine.X = _background.X;
+                        _hpLineBorder.Y = _hpLineRed.Y = _hpLine.Y = _background.Y;
+                        _hpLineBorder.LineWidth = _hpLineRed.LineWidth = _hpLine.LineWidth = 0;
+                    }
                 }
                 // ## BEGIN - END ## //
             }
