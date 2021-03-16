@@ -443,6 +443,16 @@ namespace ClassicUO.Configuration
         public bool IgnoreCoTEnabled { get; set; } = false;
         public bool ShowDeathOnWorldmap { get; set; } = false;
         public bool ShowHPLineInNOH { get; set; } = false;
+        public bool NOH_cbcorpses { get; set; } = false;
+        public bool NOH_cbitems { get; set; } = false;
+        public bool NOH_cbmobiles { get; set; } = false;
+        public bool NOH_cbhumanMobilesOnly { get; set; } = false;
+        public bool NOH_cbnotoall { get; set; } = false;
+        public bool NOH_cbnotoblue { get; set; } = false;
+        public bool NOH_cbnotored { get; set; } = false;
+        public bool NOH_cbnotoorange { get; set; } = false;
+        public bool NOH_cbnotocriminal { get; set; } = false;
+        public bool NOH_cbnotoally { get; set; } = false;
         // ## BEGIN - END ## //
 
         public bool ShowJournalClient { get; set; } = true;

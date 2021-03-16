@@ -34,6 +34,9 @@ using System;
 using ClassicUO.Configuration;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.UI.Gumps;
+// ## BEGIN - END ## //
+using ClassicUO.Game.Data;
+// ## BEGIN - END ## //
 
 namespace ClassicUO.Game.Managers
 {
@@ -44,7 +47,12 @@ namespace ClassicUO.Game.Managers
         Mobiles,
         Items,
         Corpses,
-        MobilesCorpses = Mobiles | Corpses
+        // ## BEGIN - END ## //
+        //MobilesCorpses = Mobiles | Corpses
+        // ## BEGIN - END ## //
+        MobilesCorpses = Mobiles | Corpses,
+        Custom
+        // ## BEGIN - END ## //
     }
 
     internal static class NameOverHeadManager
@@ -89,6 +97,157 @@ namespace ClassicUO.Game.Managers
             {
                 return true;
             }
+
+            // ## BEGIN - END ## //
+            if (TypeAllowed.HasFlag(NameOverheadTypeAllowed.Custom))
+            {
+                if (ProfileManager.CurrentProfile.NOH_cbitems && SerialHelper.IsItem(serial.Serial))
+                {
+                    return true;
+                }
+                if (ProfileManager.CurrentProfile.NOH_cbcorpses && SerialHelper.IsItem(serial.Serial) && World.Items.Get(serial)?.IsCorpse == true)
+                {
+                    return true;
+                }
+                if (SerialHelper.IsMobile(serial.Serial))
+                {
+                    Entity entity = World.Get(serial.Serial);
+
+                    if (entity == null /*|| entity.IsDestroyed || !entity.UseObjectHandles || entity.ClosedObjectHandles*/)
+                    {
+                        return false;
+                    }
+
+                    Mobile mobile = entity as Mobile;
+
+                    if (mobile == null /*|| mobile.IsDestroyed || !mobile.UseObjectHandles || mobile.ClosedObjectHandles*/)
+                    {
+                        return false;
+                    }
+
+                    //NOTOS
+                    if (ProfileManager.CurrentProfile.NOH_cbnotoall)
+                    {
+                        //HUMANS ONLY
+                        if (ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly)
+                        {
+
+                            if (mobile.IsHuman)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (ProfileManager.CurrentProfile.NOH_cbmobiles)
+                        //ALL
+                        {
+                            return true;
+                        }
+                    }
+                    if (ProfileManager.CurrentProfile.NOH_cbnotoblue && mobile.NotorietyFlag == NotorietyFlag.Innocent)
+                    {
+                        //HUMANS ONLY
+                        if (ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly)
+                        {
+
+                            if (mobile.IsHuman)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (ProfileManager.CurrentProfile.NOH_cbmobiles)
+                        //ALL
+                        {
+                            return true;
+                        }
+                    }
+                    if (ProfileManager.CurrentProfile.NOH_cbnotored && mobile.NotorietyFlag == NotorietyFlag.Murderer)
+                    {
+                        //HUMANS ONLY
+                        if (ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly)
+                        {
+
+                            if (mobile.IsHuman)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (ProfileManager.CurrentProfile.NOH_cbmobiles)
+                        //ALL
+                        {
+                            return true;
+                        }
+                    }
+                    if (ProfileManager.CurrentProfile.NOH_cbnotoorange && mobile.NotorietyFlag == NotorietyFlag.Enemy)
+                    {
+                        //HUMANS ONLY
+                        if (ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly)
+                        {
+
+                            if (mobile.IsHuman)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (ProfileManager.CurrentProfile.NOH_cbmobiles)
+                        //ALL
+                        {
+                            return true;
+                        }
+                    }
+                    if (ProfileManager.CurrentProfile.NOH_cbnotocriminal && mobile.NotorietyFlag == NotorietyFlag.Criminal)
+                    {
+                        //HUMANS ONLY
+                        if (ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly)
+                        {
+
+                            if (mobile.IsHuman)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (ProfileManager.CurrentProfile.NOH_cbmobiles)
+                        //ALL
+                        {
+                            return true;
+                        }
+                    }
+                    if (ProfileManager.CurrentProfile.NOH_cbnotocriminal && mobile.NotorietyFlag == NotorietyFlag.Gray)
+                    {
+                        //HUMANS ONLY
+                        if (ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly)
+                        {
+
+                            if (mobile.IsHuman)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (ProfileManager.CurrentProfile.NOH_cbmobiles)
+                        //ALL
+                        {
+                            return true;
+                        }
+                    }
+                    if (ProfileManager.CurrentProfile.NOH_cbnotoally && mobile.NotorietyFlag == NotorietyFlag.Ally)
+                    {
+                        //HUMANS ONLY
+                        if (ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly)
+                        {
+
+                            if (mobile.IsHuman)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (ProfileManager.CurrentProfile.NOH_cbmobiles)
+                        //ALL
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            // ## BEGIN - END ## //
 
             return false;
         }

@@ -156,9 +156,9 @@ namespace ClassicUO.Game.UI.Gumps
                     _hpLineBorder = new LineCHB
                     (
                         1, //HPB_BAR_SPACELEFT,
-                        1,
+                        -8,
                         1, //HPB_BAR_WIDTH,
-                        7, //HPB_BAR_HEIGHT,
+                        8, //HPB_BAR_HEIGHT,
                         HPB_COLOR_DRAW_BLACK.PackedValue
                     )
                     { LineWidth = 0 }
@@ -168,7 +168,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _hpLineRed = new LineCHB
                     (
                         1, //HPB_BAR_SPACELEFT,
-                        1,
+                        -7,
                         1, //HPB_BAR_WIDTH,
                         6, //HPB_BAR_HEIGHT,
                         HPB_COLOR_DRAW_RED.PackedValue
@@ -180,7 +180,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _hpLine = new LineCHB
                     (
                         1,
-                        1,
+                        -7,
                         1,
                         6,
                         HPB_COLOR_DRAW_BLUE.PackedValue
@@ -620,9 +620,12 @@ namespace ClassicUO.Game.UI.Gumps
                         if (mobile != null)
                         {
                             //SET FIXED WIDTH
-                            _hpLineBorder.X = _hpLineRed.X = _hpLine.X = _background.X;
-                            _hpLineBorder.Y = _hpLineRed.Y = _hpLine.Y = _background.Y;
-                            _hpLineBorder.LineWidth = _hpLineRed.LineWidth = /*_hpLine.LineWidth =*/ _background.Width;
+                            _hpLineBorder.X = _background.X - 1;
+                            _hpLineRed.X = _hpLine.X = _background.X;
+                            _hpLineBorder.Y = _background.Y - 8;
+                            _hpLineRed.Y = _hpLine.Y = _background.Y - 7;
+                            _hpLineBorder.LineWidth = _background.Width + 2;
+                            _hpLineRed.LineWidth = /*_hpLine.LineWidth =*/ _background.Width;
 
                             //SET HP WIDTH
                             int hits = CalculatePercents(entity.HitsMax, entity.Hits, _background.Width);

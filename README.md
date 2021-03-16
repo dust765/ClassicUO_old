@@ -183,6 +183,8 @@ show death location on wordlmap
 
 hp line in nameoverheads
 
+more filters in nameoverheads
+
 # commands
 
 type command in chat
@@ -539,6 +541,18 @@ comments:
 
 /src/Game/Managers/MacroManager.cs	2678
 
+/src/Game/Managers/NameOverHeadManager.cs	37
+
+/src/Game/Managers/NameOverHeadManager.cs	39
+
+/src/Game/Managers/NameOverHeadManager.cs	50
+
+/src/Game/Managers/NameOverHeadManager.cs	55
+
+/src/Game/Managers/NameOverHeadManager.cs	101
+
+/src/Game/Managers/NameOverHeadManager.cs	250
+
 /src/Game/Managers/TargetManager.cs	26
 
 /src/Game/Managers/TargetManager.cs	28
@@ -794,6 +808,26 @@ comments:
 /src/Game/UI/Gumps/NameOverheadGump.cs	613
 
 /src/Game/UI/Gumps/NameOverheadGump.cs	662
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	37
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	39
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	58
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	64
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	138
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	296
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	299
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	306
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	343
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	393
 
 /src/Game/UI/Gumps/OptionsGump.cs	31
 
