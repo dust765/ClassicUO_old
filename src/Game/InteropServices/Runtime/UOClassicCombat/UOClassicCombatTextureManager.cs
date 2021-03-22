@@ -1,26 +1,4 @@
-﻿#region license
-
-// Copyright (C) 2020 project dust765
-// 
-// This project is an alternative client for the game Ultima Online.
-// The goal of this is to develop a lightweight client considering
-// new technologies.
-// 
-//  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or
-//  (at your option) any later version.
-// 
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-// 
-//  You should have received a copy of the GNU General Public License
-//  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-#endregion
-using System.IO;
+﻿using System.IO;
 
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
@@ -41,11 +19,12 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
         public bool IsHalosEnabled => ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.TextureManagerHalos;
 
 
-        private static BlendState _blend = new BlendState {
+        private static BlendState _blend = new BlendState
+        {
             ColorSourceBlend = Blend.SourceAlpha,
             ColorDestinationBlend = Blend.InverseSourceAlpha
         };
-        
+
         private static Vector3 _hueVector = Vector3.Zero;
 
         //TEXTURES ARROW
@@ -54,7 +33,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
         {
             get
             {
-                if(_arrowGreen == null || _arrowGreen.IsDisposed)
+                if (_arrowGreen == null || _arrowGreen.IsDisposed)
                 {
                     Stream stream = typeof(CUOEnviroment).Assembly.GetManifestResourceStream("ClassicUO.arrow_green.png");
                     Texture2D.TextureDataFromStreamEXT(stream, out int w, out int h, out byte[] pixels);
@@ -90,7 +69,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
         {
             get
             {
-                if(_arrowRed == null || _arrowRed.IsDisposed)
+                if (_arrowRed == null || _arrowRed.IsDisposed)
                 {
                     Stream stream = typeof(CUOEnviroment).Assembly.GetManifestResourceStream("ClassicUO.arrow_red.png");
                     Texture2D.TextureDataFromStreamEXT(stream, out int w, out int h, out byte[] pixels);
@@ -136,6 +115,24 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 }
 
                 return _arrowOrange;
+            }
+        }
+
+        private static UOTexture _arrowBlue;
+        public static UOTexture ArrowBlue
+        {
+            get
+            {
+                if (_arrowBlue == null || _arrowBlue.IsDisposed)
+                {
+                    Stream stream = typeof(CUOEnviroment).Assembly.GetManifestResourceStream("ClassicUO.arrow_blue2.png");
+                    Texture2D.TextureDataFromStreamEXT(stream, out int w, out int h, out byte[] pixels);
+
+                    _arrowBlue = new UOTexture(w, h);
+                    _arrowBlue.SetData(pixels);
+                }
+
+                return _arrowBlue;
             }
         }
         //TEXTURES HALO
@@ -229,7 +226,6 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
             }
         }
 
-
         private static UOTexture _haloOrange;
         private static UOTexture HaloOrange
         {
@@ -247,15 +243,33 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 return _haloOrange;
             }
         }
+
+        private static UOTexture _haloBlue;
+        private static UOTexture HaloBlue
+        {
+            get
+            {
+                if (_haloBlue == null || _haloBlue.IsDisposed)
+                {
+                    Stream stream = typeof(CUOEnviroment).Assembly.GetManifestResourceStream("ClassicUO.halo_blue2.png");
+                    Texture2D.TextureDataFromStreamEXT(stream, out int w, out int h, out byte[] pixels, 50, 27);
+
+                    _haloBlue = new UOTexture(w, h);
+                    _haloBlue.SetData(pixels);
+                }
+
+                return _haloBlue;
+            }
+        }
         //TEXTURES END
         public void Draw(UltimaBatcher2D batcher)
         {
-           if (!IsEnabled)
-            return;
+            if (!IsEnabled)
+                return;
 
-           if (World.Player == null)
-            return;
-            
+            if (World.Player == null)
+                return;
+
             foreach (Mobile mobile in World.Mobiles)
             {
                 //SKIP FOR PLAYER
@@ -270,7 +284,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 pm.Y += (int) (mobile.Offset.Y - mobile.Offset.Z) + 22;
                 Point p1 = pm;
 
-                if (IsHalosEnabled && (HaloOrange != null || HaloGreen != null || HaloPurple != null || HaloRed != null))
+                if (IsHalosEnabled && (HaloOrange != null || HaloGreen != null || HaloPurple != null || HaloRed != null || HaloBlue != null))
                 {
                     _hueVector.Y = ShaderHueTranslator.SHADER_LIGHTS;
 
@@ -279,28 +293,51 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
 
                     batcher.SetBlendState(_blend);
 
-                    //PURPLE HALO FOR: LAST ATTACK, LASTTARGET
-                    if (TargetManager.LastAttack == mobile.Serial || TargetManager.LastTargetInfo.Serial == mobile.Serial)
-                        batcher.Draw2D(HaloPurple, pm.X, pm.Y - 15, HaloPurple.Width, HaloPurple.Height, ref _hueVector);
+                    //HUMANS ONLY
+                    if (ProfileManager.CurrentProfile.TextureManagerHumansOnly && !mobile.IsHuman)
+                    {
 
-                    //GREEN HALO FOR: ALLYS AND PARTY
-                    else if ((mobile.NotorietyFlag == NotorietyFlag.Ally || World.Party.Contains(mobile.Serial)) && mobile != World.Player)
-                        batcher.Draw2D(HaloGreen, pm.X, pm.Y - 15, HaloGreen.Width, HaloGreen.Height, ref _hueVector);
-
-                    //RED HALO FOR: CRIMINALS, GRAY, MURDERER
-                    else if (mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray || mobile.NotorietyFlag == NotorietyFlag.Murderer)
-                        batcher.Draw2D(HaloRed, pm.X, pm.Y - 15, HaloRed.Width, HaloRed.Height, ref _hueVector);
-
-                    //ORANGE HALO FOR: ENEMY
-                    else if (mobile.NotorietyFlag == NotorietyFlag.Enemy)
-                        batcher.Draw2D(HaloOrange, pm.X, pm.Y - 15, HaloOrange.Width, HaloOrange.Height, ref _hueVector);
+                    }
+                    else
+                    {
+                        //PURPLE HALO FOR: LAST ATTACK, LASTTARGET
+                        if (ProfileManager.CurrentProfile.TextureManagerPurple)
+                        {
+                            if (TargetManager.LastAttack == mobile.Serial || TargetManager.LastTargetInfo.Serial == mobile.Serial)
+                                batcher.Draw2D(HaloPurple, pm.X, pm.Y - 15, HaloPurple.Width, HaloPurple.Height, ref _hueVector);
+                        }
+                        //GREEN HALO FOR: ALLYS AND PARTY
+                        if (ProfileManager.CurrentProfile.TextureManagerGreen)
+                        {
+                            if ((mobile.NotorietyFlag == NotorietyFlag.Ally || World.Party.Contains(mobile.Serial)) && mobile != World.Player)
+                                batcher.Draw2D(HaloGreen, pm.X, pm.Y - 15, HaloGreen.Width, HaloGreen.Height, ref _hueVector);
+                        }
+                        //RED HALO FOR: CRIMINALS, GRAY, MURDERER
+                        if (ProfileManager.CurrentProfile.TextureManagerRed)
+                        {
+                            if (mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray || mobile.NotorietyFlag == NotorietyFlag.Murderer)
+                                batcher.Draw2D(HaloRed, pm.X, pm.Y - 15, HaloRed.Width, HaloRed.Height, ref _hueVector);
+                        }
+                        //ORANGE HALO FOR: ENEMY
+                        if (ProfileManager.CurrentProfile.TextureManagerOrange)
+                        {
+                            if (mobile.NotorietyFlag == NotorietyFlag.Enemy)
+                                batcher.Draw2D(HaloOrange, pm.X, pm.Y - 15, HaloOrange.Width, HaloOrange.Height, ref _hueVector);
+                        }
+                        //BLUE HALO FOR: INNOCENT
+                        if (ProfileManager.CurrentProfile.TextureManagerBlue)
+                        {
+                            if (mobile.NotorietyFlag == NotorietyFlag.Innocent)
+                                batcher.Draw2D(HaloBlue, pm.X, pm.Y - 15, HaloBlue.Width, HaloBlue.Height, ref _hueVector);
+                        }
+                    }
 
                     batcher.SetBlendState(null);
                 }
                 //HALO TEXTURE
 
                 //ARROW TEXTURE
-                
+
                 //CALC MOBILE HEIGHT FROM ANIMATION
                 AnimationsLoader.Instance.GetAnimationDimensions(mobile.AnimIndex,
                                                               mobile.GetGraphicForAnimation(),
@@ -323,7 +360,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 {
                     p1.Y += 22;
                 }
-                
+
                 p1.X -= ArrowRed.Width / 2;
                 p1.Y -= ArrowRed.Height / 1;
 
@@ -340,27 +377,50 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 */
 
                 //ARROW TEXTURE
-                if (IsArrowEnabled && (ArrowGreen != null || ArrowRed != null || ArrowPurple != null || ArrowOrange != null))
+                if (IsArrowEnabled && (ArrowGreen != null || ArrowRed != null || ArrowPurple != null || ArrowOrange != null || ArrowBlue != null))
                 {
                     _hueVector.Y = ShaderHueTranslator.SHADER_LIGHTS;
 
                     batcher.SetBlendState(_blend);
 
-                    //PURPLE ARROW FOR: LAST ATTACK, LASTTARGET
-                    if (TargetManager.LastAttack == mobile.Serial || TargetManager.LastTargetInfo.Serial == mobile.Serial)
-                        batcher.Draw2D(ArrowPurple, p1.X, p1.Y, ArrowPurple.Width, ArrowPurple.Height, ref _hueVector);
-                    
-                    //GREEN ARROW FOR: ALLYS AND PARTY
-                    else if ((mobile.NotorietyFlag == NotorietyFlag.Ally || World.Party.Contains(mobile.Serial)) && mobile != World.Player)
-                        batcher.Draw2D(ArrowGreen, p1.X, p1.Y, ArrowGreen.Width, ArrowGreen.Height, ref _hueVector);
-                    
-                    //RED ARROW FOR: CRIMINALS, GRAY, MURDERER
-                    else if (mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray || mobile.NotorietyFlag == NotorietyFlag.Murderer)
-                        batcher.Draw2D(ArrowRed, p1.X, p1.Y, ArrowRed.Width, ArrowRed.Height, ref _hueVector);
+                    //HUMANS ONLY
+                    if (ProfileManager.CurrentProfile.TextureManagerHumansOnlyArrows && !mobile.IsHuman)
+                    {
 
-                    //ORANGE ARROW FOR: ENEMY
-                    else if (mobile.NotorietyFlag == NotorietyFlag.Enemy)
-                        batcher.Draw2D(ArrowOrange, p1.X, p1.Y, ArrowOrange.Width, ArrowOrange.Height, ref _hueVector);
+                    }
+                    else
+                    {
+                        //PURPLE ARROW FOR: LAST ATTACK, LASTTARGET
+                        if (ProfileManager.CurrentProfile.TextureManagerPurpleArrows)
+                        {
+                            if (TargetManager.LastAttack == mobile.Serial || TargetManager.LastTargetInfo.Serial == mobile.Serial)
+                                batcher.Draw2D(ArrowPurple, p1.X, p1.Y, ArrowPurple.Width, ArrowPurple.Height, ref _hueVector);
+                        }
+                        //GREEN ARROW FOR: ALLYS AND PARTY
+                        if (ProfileManager.CurrentProfile.TextureManagerGreenArrows)
+                        {
+                            if ((mobile.NotorietyFlag == NotorietyFlag.Ally || World.Party.Contains(mobile.Serial)) && mobile != World.Player)
+                                batcher.Draw2D(ArrowGreen, p1.X, p1.Y, ArrowGreen.Width, ArrowGreen.Height, ref _hueVector);
+                        }
+                        //RED ARROW FOR: CRIMINALS, GRAY, MURDERER
+                        if (ProfileManager.CurrentProfile.TextureManagerRedArrows)
+                        {
+                            if (mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray || mobile.NotorietyFlag == NotorietyFlag.Murderer)
+                                batcher.Draw2D(ArrowRed, p1.X, p1.Y, ArrowRed.Width, ArrowRed.Height, ref _hueVector);
+                        }
+                        //ORANGE ARROW FOR: ENEMY
+                        if (ProfileManager.CurrentProfile.TextureManagerOrangeArrows)
+                        {
+                            if (mobile.NotorietyFlag == NotorietyFlag.Enemy)
+                                batcher.Draw2D(ArrowOrange, p1.X, p1.Y, ArrowOrange.Width, ArrowOrange.Height, ref _hueVector);
+                        }
+                        //BLUE ARROW FOR: INNOCENT
+                        if (ProfileManager.CurrentProfile.TextureManagerBlueArrows)
+                        {
+                            if (mobile.NotorietyFlag == NotorietyFlag.Innocent)
+                                batcher.Draw2D(ArrowBlue, p1.X, p1.Y, ArrowBlue.Width, ArrowBlue.Height, ref _hueVector);
+                        }
+                    }
 
                     batcher.SetBlendState(null);
                 }

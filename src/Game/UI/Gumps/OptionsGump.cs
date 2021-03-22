@@ -187,7 +187,7 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccDisarmStrikeCooldown, _uccDisarmAttemptCooldown, _uccHamstringStrikeCooldown, _uccHamstringAttemptCooldown, _uccDisarmedCooldown, _uccHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
         private Checkbox _uccEnableBuffbar, _uccSwing, _uccDoD, _uccGotD, _uccDoH, _uccGotH, _uccClilocTrigger, _uccMacroTrigger, _uccLocked;
         private Checkbox _uccEnableLines, _uccEnableLTBar;
-        private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap; //##TEXTUREMANAGER##//
+        private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _textureManagerHumansOnly, _textureManagerPurple, _textureManagerGreen, _textureManagerRed, _textureManagerOrange, _textureManagerBlue, _textureManagerHumansOnlyArrows, _textureManagerPurpleArrows, _textureManagerGreenArrows, _textureManagerRedArrows, _textureManagerOrangeArrows, _textureManagerBlueArrows, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap; //##TEXTUREMANAGER##//
         private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ;
         private Checkbox _uccEnableAL, _uccEnableGridLootColoring, _uccBEnableLootAboveID;
         private InputField _uccLootDelay, _uccPurgeDelay, _uccQueueSpeed;
@@ -382,9 +382,9 @@ namespace ClassicUO.Game.UI.Gumps
             );
 
             // ## BEGIN - END ## //
-            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "") { ButtonParameter = 13 });
-            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "") { ButtonParameter = 14 });
-            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "") { ButtonParameter = 15 });
+            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Dust") { ButtonParameter = 13 });
+            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "765") { ButtonParameter = 14 });
+            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Mods") { ButtonParameter = 15 });
             // ## BEGIN - END ## //
 
             Add
@@ -4463,8 +4463,36 @@ namespace ClassicUO.Game.UI.Gumps
             startY += _textureManagerEnabled.Height + 2;
             section2.Add(_textureManagerHalosEnabled = AddCheckBox(null, "Enable TextureManager Halos", ProfileManager.CurrentProfile.TextureManagerHalos, startX, startY));
             startY += _textureManagerHalosEnabled.Height + 2;
+            //
+            section2.Add(_textureManagerHumansOnly = AddCheckBox(null, "Humans only", ProfileManager.CurrentProfile.TextureManagerHumansOnly, startX, startY));
+            startY += _textureManagerHumansOnly.Height + 2;
+            section2.Add(_textureManagerPurple = AddCheckBox(null, "Purple (last attack / last target)", ProfileManager.CurrentProfile.TextureManagerPurple, startX, startY));
+            startY += _textureManagerPurple.Height + 2;
+            section2.Add(_textureManagerGreen = AddCheckBox(null, "Green (allys / party)", ProfileManager.CurrentProfile.TextureManagerGreen, startX, startY));
+            startY += _textureManagerGreen.Height + 2;
+            section2.Add(_textureManagerRed = AddCheckBox(null, "Red (criminal / gray / murderer)", ProfileManager.CurrentProfile.TextureManagerRed, startX, startY));
+            startY += _textureManagerRed.Height + 2;
+            section2.Add(_textureManagerOrange = AddCheckBox(null, "Orange (enemy)", ProfileManager.CurrentProfile.TextureManagerOrange, startX, startY));
+            startY += _textureManagerOrange.Height + 2;
+            section2.Add(_textureManagerBlue = AddCheckBox(null, "Blue (innocent)", ProfileManager.CurrentProfile.TextureManagerBlue, startX, startY));
+            startY += _textureManagerBlue.Height + 2;
+            //
             section2.Add(_textureManagerArrowsEnabled = AddCheckBox(null, "Enable TextureManager Arrows", ProfileManager.CurrentProfile.TextureManagerArrows, startX, startY));
             startY += _textureManagerArrowsEnabled.Height + 2;
+            //
+            section2.Add(_textureManagerHumansOnlyArrows = AddCheckBox(null, "Humans only", ProfileManager.CurrentProfile.TextureManagerHumansOnlyArrows, startX, startY));
+            startY += _textureManagerHumansOnlyArrows.Height + 2;
+            section2.Add(_textureManagerPurpleArrows = AddCheckBox(null, "Purple (last attack / last target)", ProfileManager.CurrentProfile.TextureManagerPurpleArrows, startX, startY));
+            startY += _textureManagerPurpleArrows.Height + 2;
+            section2.Add(_textureManagerGreenArrows = AddCheckBox(null, "Green (allys / party)", ProfileManager.CurrentProfile.TextureManagerGreenArrows, startX, startY));
+            startY += _textureManagerGreenArrows.Height + 2;
+            section2.Add(_textureManagerRedArrows = AddCheckBox(null, "Red (criminal / gray / murderer)", ProfileManager.CurrentProfile.TextureManagerRedArrows, startX, startY));
+            startY += _textureManagerRedArrows.Height + 2;
+            section2.Add(_textureManagerOrangeArrows = AddCheckBox(null, "Orange (enemy)", ProfileManager.CurrentProfile.TextureManagerOrangeArrows, startX, startY));
+            startY += _textureManagerOrangeArrows.Height + 2;
+            section2.Add(_textureManagerBlueArrows = AddCheckBox(null, "Blue (innocent)", ProfileManager.CurrentProfile.TextureManagerBlueArrows, startX, startY));
+            startY += _textureManagerBlueArrows.Height + 2;
+            //
 
             section2.Add(AddLabel(null, "Not texture manager dependant:", startX, startY));
 
@@ -5849,7 +5877,20 @@ namespace ClassicUO.Game.UI.Gumps
 
             ProfileManager.CurrentProfile.TextureManagerEnabled = _textureManagerEnabled.IsChecked; //##TEXTUREMANAGER##//
             ProfileManager.CurrentProfile.TextureManagerArrows = _textureManagerArrowsEnabled.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerHumansOnlyArrows = _textureManagerHumansOnlyArrows.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerPurpleArrows = _textureManagerPurpleArrows.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerGreenArrows = _textureManagerGreenArrows.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerRedArrows = _textureManagerRedArrows.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerOrangeArrows = _textureManagerOrangeArrows.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerBlueArrows = _textureManagerBlueArrows.IsChecked;
+
             ProfileManager.CurrentProfile.TextureManagerHalos = _textureManagerHalosEnabled.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerHumansOnly = _textureManagerHumansOnly.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerPurple = _textureManagerPurple.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerGreen = _textureManagerGreen.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerRed = _textureManagerRed.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerOrange = _textureManagerOrange.IsChecked;
+            ProfileManager.CurrentProfile.TextureManagerBlue = _textureManagerBlue.IsChecked;
 
             ProfileManager.CurrentProfile.TransparentHousesEnabled = _transparentHouses.IsChecked;
             ProfileManager.CurrentProfile.TransparentHousesZ = _transparentHousesZ.Value;
