@@ -497,9 +497,7 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 if (UOClassicCombatLines.entryList.Exists(mob => mob.Serial == mobile.Serial) || _draw)
                 {
                     //CALC WHERE MOBILE IS
-                    Point pm = mobile.RealScreenPosition;
-                    pm.X += (int)mobile.Offset.X + 22;
-                    pm.Y += (int)(mobile.Offset.Y - mobile.Offset.Z) + 22;
+                    Point pm = UOClassicCombatCollection.CalcUnderChar5(mobile);
 
                     if (!mobile.IsDead)
                     {

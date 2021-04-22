@@ -26,6 +26,7 @@ using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Renderer;
+using ClassicUO.IO.Resources;
 
 using ClassicUO.Network;
 using static ClassicUO.Network.NetClient;
@@ -60,6 +61,73 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
         public static int _HealOnHPChangeHP = 0;
         public static bool _HarmOnSwingON = false;
         public static bool _HarmOnSwingTrigger = false;
+
+        //UCC
+        public static Point CalcUnderChar5(Mobile mobile)
+        {
+            Point p = mobile.RealScreenPosition;
+            p.X += (int)mobile.Offset.X + 22 + 5;
+            p.Y += (int)(mobile.Offset.Y - mobile.Offset.Z) + 22 + 5;
+
+            p = Client.Game.Scene.Camera.WorldToScreen(p);
+
+            return p;
+        }
+
+        public static Point CalcUnderChar(Mobile mobile)
+        {
+            Point p = mobile.RealScreenPosition;
+            p.X += (int)mobile.Offset.X + 22;
+            p.Y += (int)(mobile.Offset.Y - mobile.Offset.Z) + 22;
+
+            p = Client.Game.Scene.Camera.WorldToScreen(p);
+
+            return p;
+        }
+        public static Point CalcOverChar(Mobile mobile)
+        {
+            Point p = mobile.RealScreenPosition;
+            p.X += (int)mobile.Offset.X + 22;
+            p.Y += (int)(mobile.Offset.Y - mobile.Offset.Z) + 22;
+
+            AnimationsLoader.Instance.GetAnimationDimensions
+                            (
+                                mobile.AnimIndex,
+                                mobile.GetGraphicForAnimation(),
+                                /*(byte) m.GetDirectionForAnimation()*/
+                                0,
+                                /*Mobile.GetGroupForAnimation(m, isParent:true)*/
+                                0,
+                                mobile.IsMounted,
+                                /*(byte) m.AnimIndex*/
+                                0,
+                                out int centerX,
+                                out int centerY,
+                                out int width,
+                                out int height
+                            );
+
+            Point p1 = p;
+
+            p1.X = (int)(mobile.RealScreenPosition.X + mobile.Offset.X + 22);
+            p1.Y = (int)(mobile.RealScreenPosition.Y + (mobile.Offset.Y - mobile.Offset.Z) - (height + centerY + 8 + 22) + (mobile.IsGargoyle && mobile.IsFlying ? -22 : !mobile.IsMounted ? 22 : 0));
+
+            if (mobile.ObjectHandlesOpened)
+            {
+                p1.Y -= Constants.OBJECT_HANDLES_GUMP_HEIGHT + 5;
+            }
+
+            /*
+            if (!(p1.X < 0 || p1.X > screenW - mobile.HitsTexture.Width || p1.Y < 0 || p1.Y > screenH))
+            {
+                return p1;
+            }
+            */
+
+            p1 = Client.Game.Scene.Camera.WorldToScreen(p1);
+
+            return p1;
+        }
 
         //MACROS
         //GAME\SCENES\GAMESCENEINPUTHANDLER.CS

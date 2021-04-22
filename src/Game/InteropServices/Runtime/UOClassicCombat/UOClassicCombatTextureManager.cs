@@ -28,6 +28,9 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
         private static Vector3 _hueVector = Vector3.Zero;
 
         //TEXTURES ARROW
+        private int ARROW_WIDTH_HALF = 14;
+        private int ARROW_HEIGHT_HALF = 14;
+
         private static UOTexture _arrowGreen;
         public static UOTexture ArrowGreen
         {
@@ -136,6 +139,8 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
             }
         }
         //TEXTURES HALO
+        private int HALO_WIDTH_HALF = 25;
+
         private static UOTexture _haloGreen;
         private static UOTexture HaloGreen
         {
@@ -278,19 +283,14 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
 
                 _hueVector.Z = 0f;
 
-                //CALC WHERE MOBILE IS
-                Point pm = mobile.RealScreenPosition;
-                pm.X += (int) mobile.Offset.X + 22;
-                pm.Y += (int) (mobile.Offset.Y - mobile.Offset.Z) + 22;
-                Point p1 = pm;
-
                 if (IsHalosEnabled && (HaloOrange != null || HaloGreen != null || HaloPurple != null || HaloRed != null || HaloBlue != null))
                 {
+                    //CALC WHERE MOBILE IS
+                    Point pm = UOClassicCombatCollection.CalcUnderChar(mobile);
+                    //Move from center by half texture width
+                    pm.X -= HALO_WIDTH_HALF;
+
                     _hueVector.Y = ShaderHueTranslator.SHADER_LIGHTS;
-
-                    //Move from center by texture width
-                    pm.X = pm.X - HaloOrange.Width / 2;
-
                     batcher.SetBlendState(_blend);
 
                     //HUMANS ONLY
@@ -337,50 +337,22 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                 //HALO TEXTURE
 
                 //ARROW TEXTURE
-
-                //CALC MOBILE HEIGHT FROM ANIMATION
-                AnimationsLoader.Instance.GetAnimationDimensions(mobile.AnimIndex,
-                                                              mobile.GetGraphicForAnimation(),
-                                                              /*(byte) m.GetDirectionForAnimation()*/ 0,
-                                                              /*Mobile.GetGroupForAnimation(m, isParent:true)*/ 0,
-                                                              mobile.IsMounted,
-                                                              /*(byte) m.AnimIndex*/ 0,
-                                                              out int centerX,
-                                                              out int centerY,
-                                                              out int width,
-                                                              out int height);
-
-                p1.Y -= height + centerY + 8 + 22;
-
-                if (mobile.IsGargoyle && mobile.IsFlying)
-                {
-                    p1.Y -= 22;
-                }
-                else if (!mobile.IsMounted)
-                {
-                    p1.Y += 22;
-                }
-
-                p1.X -= ArrowRed.Width / 2;
-                p1.Y -= ArrowRed.Height / 1;
-
-                if (mobile.ObjectHandlesOpened)
-                {
-                    p1.Y -= 22;
-                }
-
-                /* MAYBE USE THIS INCASE IT SHOWS OUTSIDE OF GAMESCREEN?
-                if (!(p1.X < 0 || p1.X > screenW - mobile.HitsTexture.Width || p1.Y < 0 || p1.Y > screenH))
-                            {
-                                mobile.HitsTexture.Draw(batcher, p1.X, p1.Y);
-                            }
-                */
-
-                //ARROW TEXTURE
                 if (IsArrowEnabled && (ArrowGreen != null || ArrowRed != null || ArrowPurple != null || ArrowOrange != null || ArrowBlue != null))
                 {
-                    _hueVector.Y = ShaderHueTranslator.SHADER_LIGHTS;
+                    //CALC MOBILE HEIGHT FROM ANIMATION
+                    Point p1 = UOClassicCombatCollection.CalcOverChar(mobile);
+                    //Move from center by half texture width
+                    p1.X -= ARROW_WIDTH_HALF;
+                    p1.Y -= ARROW_HEIGHT_HALF;
 
+                    /* MAYBE USE THIS INCASE IT SHOWS OUTSIDE OF GAMESCREEN?
+                    if (!(p1.X < 0 || p1.X > screenW - mobile.HitsTexture.Width || p1.Y < 0 || p1.Y > screenH))
+                                {
+                                    mobile.HitsTexture.Draw(batcher, p1.X, p1.Y);
+                                }
+                    */
+
+                    _hueVector.Y = ShaderHueTranslator.SHADER_LIGHTS;
                     batcher.SetBlendState(_blend);
 
                     //HUMANS ONLY
