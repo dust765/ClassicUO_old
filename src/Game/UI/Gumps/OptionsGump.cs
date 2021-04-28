@@ -180,7 +180,7 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY, _mobileHamstrungTimeCooldown, _SpecialSetLastTargetClilocText;
         private Checkbox _multipleUnderlinesSelfParty, _multipleUnderlinesSelfPartyBigBars, _useOldHealthBars;
         private HSliderBar _multipleUnderlinesSelfPartyTransparency, _flashingHealthbarTreshold;
-        private Checkbox _ignoreStaminaCheck, _blackOutlineStatics, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
+        private Checkbox _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _blackOutlineStatics, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
 
         //##UCC##//
         private Checkbox _uccEnableSelf, _uccBandiesPoison, _uccNoRefreshPotAfterHamstrung;
@@ -3690,6 +3690,12 @@ namespace ClassicUO.Game.UI.Gumps
             section7.Add(_ignoreStaminaCheck = AddCheckBox(null, "Ignore stamina check", ProfileManager.CurrentProfile.IgnoreStaminaCheck, startX, startY));
             startY += _ignoreStaminaCheck.Height + 2;
 
+            section7.Add(_blockWoS = AddCheckBox(null, "Block Wall of Stone", ProfileManager.CurrentProfile.BlockWoS, startX, startY));
+            startY += _blockWoS.Height + 2;
+
+            section7.Add(_blockWoSFelOnly = AddCheckBox(null, "Block Wall of Stone Fel only", ProfileManager.CurrentProfile.BlockWoSFelOnly, startX, startY));
+            startY += _blockWoSFelOnly.Height + 2;
+
             // MISC END
             //MACRO START
             SettingsSection section8 = AddSettingsSection(box, "-----MACRO-----");
@@ -5668,6 +5674,37 @@ namespace ClassicUO.Game.UI.Gumps
             ProfileManager.CurrentProfile.UseOldHealthBars = _useOldHealthBars.IsChecked;
             ProfileManager.CurrentProfile.BlackOutlineStatics = _blackOutlineStatics.IsChecked;
             ProfileManager.CurrentProfile.IgnoreStaminaCheck = _ignoreStaminaCheck.IsChecked;
+
+            //
+            if (ProfileManager.CurrentProfile.BlockWoS != _blockWoS.IsChecked)
+            {
+                if (_blockWoS.IsChecked)
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = true;
+                    TileDataLoader.Instance.StaticData[1872].IsImpassable = true;
+                }
+                else
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = false;
+                    TileDataLoader.Instance.StaticData[1872].IsImpassable = false;
+                }
+                ProfileManager.CurrentProfile.BlockWoS = _blockWoS.IsChecked;
+            }
+            if (ProfileManager.CurrentProfile.BlockWoSFelOnly != _blockWoSFelOnly.IsChecked)
+            {
+                if (_blockWoSFelOnly.IsChecked && World.MapIndex == 0)
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = true;
+                    TileDataLoader.Instance.StaticData[1872].IsImpassable = true;
+                }
+                else
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = false;
+                    TileDataLoader.Instance.StaticData[1872].IsImpassable = false;
+                }
+                ProfileManager.CurrentProfile.BlockWoSFelOnly = _blockWoSFelOnly.IsChecked;
+            }
+            //
 
             if (ProfileManager.CurrentProfile.TreeType != _treeType.SelectedIndex)
             {

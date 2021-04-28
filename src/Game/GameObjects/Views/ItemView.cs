@@ -90,6 +90,21 @@ namespace ClassicUO.Game.GameObjects
                 if (ProfileManager.CurrentProfile.ColorStealth || ProfileManager.CurrentProfile.StealthNeonType != 0)
                     hue = UOClassicCombatCollection.StealthtHue(hue);
             }
+
+            if (ProfileManager.CurrentProfile.BlockWoS)
+            {
+                if (StaticFilters.IsWallOfStone(Graphic) || Graphic == 1872)
+                {
+                    if (ProfileManager.CurrentProfile.BlockWoSFelOnly && World.MapIndex != 0)
+                    {
+
+                    }
+                    else
+                    {
+                        TileDataLoader.Instance.StaticData[graphic].IsImpassable = true;
+                    }
+                }
+            }
             // ## BEGIN - END ## //
 
             if (OnGround)
