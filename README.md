@@ -97,6 +97,8 @@ Black Outline for statics
 
 Ignore stamina check
 
+Block Wall of Stone
+
 # macros
 
 ObjectInfo (-info command)
@@ -136,6 +138,8 @@ SetMimic_PlayerSerial (set master)
 OpenCorpsesSafe (open corpses in 2 tiles safe to loot)
 
 OpenJournal2 (open second journal)
+
+Toggle transparent / invis houses
 
 # Note
 
