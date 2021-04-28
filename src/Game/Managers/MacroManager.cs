@@ -1646,6 +1646,15 @@ namespace ClassicUO.Game.Managers
                     }
 
                     break;
+
+                case MacroType.ToggleTransparentHouses:
+                    ProfileManager.CurrentProfile.TransparentHousesEnabled = !ProfileManager.CurrentProfile.TransparentHousesEnabled;
+
+                    break;
+                case MacroType.ToggleInvisibleHouses:
+                    ProfileManager.CurrentProfile.InvisibleHousesEnabled = !ProfileManager.CurrentProfile.InvisibleHousesEnabled;
+
+                    break;
                 //##Equip Manager##//
                 case MacroType.EquipManager:
 
@@ -2430,7 +2439,11 @@ namespace ClassicUO.Game.Managers
         ToggleDrawRoofs,
         ToggleTreeStumps,
         ToggleVegetation,
-        ToggleCaveTiles
+        ToggleCaveTiles,
+        // ## BEGIN - END ## //
+        ToggleTransparentHouses,
+        ToggleInvisibleHouses
+        // ## BEGIN - END ## //
     }
 
     internal enum MacroSubType
