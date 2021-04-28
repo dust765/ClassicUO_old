@@ -177,7 +177,7 @@ namespace ClassicUO.Game.UI.Gumps
         private ClickableColorBox _stealthColorPickerBox, _energyBoltColorPickerBox, _goldColorPickerBox, _treeTileColorPickerBox, _blockerTileColorPickerBox, _highlightTileRangeColorPickerBox, _highlightTileRangeColorPickerBoxSpell, _highlightLastTargetTypeColorPickerBox, _highlightLastTargetTypeColorPickerBoxPoison, _highlightLastTargetTypeColorPickerBoxPara, _highlightGlowingWeaponsTypeColorPickerBoxHue, _hueImpassableViewColorPickerBox;
         private Combobox _goldType, _treeType, _blockerType, _stealthNeonType, _energyBoltNeonType, _glowingWeaponsType, _energyBoltArtType, _highlightLastTargetType, _highlightLastTargetTypePoison, _highlightLastTargetTypePara;
         private HSliderBar _highlightTileRangeRange, _highlightTileRangeRangeSpell, _lastTargetRange;
-        private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY, _mobileHamstrungTimeCooldown, _SpecialSetLastTargetClilocText;
+        private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY, _mobileHamstrungTimeCooldown, _SpecialSetLastTargetClilocText, _blockWoSArt;
         private Checkbox _multipleUnderlinesSelfParty, _multipleUnderlinesSelfPartyBigBars, _useOldHealthBars;
         private HSliderBar _multipleUnderlinesSelfPartyTransparency, _flashingHealthbarTreshold;
         private Checkbox _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _blackOutlineStatics, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
@@ -3696,6 +3696,25 @@ namespace ClassicUO.Game.UI.Gumps
             section7.Add(_blockWoSFelOnly = AddCheckBox(null, "Block Wall of Stone Fel only", ProfileManager.CurrentProfile.BlockWoSFelOnly, startX, startY));
             startY += _blockWoSFelOnly.Height + 2;
 
+            section7.Add(AddLabel(null, "Wall of Stone Art (DEZ): ", startX, startY));
+            section7.Add
+            (
+                _blockWoSArt = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _blockWoSArt.SetText(ProfileManager.CurrentProfile.BlockWoSArt.ToString());
+            startY += _blockWoSArt.Height + 2;
+
             // MISC END
             //MACRO START
             SettingsSection section8 = AddSettingsSection(box, "-----MACRO-----");
@@ -5676,17 +5695,18 @@ namespace ClassicUO.Game.UI.Gumps
             ProfileManager.CurrentProfile.IgnoreStaminaCheck = _ignoreStaminaCheck.IsChecked;
 
             //
+            ProfileManager.CurrentProfile.BlockWoSArt = uint.Parse(_blockWoSArt.Text);
             if (ProfileManager.CurrentProfile.BlockWoS != _blockWoS.IsChecked)
             {
                 if (_blockWoS.IsChecked)
                 {
                     TileDataLoader.Instance.StaticData[0x038A].IsImpassable = true;
-                    TileDataLoader.Instance.StaticData[1872].IsImpassable = true;
+                    TileDataLoader.Instance.StaticData[ProfileManager.CurrentProfile.BlockWoSArt].IsImpassable = true;
                 }
                 else
                 {
                     TileDataLoader.Instance.StaticData[0x038A].IsImpassable = false;
-                    TileDataLoader.Instance.StaticData[1872].IsImpassable = false;
+                    TileDataLoader.Instance.StaticData[ProfileManager.CurrentProfile.BlockWoSArt].IsImpassable = false;
                 }
                 ProfileManager.CurrentProfile.BlockWoS = _blockWoS.IsChecked;
             }
@@ -5695,12 +5715,12 @@ namespace ClassicUO.Game.UI.Gumps
                 if (_blockWoSFelOnly.IsChecked && World.MapIndex == 0)
                 {
                     TileDataLoader.Instance.StaticData[0x038A].IsImpassable = true;
-                    TileDataLoader.Instance.StaticData[1872].IsImpassable = true;
+                    TileDataLoader.Instance.StaticData[ProfileManager.CurrentProfile.BlockWoSArt].IsImpassable = true;
                 }
                 else
                 {
                     TileDataLoader.Instance.StaticData[0x038A].IsImpassable = false;
-                    TileDataLoader.Instance.StaticData[1872].IsImpassable = false;
+                    TileDataLoader.Instance.StaticData[ProfileManager.CurrentProfile.BlockWoSArt].IsImpassable = false;
                 }
                 ProfileManager.CurrentProfile.BlockWoSFelOnly = _blockWoSFelOnly.IsChecked;
             }

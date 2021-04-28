@@ -338,6 +338,7 @@ namespace ClassicUO.Configuration
         public bool UseOldHealthBars { get; set; } = false;
         public bool BlockWoS { get; set; } = false;
         public bool BlockWoSFelOnly { get; set; } = false;
+        public uint BlockWoSArt { get; set; } = 1872;
         public bool BlackOutlineStatics { get; set; } = false;
         public bool FlashingHealthbarOutlineSelf { get; set; } = false;
         public bool FlashingHealthbarOutlineParty { get; set; } = false;

@@ -93,11 +93,11 @@ namespace ClassicUO.Game.GameObjects
 
             if (ProfileManager.CurrentProfile.BlockWoS)
             {
-                if (StaticFilters.IsWallOfStone(Graphic) || Graphic == 1872)
+                if (StaticFilters.IsWallOfStone(Graphic) || Graphic == ProfileManager.CurrentProfile.BlockWoSArt)
                 {
                     if (ProfileManager.CurrentProfile.BlockWoSFelOnly && World.MapIndex != 0)
                     {
-
+                        TileDataLoader.Instance.StaticData[graphic].IsImpassable = false;
                     }
                     else
                     {
