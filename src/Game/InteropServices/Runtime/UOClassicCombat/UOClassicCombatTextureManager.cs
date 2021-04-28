@@ -301,35 +301,25 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                     else
                     {
                         //PURPLE HALO FOR: LAST ATTACK, LASTTARGET
-                        if (ProfileManager.CurrentProfile.TextureManagerPurple)
-                        {
-                            if (TargetManager.LastAttack == mobile.Serial || TargetManager.LastTargetInfo.Serial == mobile.Serial)
-                                batcher.Draw2D(HaloPurple, pm.X, pm.Y - 15, HaloPurple.Width, HaloPurple.Height, ref _hueVector);
-                        }
+                        if ((TargetManager.LastAttack == mobile.Serial & TargetManager.LastAttack != 0 & ProfileManager.CurrentProfile.TextureManagerPurple) || (TargetManager.LastTargetInfo.Serial == mobile.Serial & TargetManager.LastTargetInfo.Serial != 0 & ProfileManager.CurrentProfile.TextureManagerPurple))
+                            batcher.Draw2D(HaloPurple, pm.X, pm.Y - 15, HaloPurple.Width, HaloPurple.Height, ref _hueVector);
                         //GREEN HALO FOR: ALLYS AND PARTY
-                        if (ProfileManager.CurrentProfile.TextureManagerGreen)
-                        {
-                            if ((mobile.NotorietyFlag == NotorietyFlag.Ally || World.Party.Contains(mobile.Serial)) && mobile != World.Player)
-                                batcher.Draw2D(HaloGreen, pm.X, pm.Y - 15, HaloGreen.Width, HaloGreen.Height, ref _hueVector);
-                        }
+                        else if (mobile.NotorietyFlag == NotorietyFlag.Ally & ProfileManager.CurrentProfile.TextureManagerGreen || World.Party.Contains(mobile.Serial) & ProfileManager.CurrentProfile.TextureManagerGreen)
+                            batcher.Draw2D(HaloGreen, pm.X, pm.Y - 15, HaloGreen.Width, HaloGreen.Height, ref _hueVector);
                         //RED HALO FOR: CRIMINALS, GRAY, MURDERER
-                        if (ProfileManager.CurrentProfile.TextureManagerRed)
+                        else if (mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray || mobile.NotorietyFlag == NotorietyFlag.Murderer)
                         {
-                            if (mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray || mobile.NotorietyFlag == NotorietyFlag.Murderer)
+                            if (ProfileManager.CurrentProfile.TextureManagerRed)
+                            {
                                 batcher.Draw2D(HaloRed, pm.X, pm.Y - 15, HaloRed.Width, HaloRed.Height, ref _hueVector);
+                            }
                         }
                         //ORANGE HALO FOR: ENEMY
-                        if (ProfileManager.CurrentProfile.TextureManagerOrange)
-                        {
-                            if (mobile.NotorietyFlag == NotorietyFlag.Enemy)
-                                batcher.Draw2D(HaloOrange, pm.X, pm.Y - 15, HaloOrange.Width, HaloOrange.Height, ref _hueVector);
-                        }
+                        else if (mobile.NotorietyFlag == NotorietyFlag.Enemy & ProfileManager.CurrentProfile.TextureManagerOrange)
+                            batcher.Draw2D(HaloOrange, pm.X, pm.Y - 15, HaloOrange.Width, HaloOrange.Height, ref _hueVector);
                         //BLUE HALO FOR: INNOCENT
-                        if (ProfileManager.CurrentProfile.TextureManagerBlue)
-                        {
-                            if (mobile.NotorietyFlag == NotorietyFlag.Innocent)
-                                batcher.Draw2D(HaloBlue, pm.X, pm.Y - 15, HaloBlue.Width, HaloBlue.Height, ref _hueVector);
-                        }
+                        else if (mobile.NotorietyFlag == NotorietyFlag.Innocent & ProfileManager.CurrentProfile.TextureManagerBlue)
+                            batcher.Draw2D(HaloBlue, pm.X, pm.Y - 15, HaloBlue.Width, HaloBlue.Height, ref _hueVector);
                     }
 
                     batcher.SetBlendState(null);
@@ -358,41 +348,28 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
                     //HUMANS ONLY
                     if (ProfileManager.CurrentProfile.TextureManagerHumansOnlyArrows && !mobile.IsHuman)
                     {
+                        batcher.SetBlendState(null);
+                        continue;
+                    }
 
-                    }
-                    else
+                    //PURPLE ARROW FOR: LAST ATTACK, LASTTARGET
+                    if ((TargetManager.LastAttack == mobile.Serial & TargetManager.LastAttack != 0 & ProfileManager.CurrentProfile.TextureManagerPurpleArrows) || (TargetManager.LastTargetInfo.Serial == mobile.Serial & TargetManager.LastTargetInfo.Serial != 0 & ProfileManager.CurrentProfile.TextureManagerPurpleArrows))
+                        batcher.Draw2D(ArrowPurple, p1.X, p1.Y, ArrowPurple.Width, ArrowPurple.Height, ref _hueVector);
+                    //GREEN ARROW FOR: ALLYS AND PARTY
+                    else if ((mobile.NotorietyFlag == NotorietyFlag.Ally & ProfileManager.CurrentProfile.TextureManagerGreenArrows || World.Party.Contains(mobile.Serial)) && mobile != World.Player & ProfileManager.CurrentProfile.TextureManagerGreenArrows)
+                        batcher.Draw2D(ArrowGreen, p1.X, p1.Y, ArrowGreen.Width, ArrowGreen.Height, ref _hueVector);
+                    //RED ARROW FOR: CRIMINALS, GRAY, MURDERER
+                    else if (mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray || mobile.NotorietyFlag == NotorietyFlag.Murderer)
                     {
-                        //PURPLE ARROW FOR: LAST ATTACK, LASTTARGET
-                        if (ProfileManager.CurrentProfile.TextureManagerPurpleArrows)
-                        {
-                            if (TargetManager.LastAttack == mobile.Serial || TargetManager.LastTargetInfo.Serial == mobile.Serial)
-                                batcher.Draw2D(ArrowPurple, p1.X, p1.Y, ArrowPurple.Width, ArrowPurple.Height, ref _hueVector);
-                        }
-                        //GREEN ARROW FOR: ALLYS AND PARTY
-                        if (ProfileManager.CurrentProfile.TextureManagerGreenArrows)
-                        {
-                            if ((mobile.NotorietyFlag == NotorietyFlag.Ally || World.Party.Contains(mobile.Serial)) && mobile != World.Player)
-                                batcher.Draw2D(ArrowGreen, p1.X, p1.Y, ArrowGreen.Width, ArrowGreen.Height, ref _hueVector);
-                        }
-                        //RED ARROW FOR: CRIMINALS, GRAY, MURDERER
                         if (ProfileManager.CurrentProfile.TextureManagerRedArrows)
-                        {
-                            if (mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray || mobile.NotorietyFlag == NotorietyFlag.Murderer)
-                                batcher.Draw2D(ArrowRed, p1.X, p1.Y, ArrowRed.Width, ArrowRed.Height, ref _hueVector);
-                        }
-                        //ORANGE ARROW FOR: ENEMY
-                        if (ProfileManager.CurrentProfile.TextureManagerOrangeArrows)
-                        {
-                            if (mobile.NotorietyFlag == NotorietyFlag.Enemy)
-                                batcher.Draw2D(ArrowOrange, p1.X, p1.Y, ArrowOrange.Width, ArrowOrange.Height, ref _hueVector);
-                        }
-                        //BLUE ARROW FOR: INNOCENT
-                        if (ProfileManager.CurrentProfile.TextureManagerBlueArrows)
-                        {
-                            if (mobile.NotorietyFlag == NotorietyFlag.Innocent)
-                                batcher.Draw2D(ArrowBlue, p1.X, p1.Y, ArrowBlue.Width, ArrowBlue.Height, ref _hueVector);
-                        }
+                            batcher.Draw2D(ArrowRed, p1.X, p1.Y, ArrowRed.Width, ArrowRed.Height, ref _hueVector);
                     }
+                    //ORANGE ARROW FOR: ENEMY
+                    else if (mobile.NotorietyFlag == NotorietyFlag.Enemy & ProfileManager.CurrentProfile.TextureManagerOrangeArrows)
+                        batcher.Draw2D(ArrowOrange, p1.X, p1.Y, ArrowOrange.Width, ArrowOrange.Height, ref _hueVector);
+                    //BLUE ARROW FOR: INNOCENT
+                    else if (mobile.NotorietyFlag == NotorietyFlag.Innocent & ProfileManager.CurrentProfile.TextureManagerBlueArrows)
+                        batcher.Draw2D(ArrowBlue, p1.X, p1.Y, ArrowBlue.Width, ArrowBlue.Height, ref _hueVector);
 
                     batcher.SetBlendState(null);
                 }
