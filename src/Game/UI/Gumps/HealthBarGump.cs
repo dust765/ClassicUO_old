@@ -584,7 +584,7 @@ namespace ClassicUO.Game.UI.Gumps
                 }
 
                 // ## BEGIN - END ## //
-                if (_timersTextBox != null)
+                if (_timersTextBox != null && mobile != null)
                 {
                     if (mobile.HamstrungTime >= 1 && ProfileManager.CurrentProfile.MobileHamstrungTime)
                     {

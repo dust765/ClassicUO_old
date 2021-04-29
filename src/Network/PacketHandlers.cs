@@ -5568,6 +5568,13 @@ namespace ClassicUO.Network
             Flags flags = (Flags) p.ReadByte();
             ushort unk2 = p.ReadUShort();
 
+            // ## BEGIN - END ## //
+            if (graphic == 130 & ProfileManager.CurrentProfile.BlockWoSArtForceAoS)
+            {
+                graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockWoSArt);
+                hue = 945;
+            }
+            // ## BEGIN - END ## //
 
             if (serial != World.Player)
             {

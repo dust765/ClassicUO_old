@@ -97,11 +97,11 @@ namespace ClassicUO.Game.GameObjects
                 {
                     if (ProfileManager.CurrentProfile.BlockWoSFelOnly && World.MapIndex != 0)
                     {
-                        TileDataLoader.Instance.StaticData[graphic].IsImpassable = false;
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
                     }
                     else
                     {
-                        TileDataLoader.Instance.StaticData[graphic].IsImpassable = true;
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
                     }
                 }
             }

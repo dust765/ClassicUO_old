@@ -180,7 +180,7 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY, _mobileHamstrungTimeCooldown, _SpecialSetLastTargetClilocText, _blockWoSArt;
         private Checkbox _multipleUnderlinesSelfParty, _multipleUnderlinesSelfPartyBigBars, _useOldHealthBars;
         private HSliderBar _multipleUnderlinesSelfPartyTransparency, _flashingHealthbarTreshold;
-        private Checkbox _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _blackOutlineStatics, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
+        private Checkbox _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _lockWoSArtForceAoS, _blackOutlineStatics, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
 
         //##UCC##//
         private Checkbox _uccEnableSelf, _uccBandiesPoison, _uccNoRefreshPotAfterHamstrung;
@@ -3715,6 +3715,9 @@ namespace ClassicUO.Game.UI.Gumps
             _blockWoSArt.SetText(ProfileManager.CurrentProfile.BlockWoSArt.ToString());
             startY += _blockWoSArt.Height + 2;
 
+            section7.Add(_lockWoSArtForceAoS = AddCheckBox(null, "Force WoS to Art above (AoS only?) and hue 945", ProfileManager.CurrentProfile.BlockWoSArtForceAoS, startX, startY));
+            startY += _lockWoSArtForceAoS.Height + 2;
+
             // MISC END
             //MACRO START
             SettingsSection section8 = AddSettingsSection(box, "-----MACRO-----");
@@ -5695,6 +5698,7 @@ namespace ClassicUO.Game.UI.Gumps
             ProfileManager.CurrentProfile.IgnoreStaminaCheck = _ignoreStaminaCheck.IsChecked;
 
             //
+            ProfileManager.CurrentProfile.BlockWoSArtForceAoS = _lockWoSArtForceAoS.IsChecked;
             ProfileManager.CurrentProfile.BlockWoSArt = uint.Parse(_blockWoSArt.Text);
             if (ProfileManager.CurrentProfile.BlockWoS != _blockWoS.IsChecked)
             {

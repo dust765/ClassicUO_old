@@ -624,6 +624,9 @@ namespace ClassicUO.Game.InteropServices.Runtime.UOClassicCombat
         }
         public static void UpdateHamstrung(Mobile mobile)
         {
+            if (mobile == null)
+                return;
+
             if (Time.Ticks >= (mobile.HamstrungTimeTick + 100))
             {
                 if (mobile.HamstrungTime >= 100)
