@@ -48,6 +48,11 @@ namespace ClassicUO.IO
     {
         public static string GetUOFilePath(string file)
         {
+            if (UOFilesOverrideMap.Instance.TryGetValue(file.ToLowerInvariant(), out string uoFilePath))
+            {
+                return uoFilePath;
+            }
+
             return Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, file);
         }
 
@@ -56,13 +61,15 @@ namespace ClassicUO.IO
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
+            UOFilesOverrideMap.Instance.Load(); // need to load this first so that it manages can perform the file overrides if needed
+
             List<Task> tasks = new List<Task>
             {
                 AnimationsLoader.Instance.Load(),
                 AnimDataLoader.Instance.Load(),
                 ArtLoader.Instance.Load(),
                 MapLoader.Instance.Load(),
-                ClilocLoader.Instance.Load(Settings.GlobalSettings.ClilocFile),
+                ClilocLoader.Instance.Load(Settings.GlobalSettings.Language),
                 GumpsLoader.Instance.Load(),
                 FontsLoader.Instance.Load(),
                 HuesLoader.Instance.Load(),
@@ -157,13 +164,15 @@ namespace ClassicUO.IO
 
                             if (skill != null)
                             {
-                                DataReader reader = new DataReader();
-                                reader.SetData(verdata.StartAddress, verdata.Length);
+                                unsafe
+                                {
+                                    StackDataReader reader = new StackDataReader((byte*)verdata.StartAddress, verdata.Length);
 
-                                skill.HasAction = reader.ReadBool();
-                                skill.Name = reader.ReadASCII((int) (vh.Length - 1));
+                                    skill.HasAction = reader.Read<byte>() != 0;
+                                    skill.Name = reader.ReadASCII((int)(vh.Length - 1));
 
-                                reader.ReleaseData();
+                                    reader.Release();
+                                }
                             }
                         }
                         else if (vh.FileID == 30)

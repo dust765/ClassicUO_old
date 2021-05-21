@@ -142,8 +142,6 @@ namespace ClassicUO.Game.Scenes
 
         public override void Unload()
         {
-            Audio.StopMusic();
-
             UIManager.GetGump<LoginBackground>()?.Dispose();
 
             _currentGump?.Dispose();
@@ -346,7 +344,6 @@ namespace ClassicUO.Game.Scenes
                 CurrentLoginStep = LoginSteps.Connecting;
             }
 
-            EncryptionHelper.Initialize(true, NetClient.ClientAddress, (ENCRYPTION_TYPE) Settings.GlobalSettings.Encryption);
 
             if (!await NetClient.LoginSocket.Connect(Settings.GlobalSettings.IP, Settings.GlobalSettings.Port))
             {
@@ -354,6 +351,40 @@ namespace ClassicUO.Game.Scenes
                 CurrentLoginStep = LoginSteps.PopUpMessage;
                 Log.Error("No Internet Access");
             }
+        }
+
+        public int GetServerIndexByName(string name)
+        {
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                for (int i = 0; i < Servers.Length; i++)
+                {
+                    if (Servers[i].Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        public int GetServerIndexFromSettings()
+        {
+            string name = Settings.GlobalSettings.LastServerName;
+            int index = GetServerIndexByName(name);
+
+            if (index == -1)
+            {
+                index = Settings.GlobalSettings.LastServerNum;
+            }
+
+            if (index < 0 || index >= Servers.Length)
+            {
+                index = 0;
+            }
+
+            return index;
         }
 
         public void SelectServer(byte index)
@@ -371,6 +402,7 @@ namespace ClassicUO.Game.Scenes
                 }
 
                 Settings.GlobalSettings.LastServerNum = (ushort) (1 + ServerIndex);
+                Settings.GlobalSettings.LastServerName = Servers[ServerIndex].Name;
                 Settings.GlobalSettings.Save();
 
                 CurrentLoginStep = LoginSteps.LoginInToServer;
@@ -388,7 +420,7 @@ namespace ClassicUO.Game.Scenes
                 Settings.GlobalSettings.LastCharacterName = Characters[index];
                 Settings.GlobalSettings.Save();
                 CurrentLoginStep = LoginSteps.EnteringBritania;
-                NetClient.Socket.Send(new PSelectCharacter(index, Characters[index], NetClient.ClientAddress));
+                NetClient.Socket.Send(new PSelectCharacter(index, Characters[index], NetClient.Socket.LocalIP));
             }
         }
 
@@ -420,7 +452,7 @@ namespace ClassicUO.Game.Scenes
                 (
                     character,
                     cityIndex,
-                    NetClient.ClientAddress,
+                    NetClient.Socket.LocalIP,
                     ServerIndex,
                     (uint) i,
                     profession
@@ -434,7 +466,7 @@ namespace ClassicUO.Game.Scenes
         {
             if (CurrentLoginStep == LoginSteps.CharacterSelection)
             {
-                NetClient.Socket.Send(new PDeleteCharacter((byte) index, NetClient.ClientAddress));
+                NetClient.Socket.Send(new PDeleteCharacter((byte) index, NetClient.Socket.LocalIP));
             }
         }
 
@@ -498,6 +530,10 @@ namespace ClassicUO.Game.Scenes
             Log.Info("Connected!");
             CurrentLoginStep = LoginSteps.VerifyingAccount;
 
+            uint address = NetClient.LoginSocket.LocalIP;
+
+            EncryptionHelper.Initialize(true, address, (ENCRYPTION_TYPE)Settings.GlobalSettings.Encryption);
+
             if (Client.Version >= ClientVersion.CV_6040)
             {
                 uint clientVersion = (uint) Client.Version;
@@ -509,7 +545,7 @@ namespace ClassicUO.Game.Scenes
 
                 PSeed packet = new PSeed
                 (
-                    NetClient.ClientAddress,
+                    address,
                     major,
                     minor,
                     build,
@@ -520,8 +556,6 @@ namespace ClassicUO.Game.Scenes
             }
             else
             {
-                uint address = NetClient.ClientAddress;
-
                 // TODO: stackalloc
                 byte[] packet = new byte[4];
                 packet[0] = (byte) (address >> 24);
@@ -594,15 +628,9 @@ namespace ClassicUO.Game.Scenes
             {
                 if (Servers.Length != 0)
                 {
-                    int index = Settings.GlobalSettings.LastServerNum;
+                    int index = GetServerIndexFromSettings();
 
-                    if (index <= 0 || index > Servers.Length)
-                    {
-                        Log.Warn($"Wrong server index: {index}");
-                        index = 1;
-                    }
-
-                    SelectServer((byte) Servers[index - 1].Index);
+                    SelectServer((byte)Servers[index].Index);
                 }
             }
         }
@@ -783,8 +811,8 @@ namespace ClassicUO.Game.Scenes
                         cityName,
                         cityBuilding,
                         descriptions != null ? descriptions[i] : string.Empty,
-                        (ushort) oldtowns[i].X,
-                        (ushort) oldtowns[i].Y,
+                        (ushort) oldtowns[i % oldtowns.Length].X,
+                        (ushort) oldtowns[i % oldtowns.Length].Y,
                         0,
                         0,
                         isNew
