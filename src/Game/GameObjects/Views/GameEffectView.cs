@@ -1,37 +1,12 @@
-#region license
-
-// Copyright (c) 2021, andreakarasho
-// All rights reserved.
-// 
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
-// 1. Redistributions of source code must retain the above copyright
-//    notice, this list of conditions and the following disclaimer.
-// 2. Redistributions in binary form must reproduce the above copyright
-//    notice, this list of conditions and the following disclaimer in the
-//    documentation and/or other materials provided with the distribution.
-// 3. All advertising materials mentioning features or use of this software
-//    must display the following acknowledgement:
-//    This product includes software developed by andreakarasho - https://github.com/andreakarasho
-// 4. Neither the name of the copyright holder nor the
-//    names of its contributors may be used to endorse or promote products
-//    derived from this software without specific prior written permission.
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
-// EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
-// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-#endregion
-
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ClassicUO.Configuration;
+// ## BEGIN - END ## //
+using ClassicUO.Game.InteropServices.Runtime.UOClassicCombat;
+// ## BEGIN - END ## //
 using ClassicUO.Game.Data;
 using ClassicUO.Game.Scenes;
 using ClassicUO.IO.Resources;
@@ -40,7 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ClassicUO.Game.GameObjects
 {
-    internal sealed partial class AnimatedItemEffect
+    partial class GameEffect
     {
         private static readonly Lazy<BlendState> _multiplyBlendState = new Lazy<BlendState>
         (
@@ -113,6 +88,7 @@ namespace ClassicUO.Game.GameObjects
             }
         );
 
+
         public override bool Draw(UltimaBatcher2D batcher, int posX, int posY)
         {
             if (IsDestroyed || !AllowedToDraw)
@@ -129,8 +105,19 @@ namespace ClassicUO.Game.GameObjects
 
             ref StaticTiles data = ref TileDataLoader.Instance.StaticData[Graphic];
 
-            posX += (int) Offset.X;
-            posY -= (int) (Offset.Z - Offset.Y);
+            posX += (int)Offset.X;
+            posY += (int)(Offset.Z + Offset.Y);
+
+            // ## BEGIN - END ## //
+            if (Graphic == 0x379F) //energy bolt
+            {
+                if (ProfileManager.CurrentProfile.EnergyBoltArtType != 0)
+                    Graphic = UOClassicCombatCollection.EnergyBoltArt(Graphic);
+
+                if (ProfileManager.CurrentProfile.ColorEnergyBolt || ProfileManager.CurrentProfile.EnergyBoltNeonType != 0)
+                    Hue = UOClassicCombatCollection.EnergyBoltHue(Hue);
+            }
+            // ## BEGIN - END ## //
 
             ushort hue = Hue;
 
@@ -143,24 +130,20 @@ namespace ClassicUO.Game.GameObjects
                 hue = Constants.DEAD_RANGE_COLOR;
             }
 
-            ShaderHueTranslator.GetHueVector(ref HueVector, hue, data.IsPartialHue, data.IsTranslucent ? .5f : 0);
+            ShaderHueTranslator.GetHueVector(ref HueVector, hue, data.IsPartialHue, data.IsTranslucent ? .5f : 0, effect: true);
 
-            if (data.IsLight)
-            {
-                HueVector.Y = ShaderHueTranslator.SHADER_LIGHTS;
-            }
-            
             switch (Blend)
             {
                 case GraphicEffectBlendMode.Multiply:
                     batcher.SetBlendState(_multiplyBlendState.Value);
 
-                    DrawStatic
+                    DrawStaticRotated
                     (
                         batcher,
                         AnimationGraphic,
                         posX,
                         posY,
+                        AngleToTarget,
                         ref HueVector
                     );
 
@@ -172,12 +155,13 @@ namespace ClassicUO.Game.GameObjects
                 case GraphicEffectBlendMode.ScreenMore:
                     batcher.SetBlendState(_screenBlendState.Value);
 
-                    DrawStatic
+                    DrawStaticRotated
                     (
                         batcher,
                         AnimationGraphic,
                         posX,
                         posY,
+                        AngleToTarget,
                         ref HueVector
                     );
 
@@ -188,12 +172,13 @@ namespace ClassicUO.Game.GameObjects
                 case GraphicEffectBlendMode.ScreenLess:
                     batcher.SetBlendState(_screenLessBlendState.Value);
 
-                    DrawStatic
+                    DrawStaticRotated
                     (
                         batcher,
                         AnimationGraphic,
                         posX,
                         posY,
+                        AngleToTarget,
                         ref HueVector
                     );
 
@@ -204,12 +189,13 @@ namespace ClassicUO.Game.GameObjects
                 case GraphicEffectBlendMode.NormalHalfTransparent:
                     batcher.SetBlendState(_normalHalfBlendState.Value);
 
-                    DrawStatic
+                    DrawStaticRotated
                     (
                         batcher,
                         AnimationGraphic,
                         posX,
                         posY,
+                        AngleToTarget,
                         ref HueVector
                     );
 
@@ -220,12 +206,13 @@ namespace ClassicUO.Game.GameObjects
                 case GraphicEffectBlendMode.ShadowBlue:
                     batcher.SetBlendState(_shadowBlueBlendState.Value);
 
-                    DrawStatic
+                    DrawStaticRotated
                     (
                         batcher,
                         AnimationGraphic,
                         posX,
                         posY,
+                        AngleToTarget,
                         ref HueVector
                     );
 
@@ -246,12 +233,13 @@ namespace ClassicUO.Game.GameObjects
                     //}
                     //else
 
-                    DrawStatic
+                    DrawStaticRotated
                     (
                         batcher,
                         AnimationGraphic,
                         posX,
                         posY,
+                        AngleToTarget,
                         ref HueVector
                     );
 
@@ -268,5 +256,6 @@ namespace ClassicUO.Game.GameObjects
 
             return true;
         }
+
     }
 }

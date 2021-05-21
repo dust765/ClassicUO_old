@@ -63,7 +63,6 @@ namespace ClassicUO.Network
         public delegate void OnPacketBufferReader(ref PacketBufferReader p);
 
         private static uint _requestedGridLoot;
-        private static readonly DataReader _reader = new DataReader();
 
         private static readonly TextFileParser _parser = new TextFileParser(string.Empty, new[] { ' ' }, new char[] { }, new[] { '{', '}' });
         private static readonly TextFileParser _cmdparser = new TextFileParser(string.Empty, new[] { ' ', ',' }, new char[] { }, new[] { '@', '@' });
@@ -788,6 +787,8 @@ namespace ClassicUO.Network
                 World.Light.Overall = ProfileManager.CurrentProfile.LightLevel;
             }
 
+            Client.Game.Scene.Audio.UpdateCurrentMusicVolume();
+
             if (Client.Version >= Data.ClientVersion.CV_200)
             {
                 if (ProfileManager.CurrentProfile != null)
@@ -795,7 +796,7 @@ namespace ClassicUO.Network
                     NetClient.Socket.Send(new PGameWindowSize((uint) ProfileManager.CurrentProfile.GameWindowSize.X, (uint) ProfileManager.CurrentProfile.GameWindowSize.Y));
                 }
 
-                NetClient.Socket.Send(new PLanguage("ENU"));
+                NetClient.Socket.Send(new PLanguage(Settings.GlobalSettings.Language));
             }
 
             NetClient.Socket.Send(new PClientVersion(Settings.GlobalSettings.ClientVersion));
@@ -1151,60 +1152,30 @@ namespace ClassicUO.Network
                 destZ = destEntity.Z;
             }
 
-            GameEffect effect;
+            World.SpawnEffect
+            (
+                !SerialHelper.IsValid(source) || !SerialHelper.IsValid(dest) ? GraphicEffectType.Moving : GraphicEffectType.DragEffect,
+                source,
+                dest,
+                graphic,
+                hue,
+                sourceX, sourceY, sourceZ,
+                destX, destY, destZ,
+                5, 5000,
+                true,
+                false,
+                false,
+                GraphicEffectBlendMode.Normal
+            );
 
-
-            if (!SerialHelper.IsValid(source) || !SerialHelper.IsValid(dest))
-            {
-                effect = new MovingEffect
-                (
-                    source,
-                    dest,
-                    sourceX,
-                    sourceY,
-                    sourceZ,
-                    destX,
-                    destY,
-                    destZ,
-                    graphic,
-                    hue,
-                    true,
-                    5
-                )
-                {
-                    Duration = Time.Ticks + 5000
-                };
-            }
-            else
-            {
-                effect = new DragEffect
-                (
-                    source,
-                    dest,
-                    sourceX,
-                    sourceY,
-                    sourceZ,
-                    destX,
-                    destY,
-                    destZ,
-                    graphic,
-                    hue
-                )
-                {
-                    Duration = Time.Ticks + 5000
-                };
-            }
-
-            if (effect.AnimDataFrame.FrameCount != 0)
-            {
-                effect.IntervalInMs = effect.AnimDataFrame.FrameInterval * 45;
-            }
-            else
-            {
-                effect.IntervalInMs = 13;
-            }
-
-            World.AddEffect(effect);
+            //if (effect.AnimDataFrame.FrameCount != 0)
+            //{
+            //    effect.IntervalInMs = (uint) (effect.AnimDataFrame.FrameInterval * 45);
+            //}
+            //else
+            //{
+            //    effect.IntervalInMs = 13;
+            //}
         }
 
         private static void OpenContainer(ref PacketBufferReader p)
@@ -2093,6 +2064,8 @@ namespace ClassicUO.Network
             if (World.Player != null && Client.Game.Scene is LoginScene)
             {
                 GameScene scene = new GameScene();
+                scene.Audio = Client.Game.Scene.Audio;
+                Client.Game.Scene.Audio = null;
                 Client.Game.SetScene(scene);
 
                 //GameActions.OpenPaperdoll(World.Player);
@@ -2113,7 +2086,15 @@ namespace ClassicUO.Network
                     NetClient.Socket.Send(new PClientViewRange(World.ClientViewRange));
                 }
 
-                ProfileManager.CurrentProfile.ReadGumps(ProfileManager.ProfilePath)?.ForEach(UIManager.Add);
+                List<Gump> gumps = ProfileManager.CurrentProfile.ReadGumps(ProfileManager.ProfilePath);
+
+                if (gumps != null)
+                {
+                    foreach (Gump gump in gumps)
+                    {
+                        UIManager.Add(gump);
+                    }
+                }
             }
         }
 
@@ -2434,7 +2415,7 @@ namespace ClassicUO.Network
                 }
             }
 
-            World.AddEffect
+            World.SpawnEffect
             (
                 type,
                 source,
@@ -3269,16 +3250,23 @@ namespace ClassicUO.Network
             int x = (Client.Game.Window.ClientBounds.Width >> 1) - (rect.Width >> 1);
             int y = (Client.Game.Window.ClientBounds.Height >> 1) - (rect.Height >> 1);
 
-            ColorPickerGump gump = new ColorPickerGump
-            (
-                serial,
-                graphic,
-                x,
-                y,
-                null
-            );
+            ColorPickerGump gump = UIManager.GetGump<ColorPickerGump>(serial);
 
-            UIManager.Add(gump);
+            if (gump == null || gump.IsDisposed || gump.Graphic != graphic)
+            {
+                gump?.Dispose();
+
+                gump = new ColorPickerGump
+                (
+                    serial,
+                    graphic,
+                    x,
+                    y,
+                    null
+                );
+
+                UIManager.Add(gump);
+            }
         }
 
         private static void MovePlayer(ref PacketBufferReader p)
@@ -4999,23 +4987,26 @@ namespace ClassicUO.Network
             ref RawList<CustomBuildObject> list
         )
         {
-            byte* decompressedBytes = stackalloc byte[dlen];
+            //byte* decompressedBytes = stackalloc byte[dlen];
 
-            fixed (byte* srcPtr = &source[sourcePosition])
+            byte[] decompressedBytes = new byte[dlen];
+
+            fixed (byte* dbytesPtr = decompressedBytes)
             {
-                ZLib.Decompress
-                (
-                    (IntPtr) srcPtr,
-                    clen,
-                    0,
-                    (IntPtr) decompressedBytes,
-                    dlen
-                );
-            }
+                fixed (byte* srcPtr = &source[sourcePosition])
+                {
+                    ZLib.Decompress
+                    (
+                        (IntPtr) srcPtr,
+                        clen,
+                        0,
+                        (IntPtr) dbytesPtr,
+                        dlen
+                    );
+                }
 
-            _reader.SetData(decompressedBytes, dlen);
+                StackDataReader reader = new StackDataReader(dbytesPtr, dlen);
 
-            {
                 ushort id = 0;
                 sbyte x = 0, y = 0, z = 0;
 
@@ -5026,10 +5017,10 @@ namespace ClassicUO.Network
 
                         for (uint i = 0; i < c; i++)
                         {
-                            id = _reader.ReadUShortReversed();
-                            x = _reader.ReadSByte();
-                            y = _reader.ReadSByte();
-                            z = _reader.ReadSByte();
+                            id = reader.ReadLE<ushort>();
+                            x = reader.Read<sbyte>();
+                            y = reader.Read<sbyte>();
+                            z = reader.Read<sbyte>();
 
                             if (id != 0)
                             {
@@ -5054,9 +5045,9 @@ namespace ClassicUO.Network
 
                         for (uint i = 0; i < c; i++)
                         {
-                            id = _reader.ReadUShortReversed();
-                            x = _reader.ReadSByte();
-                            y = _reader.ReadSByte();
+                            id = reader.ReadLE<ushort>();
+                            x = reader.Read<sbyte>();
+                            y = reader.Read<sbyte>();
 
                             if (id != 0)
                             {
@@ -5102,7 +5093,7 @@ namespace ClassicUO.Network
 
                         for (uint i = 0; i < c; i++)
                         {
-                            id = _reader.ReadUShortReversed();
+                            id = reader.ReadLE<ushort>();
                             x = (sbyte) (i / multiHeight + offX);
                             y = (sbyte) (i % multiHeight + offY);
 
@@ -5114,9 +5105,9 @@ namespace ClassicUO.Network
 
                         break;
                 }
-            }
 
-            _reader.ReleaseData();
+                reader.Release();
+            }
         }
 
         private static void CustomHouse(ref PacketBufferReader p)
@@ -5378,16 +5369,17 @@ namespace ClassicUO.Network
                         uint wtfCliloc = p.ReadUInt();
 
                         ushort arg_length = p.ReadUShort();
-                        string args = p.ReadUnicodeReversed();
+                        p.Skip(4);
+                        string args = p.ReadUnicodeReversed();     
                         string title = ClilocLoader.Instance.Translate((int) titleCliloc, args, true);
 
                         arg_length = p.ReadUShort();
-                        args = p.ReadUnicodeReversed();
+                        string args_2 = p.ReadUnicodeReversed();
                         string description = string.Empty;
 
                         if (descriptionCliloc != 0)
                         {
-                            description = "\n" + ClilocLoader.Instance.Translate((int) descriptionCliloc, args, true);
+                            description = "\n" + ClilocLoader.Instance.Translate((int) descriptionCliloc, String.IsNullOrEmpty(args_2) ? args : args_2, true);
 
                             if (description.Length < 2)
                             {
@@ -5396,12 +5388,12 @@ namespace ClassicUO.Network
                         }
 
                         arg_length = p.ReadUShort();
-                        args = p.ReadUnicodeReversed();
+                        string args_3 = p.ReadUnicodeReversed();
                         string wtf = string.Empty;
 
                         if (wtfCliloc != 0)
                         {
-                            wtf = ClilocLoader.Instance.Translate((int) wtfCliloc, args, true);
+                            wtf = ClilocLoader.Instance.Translate((int) wtfCliloc, String.IsNullOrEmpty(args_3) ? args : args_3, true);
 
                             if (!string.IsNullOrWhiteSpace(wtf))
                             {
@@ -6329,6 +6321,8 @@ namespace ClassicUO.Network
 
                 World.Player.UpdateScreenPosition();
                 World.Player.AddToTile();
+
+                World.Player.UpdateAbilities();
             }
         }
 
@@ -6763,7 +6757,7 @@ namespace ClassicUO.Network
                         }
                         else
                         {
-                            text = ClilocLoader.Instance.Translate(int.Parse(gparams[1]), args, true);
+                            text = ClilocLoader.Instance.Translate(int.Parse(gparams[1]), args, false);
                         }
                     }
                     else
@@ -6789,6 +6783,7 @@ namespace ClassicUO.Network
                         }
 
                         last.Priority = ClickPriority.High;
+                        last.AcceptMouseInput = true;
                     }
                 }
                 else if (string.Equals(entry, "itemproperty", StringComparison.InvariantCultureIgnoreCase))

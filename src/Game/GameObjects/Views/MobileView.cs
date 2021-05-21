@@ -68,7 +68,7 @@ namespace ClassicUO.Game.GameObjects
         {
             ResetHueVector();
 
-            int sittigIndex = 0;
+            AnimationsLoader.SittingInfoData seatData = AnimationsLoader.SittingInfoData.Empty;
             _equipConvData = null;
             _transform = false;
             FrameInfo.X = 0;
@@ -288,7 +288,7 @@ namespace ClassicUO.Game.GameObjects
             }
             else
             {
-                if ((sittigIndex = IsSitting()) != 0)
+                if (TryGetSittingInfo(out seatData))
                 {
                     animGroup = (byte) PEOPLE_ANIMATION_GROUP.PAG_STAND;
                     animIndex = 0;
@@ -301,7 +301,7 @@ namespace ClassicUO.Game.GameObjects
                         ref IsFlipped,
                         ref drawX,
                         ref drawY,
-                        sittigIndex
+                        ref seatData
                     );
 
                     drawY += SIT_OFFSET_Y;
@@ -470,48 +470,25 @@ namespace ClassicUO.Game.GameObjects
                                 }
                             }
 
-                            // Seems like all Gargoyle equipment has the 'IsWeapon' flag
-                            if (sittigIndex == 0 && IsGargoyle /*&& item.ItemData.IsWeapon*/)
-                            {
-                                DrawInternal
-                                (
-                                    batcher,
-                                    this,
-                                    item,
-                                    drawX,
-                                    drawY,
-                                    IsFlipped,
-                                    animIndex,
-                                    false,
-                                    graphic,
-                                    GetGroupForAnimation(this, graphic, true),
-                                    dir,
-                                    isHuman,
-                                    true,
-                                    alpha: HueVector.Z,
-                                    forceUOP: true
-                                );
-                            }
-                            else
-                            {
-                                DrawInternal
-                                (
-                                    batcher,
-                                    this,
-                                    item,
-                                    drawX,
-                                    drawY,
-                                    IsFlipped,
-                                    animIndex,
-                                    false,
-                                    graphic,
-                                    animGroup,
-                                    dir,
-                                    isHuman,
-                                    false,
-                                    alpha: HueVector.Z
-                                );
-                            }
+                            DrawInternal
+                            (
+                                batcher,
+                                this,
+                                item,
+                                drawX,
+                                drawY,
+                                IsFlipped, 
+                                animIndex,
+                                false,
+                                graphic,
+                                isGargoyle /*&& item.ItemData.IsWeapon*/ && seatData.Graphic == 0 ? GetGroupForAnimation(this, graphic, true) : animGroup,
+                                dir,
+                                isHuman,
+                                false,
+                                false,
+                                isGargoyle,
+                                HueVector.Z
+                            );
                         }
                         else
                         {
@@ -529,7 +506,25 @@ namespace ClassicUO.Game.GameObjects
                         {
                             Client.Game.GetScene<GameScene>().AddLight(this, this, drawX, drawY);
 
-                            break;
+                            /*DrawInternal
+                            (
+                                batcher,
+                                this,
+                                item,
+                                drawX,
+                                drawY,
+                                IsFlipped,
+                                animIndex,
+                                false,
+                                graphic,
+                                animGroup,
+                                dir,
+                                isHuman,
+                                false,
+                                alpha: HueVector.Z
+                            );
+                            */
+                            //break;
                         }
                     }
                 }
@@ -583,6 +578,7 @@ namespace ClassicUO.Game.GameObjects
 
             ushort hueFromFile = _viewHue;
 
+
             AnimationDirection direction = AnimationsLoader.Instance.GetBodyAnimationGroup
                                                            (
                                                                ref id,
@@ -618,7 +614,11 @@ namespace ClassicUO.Game.GameObjects
 
             int fc = direction.FrameCount;
 
-            if (fc > 0 && frameIndex >= fc || frameIndex < 0)
+            if (fc > 0 && frameIndex >= fc)
+            {
+                frameIndex = (sbyte) (fc - 1);
+            }
+            else if (frameIndex < 0)
             {
                 frameIndex = 0;
             }
@@ -695,6 +695,15 @@ namespace ClassicUO.Game.GameObjects
 
                     ResetHueVector();
                     ShaderHueTranslator.GetHueVector(ref HueVector, hue, partialHue, alpha);
+
+                    // this is an hack to make entities partially hued. OG client seems to ignore this.
+                    /*if (entity != null && entity.ItemData.AnimID == 0 && entity.ItemData.IsLight)
+                    {
+                        HueVector.X = entity.Hue == 0 ? owner.Hue : entity.Hue;
+                        HueVector.Y = ShaderHueTranslator.SHADER_LIGHTS;
+                        HueVector.Z = alpha;
+                    }
+                    */
 
                     if (_transform)
                     {

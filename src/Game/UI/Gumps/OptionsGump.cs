@@ -619,10 +619,10 @@ namespace ClassicUO.Game.UI.Gumps
                     50,
                     TEXTBOX_HEIGHT,
                     ResGumps.CorpseOpenRange,
-                    80,
+                    50,
                     false,
                     true,
-                    2
+                    5
                 )
             );
 
@@ -1584,10 +1584,9 @@ namespace ClassicUO.Game.UI.Gumps
                     50,
                     TEXTBOX_HEIGHT,
                     null,
-                    80,
+                    50,
                     false,
-                    true,
-                    5
+                    true
                 ),
                 4
             );
@@ -1604,10 +1603,9 @@ namespace ClassicUO.Game.UI.Gumps
                     50,
                     TEXTBOX_HEIGHT,
                     null,
-                    80,
+                    50,
                     false,
-                    true,
-                    5
+                    true
                 )
             );
 
@@ -1626,10 +1624,9 @@ namespace ClassicUO.Game.UI.Gumps
                     50,
                     TEXTBOX_HEIGHT,
                     null,
-                    80,
+                    50,
                     false,
-                    true,
-                    5
+                    true
                 )
             );
 
@@ -1645,10 +1642,9 @@ namespace ClassicUO.Game.UI.Gumps
                     50,
                     TEXTBOX_HEIGHT,
                     null,
-                    80,
+                    50,
                     false,
-                    true,
-                    5
+                    true
                 )
             );
 
@@ -2470,13 +2466,13 @@ namespace ClassicUO.Game.UI.Gumps
                 ushort yellHue = (ushort) RandomHelper.GetValue(2, 0x03b2);
                 ushort whisperHue = (ushort) RandomHelper.GetValue(2, 0x03b2);
                 _currentProfile.SpeechHue = speechHue;
-                _speechColorPickerBox.SetColor(speechHue, HuesLoader.Instance.GetPolygoneColor(12, speechHue));
+                _speechColorPickerBox.Hue = speechHue;
                 _currentProfile.EmoteHue = emoteHue;
-                _emoteColorPickerBox.SetColor(emoteHue, HuesLoader.Instance.GetPolygoneColor(12, emoteHue));
+                _emoteColorPickerBox.Hue = emoteHue;
                 _currentProfile.YellHue = yellHue;
-                _yellColorPickerBox.SetColor(yellHue, HuesLoader.Instance.GetPolygoneColor(12, yellHue));
+                _yellColorPickerBox.Hue = yellHue;
                 _currentProfile.WhisperHue = whisperHue;
-                _whisperColorPickerBox.SetColor(whisperHue, HuesLoader.Instance.GetPolygoneColor(12, whisperHue));
+                _whisperColorPickerBox.Hue = whisperHue;
             };
 
             rightArea.Add(_randomizeColorsButton);
@@ -2858,7 +2854,7 @@ namespace ClassicUO.Game.UI.Gumps
                 50,
                 TEXTBOX_HEIGHT,
                 null,
-                80,
+                50,
                 false,
                 true
             );
@@ -2888,10 +2884,10 @@ namespace ClassicUO.Game.UI.Gumps
                 50,
                 TEXTBOX_HEIGHT,
                 null,
-                80,
+                50,
                 false,
                 true,
-                2
+                999
             );
 
             _highlightAmount.SetText(_currentProfile.CounterBarHighlightAmount.ToString());
@@ -2934,10 +2930,10 @@ namespace ClassicUO.Game.UI.Gumps
                 50,
                 30,
                 ResGumps.Counter_Rows,
-                80,
+                50,
                 false,
                 true,
-                5
+                30
             );
 
             _rows.SetText(_currentProfile.CounterBarRows.ToString());
@@ -2953,10 +2949,10 @@ namespace ClassicUO.Game.UI.Gumps
                 50,
                 30,
                 ResGumps.Counter_Columns,
-                80,
+                50,
                 false,
                 true,
-                5
+                30
             );
 
             _columns.SetText(_currentProfile.CounterBarColumns.ToString());
@@ -4899,7 +4895,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 case 1: // general
                     _sliderFPS.Value = 60;
-                    _reduceFPSWhenInactive.IsChecked = false;
+                    _reduceFPSWhenInactive.IsChecked = true;
                     _highlightObjects.IsChecked = true;
                     _enableTopbar.IsChecked = false;
                     _holdDownKeyTab.IsChecked = true;
@@ -4916,9 +4912,9 @@ namespace ClassicUO.Game.UI.Gumps
                     _hpComboBox.SelectedIndex = 0;
                     _hpComboBoxShowWhen.SelectedIndex = 0;
                     _highlightByState.IsChecked = true;
-                    _poisonColorPickerBox.SetColor(0x0044, HuesLoader.Instance.GetPolygoneColor(12, 0x0044));
-                    _paralyzedColorPickerBox.SetColor(0x014C, HuesLoader.Instance.GetPolygoneColor(12, 0x014C));
-                    _invulnerableColorPickerBox.SetColor(0x0030, HuesLoader.Instance.GetPolygoneColor(12, 0x0030));
+                    _poisonColorPickerBox.Hue = 0x0044;
+                    _paralyzedColorPickerBox.Hue = 0x014C;
+                    _invulnerableColorPickerBox.Hue = 0x0030;
                     _drawRoofs.IsChecked = false;
                     _enableCaveBorder.IsChecked = false;
                     // ## BEGIN - END ## //  ORIG
@@ -5000,7 +4996,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _runMouseInSeparateThread.IsChecked = true;
                     _auraMouse.IsChecked = true;
                     _partyAura.IsChecked = true;
-                    _partyAuraColorPickerBox.SetColor(0x0044, HuesLoader.Instance.GetPolygoneColor(12, 0x0044));
+                    _partyAuraColorPickerBox.Hue = 0x0044;
 
                     break;
 
@@ -5009,7 +5005,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                 case 5: // tooltip
                     _use_tooltip.IsChecked = true;
-                    _tooltip_font_hue.SetColor(0xFFFF, 0xFF7F7F7F);
+                    _tooltip_font_hue.Hue = 0xFFFF;
                     _delay_before_display_tooltip.Value = 200;
                     _tooltip_background_opacity.Value = 70;
                     _tooltip_zoom.Value = 100;
@@ -5027,14 +5023,14 @@ namespace ClassicUO.Game.UI.Gumps
                 case 7: // speech
                     _scaleSpeechDelay.IsChecked = true;
                     _sliderSpeechDelay.Value = 100;
-                    _speechColorPickerBox.SetColor(0x02B2, HuesLoader.Instance.GetPolygoneColor(12, 0x02B2));
-                    _emoteColorPickerBox.SetColor(0x0021, HuesLoader.Instance.GetPolygoneColor(12, 0x0021));
-                    _yellColorPickerBox.SetColor(0x0021, HuesLoader.Instance.GetPolygoneColor(12, 0x0021));
-                    _whisperColorPickerBox.SetColor(0x0033, HuesLoader.Instance.GetPolygoneColor(12, 0x0033));
-                    _partyMessageColorPickerBox.SetColor(0x0044, HuesLoader.Instance.GetPolygoneColor(12, 0x0044));
-                    _guildMessageColorPickerBox.SetColor(0x0044, HuesLoader.Instance.GetPolygoneColor(12, 0x0044));
-                    _allyMessageColorPickerBox.SetColor(0x0057, HuesLoader.Instance.GetPolygoneColor(12, 0x0057));
-                    _chatMessageColorPickerBox.SetColor(0x0256, HuesLoader.Instance.GetPolygoneColor(12, 0x0256));
+                    _speechColorPickerBox.Hue = 0x02B2;
+                    _emoteColorPickerBox.Hue = 0x0021;
+                    _yellColorPickerBox.Hue = 0x0021;
+                    _whisperColorPickerBox.Hue = 0x0033;
+                    _partyMessageColorPickerBox.Hue = 0x0044;
+                    _guildMessageColorPickerBox.Hue = 0x0044;
+                    _allyMessageColorPickerBox.Hue = 0x0057;
+                    _chatMessageColorPickerBox.Hue = 0x0256;
                     _chatAfterEnter.IsChecked = false;
                     UIManager.SystemChat.IsActive = !_chatAfterEnter.IsChecked;
                     _chatAdditionalButtonsCheckbox.IsChecked = true;
@@ -5045,19 +5041,19 @@ namespace ClassicUO.Game.UI.Gumps
                     break;
 
                 case 8: // combat
-                    _innocentColorPickerBox.SetColor(0x005A, HuesLoader.Instance.GetPolygoneColor(12, 0x005A));
-                    _friendColorPickerBox.SetColor(0x0044, HuesLoader.Instance.GetPolygoneColor(12, 0x0044));
-                    _crimialColorPickerBox.SetColor(0x03b2, HuesLoader.Instance.GetPolygoneColor(12, 0x03b2));
-                    _canAttackColorPickerBox.SetColor(0x03b2, HuesLoader.Instance.GetPolygoneColor(12, 0x03b2));
-                    _murdererColorPickerBox.SetColor(0x0023, HuesLoader.Instance.GetPolygoneColor(12, 0x0023));
-                    _enemyColorPickerBox.SetColor(0x0031, HuesLoader.Instance.GetPolygoneColor(12, 0x0031));
+                    _innocentColorPickerBox.Hue = 0x005A;
+                    _friendColorPickerBox.Hue = 0x0044;
+                    _crimialColorPickerBox.Hue = 0x03b2;
+                    _canAttackColorPickerBox.Hue = 0x03b2;
+                    _murdererColorPickerBox.Hue = 0x0023;
+                    _enemyColorPickerBox.Hue = 0x0031;
                     _queryBeforAttackCheckbox.IsChecked = true;
                     _queryBeforeBeneficialCheckbox.IsChecked = false;
                     _castSpellsByOneClick.IsChecked = false;
                     _buffBarTime.IsChecked = false;
-                    _beneficColorPickerBox.SetColor(0x0059, HuesLoader.Instance.GetPolygoneColor(12, 0x0059));
-                    _harmfulColorPickerBox.SetColor(0x0020, HuesLoader.Instance.GetPolygoneColor(12, 0x0020));
-                    _neutralColorPickerBox.SetColor(0x03b2, HuesLoader.Instance.GetPolygoneColor(12, 0x03b2));
+                    _beneficColorPickerBox.Hue = 0x0059;
+                    _harmfulColorPickerBox.Hue = 0x0020;
+                    _neutralColorPickerBox.Hue = 0x03b2;
                     _spellFormatBox.SetText(ResGumps.SpellFormat_Default);
                     _spellColoringCheckbox.IsChecked = false;
                     _spellFormatCheckbox.IsChecked = false;
@@ -5447,12 +5443,36 @@ namespace ClassicUO.Game.UI.Gumps
             bool before = _currentProfile.CounterBarEnabled;
             _currentProfile.CounterBarEnabled = _enableCounters.IsChecked;
             _currentProfile.CounterBarCellSize = _cellSize.Value;
-            _currentProfile.CounterBarRows = int.Parse(_rows.Text);
-            _currentProfile.CounterBarColumns = int.Parse(_columns.Text);
+
+            if (!int.TryParse(_rows.Text, out int v))
+            {
+                v = 1;
+                _rows.SetText("1");
+            }
+
+            _currentProfile.CounterBarRows = v;
+
+            if (!int.TryParse(_columns.Text, out v))
+            {
+                v = 1;
+                _columns.SetText("1");
+            }
+            _currentProfile.CounterBarColumns = v;
             _currentProfile.CounterBarHighlightOnUse = _highlightOnUse.IsChecked;
 
-            _currentProfile.CounterBarHighlightAmount = int.Parse(_highlightAmount.Text);
-            _currentProfile.CounterBarAbbreviatedAmount = int.Parse(_abbreviatedAmount.Text);
+            if (!int.TryParse(_highlightAmount.Text, out v))
+            {
+                v = 5;
+                _highlightAmount.SetText("5");
+            }
+            _currentProfile.CounterBarHighlightAmount = v;
+
+            if (!int.TryParse(_abbreviatedAmount.Text, out v))
+            {
+                v = 1000;
+                _abbreviatedAmount.SetText("1000");
+            }
+            _currentProfile.CounterBarAbbreviatedAmount = v;
             _currentProfile.CounterBarHighlightOnAmount = _highlightOnAmount.IsChecked;
             _currentProfile.CounterBarDisplayAbbreviatedAmount = _enableAbbreviatedAmount.IsChecked;
 
@@ -6162,21 +6182,13 @@ namespace ClassicUO.Game.UI.Gumps
 
         private ClickableColorBox AddColorBox(ScrollArea area, int x, int y, ushort hue, string text)
         {
-            uint color = 0xFF7F7F7F;
-
-            if (hue != 0xFFFF)
-            {
-                color = HuesLoader.Instance.GetPolygoneColor(12, hue);
-            }
-
             ClickableColorBox box = new ClickableColorBox
             (
                 x,
                 y,
                 13,
                 14,
-                hue,
-                color
+                hue
             );
 
             area?.Add(box);
@@ -6435,6 +6447,18 @@ namespace ClassicUO.Game.UI.Gumps
 
                 Add(background);
                 Add(_textbox);
+            }
+
+            public override bool Draw(UltimaBatcher2D batcher, int x, int y)
+            {
+                if (batcher.ClipBegin(x, y, Width, Height))
+                {
+                    base.Draw(batcher, x, y);
+
+                    batcher.ClipEnd();
+                }
+
+                return true;
             }
 
 

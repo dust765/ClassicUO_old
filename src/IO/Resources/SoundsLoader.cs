@@ -34,10 +34,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ClassicUO.Configuration;
 using ClassicUO.Data;
 using ClassicUO.Game;
 using ClassicUO.IO.Audio;
+using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.IO.Resources
 {
@@ -51,6 +54,8 @@ namespace ClassicUO.IO.Resources
         private UOFile _file;
         private readonly Sound[] _musics = new Sound[Constants.MAX_SOUND_DATA_INDEX_COUNT];
         private readonly Sound[] _sounds = new Sound[Constants.MAX_SOUND_DATA_INDEX_COUNT];
+
+        private bool _useDigitalMusicFolder;
 
         private SoundsLoader()
         {
@@ -141,7 +146,7 @@ namespace ClassicUO.IO.Resources
                         }
                     }
 
-                    path = UOFileManager.GetUOFilePath(@"Music/Digital/Config.txt");
+                    path = UOFileManager.GetUOFilePath(Client.Version >= ClientVersion.CV_4011C ?  @"Music/Digital/Config.txt" : @"Music/Config.txt");
 
                     if (File.Exists(path))
                     {
@@ -158,7 +163,7 @@ namespace ClassicUO.IO.Resources
                             }
                         }
                     }
-                    else if (Client.Version <= ClientVersion.CV_5090)
+                    else
                     {
                         _musicData.Add(0, new Tuple<string, bool>("oldult01", true));
                         _musicData.Add(1, new Tuple<string, bool>("create1", false));
@@ -228,6 +233,8 @@ namespace ClassicUO.IO.Resources
                         _musicData.Add(65, new Tuple<string, bool>("serpentislecombat_u7", true));
                         _musicData.Add(66, new Tuple<string, bool>("valoriaships", true));
                     }
+
+                    _useDigitalMusicFolder = Directory.Exists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "Music", "Digital"));
                 }
             );
         }
@@ -289,13 +296,52 @@ namespace ClassicUO.IO.Resources
 
             int index = int.Parse(splits[0]);
 
-            string name = splits[1].Trim();
+            // check if name exists as file, ignoring case since UO isn't consistent with file case (necessary for *nix)
+            // also, not every filename in Config.txt has a file extension, so let's strip it out just in case.
+            string name = GetTrueFileName(Path.GetFileNameWithoutExtension(splits[1]));
 
             bool doesLoop = splits.Length == 3 && splits[2] == "loop";
 
             songData = new Tuple<int, string, bool>(index, name, doesLoop);
 
             return true;
+        }
+
+        /// <summary>
+        ///     Returns true filename from name, ignoring case since UO isn't consistent with file case (necessary for *nix)
+        /// </summary>
+        /// <param name="name">The filename from the music Config.txt</param>
+        /// <returns>a string with the true case sensitive filename</returns>
+        private static string GetTrueFileName(string name)
+        {
+            // don't worry about subdirectories, we'll recursively search them all
+            string dir = Settings.GlobalSettings.UltimaOnlineDirectory + $"/Music";
+
+            // Enumerate all files in the directory, using the file name as a pattern
+            // This will list all case variants of the filename even on file systems that
+            // are case sensitive.
+            Regex  pattern = new Regex($"^{name}.mp3", RegexOptions.IgnoreCase);
+            //string[] fileList = Directory.GetFiles(dir, "*.mp3", SearchOption.AllDirectories).Where(path => pattern.IsMatch(Path.GetFileName(path))).ToArray();
+            string[] fileList = Directory.GetFiles(dir, "*.mp3", SearchOption.AllDirectories);
+            fileList = Array.FindAll(fileList, path => pattern.IsMatch(Path.GetFileName(path)));
+
+            if (fileList != null && fileList.Length != 0)
+            {
+                if (fileList.Length > 1)
+                {
+                    // More than one file with the same name but different case spelling found
+                    Log.Warn($"Ambiguous File reference for {name}. More than one file found with different spellings.");
+                }
+
+                Log.Debug($"Loading music:\t\t{fileList[0]}");
+
+                return Path.GetFileName(fileList[0]);
+            }
+            
+            // If we've made it this far, there is no file with that name, regardless of case spelling
+            // return name and GetMusic will fail gracefully (play nothing)
+            Log.Warn($"No File found known as {name}");
+            return name;
         }
 
         private bool TryGetMusicData(int index, out string name, out bool doesLoop)
@@ -341,7 +387,7 @@ namespace ClassicUO.IO.Resources
 
                 if (music == null && TryGetMusicData(index, out string name, out bool loop))
                 {
-                    music = new UOMusic(index, name, loop);
+                    music = _useDigitalMusicFolder ? new UOMusic(index, name, loop, "Music/Digital/") : new UOMusic(index, name, loop, "Music/");
                 }
 
                 return music;

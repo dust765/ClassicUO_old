@@ -30,37 +30,37 @@
 
 #endregion
 
+using ClassicUO.Game.Managers;
 using ClassicUO.Utility;
 
 namespace ClassicUO.Game.GameObjects
 {
-    internal sealed partial class AnimatedItemEffect : GameEffect
+    internal sealed class FixedEffect : GameEffect
     {
-        public AnimatedItemEffect(ushort graphic, ushort hue, int duration, int speed)
+        public FixedEffect(EffectManager manager, ushort graphic, ushort hue, int duration, byte speed) 
+            : base(manager, graphic, hue, duration, speed)
         {
-            Graphic = graphic;
-            Hue = hue;
-            Duration = duration > 0 ? Time.Ticks + duration : -1;
-            AllowedToDraw = !GameObjectHelper.IsNoDrawable(graphic);
-            Load();
+            
         }
 
-        public AnimatedItemEffect
+        public FixedEffect
         (
+            EffectManager manager,
             int sourceX,
             int sourceY,
             int sourceZ,
             ushort graphic,
             ushort hue,
             int duration,
-            int speed
-        ) : this(graphic, hue, duration, speed)
+            byte speed
+        ) : this(manager, graphic, hue, duration, speed)
         {
             SetSource(sourceX, sourceY, sourceZ);
         }
 
-        public AnimatedItemEffect
+        public FixedEffect
         (
+            EffectManager manager,
             uint sourceSerial,
             int sourceX,
             int sourceY,
@@ -68,8 +68,8 @@ namespace ClassicUO.Game.GameObjects
             ushort graphic,
             ushort hue,
             int duration,
-            int speed
-        ) : this(graphic, hue, duration, speed)
+            byte speed
+        ) : this(manager, graphic, hue, duration, speed)
         {
             Entity source = World.Get(sourceSerial);
 

@@ -112,7 +112,7 @@ namespace ClassicUO.Game.Scenes
         private RenderTarget2D _world_render_target, _lightRenderTarget;
 
 
-        public GameScene() : base((int) SceneType.Game, true, true, true)
+        public GameScene() : base((int) SceneType.Game, true, true, false)
         {
         }
 
@@ -171,8 +171,7 @@ namespace ClassicUO.Game.Scenes
             Weather = new Weather();
 
             WorldViewportGump viewport = new WorldViewportGump(this);
-
-            UIManager.Add(viewport);
+            UIManager.Add(viewport, false);
 
             if (!ProfileManager.CurrentProfile.TopbarGumpIsDisabled)
             {
@@ -1110,18 +1109,27 @@ namespace ClassicUO.Game.Scenes
 
             int z = World.Player.Z + 5;
 
+            ushort hue = 0;
+
             for (int i = 0; i < _renderListCount; ++i)
             {
-                GameObject obj = _renderList[i];
+                ref var info = ref _renderList[i];
+
+                var obj = info.Object;
 
                 if (obj.Z <= _maxGroundZ)
                 {
                     GameObject.DrawTransparent = usecircle && obj.TransparentTest(z);
 
+                    hue = obj.Hue;
+                    obj.Hue = info.Hue;
+
                     if (obj.Draw(batcher, obj.RealScreenPosition.X, obj.RealScreenPosition.Y))
                     {
                         ++RenderedObjectsCount;
                     }
+
+                    obj.Hue = hue;
                 }
             }
 
@@ -1129,7 +1137,7 @@ namespace ClassicUO.Game.Scenes
             {
                 _multi.Draw(batcher, _multi.RealScreenPosition.X, _multi.RealScreenPosition.Y);
             }
-
+        
             // draw weather
             Weather.Draw(batcher, 0, 0);
             batcher.End();

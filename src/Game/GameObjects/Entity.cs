@@ -94,7 +94,7 @@ namespace ClassicUO.Game.GameObjects
         public ushort LootFlag;
         // ## BEGIN - END ## //
 
-        protected long LastAnimationChangeTime;
+        internal long LastAnimationChangeTime;
 
 
         public void FixHue(ushort hue)

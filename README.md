@@ -403,13 +403,13 @@ comments:
 
 /src/Game/GameObjects/Views/MobileView.cs	109
 
-/src/Game/GameObjects/Views/MovingEffectView.cs	25
+/src/Game/GameObjects/Views/GameEffectView.cs	7
 
-/src/Game/GameObjects/Views/MovingEffectView.cs	27
+/src/Game/GameObjects/Views/GameEffectView.cs	9
 
-/src/Game/GameObjects/Views/MovingEffectView.cs	45
+/src/Game/GameObjects/Views/GameEffectView.cs	111
 
-/src/Game/GameObjects/Views/MovingEffectView.cs	54
+/src/Game/GameObjects/Views/GameEffectView.cs	120
 
 /src/Game/GameObjects/Views/MultiView.cs	25
 
@@ -928,6 +928,14 @@ comments:
 /src/IO/Resources/TexmapsLoader.cs	305
 
 /src/IO/Resources/TexmapsLoader.cs	222
+
+/src/IO/Resources/TileDataLoader.cs	358
+
+/src/IO/Resources/TileDataLoader.cs	360
+
+/src/IO/Resources/TileDataLoader.cs	375
+
+/src/IO/Resources/TileDataLoader.cs	379
 
 /src/Main.cs	361
 

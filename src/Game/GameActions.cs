@@ -62,13 +62,16 @@ namespace ClassicUO.Game
 
         public static void RequestWarMode(bool war)
         {
-            if (war && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableMusic)
+            if (!World.Player.IsDead)
             {
-                Client.Game.Scene.Audio.PlayMusic((RandomHelper.GetValue(0, 3) % 3) + 38, true);
-            }
-            else if (!war)
-            {
-                Client.Game.Scene.Audio.StopWarMusic();
+                if (war && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableMusic)
+                {
+                    Client.Game.Scene.Audio.PlayMusic((RandomHelper.GetValue(0, 3) % 3) + 38, true);
+                }
+                else if (!war)
+                {
+                    Client.Game.Scene.Audio.StopWarMusic();
+                }
             }
 
             Socket.Send(new PChangeWarMode(war));
@@ -364,7 +367,7 @@ namespace ClassicUO.Game
                         type,
                         font,
                         hue,
-                        "ENU"
+                        Settings.GlobalSettings.Language
                     )
                 );
             }
@@ -408,7 +411,7 @@ namespace ClassicUO.Game
                 font,
                 entity == null ? TextType.SYSTEM : TextType.OBJECT,
                 unicode,
-                "ENU"
+                Settings.GlobalSettings.Language
             );
         }
 

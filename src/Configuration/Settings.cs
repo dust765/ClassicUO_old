@@ -60,9 +60,11 @@ namespace ClassicUO.Configuration
 
         [JsonProperty("lastcharactername")] public string LastCharacterName { get; set; } = string.Empty;
 
-        [JsonProperty("cliloc")] public string ClilocFile { get; set; } = "Cliloc.enu";
+        [JsonProperty("lang")] public string Language { get; set; } = "";
 
         [JsonProperty("lastservernum")] public ushort LastServerNum { get; set; } = 1;
+
+        [JsonProperty("last_server_name")] public string LastServerName { get; set; } = string.Empty;
 
         [JsonProperty("fps")] public int FPS { get; set; } = 60;
 

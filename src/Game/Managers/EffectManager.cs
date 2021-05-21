@@ -30,14 +30,16 @@
 
 #endregion
 
+using System;
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Interfaces;
 using ClassicUO.Utility.Logging;
+using CUO_API;
 
 namespace ClassicUO.Game.Managers
 {
-    internal class EffectManager : IUpdateable
+    internal class EffectManager : LinkedObject, IUpdateable
     {
         // ## BEGIN - END ## //
         //private GameEffect _root;
@@ -47,40 +49,23 @@ namespace ClassicUO.Game.Managers
 
         public void Update(double totalTime, double frameTime)
         {
-            GameEffect f = _root;
-
-            while (f != null)
+            for (GameEffect f = (GameEffect) Items; f != null;)
             {
-                LinkedObject n = f.Next;
+                GameEffect next = (GameEffect) f.Next;
 
                 f.Update(totalTime, frameTime);
 
                 if (!f.IsDestroyed && f.Distance > World.ClientViewRange)
                 {
-                    RemoveEffect(f);
+                    f.Destroy();
                 }
 
-                if (f.IsDestroyed)
-                {
-                    if (f.Children.Count != 0)
-                    {
-                        foreach (GameEffect child in f.Children)
-                        {
-                            if (!child.IsDestroyed)
-                            {
-                                Add(child);
-                            }
-                        }
-
-                        f.Children.Clear();
-                    }
-                }
-
-                f = (GameEffect) n;
+                f = next;
             }
         }
 
-        public void Add
+
+        public void CreateEffect
         (
             GraphicEffectType type,
             uint source,
@@ -106,7 +91,7 @@ namespace ClassicUO.Game.Managers
                 Log.Warn("Unhandled particles in an effects packet.");
             }
 
-            GameEffect effect = null;
+            GameEffect effect;
 
             if (hue != 0)
             {
@@ -123,6 +108,7 @@ namespace ClassicUO.Game.Managers
                         return;
                     }
 
+                    // TODO: speed == 0 means run at standard frameInterval got from anim.mul?
                     if (speed == 0)
                     {
                         speed++;
@@ -130,6 +116,7 @@ namespace ClassicUO.Game.Managers
 
                     effect = new MovingEffect
                     (
+                        this,
                         source,
                         target,
                         srcX,
@@ -141,35 +128,55 @@ namespace ClassicUO.Game.Managers
                         graphic,
                         hue,
                         fixedDir,
+                        duration,
                         speed
                     )
                     {
-                        Blend = blendmode
+                        Blend = blendmode,
+                        CanCreateExplosionEffect = doesExplode
                     };
 
-                    if (doesExplode)
+                    break;
+
+                case GraphicEffectType.DragEffect:
+
+                    if (graphic <= 0)
                     {
-                        effect.AddChildEffect
-                        (
-                            new AnimatedItemEffect
-                            (
-                                target,
-                                targetX,
-                                targetY,
-                                targetZ,
-                                0x36Cb,
-                                hue,
-                                9,
-                                speed
-                            )
-                        );
+                        return;
                     }
+
+                    if (speed == 0)
+                    {
+                        speed++;
+                    }
+
+                    effect = new DragEffect
+                    (
+                        this,
+                        source,
+                        target,
+                        srcX,
+                        srcY,
+                        srcZ,
+                        targetX,
+                        targetY,
+                        targetZ,
+                        graphic,
+                        hue,
+                        duration,
+                        speed
+                    )
+                    {
+                        Blend = blendmode,
+                        CanCreateExplosionEffect = doesExplode
+                    };
 
                     break;
 
                 case GraphicEffectType.Lightning:
                     effect = new LightningEffect
                     (
+                        this,
                         source,
                         srcX,
                         srcY,
@@ -186,15 +193,16 @@ namespace ClassicUO.Game.Managers
                         return;
                     }
 
-                    effect = new AnimatedItemEffect
+                    effect = new FixedEffect
                     (
+                        this,
                         srcX,
                         srcY,
                         srcZ,
                         graphic,
                         hue,
                         duration,
-                        speed
+                        0 //speed [use 50ms]
                     )
                     {
                         Blend = blendmode
@@ -209,8 +217,9 @@ namespace ClassicUO.Game.Managers
                         return;
                     }
 
-                    effect = new AnimatedItemEffect
+                    effect = new FixedEffect
                     (
+                        this,
                         source,
                         srcX,
                         srcY,
@@ -218,7 +227,7 @@ namespace ClassicUO.Game.Managers
                         graphic,
                         hue,
                         duration,
-                        speed
+                        0 //speed [use 50ms]
                     )
                     {
                         Blend = blendmode
@@ -229,7 +238,7 @@ namespace ClassicUO.Game.Managers
                 case GraphicEffectType.ScreenFade:
                     Log.Warn("Unhandled 'Screen Fade' effect.");
 
-                    break;
+                    return;
 
                 default:
                     Log.Warn("Unhandled effect.");
@@ -238,78 +247,23 @@ namespace ClassicUO.Game.Managers
             }
 
 
-            Add(effect);
+            PushToBack(effect);
         }
 
-        public void Add(GameEffect effect)
+        public new void Clear()
         {
-            if (effect != null)
+            GameEffect first = (GameEffect) Items;
+
+            while (first != null)
             {
-                if (_root == null)
-                {
-                    _root = effect;
-                    effect.Previous = null;
-                    effect.Next = null;
-                }
-                else
-                {
-                    effect.Next = _root;
-                    _root.Previous = effect;
-                    effect.Previous = null;
-                    _root = effect;
-                }
-            }
-        }
+                LinkedObject n = first.Next;
 
-        public void Clear()
-        {
-            while (_root != null)
-            {
-                LinkedObject n = _root.Next;
+                first.Destroy();
 
-                foreach (GameEffect child in _root.Children)
-                {
-                    RemoveEffect(child);
-                }
-
-                _root.Children.Clear();
-
-                RemoveEffect(_root);
-
-                _root = (GameEffect) n;
-            }
-        }
-
-
-        public void RemoveEffect(GameEffect effect)
-        {
-            if (effect == null || effect.IsDestroyed)
-            {
-                return;
+                first = (GameEffect) n;
             }
 
-            if (effect.Previous == null)
-            {
-                _root = (GameEffect) effect.Next;
-
-                if (_root != null)
-                {
-                    _root.Previous = null;
-                }
-            }
-            else
-            {
-                effect.Previous.Next = effect.Next;
-
-                if (effect.Next != null)
-                {
-                    effect.Next.Previous = effect.Previous;
-                }
-            }
-
-            effect.Next = null;
-            effect.Previous = null;
-            effect.Destroy();
+            Items = null;
         }
     }
 }
