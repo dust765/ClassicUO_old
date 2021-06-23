@@ -11,17 +11,20 @@
 #define EFFECT_HUED 10
 #define GUMP 20
 
+const static float3 LIGHT_DIRECTION = float3(0.0f, 1.0f, 1.0f);
+
+
 float4x4 MatrixTransform;
 float4x4 WorldMatrix;
 float2 Viewport;
 float Brightlight;
 const float HuesPerTexture = 2048;
 
-const static float3 VEC3_ZERO = float3(0, 0, 0);
 
 sampler DrawSampler : register(s0);
 sampler HueSampler0 : register(s1);
 sampler HueSampler1 : register(s2);
+sampler HueSampler2 : register(s3);
 
 struct VS_INPUT
 {
@@ -55,9 +58,6 @@ float3 get_rgb(float gray, float hue)
 	}
 }
 
-const static float3 LIGHT_DIRECTION = float3(0.0f, 1.0f, 1.0f);
-const static float LIGHT_SCALE = 1.5;
-
 float get_light(float3 norm)
 {
 	float3 light = normalize(LIGHT_DIRECTION);
@@ -66,7 +66,14 @@ float get_light(float3 norm)
 
 	// At 45 degrees (the angle the flat tiles are lit at) it must come out
 	// to (cos(45) / 2) + 0.5 or 0.85355339...
-	return base + ((LIGHT_SCALE * (base - 0.85355339f)) - (base - 0.85355339f));
+	return base + ((Brightlight * (base - 0.85355339f)) - (base - 0.85355339f));
+}
+
+float3 get_colored_light(float shader, float gray)
+{
+	float2 texcoord = float2(gray, (shader - 0.5) / 63);
+
+	return tex2D(HueSampler2, texcoord).rgb;
 }
 
 PS_INPUT VertexShaderFunction(VS_INPUT IN)
@@ -144,18 +151,22 @@ float4 PixelShader_Hue(PS_INPUT IN) : COLOR0
 	else if (mode == SPECTRAL)
 	{
 		alpha = 1 - (color.r * 1.5f);
-		color.rgb = VEC3_ZERO;
+		color.r = 0;
+		color.g = 0;
+		color.b = 0;
 	}
 	else if (mode == SHADOW)
 	{
 		alpha = 0.4f;
-		color.rgb = VEC3_ZERO;
+		color.r = 0;
+		color.g = 0;
+		color.b = 0;
 	}
 	else if (mode == LIGHTS)
 	{
-		if (IN.Hue.x != 0.0f)
+		if (IN.Hue.x > 1.0f)
 		{
-			color.rgb *= get_rgb(color.r, hue);
+			color.rgb = get_colored_light(IN.Hue.x - 1, color.r);
 		}
 	}
 	else if (mode == EFFECT_HUED)

@@ -159,7 +159,7 @@ namespace ClassicUO.Game.GameObjects
 
         public unsafe void ApplyStretch(Map.Map map, int x, int y, sbyte z)
         {
-            if (IsStretched || TexmapsLoader.Instance.GetTexture(TileData.TexID) == null)
+            if (IsStretched || TexmapsLoader.Instance.GetValidRefEntry(TileData.TexID).Length <= 0)
             {
                 IsStretched = false;
                 AverageZ = z;
@@ -177,9 +177,18 @@ namespace ClassicUO.Game.GameObjects
             YOffsets.Left = zLeft * 4;
             YOffsets.Bottom = zBottom * 4;
 
-            AverageZ = (sbyte)((zTop + zRight + zLeft + zBottom) / 4);
-            MinZ = (sbyte)Math.Min(zTop, Math.Min(zRight, Math.Min(zLeft, zBottom)));
+            if (Math.Abs(zTop - zBottom) <= Math.Abs(zLeft - zRight))
+            {
+                AverageZ = (sbyte)((zTop + zBottom) >> 1);
+            }
+            else
+            {
+                AverageZ = (sbyte)((zLeft + zRight) >> 1);
+            }
 
+            //AverageZ = (sbyte) Math.Floor((zTop + zRight + zLeft + zBottom) / 4f);
+            MinZ = (sbyte) Math.Min(zTop, Math.Min(zRight, Math.Min(zLeft, zBottom)));
+            
             CalculateNormal(map, x, y, out NormalTop);
             CalculateNormal(map, x + 1, y, out NormalRight);
             CalculateNormal(map, x, y + 1, out NormalLeft);

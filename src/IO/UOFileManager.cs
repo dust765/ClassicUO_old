@@ -166,9 +166,9 @@ namespace ClassicUO.IO
                             {
                                 unsafe
                                 {
-                                    StackDataReader reader = new StackDataReader((byte*)verdata.StartAddress, verdata.Length);
+                                    StackDataReader reader = new StackDataReader(new ReadOnlySpan<byte>((byte*)verdata.StartAddress, (int) verdata.Length));
 
-                                    skill.HasAction = reader.Read<byte>() != 0;
+                                    skill.HasAction = reader.ReadUInt8() != 0;
                                     skill.Name = reader.ReadASCII((int)(vh.Length - 1));
 
                                     reader.Release();
