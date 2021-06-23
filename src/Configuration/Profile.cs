@@ -278,6 +278,9 @@ namespace ClassicUO.Configuration
 
         public bool IgnoreStaminaCheck { get; set; } = false;
 
+        // ## BEGIN - END ## // BASICSETUP
+
+        // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;
         public bool ShowJournalSystem { get; set; } = true;
