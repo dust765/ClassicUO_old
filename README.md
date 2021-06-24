@@ -40,6 +40,24 @@ Tree to stumps / tiles and color
 
 Blockers to stumps / tiles and color
 
+# visual helpers
+
+Highlight tiles at range
+
+Highlight tiles at range if spell is up
+
+Preview fields and wall of stone
+
+Glowing weapons
+
+Color own aura by HP
+
+Highlight lasttarget (more colors and options)
+
+# macros
+
+HighlightTileAtRange (toggle)
+
 # Added files
 
 /src/Dust765
@@ -107,6 +125,58 @@ FILE                                            START   END     COMMIT
 /src/Game/GameObjects/Static.cs                 57      59      ART / HUE CHANGES
 
 /src/Game/GameObjects/Static.cs                 121     126     ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/MultiView.cs        34      36      VISUAL HELPERS
+
+/src/Game/GameObjects/Views/MultiView.cs        129     156     VISUAL HELPERS
+
+/src/Game/GameObjects/Views/StaticView.cs       36      38      VISUAL HELPERS
+
+/src/Game/GameObjects/Views/StaticView.cs       99      126     VISUAL HELPERS
+
+/src/Game/GameObjects/Views/TileView.cs         34      36      VISUAL HELPERS
+
+/src/Game/GameObjects/Views/TileView.cs         81      108     VISUAL HELPERS
+
+/src/Game/GameCursor.cs                         37      39      VISUAL HELPERS
+
+/src/Game/GameCursor.cs                         83      87      VISUAL HELPERS
+
+/src/Game/GameCursor.cs                         472     477     VISUAL HELPERS
+
+/src/Game/GameActions.cs                        54      56      VISUAL HELPERS
+
+/src/Game/GameActions.cs                        631     634     VISUAL HELPERS
+
+/src/Game/GameActions.cs                        645     648     VISUAL HELPERS
+
+/src/Game/Managers/TargetManager.cs             35      37      VISUAL HELPERS
+
+/src/Game/Managers/TargetManager.cs             162     165     VISUAL HELPERS
+
+/src/Game/Managers/TargetManager.cs             189     191     VISUAL HELPERS
+
+/src/Game/Managers/TargetManager.cs             230     233     VISUAL HELPERS
+
+/src/Game/GameObjects/Views/MobileView.cs       37      39      VISUAL HELPERS
+
+/src/Game/GameObjects/Views/MobileView.cs       84      91      VISUAL HELPERS
+
+/src/Game/GameObjects/Views/MobileView.cs       106     121     VISUAL HELPERS
+
+/src/Game/GameObjects/Views/MobileView.cs       183     197     VISUAL HELPERS
+
+/src/Game/GameObjects/Views/MobileView.cs       393     399     VISUAL HELPERS
+
+/src/Game/GameObjects/Views/MobileView.cs       685     691     VISUAL HELPERS
+
+/src/Game/Managers/MacroManager.cs              1550    1555    VISUAL HELPERS
+
+/src/Game/Managers/MacroManager.cs              2022    2048    BASICSETUP IN VISUAL HELPERS
+
+/src/Game/Managers/MacroManager.cs              2053    2056    BASICSETUP IN VISUAL HELPERS
+
+/src/Game/Managers/MacroManager.cs              2031    2033    VISUAL HELPERS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.

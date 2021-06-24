@@ -32,6 +32,9 @@
 
 using ClassicUO.Configuration;
 using ClassicUO.Data;
+// ## BEGIN - END ## // VISUAL HELPERS
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // VISUAL HELPERS
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.UI.Gumps;
@@ -155,6 +158,11 @@ namespace ClassicUO.Game.Managers
             }
 
             IsTargeting = false;
+
+            // ## BEGIN - END ## // VISUAL HELPERS
+            GameActions.LastSpellIndexCursor = 0;
+            GameCursor._spellTime = 0;
+            // ## BEGIN - END ## // VISUAL HELPERS
         }
 
         public static void Reset()
@@ -177,6 +185,10 @@ namespace ClassicUO.Game.Managers
             TargetingState = targeting;
             _targetCursorId = cursorID;
             TargetingType = cursorType;
+
+            // ## BEGIN - END ## // VISUAL HELPERS
+            CombatCollection.StartSpelltime();
+            // ## BEGIN - END ## // VISUAL HELPERS
 
             bool lastTargetting = IsTargeting;
             IsTargeting = cursorType < TargetType.Cancel;
@@ -214,6 +226,11 @@ namespace ClassicUO.Game.Managers
                 NetClient.Socket.Send_TargetCancel(TargetingState, _targetCursorId, (byte)TargetingType);
                 IsTargeting = false;
             }
+
+            // ## BEGIN - END ## // VISUAL HELPERS
+            GameActions.LastSpellIndexCursor = 0;
+            GameCursor._spellTime = 0;
+            // ## BEGIN - END ## // VISUAL HELPERS
 
             Reset();
         }
