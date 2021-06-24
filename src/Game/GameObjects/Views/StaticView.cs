@@ -32,6 +32,9 @@
 
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // ART / HUE CHANGES
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // ART / HUE CHANGES
 using ClassicUO.Game.Scenes;
 using ClassicUO.IO;
 using ClassicUO.IO.Resources;
@@ -91,12 +94,20 @@ namespace ClassicUO.Game.GameObjects
 
             ShaderHueTranslator.GetHueVector(ref hueVec, hue, partial, 0);
 
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            /*
             bool isTree = StaticFilters.IsTree(graphic, out _);
 
             if (isTree && ProfileManager.CurrentProfile.TreeToStumps)
             {
                 graphic = Constants.TREE_REPLACE_GRAPHIC;
             }
+            */
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            graphic = CombatCollection.ArtloaderFilters(graphic);
+
+            bool isTree = StaticFilters.IsTree(graphic, out _);
+            // ## BEGIN - END ## // ART / HUE CHANGES
 
             if (AlphaHue != 255)
             {
