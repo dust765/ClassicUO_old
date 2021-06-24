@@ -178,6 +178,8 @@ FILE                                            START   END     COMMIT
 
 /src/Game/Managers/MacroManager.cs              2031    2033    VISUAL HELPERS
 
+/src/Game/GameObjects/Static.cs                 70      74      ART / HUE CHANGES FIX1
+
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
 
