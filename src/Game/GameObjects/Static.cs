@@ -67,7 +67,11 @@ namespace ClassicUO.Game.GameObjects
         {
             Static s = _pool.GetOne();
             s.Graphic = s.OriginalGraphic = graphic;
-            s.Hue = hue;
+            // ## BEGIN - END ## // ART / HUE CHANGES FIX1
+            //s.Hue = hue;
+            // ## BEGIN - END ## // ART / HUE CHANGES FIX1
+            s.Hue = s.OriginalHue = hue;
+            // ## BEGIN - END ## // ART / HUE CHANGES FIX1
             s.UpdateGraphicBySeason();
 
             if (s.ItemData.Height > 5 || s.ItemData.Height == 0)
