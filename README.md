@@ -28,6 +28,22 @@ This project is to address a problem constructed within the toxicity of this com
 
 [Video Part 3 on MetaCafe](https://www.metacafe.com/watch/12177847/project-dust765-3/)
 
+# art / hue changes
+
+Stealth footsteps color
+
+Energy Bolt - art and color
+
+Gold - art and color
+
+Tree to stumps / tiles and color
+
+Blockers to stumps / tiles and color
+
+# Added files
+
+/src/Dust765
+
 # changed constant
 
 WAIT_FOR_TARGET_DELAY 5000 -> 4000
@@ -47,26 +63,50 @@ README.md   20      *
 
 comments:
 
-FILE                                    START   END     COMMIT
-/src/Configuration/Profile.cs	        276     *       BASICSETUP
+FILE                                            START   END     COMMIT
+/src/Configuration/Profile.cs                   276     *       BASICSETUP
 
-/src/Game/UI/Gumps/OptionsGump.cs	    171     172     BASICSETUP
+/src/Game/UI/Gumps/OptionsGump.cs               171     172     BASICSETUP
 
-/src/Game/UI/Gumps/OptionsGump.cs	    349     353     BASICSETUP
+/src/Game/UI/Gumps/OptionsGump.cs               349     353     BASICSETUP
 
-/src/Game/UI/Gumps/OptionsGump.cs	    430     434     BASICSETUP
+/src/Game/UI/Gumps/OptionsGump.cs               430     434     BASICSETUP
 
-/src/Game/UI/Gumps/OptionsGump.cs	    3307    3353    BASICSETUP
+/src/Game/UI/Gumps/OptionsGump.cs               3307    3353    BASICSETUP
 
-/src/Game/UI/Gumps/OptionsGump.cs	    4156    4157    BASICSETUP
+/src/Game/UI/Gumps/OptionsGump.cs               4156    4157    BASICSETUP
 
-/src/Game/Constants.cs                  87              CONSTANTS
+/src/Game/Constants.cs                          87              CONSTANTS
 
-/src/Game/Constants.cs                  108             CONSTANTS
+/src/Game/Constants.cs                          108             CONSTANTS
 
-/src/Game/Constants.cs                  122             CONSTANTS
+/src/Game/Constants.cs                          122             CONSTANTS
 
-/src/Game/Constants.cs                  127             CONSTANTS
+/src/Game/Constants.cs                          127             CONSTANTS
+
+/src/Game/GameObjects/Views/ItemView.cs         36      38      ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/ItemView.cs         98      95      ART / HUE CHANGES
+
+/src/Game/GameObjects/Item.cs                   35      38      ART / HUE CHANGES
+
+/src/Game/GameObjects/Item.cs                   127     162     ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/GameEffectView.cs   7       10      ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/GameEffectView.cs   112     126     ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/StaticView.cs       35      37      ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/StaticView.cs       97      110     ART / HUE CHANGES
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs     37      39      ART / HUE CHANGES
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs     385     400     ART / HUE CHANGES
+
+/src/Game/GameObjects/Static.cs                 57      59      ART / HUE CHANGES
+
+/src/Game/GameObjects/Static.cs                 121     126     ART / HUE CHANGES
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
