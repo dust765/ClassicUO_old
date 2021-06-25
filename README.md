@@ -54,6 +54,14 @@ Color own aura by HP
 
 Highlight lasttarget (more colors and options)
 
+# healthbar
+
+highlight lasttarget healthbar
+
+color border by state
+
+flashing outline (many options)
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -179,6 +187,28 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/MacroManager.cs              2031    2033    VISUAL HELPERS
 
 /src/Game/GameObjects/Static.cs                 70      74      ART / HUE CHANGES FIX1
+
+/src/Game/GameObjects/Mobile.cs                 139     142     HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             358     361     HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             489     492     HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             577     580     HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             591     594     HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             598     687     HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             749     778     HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             1032    1037    HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             1202    1207    HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             1309    1314    HEALTHBAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             1356    1359    HEALTHBAR
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
