@@ -35,7 +35,9 @@ using System.Collections.Generic;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
 // ## BEGIN - END ## // VISUAL HELPERS
+// ## BEGIN - END ## // CURSOR
 using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // CURSOR
 // ## BEGIN - END ## // VISUAL HELPERS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -84,6 +86,11 @@ namespace ClassicUO.Game
         public static uint _startSpellTime { get; set; }
         public static bool _fieldEastToWest { get; set; }
         // ## BEGIN - END ## // VISUAL HELPERS
+        // ## BEGIN - END ## // CURSOR
+        private ushort _spellIconHue;
+        private Vector3 _spellIconVector = new Vector3(0, 13, 0);
+        public static RenderedText _spellTimeText { get; set; }
+        // ## BEGIN - END ## // CURSOR
 
         public GameCursor()
         {
@@ -345,6 +352,20 @@ namespace ClassicUO.Game
                 if (GameActions.LastSpellIndexCursor >= 1 && GameActions.LastSpellIndexCursor <= 64)
                 {
                     CombatCollection.UpdateSpelltime();
+
+                    // ## BEGIN - END ## // CURSOR
+                    if (_spellTime < 10 && ProfileManager.CurrentProfile.SpellOnCursor)
+                        _spellTimeText.Draw(sb, Mouse.Position.X + ProfileManager.CurrentProfile.SpellOnCursorOffset.X - 17, Mouse.Position.Y + ProfileManager.CurrentProfile.SpellOnCursorOffset.Y, 0);
+
+                    SpellDefinition def = SpellsMagery.GetSpell(GameActions.LastSpellIndexCursor);
+
+                    _spellIconVector = Vector3.Zero;
+                    _spellIconHue = CombatCollection.SpellIconHue(_spellIconHue);
+                    ShaderHueTranslator.GetHueVector(ref _spellIconVector, _spellIconHue);
+
+                    if (ProfileManager.CurrentProfile.SpellOnCursor)
+                        sb.Draw2D(GumpsLoader.Instance.GetTexture((ushort) def.GumpIconSmallID), Mouse.Position.X + ProfileManager.CurrentProfile.SpellOnCursorOffset.X, Mouse.Position.Y + ProfileManager.CurrentProfile.SpellOnCursorOffset.Y, 20, 20, ref _spellIconVector);
+                    // ## BEGIN - END ## // CURSOR
                 }
                 // ## BEGIN - END ## // VISUAL HELPERS
 
