@@ -66,6 +66,10 @@ flashing outline (many options)
 
 Show spell on cursor (and runout countdown)
 
+# overhead / underchar
+
+Distance
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -220,7 +224,17 @@ FILE                                            START   END     COMMIT
 
 /src/Game/GameCursor.cs                         484     496     CURSOR
 
+/src/Game/Managers/HealthLinesManager.cs        35      37      OVERHEAD / UNDERCHAR
 
+/src/Game/Managers/HealthLinesManager.cs        35      37      OVERHEAD / UNDERCHAR
+
+/src/Game/GameObjects/Views/MobileView.cs       61      63      OVERHEAD / UNDERCHAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             39      41      OVERHEAD / UNDERCHAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             752     754     OVERHEAD / UNDERCHAR
+
+/src/Game/UI/Gumps/HealthBarGump.cs             1994    1996    OVERHEAD / UNDERCHAR
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
