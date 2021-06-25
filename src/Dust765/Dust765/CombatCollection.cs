@@ -59,6 +59,25 @@ namespace ClassicUO.Dust765.Dust765
         public const ushort BRIGHT_PARALYZE_COLOR = 0x0A13;
         // ## BEGIN - END ## // ART / HUE CHANGES
 
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        //GAME\GAMEOBJECTS\VIEWS\MOBILEVIEW.CS
+        public static void UpdateRange(Mobile mobile)
+        {
+            mobile.RangeTexture?.Destroy();
+            mobile.RangeTexture = RenderedText.Create($"[{mobile.Distance}]", 0x0044, 3, false);
+        }
+        //GAME\MANAGERS\HEALTHLINESMANAGER.CS
+        public static void UpdateOverheads(Mobile mobile)
+        {
+            if (ProfileManager.CurrentProfile.OverheadRange)
+            {
+                if (mobile.Distance >= 0)
+                {
+                    UpdateRange(mobile);
+                }
+            }
+        }
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         // ## BEGIN - END ## // CURSOR
         //GAME\GAMECURSOR.CS
         public static ushort SpellIconHue(ushort hue)
