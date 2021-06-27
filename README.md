@@ -70,6 +70,14 @@ Show spell on cursor (and runout countdown)
 
 Distance
 
+# oldhealthlines
+
+old healthbars
+
+mana / stamina lines, for self and party, 
+
+bigger version and transparency
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -235,6 +243,16 @@ FILE                                            START   END     COMMIT
 /src/Game/UI/Gumps/HealthBarGump.cs             752     754     OVERHEAD / UNDERCHAR
 
 /src/Game/UI/Gumps/HealthBarGump.cs             1994    1996    OVERHEAD / UNDERCHAR
+
+/src/Game/Managers/HealthLinesManager.cs        38      40      OLDHEALTLINES
+
+/src/Game/Managers/HealthLinesManager.cs        59      84      OLDHEALTLINES
+
+/src/Game/Managers/HealthLinesManager.cs        243     264     OLDHEALTLINES
+
+/src/Game/Managers/HealthLinesManager.cs        296     317     OLDHEALTLINES
+
+/src/Game/Managers/HealthLinesManager.cs        411     489     OLDHEALTLINES
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
