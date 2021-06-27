@@ -78,6 +78,18 @@ mana / stamina lines, for self and party,
 
 bigger version and transparency
 
+# misc
+
+Offscreen targeting
+
+Razor lasttarget sync (Razor lasttarget string - set this to the same lasttarget overhead string as set in Razor, so the ClassicUO lasttarget will be the same as in Razor.)
+
+Black Outline for statics
+
+Ignore stamina check
+
+Block Wall of Stone
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -253,6 +265,21 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/HealthLinesManager.cs        296     317     OLDHEALTLINES
 
 /src/Game/Managers/HealthLinesManager.cs        411     489     OLDHEALTLINES
+
+/src/Network/PacketHandlers.cs	                41      43      MISC
+
+/src/Network/PacketHandlers.cs	                3635    3638    MISC
+
+/src/Network/PacketHandlers.cs	                5624    5630    MISC
+
+/src/Game/GameObjects/Views/ItemView.cs         96      111     MISC
+
+/src/IO/Resources/ArtLoader.cs                  353     357     MISC
+
+/src/IO/Resources/TileDataLoader.cs             358     360     MISC
+
+/src/IO/Resources/TileDataLoader.cs             375     379     MISC
+
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.

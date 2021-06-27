@@ -38,6 +38,9 @@ using System.Text;
 using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // MISC
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MISC
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
@@ -3637,6 +3640,11 @@ namespace ClassicUO.Network
                 }
             }
 
+            // ## BEGIN - END ## // MISC
+            if (text.StartsWith(ProfileManager.CurrentProfile.SpecialSetLastTargetClilocText.ToString()))
+                CombatCollection.SpecialSetLastTargetCliloc(serial);
+            // ## BEGIN - END ## // MISC
+
             MessageManager.HandleMessage
             (
                 entity,
@@ -5653,6 +5661,13 @@ namespace ClassicUO.Network
             Flags flags = (Flags) p.ReadUInt8();
             ushort unk2 = p.ReadUInt16BE();
 
+            // ## BEGIN - END ## // MISC
+            if (graphic == 130 & ProfileManager.CurrentProfile.BlockWoSArtForceAoS)
+            {
+                graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockWoSArt);
+                hue = 945;
+            }
+            // ## BEGIN - END ## // MISC
 
             if (serial != World.Player)
             {

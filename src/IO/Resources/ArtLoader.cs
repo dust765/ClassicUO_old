@@ -367,7 +367,11 @@ namespace ClassicUO.IO.Resources
             int pos1 = 0;
             int minX = width, minY = height, maxX = 0, maxY = 0;
 
-            if (StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
+            // ## BEGIN - END ## // MISC
+            //if (StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
+            // ## BEGIN - END ## // MISC
+            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.BlackOutlineStatics || StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
+            // ## BEGIN - END ## // MISC
             {
                 AddBlackBorder(pixels, width, height);
             }

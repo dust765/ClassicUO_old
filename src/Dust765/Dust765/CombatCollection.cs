@@ -59,6 +59,18 @@ namespace ClassicUO.Dust765.Dust765
         public const ushort BRIGHT_PARALYZE_COLOR = 0x0A13;
         // ## BEGIN - END ## // ART / HUE CHANGES
 
+        // ## BEGIN - END ## // MISC
+        //NETWORK\PACKETHANDLERS.CS
+        public static void SpecialSetLastTargetCliloc(uint target)
+        {
+            if (ProfileManager.CurrentProfile.SpecialSetLastTargetCliloc)
+            {
+                TargetManager.LastTargetInfo.Serial = target;
+                TargetManager.LastTargetInfo.SetEntity(target);
+            }
+        }
+        // ## BEGIN - END ## // MISC
+
         // ## BEGIN - END ## // OLDHEALTLINES
         //GAME\MANAGERS\HEALTHLINESMANAGER.CS
         public static (Color hpcolor, int hpwidth, int manawidth, int staminawidth) CalcUnderlines(Mobile mobile)

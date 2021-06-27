@@ -93,6 +93,22 @@ namespace ClassicUO.Game.GameObjects
                     hue = CombatCollection.StealthtHue(hue);
             }
             // ## BEGIN - END ## // ART / HUE CHANGES
+            // ## BEGIN - END ## // MISC
+            if (ProfileManager.CurrentProfile.BlockWoS)
+            {
+                if (StaticFilters.IsWallOfStone(Graphic) || Graphic == ProfileManager.CurrentProfile.BlockWoSArt)
+                {
+                    if (ProfileManager.CurrentProfile.BlockWoSFelOnly && World.MapIndex != 0)
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+                    }
+                    else
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+                    }
+                }
+            }
+            // ## BEGIN - END ## // MISC
 
             if (OnGround)
             {
