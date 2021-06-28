@@ -114,9 +114,25 @@ sticky last target healthbar (healthbar that always will be your last targets he
 
 bandage gump (bandage timer UI)
 
+# texturemanager
+
+texture manager (arrow or halo on mobiles)
+
+# UCC UI
+
+UI UCC LINES - Draws a line to HUMANS on your screen.
+
 # macros
 
 HighlightTileAtRange (toggle)
+
+ToggleTransparentHouses (toggle)
+
+ToggleInvisibleHouses (toggle)
+
+UCCLinesToggleLT (toggle)
+
+UCCLinesToggleHM (toggle)
 
 # macros
 
@@ -443,6 +459,14 @@ FILE                                            START   END     COMMIT
 /src/Game/Scenes/GameScene.cs                   1168    1170    TEXTUREMANAGER
 
 /src/ClassicUO.csproj	                        60      78      TEXTUREMANAGER
+
+/src/Game/Managers/MacroManager.cs              3747    3750    LINES
+
+/src/Game/Scenes/GameScene.cs                   97      99      LINES
+
+/src/Game/Scenes/GameScene.cs                   171     173     LINES
+
+/src/Game/Scenes/GameScene.cs                   1177    1179    LINES
 
 
 # Introduction
