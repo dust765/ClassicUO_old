@@ -201,6 +201,9 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _offscreenTargeting, _SpecialSetLastTargetCliloc, _blackOutlineStatics, _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _lockWoSArtForceAoS;
         private InputField _SpecialSetLastTargetClilocText, _blockWoSArt;
         // ## BEGIN - END ## // MISC
+        // ## BEGIN - END ## // MACROS
+        private HSliderBar _lastTargetRange;
+        // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3695,6 +3698,29 @@ namespace ClassicUO.Game.UI.Gumps
             box.WantUpdateSize = true;
             rightArea.Add(box);
 
+            // ## BEGIN - END ## // MACROS
+            SettingsSection section = AddSettingsSection(box, "-----FEATURES MACROS-----");
+
+            section.Add(AddLabel(null, "HighlightTileAtRange (toggle HighlightTileAtRange on / off)", startX, startY));
+
+            SettingsSection section2 = AddSettingsSection(box, "-----SIMPLE MACROS-----");
+            section2.Y = section.Bounds.Bottom + 40;
+
+            section2.Add(AddLabel(null, "LastTargetRC (last target with custom range check)", startX, startY));
+            section2.Add(AddLabel(null, "LastTargetRC - Range:", startX, startY));
+
+            section2.AddRight(_lastTargetRange = AddHSlider(null, 1, 30, _currentProfile.LastTargetRange, startX, startY, 200));
+            startY += _lastTargetRange.Height + 2;
+
+            section2.Add(AddLabel(null, "ObjectInfo (macro for -info command)", startX, startY));
+            section2.Add(AddLabel(null, "HideX (remove landtile, entity, mobile or item)", startX, startY));
+            section2.Add(AddLabel(null, "HealOnHPChange (keep pressed, casts heal on own hp change)", startX, startY));
+            section2.Add(AddLabel(null, "HarmOnSwing (keep pressed, casts harm on next own swing animation)", startX, startY));
+            section2.Add(AddLabel(null, "CureGH (if poisoned cure, else greater heal)", startX, startY));
+            section2.Add(AddLabel(null, "SetTargetClientSide (set target client side only)", startX, startY));
+            section2.Add(AddLabel(null, "OpenJournal2 (opens a second journal)", startX, startY));
+            section2.Add(AddLabel(null, "OpenCorpses (opens 0x2006 corpses within 2 tiles)", startX, startY));
+            // ## BEGIN - END ## // MACROS
 
             Add(rightArea, PAGE);
         }
@@ -4628,6 +4654,9 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.BlockWoSFelOnly = _blockWoSFelOnly.IsChecked;
             }
             // ## BEGIN - END ## // MISC
+            // ## BEGIN - END ## // MACROS
+            _currentProfile.LastTargetRange = _lastTargetRange.Value;
+            // ## BEGIN - END ## // MACROS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

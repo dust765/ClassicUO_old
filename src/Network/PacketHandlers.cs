@@ -2327,6 +2327,11 @@ namespace ClassicUO.Network
             );
 
             mobile.AnimationFromServer = true;
+
+            // ## BEGIN - END ## // MACROS
+            if (mobile == World.Player)
+                World.AnimationTriggers.OnOwnCharacterAnimation(action);
+            // ## BEGIN - END ## // MACROS
         }
 
         private static void GraphicEffect(ref StackDataReader p)
@@ -5509,6 +5514,11 @@ namespace ClassicUO.Network
             }
 
             mobile.AnimationFromServer = true;
+
+            // ## BEGIN - END ## // MACROS
+            if (mobile == World.Player && type == 0)
+                World.AnimationTriggers.OnOwnCharacterAnimationNew(action, type);
+            // ## BEGIN - END ## // MACROS
         }
 
         private static void KREncryptionResponse(ref StackDataReader p)

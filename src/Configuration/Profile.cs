@@ -41,6 +41,9 @@ using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Gumps;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
+// ## BEGIN - END ## // MACROS
+using ClassicUO.Dust765.External;
+// ## BEGIN - END ## // MACROS
 using Microsoft.Xna.Framework;
 using TinyJson;
 
@@ -342,8 +345,15 @@ namespace ClassicUO.Configuration
         public uint BlockWoSArt { get; set; } = 1872;
         public bool BlockWoSArtForceAoS { get; set; } = false;
         public bool BlackOutlineStatics { get; set; } = false;
-
         // ## BEGIN - END ## // MISC
+        // ## BEGIN - END ## // MACROS
+        public int LastTargetRange { get; set; }
+        public bool Journal2DarkMode { get; set; }
+        public bool ShowJournal2Client { get; set; } = true;
+        public bool ShowJournal2Objects { get; set; } = true;
+        public bool ShowJournal2System { get; set; } = true;
+        public bool ShowJournal2GuildAlly { get; set; } = true;
+        // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;
@@ -591,6 +601,13 @@ namespace ClassicUO.Configuration
                                     gump = new JournalGump();
 
                                     break;
+
+                                // ## BEGIN - END ## // MACROS
+                                case GumpType.Journal2:
+                                    gump = new JournalGump2();
+
+                                    break;
+                                // ## BEGIN - END ## // MACROS
 
                                 case GumpType.MacroButton:
                                     gump = new MacroButtonGump();

@@ -94,9 +94,31 @@ Block Wall of Stone
 
 HighlightTileAtRange (toggle)
 
+# macros
+
+ObjectInfo (-info command)
+
+OpenCorpses (open corpses in 2 tiles)
+
+OpenJournal2 (open second journal)
+
+SetTargetClientSide (set target client side only)
+
+LastTargetRC (LastTarget with RangeCheck)
+
+HideX (removes a game object)
+
+HealOnHPChange (keep pressed, casts greater heal as soon as HP change)
+
+HarmOnSwing (keep pressed, casts harm as soon as a swinganimation is issued from server)
+
+CureGH (cure or gheal)
+
 # Added files
 
 /src/Dust765
+
+/src/Dust765/External
 
 # changed constant
 
@@ -279,6 +301,28 @@ FILE                                            START   END     COMMIT
 /src/IO/Resources/TileDataLoader.cs             358     360     MISC
 
 /src/IO/Resources/TileDataLoader.cs             375     379     MISC
+
+/src/Game/Managers/MacroManager.cs              41      44      MACROS
+
+/src/Game/Managers/MacroManager.cs              1554    1674    MACROS
+
+/src/Game/GameObjects/PlayerMobile.cs           1358    1370    MACROS
+
+/src/Game/Scenes/GameSceneInputHandler.cs       37      39      MACROS
+
+/src/Game/Scenes/GameSceneInputHandler.cs       1337    1348    MACROS
+
+/src/Network/PacketHandlers.cs	                5513    5516    MACROS
+
+/src/Game/World.cs                              37      39      MACROS
+
+/src/Game/World.cs                              93      95      MACROS
+
+/src/Configuration/Profile.cs                   44      46      MACROS
+
+/src/Configuration/Profile.cs                   600     605     MACROS
+
+/src/Game/UI/Gumps/GumpType.cs                  62      62      MACROS
 
 
 # Introduction
