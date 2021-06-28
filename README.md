@@ -102,6 +102,12 @@ ignore list for circle of transparency (txt file created in your /Data/Client fo
 
 show death location on worldmap
 
+# nameoverhead
+
+hp line in nameoverheads
+
+more filters in nameoverheads
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -381,6 +387,28 @@ FILE                                            START   END     COMMIT
 /src/Game/GameObjects/PlayerMobile.cs           51      55      MISC2
 
 /src/Network/PacketHandlers.cs	                1614    1618    MISC2
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        56      123     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        153     193     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        615     670     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	37      39      NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	58      64      NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	140     298     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	301     308     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	345     395     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       37      39      NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       50      55      NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       101     250     NAMEOVERHEAD
 
 
 # Introduction

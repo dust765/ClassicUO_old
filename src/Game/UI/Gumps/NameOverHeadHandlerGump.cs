@@ -34,6 +34,9 @@ using System;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Resources;
+// ## BEGIN - END ## // NAMEOVERHEAD
+using ClassicUO.Configuration;
+// ## BEGIN - END ## // NAMEOVERHEAD
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -52,7 +55,14 @@ namespace ClassicUO.Game.UI.Gumps
 
             LayerOrder = UILayer.Over;
 
-            RadioButton all, mobiles, items, mobilesCorpses;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            //RadioButton all, mobiles, items, mobilesCorpses;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            RadioButton all, mobiles, items, mobilesCorpses, custom;
+            Checkbox cbcorpses, cbitems, cbmobiles, cbhumanMobilesOnly;
+            Checkbox cbnotoall, cbnotoblue, cbnotored, cbnotoorange, cbnotocriminal, cbnotoally;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+
             AlphaBlendControl alpha;
 
             Add
@@ -127,8 +137,175 @@ namespace ClassicUO.Game.UI.Gumps
                 }
             );
 
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            Add
+            (
+                custom = new RadioButton
+                (
+                    0,
+                    0x00D0,
+                    0x00D1,
+                    "Custom",
+                    color: 0xFFFF
+                )
+                {
+                    Y = mobilesCorpses.Y + mobilesCorpses.Height,
+                    IsChecked = NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.Custom
+                }
+            );
+            //
+            Add
+            (
+                cbitems = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Show Items",
+                color: 0xFFFF
+                )
+                {
+                    Y = custom.Y + custom.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbitems
+                }
+            );
+            Add
+            (
+                cbcorpses = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Show Corpses",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbitems.Y + cbitems.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbcorpses
+                }
+            );
+            Add
+            (
+                cbmobiles = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "All Mobiles",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbcorpses.Y + cbcorpses.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbmobiles
+                }
+            );
+            Add
+            (
+                cbhumanMobilesOnly = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Human Mobiles Only",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbmobiles.Y + cbmobiles.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly
+                }
+            );
+            //
+            Add
+            (
+                cbnotoall = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Noto: All",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbhumanMobilesOnly.Y + cbhumanMobilesOnly.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbnotoall
+                }
+            );
+            Add
+            (
+                cbnotoblue = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Noto: Blue",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbnotoall.Y + cbnotoall.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbnotoblue
+                }
+            );
+            Add
+            (
+                cbnotored = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Noto: Red",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbnotoblue.Y + cbnotoblue.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbnotored
+                }
+            );
+            Add
+            (
+                cbnotoorange = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Noto: Orange",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbnotored.Y + cbnotored.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbnotoorange
+                }
+            );
+            Add
+            (
+                cbnotocriminal = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Noto: Criminal & Gray",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbnotoorange.Y + cbnotoorange.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbnotocriminal
+                }
+            );
+            Add
+            (
+                cbnotoally = new Checkbox
+                (
+                0x00D2,
+                0x00D3,
+                "Noto: Ally",
+                color: 0xFFFF
+                )
+                {
+                    Y = cbnotocriminal.Y + cbnotocriminal.Height,
+                    IsChecked = ProfileManager.CurrentProfile.NOH_cbnotoally
+                }
+            );
+            // ## BEGIN - END ## // NAMEOVERHEAD
+
             alpha.Width = Math.Max(mobilesCorpses.Width, Math.Max(items.Width, Math.Max(all.Width, mobiles.Width)));
-            alpha.Height = all.Height + mobiles.Height + items.Height + mobilesCorpses.Height;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            //alpha.Height = all.Height + mobiles.Height + items.Height + mobilesCorpses.Height;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            alpha.Height = all.Height + mobiles.Height + items.Height + mobilesCorpses.Height
+                + custom.Height +
+                cbitems.Height + cbcorpses.Height + cbmobiles.Height + cbhumanMobilesOnly.Height +
+                cbnotoall.Height + cbnotoblue.Height + cbnotored.Height + cbnotoorange.Height + cbnotocriminal.Height + cbnotoally.Height;
+            // ## BEGIN - END ## // NAMEOVERHEAD
 
             Width = alpha.Width;
             Height = alpha.Height;
@@ -164,6 +341,58 @@ namespace ClassicUO.Game.UI.Gumps
                     NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.MobilesCorpses;
                 }
             };
+
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            custom.ValueChanged += (sender, e) =>
+            {
+                if (custom.IsChecked)
+                {
+                    NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.Custom;
+                }
+            };
+            //
+            cbitems.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbitems = cbitems.IsChecked;
+            };
+            cbcorpses.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbcorpses = cbcorpses.IsChecked;
+            };
+            cbmobiles.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbmobiles = cbmobiles.IsChecked;
+            };
+            cbhumanMobilesOnly.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbhumanMobilesOnly = cbhumanMobilesOnly.IsChecked;
+            };
+            //
+            cbnotoall.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbnotoall = cbnotoall.IsChecked;
+            };
+            cbnotoblue.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbnotoblue = cbnotoblue.IsChecked;
+            };
+            cbnotored.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbnotored = cbnotored.IsChecked;
+            };
+            cbnotoorange.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbnotoorange = cbnotoorange.IsChecked;
+            };
+            cbnotocriminal.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbnotocriminal = cbnotocriminal.IsChecked;
+            };
+            cbnotoally.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.NOH_cbnotoally = cbnotoally.IsChecked;
+            };
+            // ## BEGIN - END ## // NAMEOVERHEAD
         }
 
 
