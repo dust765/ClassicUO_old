@@ -144,6 +144,10 @@ CureGH (cure or gheal)
 
 /src/Dust765/External
 
+/src/halo.png
+
+/src/arrow.png
+
 # changed constant
 
 WAIT_FOR_TARGET_DELAY 5000 -> 4000
@@ -431,6 +435,14 @@ FILE                                            START   END     COMMIT
 /src/Network/PacketHandlers.cs	                4695    4697    UI/GUMPS
 
 /src/Game/UI/Gumps/OptionsGump.cs               39      41      UI/GUMPS
+
+/src/Game/Scenes/GameScene.cs                   94      96      TEXTUREMANAGER
+
+/src/Game/Scenes/GameScene.cs                   165     167     TEXTUREMANAGER
+
+/src/Game/Scenes/GameScene.cs                   1168    1170    TEXTUREMANAGER
+
+/src/ClassicUO.csproj	                        60      78      TEXTUREMANAGER
 
 
 # Introduction
