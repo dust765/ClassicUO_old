@@ -204,6 +204,10 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // MACROS
         private HSliderBar _lastTargetRange;
         // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // MISC2
+        private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap;
+        private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ;
+        // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3683,6 +3687,44 @@ namespace ClassicUO.Game.UI.Gumps
             section7.Add(_lockWoSArtForceAoS = AddCheckBox(null, "Force WoS to Art above (AoS only?) and hue 945", _currentProfile.BlockWoSArtForceAoS, startX, startY));
             startY += _lockWoSArtForceAoS.Height + 2;
             // ## BEGIN - END ## // MISC
+            // ## BEGIN - END ## // MISC2
+            SettingsSection section8 = AddSettingsSection(box, "-----MISC2-----");
+            section8.Y = section7.Bounds.Bottom + 40;
+
+            startY = section7.Bounds.Bottom + 40;
+
+            section8.Add(_wireframeView = AddCheckBox(null, "Enable WireFrame view (restart needed)", _currentProfile.WireFrameView, startX, startY));
+            startY += _wireframeView.Height + 2;
+
+            section8.Add(_hueImpassableView = AddCheckBox(null, "Hue impassable Tiles", _currentProfile.HueImpassableView, startX, startY));
+            startY += _hueImpassableView.Height + 2;
+
+            section8.Add(_hueImpassableViewColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.HueImpassableViewHue, ""));
+            startY += _hueImpassableViewColorPickerBox.Height + 2;
+            section8.AddRight(AddLabel(null, "Hue", 0, 0), 2);
+
+            section8.Add(_transparentHouses = AddCheckBox(null, "Transparent Houses and Items (Z level):", _currentProfile.TransparentHousesEnabled, startX, startY));
+            startY += _transparentHouses.Height + 2;
+
+            section8.Add(_transparentHousesZ = AddHSlider(null, 1, 100, _currentProfile.TransparentHousesZ, startX, startY, 200));
+            startY += _transparentHousesZ.Height + 2;
+
+            section8.Add(AddLabel(null, "Transparency:", startX, startY));
+            section8.Add(_transparentHousesTransparency = AddHSlider(null, 1, 9, _currentProfile.TransparentHousesTransparency, startX, startY, 200));
+            startY += _transparentHousesTransparency.Height + 2;
+
+            section8.Add(_invisibleHouses = AddCheckBox(null, "Invisible Houses and Items (Z level):", _currentProfile.InvisibleHousesEnabled, startX, startY));
+            startY += _invisibleHouses.Height + 2;
+
+            section8.Add(_invisibleHousesZ = AddHSlider(null, 1, 100, _currentProfile.InvisibleHousesZ, startX, startY, 200));
+            startY += _invisibleHousesZ.Height + 2;
+
+            section8.Add(_ignoreCoT = AddCheckBox(null, "Enable ignorelist for circle of transparency:", _currentProfile.IgnoreCoTEnabled, startX, startY));
+            startY += _ignoreCoT.Height + 2;
+
+            section8.Add(_showDeathOnWorldmap = AddCheckBox(null, "Show death location on world map for 5min:", _currentProfile.ShowDeathOnWorldmap, startX, startY));
+            startY += _showDeathOnWorldmap.Height + 2;
+            // ## BEGIN - END ## // MISC2
 
             Add(rightArea, PAGE);
         }
@@ -3702,6 +3744,10 @@ namespace ClassicUO.Game.UI.Gumps
             SettingsSection section = AddSettingsSection(box, "-----FEATURES MACROS-----");
 
             section.Add(AddLabel(null, "HighlightTileAtRange (toggle HighlightTileAtRange on / off)", startX, startY));
+            // ## BEGIN - END ## // MISC2
+            section.Add(AddLabel(null, "ToggleTransparentHouses (toggle TransparentHouses on / off)", startX, startY));
+            section.Add(AddLabel(null, "ToggleInvisibleHouses (toggle InvisibleHouses on / off)", startX, startY));
+            // ## BEGIN - END ## // MISC2
 
             SettingsSection section2 = AddSettingsSection(box, "-----SIMPLE MACROS-----");
             section2.Y = section.Bounds.Bottom + 40;
@@ -4657,6 +4703,18 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // MACROS
             _currentProfile.LastTargetRange = _lastTargetRange.Value;
             // ## BEGIN - END ## // MACROS
+            // ## BEGIN - END ## // MISC2
+            _currentProfile.WireFrameView = _wireframeView.IsChecked;
+            _currentProfile.HueImpassableView = _hueImpassableView.IsChecked;
+            _currentProfile.HueImpassableViewHue = _hueImpassableViewColorPickerBox.Hue;
+            _currentProfile.TransparentHousesEnabled = _transparentHouses.IsChecked;
+            _currentProfile.TransparentHousesZ = _transparentHousesZ.Value;
+            _currentProfile.TransparentHousesTransparency = _transparentHousesTransparency.Value;
+            _currentProfile.InvisibleHousesEnabled = _invisibleHouses.IsChecked;
+            _currentProfile.InvisibleHousesZ = _invisibleHousesZ.Value;
+            _currentProfile.IgnoreCoTEnabled = _ignoreCoT.IsChecked;
+            _currentProfile.ShowDeathOnWorldmap = _showDeathOnWorldmap.IsChecked;
+            // ## BEGIN - END ## // MISC2
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

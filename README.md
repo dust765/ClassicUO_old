@@ -90,6 +90,18 @@ Ignore stamina check
 
 Block Wall of Stone
 
+# misc 2
+
+wireframe view
+
+hue impassable tiles
+
+transparent / invisible house and items by Z level from player
+
+ignore list for circle of transparency (txt file created in your /Data/Client folder)
+
+show death location on worldmap
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -323,6 +335,52 @@ FILE                                            START   END     COMMIT
 /src/Configuration/Profile.cs                   600     605     MACROS
 
 /src/Game/UI/Gumps/GumpType.cs                  62      62      MACROS
+
+/src/Game/GameObjects/Views/TileView.cs         35      37      MISC2
+
+/src/Game/GameObjects/Views/TileView.cs         111     120     MISC2
+
+/src/Game/GameObjects/Views/TileView.cs         126     167     MISC2
+
+/src/Game/GameObjects/Views/TileView.cs         176     203     MISC2
+
+/src/Game/GameObjects/Views/View.cs             36      39      MISC2
+
+/src/Game/GameObjects/Views/View.cs             163     203     MISC2
+
+/src/Game/GameObjects/Views/View.cs             342     350     MISC2
+
+/src/IO/Resources/TexmapsLoader.cs              36      38      MISC2
+
+/src/IO/Resources/TexmapsLoader.cs              207     220     MISC2
+
+/src/IO/Resources/TexmapsLoader.cs              229     314     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  145     171     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  545     616     MISC2
+
+/src/Game/Data/StaticFilters.cs                 52      54      MISC2
+
+/src/Game/Data/StaticFilters.cs                 63      65      MISC2
+
+/src/Game/Data/StaticFilters.cs                 79      118     MISC2
+
+/src/Game/Data/StaticFilters.cs                 405     411     MISC2
+
+/src/Game/GameObjects/Views/ItemView.cs         207     218     MISC2
+
+/src/Game/GameObjects/Views/MultiView.cs        129     156     MISC2
+
+/src/Game/Managers/MacroManager.cs              3747    3750    MISC2
+
+/src/Game/Managers/MacroManager.cs              2189    2192    MISC2
+
+/src/Game/UI/Gumps/WorldMapGump.cs              1757    1809    MISC2
+
+/src/Game/GameObjects/PlayerMobile.cs           51      55      MISC2
+
+/src/Network/PacketHandlers.cs	                1614    1618    MISC2
 
 
 # Introduction
