@@ -38,6 +38,10 @@ using System.Text;
 using System.Xml;
 using ClassicUO.Configuration;
 using ClassicUO.Data;
+// ## BEGIN - END ## // MACROS
+using ClassicUO.Dust765.External;
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MACROS
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Scenes;
@@ -1556,6 +1560,127 @@ namespace ClassicUO.Game.Managers
 
                     break;
 
+                // ## BEGIN - END ## // MACROS
+                case MacroType.ObjectInfo:
+
+                    CommandManager.Execute("info");
+
+                    break;
+
+                case MacroType.OpenCorpses:
+                    World.Player.OpenCorpses(2);
+
+                    break;
+
+                case MacroType.OpenJournal2:
+                    JournalGump2 journal2 = UIManager.GetGump<JournalGump2>();
+
+                    if (journal2 != null)
+                    {
+                        if (macro.Code == MacroType.Close)
+                        {
+                            journal2.Dispose();
+                        }
+                        else if (macro.Code == MacroType.Minimize)
+                        {
+                            journal2.IsMinimized = true;
+                        }
+                        else if (macro.Code == MacroType.Maximize)
+                        {
+                            journal2.IsMinimized = false;
+                        }
+                    }
+                    else
+                    {
+                        if (journal2 == null)
+                        {
+                            UIManager.Add(new JournalGump2 { X = 64, Y = 64 });
+                        }
+                        else
+                        {
+                            journal2.SetInScreen();
+                            journal2.BringOnTop();
+
+                            if (journal2.IsMinimized)
+                            {
+                                journal2.IsMinimized = false;
+                            }
+                        }
+                    }
+
+                    break;
+
+                case MacroType.SetTargetClientSide:
+                    TargetManager.SetTargeting(CursorTarget.SetTargetClientSide, CursorType.Target, TargetType.Neutral);
+
+                    break;
+
+                case MacroType.LastTargetRC:
+
+                    if (TargetManager.IsTargeting)
+                    {
+                        var entity = World.Get(TargetManager.LastTargetInfo.Serial);
+
+                        if (entity != null)
+                        {
+                            if (entity.Distance <= ProfileManager.CurrentProfile.LastTargetRange && (entity.Z - World.Player.Z) <= ProfileManager.CurrentProfile.LastTargetRange)
+                                TargetManager.Target(World.Get(TargetManager.LastTargetInfo.Serial));
+                            else
+                                MessageManager.HandleMessage(World.Player, "LastTarget out of range", null, 0x3B2, MessageType.Regular, 3, TextType.CLIENT, true);
+                        }
+
+                        WaitForTargetTimer = 0;
+                    }
+                    else if (WaitForTargetTimer < Time.Ticks)
+                        WaitForTargetTimer = 0;
+                    else
+                        result = 1;
+
+                    break;
+
+                case MacroType.HideX:
+
+                    if (SelectedObject.LastObject is Land l)
+                        l.AllowedToDraw = false;
+
+                    if (SelectedObject.LastObject is Item i)
+                        i.AllowedToDraw = false;
+
+                    if (SelectedObject.LastObject is Entity e)
+                        e.AllowedToDraw = false;
+
+                    if (SelectedObject.LastObject is Mobile m)
+                        m.AllowedToDraw = false;
+
+                    break;
+
+                case MacroType.HealOnHPChange:
+                    if (!CombatCollection._HealOnHPChangeON)
+                    {
+                        CombatCollection._HealOnHPChangeON = true;
+                        CombatCollection._HealOnHPChangeHP = World.Player.Hits;
+                    }
+
+                    CombatCollection.HealOnHPChange();
+
+                    break;
+
+                case MacroType.HarmOnSwing:
+                    if (!CombatCollection._HarmOnSwingON)
+                        CombatCollection._HarmOnSwingON = true;
+
+                    CombatCollection.HarmOnSwing();
+
+                    break;
+
+                case MacroType.CureGH:
+                    if (World.Player.IsPoisoned)
+                        GameActions.CastSpell(11); //cure
+                    else
+                        GameActions.CastSpell(29); //greater heal
+
+                    break;
+                // ## BEGIN - END ## // MACROS
                 // ## BEGIN - END ## // VISUAL HELPERS
                 case MacroType.HighlightTileAtRange:
                     ProfileManager.CurrentProfile.HighlightTileAtRange = !ProfileManager.CurrentProfile.HighlightTileAtRange;
@@ -2047,31 +2172,31 @@ namespace ClassicUO.Game.Managers
         CloseAllHealthBars,
         RazorMacro,
         // ## BEGIN - END ## // BASICSETUP
-        notimplemented,
+        ObjectInfo,
         notimplemented1,
         notimplemented2,
         notimplemented3,
         notimplemented4,
-        notimplemented5,
+        OpenCorpses,
         notimplemented6,
         notimplemented7,
         // ## BEGIN - END ## // VISUAL HELPERS
         HighlightTileAtRange,
         // ## BEGIN - END ## // VISUAL HELPERS
-        notimplemented8,
-        notimplemented9,
-        notimplemented10,
-        notimplemented11,
+        LastTargetRC,
+        HideX,
+        HealOnHPChange,
+        HarmOnSwing,
         notimplemented12,
-        notimplemented13,
+        SetTargetClientSide,
         notimplemented14,
         notimplemented15,
-        notimplemented16,
+        CureGH,
         notimplemented17,
         notimplemented18,
         notimplemented19,
         notimplemented20,
-        notimplemented21,
+        OpenJournal2,
         // ## BEGIN - END ## // BASICSETUP
         ToggleDrawRoofs,
         ToggleTreeStumps,
