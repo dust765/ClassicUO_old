@@ -108,6 +108,12 @@ hp line in nameoverheads
 
 more filters in nameoverheads
 
+# UI gumps
+
+sticky last target healthbar (healthbar that always will be your last targets healthbar)
+
+bandage gump (bandage timer UI)
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -409,6 +415,22 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/NameOverHeadManager.cs       50      55      NAMEOVERHEAD
 
 /src/Game/Managers/NameOverHeadManager.cs       101     250     NAMEOVERHEAD
+
+/src/Game/Scenes/GameScene.cs                   38      41      UI/GUMPS
+
+/src/Game/Scenes/GameScene.cs                   202     216     UI/GUMPS
+
+/src/Game/Scenes/GameScene.cs                   325     327     UI/GUMPS
+
+/src/Game/GameObjects/PlayerMobile.cs           38      40      UI/GUMPS
+
+/src/Game/GameObjects/PlayerMobile.cs           59      61      UI/GUMPS
+
+/src/Game/GameObjects/PlayerMobile.cs           67      69      UI/GUMPS
+
+/src/Network/PacketHandlers.cs	                4695    4697    UI/GUMPS
+
+/src/Game/UI/Gumps/OptionsGump.cs               39      41      UI/GUMPS
 
 
 # Introduction
