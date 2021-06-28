@@ -1697,6 +1697,24 @@ namespace ClassicUO.Game.Managers
 
                     break;
                 // ## BEGIN - END ## // MISC2
+                // ## BEGIN - END ## // LINES
+                case MacroType.UCCLinesToggleLT:
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAll(); //ALL
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Innocent);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Ally);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Criminal);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Gray);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Enemy);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Murderer);
+                    UOClassicCombatLines.ClilocTriggerToggleLT();
+
+                    break;
+
+                case MacroType.UCCLinesToggleHM:
+                    UOClassicCombatLines.ClilocTriggerToggleHM();
+
+                    break;
+                    // ## BEGIN - END ## // LINES
             }
 
             return result;
@@ -2199,8 +2217,8 @@ namespace ClassicUO.Game.Managers
         HarmOnSwing,
         notimplemented12,
         SetTargetClientSide,
-        notimplemented14,
-        notimplemented15,
+        UCCLinesToggleLT,
+        UCCLinesToggleHM,
         CureGH,
         notimplemented17,
         notimplemented18,

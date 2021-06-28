@@ -94,6 +94,9 @@ namespace ClassicUO.Game.Scenes
         // ## BEGIN - END ## // TEXTUREMANAGER
         private TextureManager _textureManager;
         // ## BEGIN - END ## // TEXTUREMANAGER
+        // ## BEGIN - END ## // LINES
+        private UOClassicCombatLines _UOClassicCombatLines;
+        // ## BEGIN - END ## // LINES
         private bool _isListReady;
         private Point _lastSelectedMultiPositionInHouseCustomization;
         private int _lightCount;
@@ -167,6 +170,9 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // TEXTUREMANAGER
             _textureManager = new TextureManager();
             // ## BEGIN - END ## // TEXTUREMANAGER
+            // ## BEGIN - END ## // LINES
+            _UOClassicCombatLines = new UOClassicCombatLines();
+            // ## BEGIN - END ## // LINES
             Weather = new Weather();
 
             WorldViewportGump viewport = new WorldViewportGump(this);
@@ -1231,6 +1237,9 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // TEXTUREMANAGER
             _textureManager.Draw(batcher);
             // ## BEGIN - END ## // TEXTUREMANAGER
+            // ## BEGIN - END ## // LINES
+            _UOClassicCombatLines.Draw(batcher);
+            // ## BEGIN - END ## // LINES
 
             _healthLinesManager.Draw(batcher);
 
