@@ -1687,6 +1687,16 @@ namespace ClassicUO.Game.Managers
 
                     break;
                 // ## BEGIN - END ## // VISUAL HELPERS
+                // ## BEGIN - END ## // MISC2
+                case MacroType.ToggleTransparentHouses:
+                    ProfileManager.CurrentProfile.TransparentHousesEnabled = !ProfileManager.CurrentProfile.TransparentHousesEnabled;
+
+                    break;
+                case MacroType.ToggleInvisibleHouses:
+                    ProfileManager.CurrentProfile.InvisibleHousesEnabled = !ProfileManager.CurrentProfile.InvisibleHousesEnabled;
+
+                    break;
+                // ## BEGIN - END ## // MISC2
             }
 
             return result;
@@ -2203,8 +2213,10 @@ namespace ClassicUO.Game.Managers
         ToggleVegetation,
         ToggleCaveTiles,
         // ## BEGIN - END ## // BASICSETUP
-        notimplemented22,
-        notimplemented23
+        // ## BEGIN - END ## // MISC2
+        ToggleTransparentHouses,
+        ToggleInvisibleHouses
+        // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // BASICSETUP
     }
 

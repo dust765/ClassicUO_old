@@ -359,6 +359,18 @@ namespace ClassicUO.Configuration
         public bool ShowJournal2System { get; set; } = true;
         public bool ShowJournal2GuildAlly { get; set; } = true;
         // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // MISC2
+        public bool WireFrameView { get; set; } = false;
+        public bool HueImpassableView { get; set; } = false;
+        public ushort HueImpassableViewHue { get; set; } = 0x0044;
+        public bool TransparentHousesEnabled { get; set; } = false;
+        public int TransparentHousesZ { get; set; }
+        public int TransparentHousesTransparency { get; set; }
+        public bool InvisibleHousesEnabled { get; set; } = false;
+        public int InvisibleHousesZ { get; set; }
+        public bool IgnoreCoTEnabled { get; set; } = false;
+        public bool ShowDeathOnWorldmap { get; set; } = false;
+        // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;

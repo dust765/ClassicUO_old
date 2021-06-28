@@ -32,7 +32,9 @@
 
 using ClassicUO.Configuration;
 // ## BEGIN - END ## // VISUAL HELPERS
+// ## BEGIN - END ## // MISC2
 using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MISC2
 // ## BEGIN - END ## // VISUAL HELPERS
 using ClassicUO.Renderer;
 using Microsoft.Xna.Framework;
@@ -106,11 +108,23 @@ namespace ClassicUO.Game.GameObjects
                 }
             }
             // ## BEGIN - END ## // VISUAL HELPERS
+            // ## BEGIN - END ## // MISC2
+            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.HueImpassableView)
+            {
+                if (this.TileData.IsImpassable)
+                {
+                    hueVec.X = ProfileManager.CurrentProfile.HueImpassableViewHue;
+                    hueVec.Y = 1;
+                }
+            }
+            // ## BEGIN - END ## // MISC2
 
             if (IsStretched)
             {
                 posY += Z << 2;
 
+                // ## BEGIN - END ## // MISC2
+                /*
                 DrawLand
                 (
                     batcher,
@@ -124,6 +138,33 @@ namespace ClassicUO.Game.GameObjects
                     ref NormalBottom,
                     ref hueVec
                 );
+                */
+                // ## BEGIN - END ## // MISC2
+                if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WireFrameView)
+                {
+                    DrawLandWF
+                    (
+                        batcher, Graphic, posX, posY, ref YOffsets, ref NormalTop, ref NormalRight, ref NormalLeft, ref NormalBottom,
+                        ref hueVec, this.TileData.IsImpassable
+                    );
+                }
+                else
+                {
+                    DrawLand
+                    (
+                        batcher,
+                        Graphic,
+                        posX,
+                        posY,
+                        ref YOffsets,
+                        ref NormalTop,
+                        ref NormalRight,
+                        ref NormalLeft,
+                        ref NormalBottom,
+                        ref hueVec
+                    );
+                }
+                // ## BEGIN - END ## // MISC2
 
                 if (SelectedObject.IsPointInStretchedLand(ref YOffsets, posX, posY))
                 {
@@ -132,6 +173,8 @@ namespace ClassicUO.Game.GameObjects
             }
             else
             {
+                // ## BEGIN - END ## // MISC2
+                /*
                 DrawLand
                 (
                     batcher,
@@ -140,6 +183,24 @@ namespace ClassicUO.Game.GameObjects
                     posY,
                     ref hueVec
                 );
+                */
+                // ## BEGIN - END ## // MISC2
+                if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WireFrameView)
+                {
+                    DrawLandWF(batcher, Graphic, posX, posY, ref hueVec, this.TileData.IsImpassable);
+                }
+                else
+                {
+                    DrawLand
+                    (
+                        batcher,
+                        Graphic,
+                        posX,
+                        posY,
+                        ref hueVec
+                    );
+                }
+                // ## BEGIN - END ## // MISC2
 
                 if (SelectedObject.IsPointInLand(posX, posY))
                 {
