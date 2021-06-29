@@ -54,7 +54,10 @@ namespace ClassicUO.Game.Managers
         SetTargetClientSide = 3,
         Grab,
         SetGrabBag,
-        HueCommandTarget
+        HueCommandTarget,
+        // ## BEGIN - END ## // ADVMACROS
+        SetCustomSerial
+        // ## BEGIN - END ## // ADVMACROS
     }
 
     internal class CursorType
@@ -413,6 +416,30 @@ namespace ClassicUO.Game.Managers
                         ClearTargetingWithoutTargetCancelPacket();
 
                         return;
+
+                    // ## BEGIN - END ## // ADVMACROS
+                    case CursorTarget.SetCustomSerial:
+
+                        if (SerialHelper.IsItem(serial))
+                        {
+                            ProfileManager.CurrentProfile.CustomSerial = serial;
+                            GameActions.Print($"Custom UOClassicEquipment Item set: {serial}", 88);
+                        }
+                        else if ((TargetingType == TargetType.Neutral && SerialHelper.IsMobile(serial)))
+                        {
+                            Mobile mobile = entity as Mobile;
+
+                            if ((!World.Player.IsDead && !mobile.IsDead) && serial != World.Player)
+                            {
+                                ProfileManager.CurrentProfile.Mimic_PlayerSerial = entity;
+                                GameActions.Print($"Mimic Player Serial Set: {entity.Name} : {entity.Serial}", 88);
+                            }
+                        }
+
+                        ClearTargetingWithoutTargetCancelPacket();
+
+                        return;
+                    // ## BEGIN - END ## // ADVMACROS
                 }
             }
         }

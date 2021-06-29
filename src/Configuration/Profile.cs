@@ -482,6 +482,16 @@ namespace ClassicUO.Configuration
         public bool UOClassicCombatSelf_ClilocTriggers { get; set; } = false;
         public bool UOClassicCombatSelf_MacroTriggers { get; set; } = false;
         // ## BEGIN - END ## // SELF
+        // ## BEGIN - END ## // ADVMACROS
+        public Point PullEnemyBars { get; set; } = new Point(1630, 214);
+        public Point PullEnemyBarsFinalLocation { get; set; } = new Point(1790, 0); // X difference needs to be 120 to get bars next to one another
+        public Point PullFriendlyBars { get; set; } = new Point(1550, 214);
+        public Point PullFriendlyBarsFinalLocation { get; set; } = new Point(1670, 0); // X difference needs to be 120 to get bars next to one another
+        public Point PullPartyAllyBars { get; set; } = new Point(1470, 214);
+        public Point PullPartyAllyBarsFinalLocation { get; set; } = new Point(1550, 0); // X difference needs to be 120 to get bars next to one another
+        public uint CustomSerial { get; set; }
+        public uint Mimic_PlayerSerial { get; set; }
+        // ## BEGIN - END ## // ADVMACROS
         // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;

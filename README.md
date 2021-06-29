@@ -172,11 +172,31 @@ HarmOnSwing (keep pressed, casts harm as soon as a swinganimation is issued from
 
 CureGH (cure or gheal)
 
+# advanced macros
+
+OpenCorpsesSafe (open corpses in 2 tiles safe to loot)
+
+GrabFriendlyBars, GrabEnemyBars, GrabPartyAllyBars (grab all bars with hotkey)
+
+AutoPot (one pot button)
+
+DefendSelfKey, DefendPartyKey (clever defend self or party)
+
+CustomInterrupt (interrupt current spellcast)
+
+EquipManager (fast equip)
+
+SetMimic_PlayerSerial (set master or custom serial for EquipManager)
+
 # Added files
 
 /src/Dust765
 
 /src/Dust765/External
+
+/src/Dust765/Macros
+
+/src/Dust765/Managers
 
 /src/halo.png
 
@@ -513,6 +533,24 @@ FILE                                            START   END     COMMIT
 /src/Game/Scenes/GameScene.cs                   384     389     SELF
 
 /src/Game/Managers/MacroManager.cs              1508    1520    SELF
+
+/src/Game/Managers/TargetManager.cs             58      60      ADVMACROS
+
+/src/Game/Managers/TargetManager.cs             416     438     ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              45      48      ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              1727    1937    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2247    2253    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2246    2259    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2413    2444    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2693    2733    ADVMACROS
+
+/src/Game/GameObjects/PlayerMobile.cs           1387    1407    ADVMACROS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
