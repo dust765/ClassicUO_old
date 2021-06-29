@@ -1562,5 +1562,98 @@ namespace ClassicUO.Dust765.Dust765
             return false;
         }
         // ## BEGIN - END ## // ART / HUE CHANGES
+        // ## BEGIN - END ## // UNUSED
+        //GAME\DATA\STATICFILTERS.CS
+        [MethodImpl(256)]
+        public static bool IsClassicBoatSailArt(ushort g)
+        {
+            switch (g)
+            {
+                case 0x3E58:
+                case 0x3E59:
+                case 0x3E5B:
+                case 0x3E5C:
+                case 0x3E6A:
+                case 0x3E6B:
+                case 0x3E6D:
+                case 0x3E6E:
+                case 0x3E70:
+                case 0x3E71:
+                case 0x3E73:
+                case 0x3E74:
+                case 0x3EC9:
+                case 0x3ECA:
+                case 0x3ECC:
+                case 0x3ECD:
+                case 0x3ECE:
+                case 0x3ECF:
+                case 0x3ED1:
+                case 0x3ED2:
+                case 0x3EDC:
+                case 0x3EDE:
+                case 0x3EDF:
+                case 0x3EE0:
+                case 0x3EE1:
+                case 0x3EE3:
+
+                    return true;
+            }
+
+            return false;
+        }
+        [MethodImpl(256)]
+        public static bool IsClassicBoatMastArt(ushort g)
+        {
+            switch (g)
+            {
+                case 0x3E57:
+                case 0x3E5A:
+                case 0x3E6C:
+                case 0x3E72:
+                case 0x3Ec8:
+                case 0x3ECB:
+                case 0x3ED0:
+                case 0x3EDD:
+                case 0x3EE2:
+
+                    return true;
+            }
+
+            return false;
+        }
+        [MethodImpl(256)]
+        public static bool IsDungeonTrapArt(ushort g)
+        {
+            switch (g)
+            {
+                case 0x10F5:
+                case 0x10FC:
+                case 0x1103:
+                case 0x1108:
+                case 0x110F:
+                case 0x1116:
+                case 0x111B:
+                case 0x1125:
+                case 0x112B:
+                case 0x112F:
+                case 0x1133:
+                case 0x113A:
+                case 0x1140:
+                case 0x1145:
+                case 0x114B:
+                case 0x1193:
+                case 0x119A:
+                case 0x11A0:
+                case 0x11A6:
+                case 0x11AC:
+                case 0x11B1:
+                case 0x11C0:
+
+                    return true;
+            }
+
+            return false;
+        }
+        // ## BEGIN - END ## // UNUSED
     }
 }
