@@ -93,6 +93,9 @@ namespace ClassicUO.Game
         // ## BEGIN - END ## // MACROS
         public static AnimationTriggers AnimationTriggers { get; } = new AnimationTriggers();
         // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // BUFFBAR
+        public static ClilocTriggers ClilocTriggers { get; } = new ClilocTriggers();
+        // ## BEGIN - END ## // BUFFBAR
 
         public static JournalManager Journal { get; } = new JournalManager();
 
