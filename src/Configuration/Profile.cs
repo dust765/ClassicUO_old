@@ -492,6 +492,9 @@ namespace ClassicUO.Configuration
         public uint CustomSerial { get; set; }
         public uint Mimic_PlayerSerial { get; set; }
         // ## BEGIN - END ## // ADVMACROS
+        // ## BEGIN - END ## // AUTOMATIONS
+        public bool AutoWorldmapMarker { get; set; }
+        // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;
