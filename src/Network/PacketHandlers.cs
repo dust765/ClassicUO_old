@@ -859,6 +859,10 @@ namespace ClassicUO.Network
             if (serial == ProfileManager.CurrentProfile.Mimic_PlayerSerial && type == MessageType.Spell && !string.IsNullOrEmpty(text))
                 AutoMimic.SyncByClilocString(serial, text);
             // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // CURSOR FIXES
+            if (serial == World.Player.Serial && type == MessageType.Spell && !string.IsNullOrEmpty(text))
+                CombatCollection.SpellCastFromCliloc(text);
+            // ## BEGIN - END ## // CURSOR FIXES
 
             if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF && name.StartsWith("SYSTEM"))
             {
