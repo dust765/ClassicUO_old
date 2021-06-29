@@ -152,6 +152,8 @@ UCCLinesToggleLT (toggle)
 
 UCCLinesToggleHM (toggle)
 
+AutoMeditate (toggle)
+
 # macros
 
 ObjectInfo (-info command)
@@ -188,6 +190,22 @@ EquipManager (fast equip)
 
 SetMimic_PlayerSerial (set master or custom serial for EquipManager)
 
+# commands
+
+type command in chat
+
+-mimic (mimic casting of master)
+
+-marker X Y (add world marker)
+
+auto add marker for T-Maps
+
+-df (defender)
+
+-automed (auto meditate)
+
+-engage (auto pathfind and attack lasttarget)
+
 # Added files
 
 /src/Dust765
@@ -197,6 +215,10 @@ SetMimic_PlayerSerial (set master or custom serial for EquipManager)
 /src/Dust765/Macros
 
 /src/Dust765/Managers
+
+/src/Dust765/Autos
+
+/src/Dust765/Shared
 
 /src/halo.png
 
@@ -551,6 +573,30 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/MacroManager.cs              2693    2733    ADVMACROS
 
 /src/Game/GameObjects/PlayerMobile.cs           1387    1407    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              1938    1944    AUTOMATIONS
+
+/src/Game/Managers/MacroManager.cs              2446    2448    AUTOMATIONS
+
+/src/Game/Scenes/GameScene.cs                   272     274     AUTOMATIONS
+
+/src/Game/Scenes/GameScene.cs                   421     429     AUTOMATIONS
+
+/src/Game/World.cs                              350     352     AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                44      46      AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                2442    2444    AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                858     861     AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                2135    2137    AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                3129    3131    AUTOMATIONS
+
+/src/Game/UI/Gumps/WorldMapGump.cs              63      74      AUTOMATIONS
+
+/src/Game/UI/Gumps/WorldMapGump.cs              1823    1893    AUTOMATIONS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.

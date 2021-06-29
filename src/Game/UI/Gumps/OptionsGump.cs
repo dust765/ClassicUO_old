@@ -245,6 +245,9 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _pullEnemyBarsX, _pullEnemyBarsY, _pullEnemyBarsFinalLocationX, _pullEnemyBarsFinalLocationY;
         private InputField _pullPartyAllyBarsX, _pullPartyAllyBarsY, _pullPartyAllyBarsFinalLocationX, _pullPartyAllyBarsFinalLocationY;
         // ## BEGIN - END ## // ADVMACROS
+        // ## BEGIN - END ## // AUTOMATIONS
+        private Checkbox _autoWorldmapMarker;
+        // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3799,6 +3802,9 @@ namespace ClassicUO.Game.UI.Gumps
             section.Add(AddLabel(null, "UCCLinesToggleLT (toggle on / off UCC Lines LastTarget)", startX, startY));
             section.Add(AddLabel(null, "UCCLinesToggleHM (toggle on / off UCC Lines Hunting Mode)", startX, startY));
             // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // AUTOMATIONS
+            section.Add(AddLabel(null, "AutoMeditate (toggle on / off automed)", startX, startY));
+            // ## BEGIN - END ## // AUTOMATIONS
 
             SettingsSection section2 = AddSettingsSection(box, "-----SIMPLE MACROS-----");
             section2.Y = section.Bounds.Bottom + 40;
@@ -4062,6 +4068,33 @@ namespace ClassicUO.Game.UI.Gumps
             section3.AddRight(AddLabel(null, "FY", 0, 0), 2);
             startY += _pullPartyAllyBarsFinalLocationY.Height + 2;
             // ## BEGIN - END ## // ADVMACROS
+            // ## BEGIN - END ## // AUTOMATIONS
+            SettingsSection section4 = AddSettingsSection(box, "-----Automations-----");
+            section4.Y = section3.Bounds.Bottom + 40;
+            startY = section3.Bounds.Bottom + 40;
+
+            section4.Add(AddLabel(null, "write in chat or use macro to enable / disable:", startX, startY));
+            section4.Add(AddLabel(null, "(runs in background until disabled)", startX, startY));
+            section4.Add(AddLabel(null, "-automed or macro AutoMeditate (auto meditates \n with 2.5s delay and not targeting)", startX, startY));
+            section4.Add(AddLabel(null, "-engange (auto engage and pathfind to last target)", startX, startY));
+
+            SettingsSection section5 = AddSettingsSection(box, "-----MISC-----");
+            section5.Y = section4.Bounds.Bottom + 40;
+            startY = section4.Bounds.Bottom + 40;
+
+            section5.Add(AddLabel(null, "write in chat to enable / disable:", startX, startY));
+            section5.Add(AddLabel(null, "-mimic (mimic harmful spells 1:1, on beneficial macro defendSelf/defendParty)", startX, startY));
+            section5.Add(AddLabel(null, "Macro: SetMimic_PlayerSerial (define the player to mimic)", startX, startY));
+            section5.Add(AddLabel(null, "-marker X Y (place a dot and line to X Y on world map \n use -marker to remove it)", startX, startY));
+            section5.Add(_autoWorldmapMarker = AddCheckBox(null, "Auto add marker for MapGumps (ie. T-Maps)", _currentProfile.AutoWorldmapMarker, startX, startY));
+            startY += _autoWorldmapMarker.Height + 2;
+            section5.Add(AddLabel(null, "-df (if GreaterHeal cursor is up and you or a party member \n " +
+                                                "gets hit by EB, Explor or FS \n " +
+                                                "and your or the party members condition is met \n " +
+                                                "greater heal will be cast on you or party member \n " +
+                                                "Condition: Poisoned and HP smaller than random between 65 - 80 \n " +
+                                                "Condition: HP smaller than random between 40-70)", startX, startY));
+            // ## BEGIN - END ## // AUTOMATIONS
 
             Add(rightArea, PAGE);
         }
@@ -5916,6 +5949,9 @@ namespace ClassicUO.Game.UI.Gumps
             int.TryParse(_pullPartyAllyBarsFinalLocationY.Text, out int pullPartyAllyBarsFinalLocationY);
             _currentProfile.PullPartyAllyBarsFinalLocation = new Point(pullPartyAllyBarsFinalLocationX, pullPartyAllyBarsFinalLocationY);
             // ## BEGIN - END ## // ADVMACROS
+            // ## BEGIN - END ## // AUTOMATIONS
+            _currentProfile.AutoWorldmapMarker = _autoWorldmapMarker.IsChecked;
+            // ## BEGIN - END ## // AUTOMATIONS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

@@ -347,6 +347,9 @@ namespace ClassicUO.Game
 
                     _toRemove.Clear();
                 }
+                // ## BEGIN - END ## // AUTOMATIONS
+                ModulesManager.OnWorldUpdate(totalTime);
+                // ## BEGIN - END ## // AUTOMATIONS
 
                 _effectManager.Update(totalTime, frameTime);
 
