@@ -1505,6 +1505,20 @@ namespace ClassicUO.Game.Managers
 
                     ushort start = (ushort) (0x0F06 + scantype);
 
+                    // ## BEGIN - END ## // SELF
+                    UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();
+
+                    if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
+                    {
+                        UOClassicCombatSelf?.MacroTriggerPotMacro(start);
+                        break;
+                    }
+                    else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
+                    {
+                        UOClassicCombatSelf?.ClilocTriggerPotMacro(start);
+                    }
+                    // ## BEGIN - END ## // SELF
+
                     Item potion = World.Player.FindItemByGraphic(start);
 
                     if (potion != null)

@@ -444,6 +444,39 @@ namespace ClassicUO.Configuration
         public uint UOClassicCombatSelf_DisarmStrikeCooldown { get; set; } = 30000;
         public uint UOClassicCombatSelf_DisarmAttemptCooldown { get; set; } = 15000;
         // ## BEGIN - END ## // UCCSETTINGS
+        // ## BEGIN - END ## // SELF
+        public bool UOClassicCombatSelf { get; set; } = false;
+        public Point UOClassicCombatSelfLocation { get; set; } = new Point(25, 25);
+        public bool UOClassicCombatSelf_AutoBandage { get; set; } = true;
+        public bool UOClassicCombatSelf_AutoPouche { get; set; } = true;
+        public bool UOClassicCombatSelf_AutoCurepot { get; set; } = true;
+        public bool UOClassicCombatSelf_AutoHealpot { get; set; } = true;
+        public bool UOClassicCombatSelf_AutoRefreshpot { get; set; } = true;
+        public uint UOClassicCombatSelf_ActionCooldown { get; set; } = 600;
+        public uint UOClassicCombatSelf_PoucheCooldown { get; set; } = 0;
+        public uint UOClassicCombatSelf_CurepotCooldown { get; set; } = 0;
+        public uint UOClassicCombatSelf_HealpotCooldown { get; set; } = 10000;
+        public uint UOClassicCombatSelf_RefreshpotCooldown { get; set; } = 0;
+        public uint UOClassicCombatSelf_WaitForTarget { get; set; } = 1000;
+        public bool UOClassicCombatSelf_RearmAfterPot { get; set; } = true;
+        public bool UOClassicCombatSelf_IsDuelingOrTankMage { get; set; } = true;
+        public bool UOClassicCombatSelf_AutoRearmAfterDisarmed { get; set; } = true;
+        public uint UOClassicCombatSelf_AutoRearmAfterDisarmedCooldown { get; set; } = 5000;
+        public uint UOClassicCombatSelf_BandiesHPTreshold { get; set; } = 1;
+        public bool UOClassicCombatSelf_BandiesPoison { get; set; } = true;
+        public uint UOClassicCombatSelf_CurepotHPTreshold { get; set; } = 10;
+        public uint UOClassicCombatSelf_HealpotHPTreshold { get; set; } = 20;
+        public uint UOClassicCombatSelf_RefreshpotStamTreshold { get; set; } = 15;
+        public bool UOClassicCombatSelf_DisarmStrike { get; set; } = true;
+        public bool UOClassicCombatSelf_ConsiderHidden { get; set; } = true;
+        public bool UOClassicCombatSelf_ConsiderSpells { get; set; } = true;
+        public uint UOClassicCombatSelf_StrengthPotCooldown { get; set; } = 120000;
+        public uint UOClassicCombatSelf_DexPotCooldown { get; set; } = 120000;
+        public int UOClassicCombatSelf_MinRNG { get; set; } = 50;
+        public int UOClassicCombatSelf_MaxRNG { get; set; } = 150;
+        public bool UOClassicCombatSelf_ClilocTriggers { get; set; } = false;
+        public bool UOClassicCombatSelf_MacroTriggers { get; set; } = false;
+        // ## BEGIN - END ## // SELF
         // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;
