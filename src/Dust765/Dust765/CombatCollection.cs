@@ -66,6 +66,9 @@ namespace ClassicUO.Dust765.Dust765
         public static bool _HarmOnSwingTrigger = false;
         // ## BEGIN - END ## // MACROS
 
+        // ## BEGIN - END ## // BUFFBAR
+
+        // ## BEGIN - END ## // BUFFBAR
         // ## BEGIN - END ## // AUTOLOOT
         //NETWORK\PACKETHANDLERS.CS
         public static void SetLootFlag(uint source, ushort hue)

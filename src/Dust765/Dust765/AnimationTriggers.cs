@@ -40,6 +40,10 @@ namespace ClassicUO.Dust765.Dust765
                 // ## BEGIN - END ## // MACROS
                 CombatCollection._HarmOnSwingTrigger = true;
                 // ## BEGIN - END ## // MACROS
+                // ## BEGIN - END ## // BUFFBAR
+                UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
+                UOClassicCombatBuffbar?.ClilocTriggerSwing();
+                // ## BEGIN - END ## // BUFFBAR
             }
             return;
         }
@@ -48,6 +52,10 @@ namespace ClassicUO.Dust765.Dust765
             // ## BEGIN - END ## // MACROS
             CombatCollection._HarmOnSwingTrigger = true;
             // ## BEGIN - END ## // MACROS
+            // ## BEGIN - END ## // BUFFBAR
+            UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
+            UOClassicCombatBuffbar?.ClilocTriggerSwing();
+            // ## BEGIN - END ## // BUFFBAR
 
             return;
         }
