@@ -3914,7 +3914,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullFriendlyBarsX.SetText(_currentProfile.PullFriendlyBars.X.ToString());
@@ -3933,7 +3933,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullFriendlyBarsY.SetText(_currentProfile.PullFriendlyBars.Y.ToString());
@@ -3952,7 +3952,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullFriendlyBarsFinalLocationX.SetText(_currentProfile.PullFriendlyBarsFinalLocation.X.ToString());
@@ -3971,7 +3971,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullFriendlyBarsFinalLocationY.SetText(_currentProfile.PullFriendlyBarsFinalLocation.Y.ToString());
@@ -3991,7 +3991,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullEnemyBarsX.SetText(_currentProfile.PullEnemyBars.X.ToString());
@@ -4010,7 +4010,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullEnemyBarsY.SetText(_currentProfile.PullEnemyBars.Y.ToString());
@@ -4029,7 +4029,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullEnemyBarsFinalLocationX.SetText(_currentProfile.PullEnemyBarsFinalLocation.X.ToString());
@@ -4048,7 +4048,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullEnemyBarsFinalLocationY.SetText(_currentProfile.PullEnemyBarsFinalLocation.Y.ToString());
@@ -4068,7 +4068,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullPartyAllyBarsX.SetText(_currentProfile.PullPartyAllyBars.X.ToString());
@@ -4087,7 +4087,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullPartyAllyBarsY.SetText(_currentProfile.PullPartyAllyBars.Y.ToString());
@@ -4106,7 +4106,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullPartyAllyBarsFinalLocationX.SetText(_currentProfile.PullPartyAllyBarsFinalLocation.X.ToString());
@@ -4125,7 +4125,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _pullPartyAllyBarsFinalLocationY.SetText(_currentProfile.PullPartyAllyBarsFinalLocation.Y.ToString());
