@@ -3654,7 +3654,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _spellOnCursorOffsetX.SetText(_currentProfile.SpellOnCursorOffset.X.ToString());
@@ -3673,7 +3673,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _spellOnCursorOffsetY.SetText(_currentProfile.SpellOnCursorOffset.Y.ToString());
@@ -3733,7 +3733,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     false,
-                    15
+                    50000
                 )
             );
             _SpecialSetLastTargetClilocText.SetText(_currentProfile.SpecialSetLastTargetClilocText.ToString());
@@ -3763,7 +3763,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    50000
                 )
             );
             _blockWoSArt.SetText(_currentProfile.BlockWoSArt.ToString());
@@ -3905,7 +3905,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _bandageGumpOffsetX.SetText(_currentProfile.BandageGumpOffset.X.ToString());
@@ -3924,7 +3924,7 @@ namespace ClassicUO.Game.UI.Gumps
                     80,
                     false,
                     true,
-                    5
+                    5000
                 )
             );
             _bandageGumpOffsetY.SetText(_currentProfile.BandageGumpOffset.Y.ToString());
