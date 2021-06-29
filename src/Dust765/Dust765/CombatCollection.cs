@@ -66,6 +66,30 @@ namespace ClassicUO.Dust765.Dust765
         public static bool _HarmOnSwingTrigger = false;
         // ## BEGIN - END ## // MACROS
 
+        // ## BEGIN - END ## // CURSOR FIXES
+        //NETWORK\PACKETHANDLERS.CS
+        public static void SpellCastFromCliloc(string text)
+        {
+            if (SpellDefinition.WordToTargettype.TryGetValue(text, out SpellDefinition spell))
+            {
+                GameActions.LastSpellIndexCursor = spell.ID;
+            }
+            else
+            {
+                //THIS IS INCASE RAZOR OR ANOTHER ASSISTANT REWRITES THE STRING
+
+                foreach (var key in SpellDefinition.WordToTargettype.Keys)
+                {
+                    if (text.Contains(key)) //SPELL FOUND
+                    {
+                        GameActions.LastSpellIndexCursor = SpellDefinition.WordToTargettype[key].ID;
+
+                        //break; //DONT BREAK LOOP BECAUSE OF IN NOX / IN NOX GRAV
+                    }
+                }
+            }
+        }
+        // ## BEGIN - END ## // CURSOR FIXES
         // ## BEGIN - END ## // BUFFBAR
 
         // ## BEGIN - END ## // BUFFBAR
