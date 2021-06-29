@@ -240,6 +240,11 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
         private Checkbox _uccClilocTrigger, _uccMacroTrigger;
         // ## BEGIN - END ## // SELF
+        // ## BEGIN - END ## // ADVMACROS
+        private InputField _pullFriendlyBarsX, _pullFriendlyBarsY, _pullFriendlyBarsFinalLocationX, _pullFriendlyBarsFinalLocationY;
+        private InputField _pullEnemyBarsX, _pullEnemyBarsY, _pullEnemyBarsFinalLocationX, _pullEnemyBarsFinalLocationY;
+        private InputField _pullPartyAllyBarsX, _pullPartyAllyBarsY, _pullPartyAllyBarsFinalLocationX, _pullPartyAllyBarsFinalLocationY;
+        // ## BEGIN - END ## // ADVMACROS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3813,6 +3818,250 @@ namespace ClassicUO.Game.UI.Gumps
             section2.Add(AddLabel(null, "OpenJournal2 (opens a second journal)", startX, startY));
             section2.Add(AddLabel(null, "OpenCorpses (opens 0x2006 corpses within 2 tiles)", startX, startY));
             // ## BEGIN - END ## // MACROS
+            // ## BEGIN - END ## // ADVMACROS
+            SettingsSection section3 = AddSettingsSection(box, "-----Advanced macros-----");
+            section3.Y = section2.Bounds.Bottom + 40;
+            startY = section2.Bounds.Bottom + 40;
+            section3.Add(AddLabel(null, "use macro to run advanced scripts ONCE:", startX, startY));
+            section3.Add(AddLabel(null, "OpenCorpsesSafeLoot (opens non blue 0x2006 corpses within 2 tiles)", startX, startY));
+            section3.Add(AddLabel(null, "EquipManager (equip an item)", startX, startY));
+            section3.Add(AddLabel(null, "SetMimic_PlayerSerial (set master or custom serial for EquipManager)", startX, startY));
+            section3.Add(AddLabel(null, "AutoPot (disarm 2h layer -> \n healpot below 85%, \n pouch if paralyzed, \n cure if poisoned and not full hp, \n refresh if below 23, \n str pot if str below 100, \n agi pot if dex above 89)", startX, startY));
+            section3.Add(AddLabel(null, "DefendPartyKey (if ally / party member in 12 tile range and hits < 64: \n if targeting -> target them, else cast gheal \n if own hits < 64: \n if targeting -> target self and use gheal pot, \n else start casting gheal)", startX, startY));
+            section3.Add(AddLabel(null, "DefendSelfKey (if own hits < 64, \n if targeting -> target self and use gheal pot, \n else start casting gheal)", startX, startY));
+            section3.Add(AddLabel(null, "CustomInterrupt (fast macro to interrupt active spellcasting)", startX, startY));
+
+            section3.Add(AddLabel(null, "GrabFriendlyBars (grab all innocent bars)", startX, startY));
+            section3.Add
+            (
+                _pullFriendlyBarsX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullFriendlyBarsX.SetText(_currentProfile.PullFriendlyBars.X.ToString());
+            section3.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _pullFriendlyBarsX.Height + 2;
+
+            section3.Add
+            (
+                _pullFriendlyBarsY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullFriendlyBarsY.SetText(_currentProfile.PullFriendlyBars.Y.ToString());
+            section3.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _pullFriendlyBarsY.Height + 2;
+            //
+            section3.Add
+            (
+                _pullFriendlyBarsFinalLocationX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullFriendlyBarsFinalLocationX.SetText(_currentProfile.PullFriendlyBarsFinalLocation.X.ToString());
+            section3.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _pullFriendlyBarsFinalLocationX.Height + 2;
+
+            section3.Add
+            (
+                _pullFriendlyBarsFinalLocationY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullFriendlyBarsFinalLocationY.SetText(_currentProfile.PullFriendlyBarsFinalLocation.Y.ToString());
+            section3.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _pullFriendlyBarsFinalLocationY.Height + 2;
+
+            section3.Add(AddLabel(null, "GrabEnemyBars (grab all criminal, enemy, gray, murderer bars)", startX, startY));
+            section3.Add
+            (
+                _pullEnemyBarsX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullEnemyBarsX.SetText(_currentProfile.PullEnemyBars.X.ToString());
+            section3.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _pullEnemyBarsX.Height + 2;
+
+            section3.Add
+            (
+                _pullEnemyBarsY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullEnemyBarsY.SetText(_currentProfile.PullEnemyBars.Y.ToString());
+            section3.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _pullEnemyBarsY.Height + 2;
+            //
+            section3.Add
+            (
+                _pullEnemyBarsFinalLocationX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullEnemyBarsFinalLocationX.SetText(_currentProfile.PullEnemyBarsFinalLocation.X.ToString());
+            section3.AddRight(AddLabel(null, "FX", 0, 0), 2);
+            startY += _pullEnemyBarsFinalLocationX.Height + 2;
+
+            section3.Add
+            (
+                _pullEnemyBarsFinalLocationY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullEnemyBarsFinalLocationY.SetText(_currentProfile.PullEnemyBarsFinalLocation.Y.ToString());
+            section3.AddRight(AddLabel(null, "FY", 0, 0), 2);
+            startY += _pullEnemyBarsFinalLocationY.Height + 2;
+
+            section3.Add(AddLabel(null, "GrabPartyAllyBars (grab all ally and party bars)", startX, startY));
+            section3.Add
+            (
+                _pullPartyAllyBarsX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullPartyAllyBarsX.SetText(_currentProfile.PullPartyAllyBars.X.ToString());
+            section3.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _pullPartyAllyBarsX.Height + 2;
+
+            section3.Add
+            (
+                _pullPartyAllyBarsY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullPartyAllyBarsY.SetText(_currentProfile.PullPartyAllyBars.Y.ToString());
+            section3.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _pullPartyAllyBarsY.Height + 2;
+            //
+            section3.Add
+            (
+                _pullPartyAllyBarsFinalLocationX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullPartyAllyBarsFinalLocationX.SetText(_currentProfile.PullPartyAllyBarsFinalLocation.X.ToString());
+            section3.AddRight(AddLabel(null, "FX", 0, 0), 2);
+            startY += _pullPartyAllyBarsFinalLocationX.Height + 2;
+
+            section3.Add
+            (
+                _pullPartyAllyBarsFinalLocationY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _pullPartyAllyBarsFinalLocationY.SetText(_currentProfile.PullPartyAllyBarsFinalLocation.Y.ToString());
+            section3.AddRight(AddLabel(null, "FY", 0, 0), 2);
+            startY += _pullPartyAllyBarsFinalLocationY.Height + 2;
+            // ## BEGIN - END ## // ADVMACROS
 
             Add(rightArea, PAGE);
         }
@@ -5645,6 +5894,28 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.UOClassicCombatSelf = _uccEnableSelf.IsChecked;
             }
             // ## BEGIN - END ## // SELF
+            // ## BEGIN - END ## // ADVMACROS
+            int.TryParse(_pullFriendlyBarsX.Text, out int pullFriendlyBarsX);
+            int.TryParse(_pullFriendlyBarsY.Text, out int pullFriendlyBarsY);
+            _currentProfile.PullFriendlyBars = new Point(pullFriendlyBarsX, pullFriendlyBarsY);
+            int.TryParse(_pullFriendlyBarsFinalLocationX.Text, out int pullFriendlyBarsFinalLocationX);
+            int.TryParse(_pullFriendlyBarsFinalLocationY.Text, out int pullFriendlyBarsFinalLocationY);
+            _currentProfile.PullFriendlyBarsFinalLocation = new Point(pullFriendlyBarsFinalLocationX, pullFriendlyBarsFinalLocationY);
+
+            int.TryParse(_pullEnemyBarsX.Text, out int pullEnemyBarsX);
+            int.TryParse(_pullEnemyBarsY.Text, out int pullEnemyBarsY);
+            _currentProfile.PullEnemyBars = new Point(pullEnemyBarsX, pullEnemyBarsY);
+            int.TryParse(_pullEnemyBarsFinalLocationX.Text, out int pullEnemyBarsFinalLocationX);
+            int.TryParse(_pullEnemyBarsFinalLocationY.Text, out int pullEnemyBarsFinalLocationY);
+            _currentProfile.PullEnemyBarsFinalLocation = new Point(pullEnemyBarsFinalLocationX, pullEnemyBarsFinalLocationY);
+
+            int.TryParse(_pullPartyAllyBarsX.Text, out int pullPartyAllyBarsX);
+            int.TryParse(_pullPartyAllyBarsY.Text, out int pullPartyAllyBarsY);
+            _currentProfile.PullPartyAllyBars = new Point(pullPartyAllyBarsX, pullPartyAllyBarsY);
+            int.TryParse(_pullPartyAllyBarsFinalLocationX.Text, out int pullPartyAllyBarsFinalLocationX);
+            int.TryParse(_pullPartyAllyBarsFinalLocationY.Text, out int pullPartyAllyBarsFinalLocationY);
+            _currentProfile.PullPartyAllyBarsFinalLocation = new Point(pullPartyAllyBarsFinalLocationX, pullPartyAllyBarsFinalLocationY);
+            // ## BEGIN - END ## // ADVMACROS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
