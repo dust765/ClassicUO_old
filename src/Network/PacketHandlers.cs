@@ -843,6 +843,17 @@ namespace ClassicUO.Network
                 text = string.Empty;
             }
 
+            // ## BEGIN - END ## // AUTOLOOT
+            Item item = World.Items.Get(serial);
+            if (item != null)
+            {
+                if (item.IsCorpse)
+                {
+                    CombatCollection.SetLootFlag(serial, hue);
+                }
+            }
+            // ## BEGIN - END ## // AUTOLOOT
+
             if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF && name.StartsWith("SYSTEM"))
             {
                 NetClient.Socket.Send_ACKTalk();
@@ -4711,6 +4722,16 @@ namespace ClassicUO.Network
             // ## BEGIN - END ## // UI/GUMPS
             World.Player?.BandageTimer.OnCliloc(cliloc);
             // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // AUTOLOOT
+            Item item = World.Items.Get(serial);
+            if (item != null)
+            {
+                if (item.IsCorpse)
+                {
+                    CombatCollection.SetLootFlag(serial, hue);
+                }
+            }
+            // ## BEGIN - END ## // AUTOLOOT
 
             if (cliloc == 1008092 || cliloc == 1005445) // value for "You notify them you don't want to join the party" || "You have been added to the party"
             {
