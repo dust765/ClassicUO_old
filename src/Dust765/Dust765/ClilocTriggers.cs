@@ -72,11 +72,38 @@ namespace ClassicUO.Dust765.Dust765
         };
         public void OnMessage(string text, ushort hue, string name, bool isunicode = true)
         {
+            UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();
             UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
 
             //SYS MESSAGES ONLY
             if (name != "System" && text.Length <= 0)
                 return;
+
+            //STOP BANDIES TIMER
+            for (int i = 0; i < _stopBandiesAtClilocs.Length; i++)
+            {
+                if (ClilocLoader.Instance.GetString(_stopBandiesAtClilocs[i]) == null)
+                    continue;
+
+                if (text.StartsWith(ClilocLoader.Instance.GetString(_stopBandiesAtClilocs[i])))
+                {
+                    UOClassicCombatSelf?.ClilocTriggerStopBandies();
+                    return;
+                }
+            }
+
+            //START BANDIES TIMER
+            for (int i = 0; i < _startBandiesAtClilocs.Length; i++)
+            {
+                if (ClilocLoader.Instance.GetString(_startBandiesAtClilocs[i]) == null)
+                    continue;
+
+                if (text.StartsWith(ClilocLoader.Instance.GetString(_startBandiesAtClilocs[i])))
+                {
+                    UOClassicCombatSelf?.ClilocTriggerStartBandies();
+                    return;
+                }
+            }
 
             //GOT DISARMED
             for (int i = 0; i < _disarmedAtClilocs.Length; i++)
@@ -86,6 +113,7 @@ namespace ClassicUO.Dust765.Dust765
 
                 if (text.StartsWith(ClilocLoader.Instance.GetString(_disarmedAtClilocs[i])))
                 {
+                    UOClassicCombatSelf?.ClilocTriggerGotDisarmed();
                     UOClassicCombatBuffbar?.ClilocTriggerGotDisarmed();
 
                     return;
@@ -93,6 +121,7 @@ namespace ClassicUO.Dust765.Dust765
             }
             if (text.StartsWith("Their attack disarms you!"))
             {
+                UOClassicCombatSelf?.ClilocTriggerGotDisarmed();
                 UOClassicCombatBuffbar?.ClilocTriggerGotDisarmed();
                 return;
             }
@@ -100,51 +129,123 @@ namespace ClassicUO.Dust765.Dust765
             //DISARM
             if (text.StartsWith("You will now attempt to disarm your opponents."))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmON();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmON();
                 return;
             }
             if (text.StartsWith("You refrain from making disarm attempts."))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmOFF();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmOFF();
                 return;
             }
             //SUCCESSFUL DISARM MSGES
             if (text.StartsWith("You disarm their weapon!"))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmStriked();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmStriked();
                 return;
             }
             if (text.StartsWith("Your strike disarms your target!"))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmStriked();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmStriked();
                 return;
             }
             if (text.StartsWith("You successfully disarm your opponent!"))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmStriked();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmStriked();
                 return;
             }
             //FAILED DISARM MSGES
             if (text.StartsWith("You fail to disarm your opponent."))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmFailed();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmFailed();
                 return;
             }
             if (text.StartsWith("You failed in your attempt do disarm."))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmFailed();
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmFailed();
                 return;
             }
+
+            //UCCSELF CLILOC TRIGGERS
+            if (text.Contains("You must have a free hand"))
+            {
+                UOClassicCombatSelf?.ClilocTriggerFSFreeHands();
+                return;
+            }
+            if (text.Contains("You must wait") && text.Contains("second before using another") && text.Contains("potion"))
+            {
+
+                string seconds = Regex.Match(text, @"\d+").Value; //first number
+                int secondsS = Int32.Parse(seconds);
+
+                ushort potion = 0;
+
+                if (text.Contains("health"))
+                {
+                    potion = 0x0F0C;
+                }
+                else if (text.Contains("cure"))
+                {
+                    potion = 0x0F07;
+                }
+
+                UOClassicCombatSelf?.ClilocTriggerFSWaitX(secondsS, potion);
+                return;
+            }
+            if (text.StartsWith("You are already at full health."))
+            {
+                UOClassicCombatSelf?.ClilocTriggerFSFullHP();
+                return;
+            }
+            if (text.StartsWith("You are not poisoned."))
+            {
+                UOClassicCombatSelf?.ClilocTriggerFSNoPoison();
+                return;
+            }
+            if (text.StartsWith("You decide against drinking this potion, as you are already at full stamina."))
+            {
+                UOClassicCombatSelf?.ClilocTriggerFSFullStamina();
+                return;
+            }
+
         }
         public void OnCliloc(uint cliloc)
         {
+            UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();
             UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
+
+            //STOP BANDIES TIMER
+            for (int i = 0; i < _stopBandiesAtClilocs.Length; i++)
+            {
+                if (_stopBandiesAtClilocs[i] == cliloc)
+                {
+                    UOClassicCombatSelf?.ClilocTriggerStopBandies();
+                    return;
+                }
+            }
+
+            //START BANDIES TIMER
+            for (int i = 0; i < _startBandiesAtClilocs.Length; i++)
+            {
+                if (_startBandiesAtClilocs[i] == cliloc)
+                {
+                    UOClassicCombatSelf?.ClilocTriggerStartBandies();
+                    return;
+                }
+            }
 
             //GOT DISARMED
             for (int i = 0; i < _disarmedAtClilocs.Length; i++)
             {
                 if (_disarmedAtClilocs[i] == cliloc)
                 {
+                    UOClassicCombatSelf?.ClilocTriggerGotDisarmed();
                     UOClassicCombatBuffbar?.ClilocTriggerGotDisarmed();
                     return;
                 }

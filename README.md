@@ -128,6 +128,18 @@ UI UCC AL - Is an autoloot feature / UI. Only works with GridLoot enabled. You c
 
 UI UCC BUFFBAR - Provides a visible timer for next swing and disarm. You can enable lines individually enable them and also lock the UI to prevent moving it. There is a txt in /Data/Client to modify the timers for weapons. It does NOT change calculation with SSI or the like.
 
+UI UCC SELF - Is an Automation feature to bandaid yourself, use pouches and pots and auto rearms a weapon after being disarmed. 
+
+Checkboxes on the UI
+
+Rearm Pot - Auto rearm after pot. 
+
+Armorer Guild -  Auto rearm after being disarmed.
+
+Thiefes Guild - Disables any actions when hidden.
+
+Mages Guild - Disables any actions when a spellcursor is up.
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -496,7 +508,11 @@ FILE                                            START   END     COMMIT
 
 /src/Network/PacketHandlers.cs	                4719    4721    BUFFBAR
 
-/src/Game/Scenes/GameScene.cs                   372     377     BUFFBAR
+/src/Game/Scenes/GameScene.cs                   261     271     SELF
+
+/src/Game/Scenes/GameScene.cs                   384     389     SELF
+
+/src/Game/Managers/MacroManager.cs              1508    1520    SELF
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
