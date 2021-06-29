@@ -66,6 +66,17 @@ namespace ClassicUO.Dust765.Dust765
         public static bool _HarmOnSwingTrigger = false;
         // ## BEGIN - END ## // MACROS
 
+        // ## BEGIN - END ## // AUTOLOOT
+        //NETWORK\PACKETHANDLERS.CS
+        public static void SetLootFlag(uint source, ushort hue)
+        {
+            Item item = World.Items.Get(source);
+            if (item != null)
+            {
+                item.LootFlag = hue;
+            }
+        }
+        // ## BEGIN - END ## // AUTOLOOT
         // ## BEGIN - END ## // TEXTUREMANAGER
         public static Point CalcUnderChar5(Mobile mobile)
         {

@@ -225,6 +225,28 @@ namespace ClassicUO.Game.Scenes
                 UIManager.Add(new BandageGump());
             }
             // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // LINES
+            if (ProfileManager.CurrentProfile.UOClassicCombatLines)
+            {
+                UIManager.Add(new UOClassicCombatLines
+                {
+                    X = ProfileManager.CurrentProfile.UOClassicCombatLinesLocation.X,
+                    Y = ProfileManager.CurrentProfile.UOClassicCombatLinesLocation.Y
+                });
+
+            }
+            // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // AUTOLOOT
+            if (ProfileManager.CurrentProfile.UOClassicCombatAL)
+            {
+                UIManager.Add(new UOClassicCombatAL
+                {
+                    X = ProfileManager.CurrentProfile.UOClassicCombatALLocation.X,
+                    Y = ProfileManager.CurrentProfile.UOClassicCombatALLocation.Y
+                });
+
+            }
+            // ## BEGIN - END ## // AUTOLOOT
 
             CircleOfTransparency.Create(ProfileManager.CurrentProfile.CircleOfTransparencyRadius);
             Plugin.OnConnected();

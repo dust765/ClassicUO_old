@@ -224,6 +224,11 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // LINES
         private Checkbox _uccEnableLines;
         // ## BEGIN - END ## // LINES
+        // ## BEGIN - END ## // AUTOLOOT
+        private Checkbox _uccEnableAL, _uccEnableGridLootColoring, _uccBEnableLootAboveID;
+        private InputField _uccLootDelay, _uccPurgeDelay, _uccQueueSpeed;
+        private InputField _uccLootAboveID, _uccSL_Gray, _uccSL_Blue, _uccSL_Green, _uccSL_Red;
+        // ## BEGIN - END ## // AUTOLOOT
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3912,6 +3917,178 @@ namespace ClassicUO.Game.UI.Gumps
             section3.Add(_uccEnableLines = AddCheckBox(null, "Enable UCC - Lines", _currentProfile.UOClassicCombatLines, startX, startY));
             startY += _uccEnableLines.Height + 2;
             // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // AUTOLOOT
+            SettingsSection section4 = AddSettingsSection(box, "-----AUTOLOOT (AL UI)-----");
+            section4.Y = section3.Bounds.Bottom + 40;
+
+            startY = section3.Bounds.Bottom + 40;
+
+            section4.Add(_uccEnableAL = AddCheckBox(null, "Enable UCC - AL", _currentProfile.UOClassicCombatAL, startX, startY));
+            startY += _uccEnableAL.Height + 2;
+            section4.Add(_uccEnableGridLootColoring = AddCheckBox(null, "Enable GridLootColoring", _currentProfile.UOClassicCombatAL_EnableGridLootColoring, startX, startY));
+            startY += _uccEnableGridLootColoring.Height + 2;
+            section4.Add(_uccBEnableLootAboveID = AddCheckBox(null, "Enable LootAboveID", _currentProfile.UOClassicCombatAL_EnableLootAboveID, startX, startY));
+            startY += _uccBEnableLootAboveID.Height + 2;
+
+            SettingsSection section5 = AddSettingsSection(box, "-----SETTINGS (AL)-----");
+            section5.Y = section4.Bounds.Bottom + 40;
+
+            startY = section4.Bounds.Bottom + 40;
+
+            section5.Add(AddLabel(null, "-----DISABLE / ENABLE AL ON CHANGES BELOW-----", startX, startY));
+
+            section5.Add(AddLabel(null, "Time between looting two items(ms)", startX, startY));
+
+            section5.Add
+            (
+                _uccLootDelay = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccLootDelay.SetText(_currentProfile.UOClassicCombatAL_LootDelay.ToString());
+
+            section5.Add(AddLabel(null, "Time to purge the queue of old items (ms)", startX, startY));
+
+            section5.Add
+            (
+                _uccPurgeDelay = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _uccPurgeDelay.SetText(_currentProfile.UOClassicCombatAL_PurgeDelay.ToString());
+
+            section5.Add(AddLabel(null, "Time between processing the queue (ms)", startX, startY));
+
+            section5.Add
+            (
+                _uccQueueSpeed = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccQueueSpeed.SetText(_currentProfile.UOClassicCombatAL_QueueSpeed.ToString());
+
+            section5.Add(AddLabel(null, "Loot above ID", startX, startY));
+
+            section5.Add
+            (
+                _uccLootAboveID = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    500000
+                )
+            );
+            _uccLootAboveID.SetText(_currentProfile.UOClassicCombatAL_LootAboveID.ToString());
+
+            section5.Add(AddLabel(null, "Gray corpse color", startX, startY));
+
+            section5.Add
+            (
+                _uccSL_Gray = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccSL_Gray.SetText(_currentProfile.UOClassicCombatAL_SL_Gray.ToString());
+
+            section5.Add(AddLabel(null, "Blue corpse color", startX, startY));
+
+            section5.Add
+            (
+                _uccSL_Blue = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccSL_Blue.SetText(_currentProfile.UOClassicCombatAL_SL_Blue.ToString());
+
+            section5.Add(AddLabel(null, "Green corpse color", startX, startY));
+
+            section5.Add
+            (
+                _uccSL_Green = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccSL_Green.SetText(_currentProfile.UOClassicCombatAL_SL_Green.ToString());
+
+            section5.Add(AddLabel(null, "Red corpse color", startX, startY));
+
+            section5.Add
+            (
+                _uccSL_Red = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccSL_Red.SetText(_currentProfile.UOClassicCombatAL_SL_Red.ToString());
+            // ## BEGIN - END ## // AUTOLOOT
 
             Add(rightArea, PAGE);
         }
@@ -4924,6 +5101,45 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.UOClassicCombatLines = _uccEnableLines.IsChecked;
             }
             // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // AUTOLOOT
+            _currentProfile.UOClassicCombatAL_LootDelay = uint.Parse(_uccLootDelay.Text);
+            _currentProfile.UOClassicCombatAL_PurgeDelay = uint.Parse(_uccPurgeDelay.Text);
+            _currentProfile.UOClassicCombatAL_QueueSpeed = uint.Parse(_uccQueueSpeed.Text);
+
+            _currentProfile.UOClassicCombatAL_EnableGridLootColoring = _uccEnableGridLootColoring.IsChecked;
+            _currentProfile.UOClassicCombatAL_EnableLootAboveID = _uccBEnableLootAboveID.IsChecked;
+
+            _currentProfile.UOClassicCombatAL_LootAboveID = uint.Parse(_uccLootAboveID.Text);
+            _currentProfile.UOClassicCombatAL_SL_Gray = uint.Parse(_uccSL_Gray.Text);
+            _currentProfile.UOClassicCombatAL_SL_Blue = uint.Parse(_uccSL_Blue.Text);
+            _currentProfile.UOClassicCombatAL_SL_Green = uint.Parse(_uccSL_Green.Text);
+            _currentProfile.UOClassicCombatAL_SL_Red = uint.Parse(_uccSL_Red.Text);
+
+            if (_currentProfile.UOClassicCombatAL != _uccEnableAL.IsChecked)
+            {
+                UOClassicCombatAL UOClassicCombatAL = UIManager.GetGump<UOClassicCombatAL>();
+
+                if (_uccEnableAL.IsChecked)
+                {
+                    if (UOClassicCombatAL != null)
+                        UOClassicCombatAL.Dispose();
+
+                    UOClassicCombatAL = new UOClassicCombatAL
+                    {
+                        X = _currentProfile.UOClassicCombatALLocation.X,
+                        Y = _currentProfile.UOClassicCombatALLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatAL);
+                }
+                else
+                {
+                    if (UOClassicCombatAL != null)
+                        UOClassicCombatAL.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatAL = _uccEnableAL.IsChecked;
+            }
+            // ## BEGIN - END ## // AUTOLOOT
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
