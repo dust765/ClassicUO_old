@@ -35,6 +35,9 @@ using System.Linq;
 using ClassicUO.Configuration;
 using ClassicUO.Data;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // UI/GUMPS
+using ClassicUO.Dust765.External;
+// ## BEGIN - END ## // UI/GUMPS
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Game.UI.Gumps;
@@ -48,9 +51,22 @@ namespace ClassicUO.Game.GameObjects
     {
         private readonly Dictionary<BuffIconType, BuffIcon> _buffIcons = new Dictionary<BuffIconType, BuffIcon>();
 
+        // ## BEGIN - END ## // MISC2
+        public int DeathX = 0;
+        public int DeathY = 0;
+        public uint DeathTick = 0;
+        // ## BEGIN - END ## // MISC2
+        // ## BEGIN - END ## // UI/GUMPS
+        public BandageGump BandageTimer;
+        // ## BEGIN - END ## // UI/GUMPS
+
         public PlayerMobile(uint serial) : base(serial)
         {
             Skills = new Skill[SkillsLoader.Instance.SkillsCount];
+
+            // ## BEGIN - END ## // UI/GUMPS
+            UIManager.Add(BandageTimer = new BandageGump());
+            // ## BEGIN - END ## // UI/GUMPS
 
             for (int i = 0; i < Skills.Length; i++)
             {
@@ -1355,6 +1371,40 @@ namespace ClassicUO.Game.GameObjects
             }
         }
 
+        // ## BEGIN - END ## // MACROS
+        public void OpenCorpses(byte range)
+        {
+            foreach (Item item in World.Items.Values)
+            {
+                if (!item.IsDestroyed && item.IsCorpse && item.Distance <= range && item.Graphic == 0x2006)
+                {
+                    ManualOpenedCorpses.Add(item.Serial);
+                    GameActions.DoubleClickQueued(item.Serial);
+                }
+            }
+        }
+        // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // ADVMACROS
+        public void OpenCorpsesSafe(byte range)
+        {
+            foreach (Item item in World.Items.Values)
+            {
+                if (!item.IsDestroyed && item.IsCorpse && item.Distance <= range && item.Graphic == 0x2006)
+                {
+                    if (item.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Gray || item.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Green || item.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Red)
+                    {
+                        ManualOpenedCorpses.Add(item.Serial);
+                        GameActions.DoubleClickQueued(item.Serial);
+                    }
+                    else
+                    {
+                        item.AddMessage(MessageType.Regular, "This is not safe lootable!", 3, 33, true, TextType.OBJECT);
+                        continue;
+                    }
+                }
+            }
+        }
+        // ## BEGIN - END ## // ADVMACROS
 
         protected override void OnDirectionChanged()
         {

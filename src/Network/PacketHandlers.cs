@@ -38,6 +38,12 @@ using System.Text;
 using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // MISC
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MISC
+// ## BEGIN - END ## // AUTOMATIONS
+using ClassicUO.Dust765.Autos;
+// ## BEGIN - END ## // AUTOMATIONS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
@@ -839,6 +845,25 @@ namespace ClassicUO.Network
                 text = string.Empty;
             }
 
+            // ## BEGIN - END ## // AUTOLOOT
+            Item item = World.Items.Get(serial);
+            if (item != null)
+            {
+                if (item.IsCorpse)
+                {
+                    CombatCollection.SetLootFlag(serial, hue);
+                }
+            }
+            // ## BEGIN - END ## // AUTOLOOT
+            // ## BEGIN - END ## // AUTOMATIONS
+            if (serial == ProfileManager.CurrentProfile.Mimic_PlayerSerial && type == MessageType.Spell && !string.IsNullOrEmpty(text))
+                AutoMimic.SyncByClilocString(serial, text);
+            // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // CURSOR FIXES
+            if (serial == World.Player.Serial && type == MessageType.Spell && !string.IsNullOrEmpty(text))
+                CombatCollection.SpellCastFromCliloc(text);
+            // ## BEGIN - END ## // CURSOR FIXES
+
             if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF && name.StartsWith("SYSTEM"))
             {
                 NetClient.Socket.Send_ACKTalk();
@@ -1607,6 +1632,12 @@ namespace ClassicUO.Network
                 }
 
                 GameActions.RequestWarMode(false);
+
+                // ## BEGIN - END ## // MISC2
+                World.Player.DeathX = World.Player.X;
+                World.Player.DeathY = World.Player.Y;
+                World.Player.DeathTick = Time.Ticks;
+                // ## BEGIN - END ## // MISC2
             }
         }
 
@@ -2105,6 +2136,10 @@ namespace ClassicUO.Network
 
                         gump.AddPin(x, y);
 
+                        // ## BEGIN - END ## // AUTOMATIONS
+                        AutoWorldMapMarker.TmapPinXY(x, y);
+                        // ## BEGIN - END ## // AUTOMATIONS
+
                         break;
 
                     case MapMessageType.Insert: break;
@@ -2324,6 +2359,11 @@ namespace ClassicUO.Network
             );
 
             mobile.AnimationFromServer = true;
+
+            // ## BEGIN - END ## // MACROS
+            if (mobile == World.Player)
+                World.AnimationTriggers.OnOwnCharacterAnimation(action);
+            // ## BEGIN - END ## // MACROS
         }
 
         private static void GraphicEffect(ref StackDataReader p)
@@ -2410,6 +2450,14 @@ namespace ClassicUO.Network
                 false,
                 blendmode
             );
+
+            // ## BEGIN - END ## // AUTOMATIONS
+            Defender.gfxTrigger(source, target, graphic);
+            // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // OUTLANDS
+            //if (graphic == 0x5683)
+            //    CombatCollection.SetHamstrungTime(source);
+            // ## BEGIN - END ## // OUTLANDS
         }
 
         private static void ClientViewRange(ref StackDataReader p)
@@ -3086,6 +3134,10 @@ namespace ClassicUO.Network
 
             MapGump gump = new MapGump(serial, gumpid, width, height);
 
+            // ## BEGIN - END ## // AUTOMATIONS
+            AutoWorldMapMarker.TmapMarker(startX, startY, endX, endY, width, height);
+            // ## BEGIN - END ## // AUTOMATIONS
+
             if (p[0] == 0xF5 || Client.Version >= Data.ClientVersion.CV_308Z)
             {
                 ushort facet = 0;
@@ -3628,6 +3680,23 @@ namespace ClassicUO.Network
                     entity.Name = string.IsNullOrEmpty(name) ? text : name;
                 }
             }
+
+            // ## BEGIN - END ## // MISC
+            if (text.StartsWith(ProfileManager.CurrentProfile.SpecialSetLastTargetClilocText.ToString()))
+                CombatCollection.SpecialSetLastTargetCliloc(serial);
+            // ## BEGIN - END ## // MISC
+            // ## BEGIN - END ## // OUTLANDS
+            /*
+            if (text.StartsWith("(summoned"))
+                CombatCollection.SetSummonTime(text, serial);
+
+            if (text.Equals("*looks calmed*"))
+                CombatCollection.GetPeaceTime(serial);
+
+            if (text.StartsWith("*pacified"))
+                CombatCollection.SetPeaceTime(text, serial);
+            */
+            // ## BEGIN - END ## // OUTLANDS
 
             MessageManager.HandleMessage
             (
@@ -4673,6 +4742,23 @@ namespace ClassicUO.Network
 
             string arguments = null;
 
+            // ## BEGIN - END ## // UI/GUMPS
+            World.Player?.BandageTimer.OnCliloc(cliloc);
+            // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // AUTOLOOT
+            Item item = World.Items.Get(serial);
+            if (item != null)
+            {
+                if (item.IsCorpse)
+                {
+                    CombatCollection.SetLootFlag(serial, hue);
+                }
+            }
+            // ## BEGIN - END ## // AUTOLOOT
+            // ## BEGIN - END ## // BUFFBAR
+            World.ClilocTriggers.OnCliloc(cliloc);
+            // ## BEGIN - END ## // BUFFBAR
+
             if (cliloc == 1008092 || cliloc == 1005445) // value for "You notify them you don't want to join the party" || "You have been added to the party"
             {
                 for (LinkedListNode<Gump> g = UIManager.Gumps.Last; g != null; g = g.Previous)
@@ -5501,6 +5587,11 @@ namespace ClassicUO.Network
             }
 
             mobile.AnimationFromServer = true;
+
+            // ## BEGIN - END ## // MACROS
+            if (mobile == World.Player && type == 0)
+                World.AnimationTriggers.OnOwnCharacterAnimationNew(action, type);
+            // ## BEGIN - END ## // MACROS
         }
 
         private static void KREncryptionResponse(ref StackDataReader p)
@@ -5613,6 +5704,13 @@ namespace ClassicUO.Network
             Flags flags = (Flags) p.ReadUInt8();
             ushort unk2 = p.ReadUInt16BE();
 
+            // ## BEGIN - END ## // MISC
+            if (graphic == 130 & ProfileManager.CurrentProfile.BlockWoSArtForceAoS)
+            {
+                graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockWoSArt);
+                hue = 945;
+            }
+            // ## BEGIN - END ## // MISC
 
             if (serial != World.Player)
             {

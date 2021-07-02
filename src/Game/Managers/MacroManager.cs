@@ -38,6 +38,14 @@ using System.Text;
 using System.Xml;
 using ClassicUO.Configuration;
 using ClassicUO.Data;
+// ## BEGIN - END ## // MACROS
+using ClassicUO.Dust765.External;
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MACROS
+// ## BEGIN - END ## // ADVMACROS
+using ClassicUO.Dust765.Macros;
+using ClassicUO.Dust765.Managers;
+// ## BEGIN - END ## // ADVMACROS
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Scenes;
@@ -1501,6 +1509,20 @@ namespace ClassicUO.Game.Managers
 
                     ushort start = (ushort) (0x0F06 + scantype);
 
+                    // ## BEGIN - END ## // SELF
+                    UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();
+
+                    if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
+                    {
+                        UOClassicCombatSelf?.MacroTriggerPotMacro(start);
+                        break;
+                    }
+                    else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
+                    {
+                        UOClassicCombatSelf?.ClilocTriggerPotMacro(start);
+                    }
+                    // ## BEGIN - END ## // SELF
+
                     Item potion = World.Player.FindItemByGraphic(start);
 
                     if (potion != null)
@@ -1546,8 +1568,381 @@ namespace ClassicUO.Game.Managers
                     ProfileManager.CurrentProfile.EnableCaveBorder = !ProfileManager.CurrentProfile.EnableCaveBorder;
 
                     break;
-            }
 
+                // ## BEGIN - END ## // MACROS
+                case MacroType.ObjectInfo:
+
+                    CommandManager.Execute("info");
+
+                    break;
+
+                case MacroType.OpenCorpses:
+                    World.Player.OpenCorpses(2);
+
+                    break;
+
+                case MacroType.OpenJournal2:
+                    JournalGump2 journal2 = UIManager.GetGump<JournalGump2>();
+
+                    if (journal2 != null)
+                    {
+                        if (macro.Code == MacroType.Close)
+                        {
+                            journal2.Dispose();
+                        }
+                        else if (macro.Code == MacroType.Minimize)
+                        {
+                            journal2.IsMinimized = true;
+                        }
+                        else if (macro.Code == MacroType.Maximize)
+                        {
+                            journal2.IsMinimized = false;
+                        }
+                    }
+                    else
+                    {
+                        if (journal2 == null)
+                        {
+                            UIManager.Add(new JournalGump2 { X = 64, Y = 64 });
+                        }
+                        else
+                        {
+                            journal2.SetInScreen();
+                            journal2.BringOnTop();
+
+                            if (journal2.IsMinimized)
+                            {
+                                journal2.IsMinimized = false;
+                            }
+                        }
+                    }
+
+                    break;
+
+                case MacroType.SetTargetClientSide:
+                    TargetManager.SetTargeting(CursorTarget.SetTargetClientSide, CursorType.Target, TargetType.Neutral);
+
+                    break;
+
+                case MacroType.LastTargetRC:
+
+                    if (TargetManager.IsTargeting)
+                    {
+                        var entity = World.Get(TargetManager.LastTargetInfo.Serial);
+
+                        if (entity != null)
+                        {
+                            if (entity.Distance <= ProfileManager.CurrentProfile.LastTargetRange && (entity.Z - World.Player.Z) <= ProfileManager.CurrentProfile.LastTargetRange)
+                                TargetManager.Target(World.Get(TargetManager.LastTargetInfo.Serial));
+                            else
+                                MessageManager.HandleMessage(World.Player, "LastTarget out of range", null, 0x3B2, MessageType.Regular, 3, TextType.CLIENT, true);
+                        }
+
+                        WaitForTargetTimer = 0;
+                    }
+                    else if (WaitForTargetTimer < Time.Ticks)
+                        WaitForTargetTimer = 0;
+                    else
+                        result = 1;
+
+                    break;
+
+                case MacroType.HideX:
+
+                    if (SelectedObject.LastObject is Land l)
+                        l.AllowedToDraw = false;
+
+                    if (SelectedObject.LastObject is Item i)
+                        i.AllowedToDraw = false;
+
+                    if (SelectedObject.LastObject is Entity e)
+                        e.AllowedToDraw = false;
+
+                    if (SelectedObject.LastObject is Mobile m)
+                        m.AllowedToDraw = false;
+
+                    break;
+
+                case MacroType.HealOnHPChange:
+                    if (!CombatCollection._HealOnHPChangeON)
+                    {
+                        CombatCollection._HealOnHPChangeON = true;
+                        CombatCollection._HealOnHPChangeHP = World.Player.Hits;
+                    }
+
+                    CombatCollection.HealOnHPChange();
+
+                    break;
+
+                case MacroType.HarmOnSwing:
+                    if (!CombatCollection._HarmOnSwingON)
+                        CombatCollection._HarmOnSwingON = true;
+
+                    CombatCollection.HarmOnSwing();
+
+                    break;
+
+                case MacroType.CureGH:
+                    if (World.Player.IsPoisoned)
+                        GameActions.CastSpell(11); //cure
+                    else
+                        GameActions.CastSpell(29); //greater heal
+
+                    break;
+                // ## BEGIN - END ## // MACROS
+                // ## BEGIN - END ## // VISUAL HELPERS
+                case MacroType.HighlightTileAtRange:
+                    ProfileManager.CurrentProfile.HighlightTileAtRange = !ProfileManager.CurrentProfile.HighlightTileAtRange;
+
+                    break;
+                // ## BEGIN - END ## // VISUAL HELPERS
+                // ## BEGIN - END ## // MISC2
+                case MacroType.ToggleTransparentHouses:
+                    ProfileManager.CurrentProfile.TransparentHousesEnabled = !ProfileManager.CurrentProfile.TransparentHousesEnabled;
+
+                    break;
+                case MacroType.ToggleInvisibleHouses:
+                    ProfileManager.CurrentProfile.InvisibleHousesEnabled = !ProfileManager.CurrentProfile.InvisibleHousesEnabled;
+
+                    break;
+                // ## BEGIN - END ## // MISC2
+                // ## BEGIN - END ## // LINES
+                case MacroType.UCCLinesToggleLT:
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAll(); //ALL
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Innocent);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Ally);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Criminal);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Gray);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Enemy);
+                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Murderer);
+                    UOClassicCombatLines.ClilocTriggerToggleLT();
+
+                    break;
+
+                case MacroType.UCCLinesToggleHM:
+                    UOClassicCombatLines.ClilocTriggerToggleHM();
+
+                    break;
+                // ## BEGIN - END ## // LINES
+                // ## BEGIN - END ## // ADVMACROS
+                case MacroType.GrabFriendlyBars:
+                    GrabBars.GrabFriendlyBars();
+
+                    break;
+
+                case MacroType.GrabEnemyBars:
+                    GrabBars.GrabEnemyBars();
+
+                    break;
+
+                case MacroType.GrabPartyAllyBars:
+                    GrabBars.GrabPartyAllyBars();
+
+                    break;
+
+                case MacroType.AutoPot:
+
+                    AutoPotion.UseAutoPotion();
+
+                    break;
+
+                case MacroType.DefendSelfKey: //Defend Self
+
+                    AutoDefender.DefendSelf();
+
+                    break;
+
+                case MacroType.DefendPartyKey: //Defend Party & Allies
+
+                    AutoDefender.DefendParty();
+
+                    break;
+
+                case MacroType.OpenCorpsesSafe:
+                    World.Player.OpenCorpsesSafe(2);
+
+                    break;
+                //##Equip Manager##//
+                case MacroType.EquipManager:
+
+                    switch (macro.SubCode)
+                    {
+                        case MacroSubType.EquipLeatherSuit:
+                            EquipManager.EquipLeather();
+
+                            break;
+                        case MacroSubType.EquipHally:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Hally);
+
+                            break;
+                        case MacroSubType.EquipBardiche:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Bardiche);
+
+                            break;
+                        case MacroSubType.EquipKatana:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Katana);
+
+                            break;
+                        case MacroSubType.EquipCutlass:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Cutlass);
+
+                            break;
+                        case MacroSubType.EquipVikingSword:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.VikingSword);
+
+                            break;
+                        case MacroSubType.EquipBroadSword:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.BroadSword);
+
+                            break;
+                        case MacroSubType.EquipLongSword:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.LongSword);
+
+                            break;
+                        case MacroSubType.EquipScimitar:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Scimitar);
+
+                            break;
+                        case MacroSubType.EquipBattleAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.BattleAxe);
+
+                            break;
+                        case MacroSubType.EquipLargeBattleAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.LargeBattleAxe);
+
+                            break;
+                        case MacroSubType.EquipDoubleAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.DoubleAxe);
+
+                            break;
+                        case MacroSubType.EquipTwoHandedAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.TwoHandedAxe);
+
+                            break;
+                        case MacroSubType.EquipExecutionerAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.ExecutionerAxe);
+
+                            break;
+                        case MacroSubType.EquipAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Axe);
+
+                            break;
+                        case MacroSubType.EquipXbow:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.HeavyXbow);
+
+                            break;
+                        case MacroSubType.EquipCrossBow:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.CrossBow);
+
+                            break;
+                        case MacroSubType.EquipBow:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Bow);
+
+                            break;
+                        case MacroSubType.EquipSpear:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Spear);
+
+                            break;
+                        case MacroSubType.EquipShortSpear:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.ShortSpear);
+
+                            break;
+                        case MacroSubType.EquipWarFork:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.WarFork);
+
+                            break;
+                        case MacroSubType.EquipKryss:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Kryss);
+
+                            break;
+                        case MacroSubType.EquipClub:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Club);
+
+                            break;
+                        case MacroSubType.EquipWarAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.WarAxe);
+
+                            break;
+                        case MacroSubType.EquipHammerPick:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.HammerPick);
+
+                            break;
+                        case MacroSubType.EquipMaul:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Maul);
+
+                            break;
+                        case MacroSubType.EquipMace:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Mace);
+
+                            break;
+                        case MacroSubType.EquipWarMace:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.WarMace);
+
+                            break;
+                        case MacroSubType.EquipQStaff:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.QuarterStaff);
+
+                            break;
+                        case MacroSubType.EquipGnarledStaff:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.GnarledStaff);
+
+                            break;
+                        case MacroSubType.EquipWarHammer:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.WarHammer);
+
+                            break;
+                        case MacroSubType.EquipChaosShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.ChaosShield);
+
+                            break;
+                        case MacroSubType.EquipOrderShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.OrderShield);
+
+                            break;
+                        case MacroSubType.EquipHeaterShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.HeaterShield);
+
+                            break;
+                        case MacroSubType.EquipBronzeShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.BronzeShield);
+
+                            break;
+                        case MacroSubType.EquipKiteShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.KiteShield);
+
+                            break;
+                        case MacroSubType.EquipCustom:
+                            EquipManager.EquipCustom();
+
+                            break;
+                        case MacroSubType.SetCustomEquip:
+                            GameActions.Print("Target the [ITEM] for Custom Equip.", 101);
+                            TargetManager.SetTargeting(CursorTarget.SetCustomSerial, 0, TargetType.Neutral);
+
+                            break;
+                    }
+                    break;
+
+                case MacroType.CustomInterrupt:
+
+                    CustomInterrupt.Interrupt();
+
+                    break;
+
+                case MacroType.SetMimic_PlayerSerial:
+                    GameActions.Print("Target the mobile to set Mimic Player Serial.", 101);
+                    TargetManager.SetTargeting(CursorTarget.SetCustomSerial, 0, TargetType.Neutral);
+
+                    break;
+                // ## BEGIN - END ## // ADVMACROS
+                // ## BEGIN - END ## // AUTOMATIONS
+                case MacroType.AutoMeditate:
+
+                    CommandManager.Execute("automed");
+
+                    break;
+                // ## BEGIN - END ## // AUTOMATIONS
+            }
 
             return result;
         }
@@ -1855,6 +2250,14 @@ namespace ClassicUO.Game.Managers
                     count = 1 + MacroSubType.ZoomOut - MacroSubType.DefaultZoom;
 
                     break;
+
+                // ## BEGIN - END ## // ADVMACROS
+                case MacroType.EquipManager:
+                    offset = (int) MacroSubType.ZoomOut;
+                    count = MacroSubType.ZoomOut - MacroSubType.EmptySlot;
+
+                    break;
+                // ## BEGIN - END ## // ADVMACROS
             }
         }
     }
@@ -2013,10 +2416,53 @@ namespace ClassicUO.Game.Managers
         UsePotion,
         CloseAllHealthBars,
         RazorMacro,
+        // ## BEGIN - END ## // BASICSETUP
+        ObjectInfo,
+        // ## BEGIN - END ## // ADVMACROS
+        GrabFriendlyBars,
+        GrabEnemyBars,
+        GrabPartyAllyBars,
+        AutoPot,
+        // ## BEGIN - END ## // ADVMACROS
+        OpenCorpses,
+        // ## BEGIN - END ## // ADVMACROS
+        DefendSelfKey,
+        DefendPartyKey,
+        // ## BEGIN - END ## // ADVMACROS
+        // ## BEGIN - END ## // VISUAL HELPERS
+        HighlightTileAtRange,
+        // ## BEGIN - END ## // VISUAL HELPERS
+        LastTargetRC,
+        HideX,
+        HealOnHPChange,
+        HarmOnSwing,
+        // ## BEGIN - END ## // ADVMACROS
+        EquipManager,
+        // ## BEGIN - END ## // ADVMACROS
+        SetTargetClientSide,
+        UCCLinesToggleLT,
+        UCCLinesToggleHM,
+        CureGH,
+        // ## BEGIN - END ## // AUTOMATIONS
+        AutoMeditate,
+        // ## BEGIN - END ## // AUTOMATIONS
+        // ## BEGIN - END ## // ADVMACROS
+        CustomInterrupt,
+        SetMimic_PlayerSerial,
+        OpenCorpsesSafe,
+        // ## BEGIN - END ## // ADVMACROS
+        OpenJournal2,
+        // ## BEGIN - END ## // BASICSETUP
         ToggleDrawRoofs,
         ToggleTreeStumps,
         ToggleVegetation,
-        ToggleCaveTiles
+        ToggleCaveTiles,
+        // ## BEGIN - END ## // BASICSETUP
+        // ## BEGIN - END ## // MISC2
+        ToggleTransparentHouses,
+        ToggleInvisibleHouses
+        // ## BEGIN - END ## // MISC2
+        // ## BEGIN - END ## // BASICSETUP
     }
 
     internal enum MacroSubType
@@ -2251,6 +2697,48 @@ namespace ClassicUO.Game.Managers
 
         DefaultZoom,
         ZoomIn,
-        ZoomOut
+        ZoomOut,
+
+        // ## BEGIN - END ## // ADVMACROS
+        EquipLeatherSuit,
+        EquipHally,
+        EquipBardiche,
+        EquipKatana,
+        EquipCutlass,
+        EquipVikingSword,
+        EquipBroadSword,
+        EquipLongSword,
+        EquipScimitar,
+        EquipBattleAxe,
+        EquipLargeBattleAxe,
+        EquipDoubleAxe,
+        EquipTwoHandedAxe,
+        EquipExecutionerAxe,
+        EquipAxe,
+        EquipXbow,
+        EquipCrossBow,
+        EquipBow,
+        EquipSpear,
+        EquipShortSpear,
+        EquipWarFork,
+        EquipKryss,
+        EquipClub,
+        EquipWarAxe,
+        EquipHammerPick,
+        EquipMaul,
+        EquipMace,
+        EquipWarMace,
+        EquipQStaff,
+        EquipGnarledStaff,
+        EquipWarHammer,
+        EquipChaosShield,
+        EquipOrderShield,
+        EquipHeaterShield,
+        EquipBronzeShield,
+        EquipKiteShield,
+        EquipCustom,
+        SetCustomEquip,
+        EmptySlot
+        // ## BEGIN - END ## // ADVMACROS
     }
 }

@@ -32,6 +32,10 @@
 
 using System;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // ART / HUE CHANGES
+using ClassicUO.Dust765.Dust765;
+using ClassicUO.Configuration;
+// ## BEGIN - END ## // ART / HUE CHANGES
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
 using ClassicUO.Game.UI.Gumps;
@@ -120,6 +124,8 @@ namespace ClassicUO.Game.GameObjects
                     return _displayedGraphic.Value;
                 }
 
+                // ## BEGIN - END ## // ART / HUE CHANGES
+                /*
                 if (IsCoin)
                 {
                     if (Amount > 5)
@@ -132,6 +138,28 @@ namespace ClassicUO.Game.GameObjects
                         return (ushort) (Graphic + 1);
                     }
                 }
+                */
+                // ## BEGIN - END ## // ART / HUE CHANGES
+                if (IsCoin)
+                {
+                    if (ProfileManager.CurrentProfile.GoldType == 0) // normal
+                    {
+                        if (Amount > 5)
+                            return (ushort) (Graphic + 2);
+                        if (Amount > 1)
+                            return (ushort) (Graphic + 1);
+                    }
+                    else
+                    {
+                        Graphic = CombatCollection.GoldArt(Graphic);
+                    }
+
+                    if (ProfileManager.CurrentProfile.ColorGold)
+                    {
+                        Hue = CombatCollection.GoldHue(Hue);
+                    }
+                }
+                // ## BEGIN - END ## // ART / HUE CHANGES
                 else if (IsMulti)
                 {
                     return MultiGraphic;
