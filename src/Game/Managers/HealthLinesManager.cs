@@ -214,6 +214,20 @@ namespace ClassicUO.Game.Managers
                             if (ProfileManager.CurrentProfile.OverheadRange && mobile != World.Player)
                                 mobile.RangeTexture.Draw(batcher, p1.X - mobile.RangeTexture.Width, p1.Y);
                             // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+                            // ## BEGIN - END ## // OUTLANDS
+                            /*
+                            if (ProfileManager.CurrentProfile.OverheadSummonTime && mobile.SummonTime != 0)
+                                mobile.SummonTexture.Draw(batcher, p1.X + mobile.HitsTexture.Width, p1.Y);
+
+                            if (ProfileManager.CurrentProfile.OverheadPeaceTime && mobile.PeaceTime != 0)
+                            {
+                                if (ProfileManager.CurrentProfile.OverheadSummonTime && mobile.SummonTime != 0)
+                                    mobile.PeaceTexture.Draw(batcher, p1.X + mobile.HitsTexture.Width + mobile.SummonTexture.Width, p1.Y);
+                                else
+                                    mobile.PeaceTexture.Draw(batcher, p1.X + mobile.HitsTexture.Width, p1.Y);
+                            }
+                            */
+                            // ## BEGIN - END ## // OUTLANDS
                         }
                     }
                 }
@@ -263,6 +277,19 @@ namespace ClassicUO.Game.Managers
                     }
                     // ## BEGIN - END ## // OLDHEALTLINES
                 }
+                // ## BEGIN - END ## // OUTLANDS
+                /*
+                if (ProfileManager.CurrentProfile.MobileHamstrungTime && mobile != World.Player)
+                {
+                    CombatCollection.UpdateHamstrung(mobile);
+
+                    if (mobile.HamstrungTime > 0)
+                    {
+                        mobile.HamstrungTexture.Draw(batcher, p.X, p.Y);
+                    }
+                }
+                */
+                // ## BEGIN - END ## // OUTLANDS
             }
         }
 

@@ -61,6 +61,11 @@ namespace ClassicUO.Game.GameObjects
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         public RenderedText RangeTexture { get; set; }
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        // ## BEGIN - END ## // OUTLANDS
+        //public RenderedText SummonTexture { get; set; }
+        //public RenderedText PeaceTexture { get; set; }
+        //public RenderedText HamstrungTexture { get; set; }
+        // ## BEGIN - END ## // OUTLANDS
 
         public override bool Draw(UltimaBatcher2D batcher, int posX, int posY, ref Vector3 hueVec)
         {
