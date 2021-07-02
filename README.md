@@ -654,6 +654,22 @@ FILE                                            START   END     COMMIT
 
 /src/Game/GameObjects/Views/MobileView.cs       64      68      OUTLANDS
 
+/src/Game/UI/Gumps/HealthBarGump.cs             75      77      OFFSCREENTARGETING
+
+/src/Game/UI/Gumps/HealthBarGump.cs             190     194     OFFSCREENTARGETING
+
+/src/Game/UI/Gumps/HealthBarGump.cs             199     201     OFFSCREENTARGETING
+
+/src/Game/UI/Gumps/HealthBarGump.cs             245     247     OFFSCREENTARGETING
+
+/src/Game/UI/Gumps/HealthBarGump.cs             249     258     OFFSCREENTARGETING
+
+/src/Game/UI/Gumps/HealthBarGump.cs             249     258     OFFSCREENTARGETING
+
+/src/Game/UI/Controls/Control.cs                36      38      OFFSCREENTARGETING
+
+/src/Game/UI/Controls/Control.cs                83      85      OFFSCREENTARGETING
+
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
 
