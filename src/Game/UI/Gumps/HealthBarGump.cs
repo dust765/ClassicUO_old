@@ -72,6 +72,10 @@ namespace ClassicUO.Game.UI.Gumps
             _name = entity.Name;
             _isDead = entity is Mobile mm && mm.IsDead;
 
+            // ## BEGIN - END ## // OFFSCREENTARGETING
+            LocalEntity = entity;
+            // ## BEGIN - END ## // OFFSCREENTARGETING
+
             BuildGump();
         }
 
@@ -183,13 +187,18 @@ namespace ClassicUO.Game.UI.Gumps
                 TargetManager.Target(LocalSerial);
                 Mouse.LastLeftButtonClickTime = 0;
             }
-            else if (_canChangeName && !_targetBroke)
+            // ## BEGIN - END ## // OFFSCREENTARGETING
+            //else if (_canChangeName && !_targetBroke)
+            // ## BEGIN - END ## // OFFSCREENTARGETING
+            else if (_canChangeName)// && !_targetBroke)
+            // ## BEGIN - END ## // OFFSCREENTARGETING
             {
                 _textBox.IsEditable = true;
                 _textBox.SetKeyboardFocus();
             }
-
-            _targetBroke = false;
+            // ## BEGIN - END ## // OFFSCREENTARGETING
+            //_targetBroke = false;
+            // ## BEGIN - END ## // OFFSCREENTARGETING
         }
 
         protected static int CalculatePercents(int max, int current, int maxValue)
@@ -233,8 +242,20 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (TargetManager.IsTargeting)
             {
-                _targetBroke = true;
+                // ## BEGIN - END ## // OFFSCREENTARGETING
+                //_targetBroke = true;
+                // ## BEGIN - END ## // OFFSCREENTARGETING
                 TargetManager.Target(LocalSerial);
+                // ## BEGIN - END ## // OFFSCREENTARGETING
+                Entity ent = World.Get(LocalSerial);
+                if (ent == null)
+                {
+                    TargetManager.LastTargetInfo.Serial = LocalEntity.Serial;
+                    GameActions.Print($"Changing last target to {LocalEntity.Name}");
+                    GameActions.Print(World.Player, $"Target: {LocalEntity.Name}");
+                    TargetManager.CancelTarget();
+                }
+                // ## BEGIN - END ## // OFFSCREENTARGETING
                 Mouse.LastLeftButtonClickTime = 0;
             }
             else if (_canChangeName)
