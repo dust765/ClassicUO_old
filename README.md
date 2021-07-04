@@ -670,6 +670,8 @@ FILE                                            START   END     COMMIT
 
 /src/Game/UI/Controls/Control.cs                83      85      OFFSCREENTARGETING
 
+/src/Game/UI/Gumps/Login/LoginGump.cs	        439     449     LOGIN
+
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
 
