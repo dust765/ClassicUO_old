@@ -508,6 +508,10 @@ namespace ClassicUO.Configuration
         public bool UOClassicCombatBuffbar_GotHEnabled { get; set; } = false;
         */
         // ## BEGIN - END ## // OUTLANDS
+        // ## BEGIN - END ## // LOBBY
+        public string LobbyIP { get; set; } = "127.0.0.1";
+        public string LobbyPort { get; set; } = "2596";
+        // ## BEGIN - END ## // LOBBY
         // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;

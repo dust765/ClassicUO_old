@@ -257,6 +257,9 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _uccDoH, _uccGotH;
         */
         // ## BEGIN - END ## // OUTLANDS
+        // ## BEGIN - END ## // LOBBY
+        private InputField _lobbyIP, _lobbyPort;
+        // ## BEGIN - END ## // LOBBY
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4180,6 +4183,69 @@ namespace ClassicUO.Game.UI.Gumps
 
             */
             // ## BEGIN - END ## // OUTLANDS
+            // ## BEGIN - END ## // LOBBY
+            SettingsSection section6 = AddSettingsSection(box, "-----LOBBY-----");
+            section6.Y = section5.Bounds.Bottom + 40;
+            startY = section5.Bounds.Bottom + 40;
+
+            section6.Add(AddLabel(null, "write in chat to enable / disable:", startX, startY));
+            section6.Add(AddLabel(null, "-lobby help (show help menu)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby status (show status)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby connect <IP> (connect to IP)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby diconnect (disconnect)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby target (send your lasttarget to be everyones)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby cast <SPELLNAME> (makes everyone cast a spell)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby drop (drop everyones spell on last target)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby attack (send your lasttarget to be everyones and everyone attacks it)", startX, startY));
+
+            section6.Add(AddLabel(null, "-autohid ((needs connected lobby) broadcast your position when hidden)", startX, startY));
+
+            section6.Add(AddLabel(null, "Macro: LobbyConnect (connect to IP and Port)", startX, startY));
+            section6.Add
+            (
+                _lobbyIP = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    150,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    35
+                )
+            );
+            _lobbyIP.SetText(_currentProfile.LobbyIP.ToString());
+
+            startY += _lobbyIP.Height + 2;
+            section6.AddRight(AddLabel(null, "Lobby IP", 0, 0), 2);
+
+            section6.Add
+            (
+                _lobbyPort = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    19935
+                )
+            );
+            _lobbyPort.SetText(_currentProfile.LobbyPort.ToString());
+            startY += _lobbyPort.Height + 2;
+            section6.AddRight(AddLabel(null, "Lobby Port", 0, 0), 2);
+
+            section6.Add(AddLabel(null, "Macro: LobbyDisconnect (disconnect)", startX, startY));
+            section6.Add(AddLabel(null, "Macro: LobbyTarget (send your lasttarget to be everyones)", startX, startY));
+            section6.Add(AddLabel(null, "Macro: LobbyCastLightning (everyone casts Lightning)", startX, startY));
+            section6.Add(AddLabel(null, "Macro: LobbyCastEB (everyone casts Energy Bolt)", startX, startY));
+            section6.Add(AddLabel(null, "Macro: LobbyDrop (everyone drops spell on target)", startX, startY));
+            // ## BEGIN - END ## // LOBBY
 
             Add(rightArea, PAGE);
         }
@@ -6051,6 +6117,10 @@ namespace ClassicUO.Game.UI.Gumps
             ProfileManager.CurrentProfile.UOClassicCombatBuffbar_GotHEnabled = _uccGotH.IsChecked;
             */
             // ## BEGIN - END ## // OUTLANDS
+            // ## BEGIN - END ## // LOBBY
+            _currentProfile.LobbyIP = _lobbyIP.Text;
+            _currentProfile.LobbyPort = _lobbyPort.Text;
+            // ## BEGIN - END ## // LOBBY
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

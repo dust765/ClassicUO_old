@@ -1942,6 +1942,43 @@ namespace ClassicUO.Game.Managers
 
                     break;
                 // ## BEGIN - END ## // AUTOMATIONS
+                // ## BEGIN - END ## // LOBBY
+                case MacroType.LobbyConnect:
+
+                    CommandManager.Execute("lobby", "connect " + ProfileManager.CurrentProfile.LobbyIP.ToString());
+
+                    break;
+
+                case MacroType.LobbyDisconnect:
+
+                    CommandManager.Execute("lobby", "disconnect");
+
+                    break;
+
+                case MacroType.LobbyTarget:
+
+                    CommandManager.Execute("lobby", "target");
+
+                    break;
+
+                case MacroType.LobbyCastLightning:
+
+                    CommandManager.Execute("lobby", "cast Lightning");
+
+                    break;
+
+                case MacroType.LobbyCastEB:
+
+                    CommandManager.Execute("lobby", "cast EnergyBolt");
+
+                    break;
+
+                case MacroType.LobbyDrop:
+
+                    CommandManager.Execute("lobby", "drop");
+
+                    break;
+                    // ## BEGIN - END ## // LOBBY
             }
 
             return result;
@@ -2460,8 +2497,16 @@ namespace ClassicUO.Game.Managers
         // ## BEGIN - END ## // BASICSETUP
         // ## BEGIN - END ## // MISC2
         ToggleTransparentHouses,
-        ToggleInvisibleHouses
+        ToggleInvisibleHouses,
         // ## BEGIN - END ## // MISC2
+        // ## BEGIN - END ## // LOBBY
+        LobbyConnect,
+        LobbyDisconnect,
+        LobbyTarget,
+        LobbyCastLightning,
+        LobbyCastEB,
+        LobbyDrop
+        // ## BEGIN - END ## // LOBBY
         // ## BEGIN - END ## // BASICSETUP
     }
 
