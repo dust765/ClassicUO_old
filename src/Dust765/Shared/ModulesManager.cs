@@ -21,6 +21,9 @@
 
 #endregion
 using ClassicUO.Dust765.Autos;
+// ## BEGIN - END ## // LOBBY
+using ClassicUO.Dust765.Lobby;
+// ## BEGIN - END ## // LOBBY
 
 namespace ClassicUO.Game.Managers // only exception to not being in the 'InteropServices.Runtime' namespace
 {
@@ -33,13 +36,20 @@ namespace ClassicUO.Game.Managers // only exception to not being in the 'Interop
             AutoMimic.Initialize();  //##AUTO MIMIC##//
             AutoWorldMapMarker.LoadCommands();
             Defender.Initialize();
+            // ## BEGIN - END ## // LOBBY
+            Lobby.LoadCommands();
+            AutoLobbyStealthPosition.Initialize();
+            // ## BEGIN - END ## // LOBBY
 
             GameActions.Print("Project dust765 Enabled.", 95);
         }
 
         public static void Unload()
         {
-            
+            // ## BEGIN - END ## // LOBBY
+            Lobby.Disconnect();
+            // ## BEGIN - END ## // LOBBY
+
         }
 
         /// <summary>
@@ -51,6 +61,10 @@ namespace ClassicUO.Game.Managers // only exception to not being in the 'Interop
             AutoMeditate.Update();  //AUTOMEDITATE##//
             AutoEngage.Update();  //AUTOENGAGE##//
             Defender.Update(totalMS);
+            // ## BEGIN - END ## // LOBBY
+            Lobby.Update();
+            AutoLobbyStealthPosition.Update();
+            // ## BEGIN - END ## // LOBBY
         }
     }
 }
