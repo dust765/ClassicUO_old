@@ -57,7 +57,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add
             (
-                new ColorBox(217, 49, 0)
+                new ColorBox(217, 49, 1)
                 {
                     X = 40,
                     Y = 42
@@ -86,7 +86,7 @@ namespace ClassicUO.Game.UI.Gumps
                 Y = 42,
                 Width = 217,
                 Height = 49,
-                WantUpdateSize = false
+                WantUpdateSize = false,
             };
 
             Add(_container);
@@ -171,15 +171,14 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 Texture = texture,
                 IsPartial = TileDataLoader.Instance.StaticData[graphic].IsPartialHue,
-                Hue = hue,
+                Hue = (ushort) (hue != 0 ? (hue + 1) : 0),
                 AcceptMouseInput = true,
                 X = x,
                 Y = y,
                 Width = texture.Width,
                 Height = texture.Height
             };
-
-
+            
             pic.MouseDoubleClick += (sender, e) =>
             {
                 NetClient.Socket.Send_MenuResponse(LocalSerial,

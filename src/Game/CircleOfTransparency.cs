@@ -97,13 +97,24 @@ namespace ClassicUO.Game
             return pixels;
         }
 
-        public static void Draw(UltimaBatcher2D batcher, int x, int y)
+        public static void Draw(UltimaBatcher2D batcher, int x, int y, ushort hue = 0)
         {
             if (_texture != null)
             {
                 x -= _width >> 1;
                 y -= _height >> 1;
 
+                if (hue == 0)
+                {
+                    _hueVector.X = 0;
+                    _hueVector.Y = 0f;
+                }
+                else
+                {
+                    _hueVector.X = hue;
+                    _hueVector.Y = 1f;
+                }
+               
                 batcher.SetStencil(_stencil.Value);
                 batcher.Draw2D(_texture, x, y, ref _hueVector);
                 batcher.SetStencil(null);
@@ -149,7 +160,7 @@ namespace ClassicUO.Game
             }
 
             _texture = new Texture2D(Client.Game.GraphicsDevice, _width, _height);
-            _texture.SetData(pixels);
+            _texture.SetData(pixels);            
         }
     }
 }

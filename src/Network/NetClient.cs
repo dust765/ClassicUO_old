@@ -355,6 +355,8 @@ namespace ClassicUO.Network
                         _logFile?.Write($"disconnection  -  error during writing to the socket buffer [3]: {ex}");
 
                         Disconnect();
+
+                        throw;
                     }
                 }
             }
@@ -540,6 +542,8 @@ namespace ClassicUO.Network
                     _logFile?.Write($"disconnection  -  error while reading from socket [2]: {ex}");
 
                     Disconnect();
+
+                    throw;
                 }
             }
         }
@@ -667,10 +671,9 @@ namespace ClassicUO.Network
                     output.Append(' ', off);
                     output.Append("-- -- -- -- -- -- -- --  -- -- -- -- -- -- -- --\n");
 
-                    int i;
                     ulong address = 0;
 
-                    for (i = 0; i < length; ++i)
+                    for (int i = 0; i < length; i += 16, address += 16)
                     {
                         output.Append($"{address:X8}");
 
@@ -700,7 +703,6 @@ namespace ClassicUO.Network
                             if (c >= 0x20 && c < 0x80)
                             {
                                 output.Append((char)c);
-
                             }
                             else
                             {
@@ -709,8 +711,6 @@ namespace ClassicUO.Network
                         }
 
                         output.Append('\n');
-                        address += 16;
-                        i += 16;
                     }
                 }
 

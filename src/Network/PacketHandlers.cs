@@ -748,7 +748,8 @@ namespace ClassicUO.Network
         {
             if (ProfileManager.CurrentProfile == null)
             {
-                ProfileManager.Load(World.ServerName, LoginScene.Account, Settings.GlobalSettings.LastCharacterName.Trim());
+                string lastChar = LastCharacterManager.GetLastCharacter(LoginScene.Account, World.ServerName);
+                ProfileManager.Load(World.ServerName, LoginScene.Account, lastChar);
             }
 
             if (World.Player != null)
@@ -2462,15 +2463,15 @@ namespace ClassicUO.Network
 
                         // poster
                         int len = p.ReadUInt8();
-                        string text = p.ReadUTF8(len, true) + " - ";
+                        string text = (len <= 0 ? string.Empty : p.ReadUTF8(len, true)) + " - ";
 
                         // subject
                         len = p.ReadUInt8();
-                        text += p.ReadUTF8(len, true) + " - ";
+                        text += (len <= 0 ? string.Empty : p.ReadUTF8(len, true)) + " - ";
 
                         // datetime
                         len = p.ReadUInt8();
-                        text += p.ReadUTF8(len, true);
+                        text += (len <= 0 ? string.Empty : p.ReadUTF8(len, true));
 
                         bulletinBoard.AddBulletinObject(serial, text);
                     }
@@ -3713,7 +3714,15 @@ namespace ClassicUO.Network
             for (int i = 0; i < textLinesCount; ++i)
             {
                 int length = p.ReadUInt16BE();
-                lines[i] = p.ReadUnicodeBE(length);
+
+                if (length > 0)
+                {
+                    lines[i] = p.ReadUnicodeBE(length);
+                }
+                else
+                {
+                    lines[i] = string.Empty;
+                }
             }
 
             //for (int i = 0, index = p.Position; i < textLinesCount; i++)
@@ -5282,7 +5291,7 @@ namespace ClassicUO.Network
             p.Skip((int) clen);
 
             uint linesNum = p.ReadUInt32BE();
-            string[] lines = System.Buffers.ArrayPool<string>.Shared.Rent((int) linesNum);
+            string[] lines = new string[linesNum];
 
             try
             {
@@ -5321,7 +5330,15 @@ namespace ClassicUO.Network
                             if (remaining >= 2)
                             {
                                 int length = reader.ReadUInt16BE();
-                                lines[i] = reader.ReadUnicodeBE(length);
+
+                                if (length > 0)
+                                {
+                                    lines[i] = reader.ReadUnicodeBE(length);
+                                }
+                                else
+                                {
+                                    lines[i] = string.Empty;
+                                }
                             }
                             else
                             {
@@ -5370,7 +5387,7 @@ namespace ClassicUO.Network
             }
             finally
             {
-                System.Buffers.ArrayPool<string>.Shared.Return(lines);
+                //System.Buffers.ArrayPool<string>.Shared.Return(lines);
             }
         }
 

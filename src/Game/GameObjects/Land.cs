@@ -119,58 +119,27 @@ namespace ClassicUO.Game.GameObjects
             }
         }
 
-        private static int NORMAL_LENGTH = 22;
-
-        private void CalculateNormal(Map.Map map, int x, int y, out Vector3 normal)
-        {
-            sbyte z = map.GetTileZ(x, y);
-            sbyte leftZ = map.GetTileZ(x, y + 1);
-            sbyte rightZ = map.GetTileZ(x + 1, y);
-
-            Vector3 toLeft = new Vector3(0, NORMAL_LENGTH, (leftZ - z) * 4);
-            Vector3 toRight = new Vector3(NORMAL_LENGTH, 0, (rightZ - z) * 4);
-
-            Vector3.Cross(ref toRight, ref toLeft, out normal);
-            Vector3.Normalize(ref normal, out normal);
-        }
-
-        private static Vector3 STRAIGHT_UP = new Vector3(0, 0, 1);
-        private static float EPSILON = 0.0001f;
-
-        private bool CloseEnough(Vector3 u, Vector3 v)
-        {
-            if (Math.Abs(u.X - v.X) > EPSILON)
-            {
-                return false;
-            }
-
-            if (Math.Abs(u.Y - v.Y) > EPSILON)
-            {
-                return false;
-            }
-
-            if (Math.Abs(u.Z - v.Z) > EPSILON)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public unsafe void ApplyStretch(Map.Map map, int x, int y, sbyte z)
+        public void ApplyStretch(Map.Map map, int x, int y, sbyte z)
         {
             if (IsStretched || TexmapsLoader.Instance.GetValidRefEntry(TileData.TexID).Length <= 0)
             {
                 IsStretched = false;
                 AverageZ = z;
                 MinZ = z;
+
                 return;
             }
 
-            int zTop = z;
-            int zRight = map.GetTileZ(x + 1, y);
-            int zLeft = map.GetTileZ(x, y + 1);
-            int zBottom = map.GetTileZ(x + 1, y + 1);
+            /*  _____ _____
+             * | top | rig |
+             * |_____|_____|
+             * | lef | bot |
+             * |_____|_____|         
+             */
+            sbyte zTop = z;
+            sbyte zRight = map.GetTileZ(x + 1, y);
+            sbyte zLeft = map.GetTileZ(x, y + 1);
+            sbyte zBottom = map.GetTileZ(x + 1, y + 1);
 
             YOffsets.Top = zTop * 4;
             YOffsets.Right = zRight * 4;
@@ -179,30 +148,124 @@ namespace ClassicUO.Game.GameObjects
 
             if (Math.Abs(zTop - zBottom) <= Math.Abs(zLeft - zRight))
             {
-                AverageZ = (sbyte)((zTop + zBottom) >> 1);
+                AverageZ = (sbyte) ((zTop + zBottom) >> 1);
             }
             else
             {
-                AverageZ = (sbyte)((zLeft + zRight) >> 1);
+                AverageZ = (sbyte) ((zLeft + zRight) >> 1);
             }
 
-            //AverageZ = (sbyte) Math.Floor((zTop + zRight + zLeft + zBottom) / 4f);
-            MinZ = (sbyte) Math.Min(zTop, Math.Min(zRight, Math.Min(zLeft, zBottom)));
-            
-            CalculateNormal(map, x, y, out NormalTop);
-            CalculateNormal(map, x + 1, y, out NormalRight);
-            CalculateNormal(map, x, y + 1, out NormalLeft);
-            CalculateNormal(map, x + 1, y + 1, out NormalBottom);
+            MinZ = Math.Min(zTop, Math.Min(zRight, Math.Min(zLeft, zBottom)));
 
-            if (CloseEnough(NormalTop, STRAIGHT_UP) && CloseEnough(NormalRight, STRAIGHT_UP) &&
-                CloseEnough(NormalLeft, STRAIGHT_UP) && CloseEnough(NormalBottom, STRAIGHT_UP))
+
+            /*  _____ _____ _____ _____
+             * |     | t10 | t20 |     |
+             * |_____|_____|_____|_____|
+             * | t01 |  z  | t21 | t31 |
+             * |_____|_____|_____|_____|
+             * | t02 | t12 | t22 | t32 |
+             * |_____|_____|_____|_____|
+             * |     | t13 | t23 |     |
+             * |_____|_____|_____|_____|
+             */
+            sbyte t10 = map.GetTileZ(x, y - 1);
+            sbyte t20 = map.GetTileZ(x + 1, y - 1);
+            sbyte t01 = map.GetTileZ(x - 1, y);
+            sbyte t21 = zRight;
+            sbyte t31 = map.GetTileZ(x + 2, y);
+            sbyte t02 = map.GetTileZ(x - 1, y + 1);
+            sbyte t12 = zLeft;
+            sbyte t22 = zBottom;
+            sbyte t32 = map.GetTileZ(x + 2, y + 1);
+            sbyte t13 = map.GetTileZ(x, y + 2);
+            sbyte t23 = map.GetTileZ(x + 1, y + 2);
+
+
+            IsStretched |= CalculateNormal(z, t10, t21, t12, t01, out NormalTop);
+            IsStretched |= CalculateNormal(t21, t20, t31, t22, z, out NormalRight);
+            IsStretched |= CalculateNormal(t22, t21, t32, t23, t12, out NormalBottom);
+            IsStretched |= CalculateNormal(t12, z, t22, t13, t02, out NormalLeft);
+        }
+
+        private static bool CalculateNormal(sbyte tile, sbyte top, sbyte right, sbyte bottom, sbyte left, out Vector3 normal)
+        {
+            if (tile == top && tile == right && tile == bottom && tile == left)
             {
-                IsStretched = false;
+                normal.X = 0;
+                normal.Y = 0;
+                normal.Z = 1f;
+
+                return false;
             }
-            else
-            {
-                IsStretched = true;
-            }
+
+            Vector3 u = new Vector3();
+            Vector3 v = new Vector3();
+            Vector3 ret = new Vector3();
+
+
+            // ========================== 
+            u.X = -22;
+            u.Y = -22;
+            u.Z = (left - tile) * 4;
+
+            v.X = -22;
+            v.Y = 22;
+            v.Z = (bottom - tile) * 4;
+
+            Vector3.Cross(ref v, ref u, out ret);
+
+            //Vector3.Cross(ref v, ref u, out normal);
+            //Vector3.Normalize(ref normal, out ret);
+            // ========================== 
+
+
+            // ========================== 
+            u.X = -22;
+            u.Y = 22;
+            u.Z = (bottom - tile) * 4;
+
+            v.X = 22;
+            v.Y = 22;
+            v.Z = (right - tile) * 4;
+
+            Vector3.Cross(ref v, ref u, out normal);
+            //Vector3.Normalize(ref normal, out normal);
+            Vector3.Add(ref ret, ref normal, out ret);
+            // ========================== 
+
+
+            // ========================== 
+            u.X = 22;
+            u.Y = 22;
+            u.Z = (right - tile) * 4;
+
+            v.X = 22;
+            v.Y = -22;
+            v.Z = (top - tile) * 4;
+
+            Vector3.Cross(ref v, ref u, out normal);
+            //Vector3.Normalize(ref normal, out normal);
+            Vector3.Add(ref ret, ref normal, out ret);
+            // ========================== 
+
+
+            // ========================== 
+            u.X = 22;
+            u.Y = -22;
+            u.Z = (top - tile) * 4;
+
+            v.X = -22;
+            v.Y = -22;
+            v.Z = (left - tile) * 4;
+
+            Vector3.Cross(ref v, ref u, out normal);
+            //Vector3.Normalize(ref normal, out normal);
+            Vector3.Add(ref ret, ref normal, out ret);
+            // ========================== 
+
+            Vector3.Normalize(ref ret, out normal);
+
+            return true;
         }
     }
 }

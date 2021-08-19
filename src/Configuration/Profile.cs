@@ -68,6 +68,8 @@ namespace ClassicUO.Configuration
         public bool ScaleSpeechDelay { get; set; } = true;
         public bool SaveJournalToFile { get; set; } = true;
         public bool ForceUnicodeJournal { get; set; }
+        public bool IgnoreAllianceMessages { get; set; }
+        public bool IgnoreGuildMessages { get; set; }
 
         // hues
         public ushort SpeechHue { get; set; } = 0x02B2;
@@ -173,6 +175,7 @@ namespace ClassicUO.Configuration
         // Experimental
         public bool CastSpellsByOneClick { get; set; }
         public bool BuffBarTime { get; set; }
+        public bool FastSpellsAssign { get; set; }
         public bool AutoOpenDoors { get; set; }
         public bool SmoothDoors { get; set; }
         public bool AutoOpenCorpses { get; set; }

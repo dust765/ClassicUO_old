@@ -77,7 +77,7 @@ namespace ClassicUO.Game.Scenes
         private uint _pingTime;
         private long _reconnectTime;
         private int _reconnectTryCounter = 1;
-
+        private bool _autoLogin;
 
         public LoginScene() : base((int) SceneType.Login, false, false, true)
         {
@@ -102,11 +102,14 @@ namespace ClassicUO.Game.Scenes
 
         public string Password { get; private set; }
 
+        public bool CanAutologin => _autoLogin || Reconnect;
+        
+
         public override void Load()
         {
             base.Load();
 
-            //Engine.FpsLimit = Settings.GlobalSettings.MaxLoginFPS;
+            _autoLogin = Settings.GlobalSettings.AutoLogin;
 
             UIManager.Add(new LoginBackground());
             UIManager.Add(_currentGump = new LoginGump(this));
@@ -119,7 +122,7 @@ namespace ClassicUO.Game.Scenes
 
             Audio.PlayMusic(Audio.LoginMusicIndex, false, true);
 
-            if ((Settings.GlobalSettings.AutoLogin || Reconnect) && CurrentLoginStep != LoginSteps.Main || CUOEnviroment.SkipLoginScreen)
+            if (CanAutologin && CurrentLoginStep != LoginSteps.Main || CUOEnviroment.SkipLoginScreen)
             {
                 if (!string.IsNullOrEmpty(Settings.GlobalSettings.Username))
                 {
@@ -196,7 +199,7 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
-            if (CurrentLoginStep == LoginSteps.CharacterCreation && Time.Ticks > _pingTime)
+            if (CUOEnviroment.NoServerPing == false && CurrentLoginStep == LoginSteps.CharacterCreation && Time.Ticks > _pingTime)
             {
                 if (NetClient.Socket != null && NetClient.Socket.IsConnected)
                 {
@@ -341,8 +344,7 @@ namespace ClassicUO.Game.Scenes
             {
                 CurrentLoginStep = LoginSteps.Connecting;
             }
-
-
+            
             if (!await NetClient.LoginSocket.Connect(Settings.GlobalSettings.IP, Settings.GlobalSettings.Port))
             {
                 PopupMessage = ResGeneral.CheckYourConnectionAndTryAgain;
@@ -415,8 +417,8 @@ namespace ClassicUO.Game.Scenes
         {
             if (CurrentLoginStep == LoginSteps.CharacterSelection)
             {
-                Settings.GlobalSettings.LastCharacterName = Characters[index];
-                Settings.GlobalSettings.Save();
+                LastCharacterManager.Save(Account, World.ServerName, Characters[index]);
+
                 CurrentLoginStep = LoginSteps.EnteringBritania;
                 NetClient.Socket.Send_SelectCharacter(index, Characters[index], NetClient.Socket.LocalIP);
             }
@@ -442,7 +444,7 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
-            Settings.GlobalSettings.LastCharacterName = character.Name;
+            LastCharacterManager.Save(Account, World.ServerName, character.Name);
 
             NetClient.Socket.Send_CreateCharacter(character,
                                                   cityIndex,
@@ -601,7 +603,7 @@ namespace ClassicUO.Game.Scenes
 
             CurrentLoginStep = LoginSteps.ServerSelection;
 
-            if (Settings.GlobalSettings.AutoLogin || Reconnect)
+            if (CanAutologin)
             {
                 if (Servers.Length != 0)
                 {
@@ -646,7 +648,14 @@ namespace ClassicUO.Game.Scenes
             uint charToSelect = 0;
 
             bool haveAnyCharacter = false;
-            bool tryAutologin = Settings.GlobalSettings.AutoLogin || Reconnect;
+            bool canLogin = CanAutologin;
+
+            if (_autoLogin)
+            {
+                _autoLogin = false;
+            }
+
+            string lastCharName = LastCharacterManager.GetLastCharacter(Account, World.ServerName);
 
             for (byte i = 0; i < Characters.Length; i++)
             {
@@ -654,7 +663,7 @@ namespace ClassicUO.Game.Scenes
                 {
                     haveAnyCharacter = true;
 
-                    if (Characters[i] == Settings.GlobalSettings.LastCharacterName)
+                    if (Characters[i] == lastCharName)
                     {
                         charToSelect = i;
 
@@ -663,7 +672,7 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
-            if (tryAutologin && haveAnyCharacter)
+            if (canLogin && haveAnyCharacter)
             {
                 SelectCharacter(charToSelect);
             }

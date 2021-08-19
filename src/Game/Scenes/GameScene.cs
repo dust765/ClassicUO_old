@@ -243,7 +243,7 @@ namespace ClassicUO.Game.Scenes
                     break;
 
                 case MessageType.System:
-                    name = string.IsNullOrEmpty(e.Name) || e.Name.ToLowerInvariant() == "system" ? ResGeneral.System : e.Name;
+                    name = string.IsNullOrEmpty(e.Name) || string.Equals(e.Name, "system", StringComparison.InvariantCultureIgnoreCase) ? ResGeneral.System : e.Name;
 
                     text = e.Text;
 
@@ -261,7 +261,20 @@ namespace ClassicUO.Game.Scenes
                     break;
 
                 case MessageType.Label:
-                    name = ResGeneral.YouSee;
+                
+                    if (e.Parent == null || !SerialHelper.IsValid(e.Parent.Serial))
+                    {
+                        name = string.Empty;
+                    }
+                    else if (string.IsNullOrEmpty(e.Name)) 
+                    {
+                        name = ResGeneral.YouSee;                      
+                    }
+                    else
+                    {
+                        name = e.Name;
+                    }
+
                     text = e.Text;
 
                     break;
@@ -1010,14 +1023,13 @@ namespace ClassicUO.Game.Scenes
 
             bool usecircle = ProfileManager.CurrentProfile.UseCircleOfTransparency;
 
-
             if (usecircle)
             {
                 int fx = (int) (World.Player.RealScreenPosition.X + World.Player.Offset.X);
                 int fy = (int) (World.Player.RealScreenPosition.Y + (World.Player.Offset.Y - World.Player.Offset.Z));
 
                 fx += 22;
-                //fy -= 22;
+                fy += 22;
 
                 CircleOfTransparency.Draw(batcher, fx, fy);
             }
@@ -1061,7 +1073,7 @@ namespace ClassicUO.Game.Scenes
                 hueVec = Vector3.Zero;
                 _multi.Draw(batcher, _multi.RealScreenPosition.X, _multi.RealScreenPosition.Y, ref hueVec);
             }
-        
+
             // draw weather
             Weather.Draw(batcher, 0, 0);
             batcher.End();
