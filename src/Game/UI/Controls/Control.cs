@@ -33,6 +33,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+// ## BEGIN - END ## // OFFSCREENTARGETING
+using ClassicUO.Game.GameObjects;
+// ## BEGIN - END ## // OFFSCREENTARGETING
 using ClassicUO.Game.Managers;
 using ClassicUO.Input;
 using ClassicUO.Renderer;
@@ -77,6 +80,9 @@ namespace ClassicUO.Game.UI.Controls
 
         public uint LocalSerial { get; set; }
 
+        // ## BEGIN - END ## // OFFSCREENTARGETING
+        public Entity LocalEntity { get; set; }
+        // ## BEGIN - END ## // OFFSCREENTARGETING
         public bool IsFromServer { get; set; }
 
         public int Page { get; set; }

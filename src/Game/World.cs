@@ -34,6 +34,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ClassicUO.IO.Audio;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // MACROS
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MACROS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Map;
@@ -86,6 +89,13 @@ namespace ClassicUO.Game
         public static int OldMusicIndex { get; set; }
 
         public static WorldTextManager WorldTextManager { get; } = new WorldTextManager();
+
+        // ## BEGIN - END ## // MACROS
+        public static AnimationTriggers AnimationTriggers { get; } = new AnimationTriggers();
+        // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // BUFFBAR
+        public static ClilocTriggers ClilocTriggers { get; } = new ClilocTriggers();
+        // ## BEGIN - END ## // BUFFBAR
 
         public static JournalManager Journal { get; } = new JournalManager();
 
@@ -339,6 +349,9 @@ namespace ClassicUO.Game
 
                     _toRemove.Clear();
                 }
+                // ## BEGIN - END ## // AUTOMATIONS
+                ModulesManager.OnWorldUpdate(totalTime);
+                // ## BEGIN - END ## // AUTOMATIONS
 
                 _effectManager.Update(totalTime, frameTime);
                 WorldTextManager.Update(totalTime, frameTime);

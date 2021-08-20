@@ -93,6 +93,9 @@ namespace ClassicUO.Game.GameObjects
         public uint LastStepTime;
         public string Name;
         public uint Serial;
+        // ## BEGIN - END ## // AUTOLOOT
+        public ushort LootFlag;
+        // ## BEGIN - END ## // AUTOLOOT
 
         internal long LastAnimationChangeTime;
         public HitsRequestStatus HitsRequest;
