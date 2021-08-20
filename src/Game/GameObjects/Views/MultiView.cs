@@ -31,6 +31,9 @@
 #endregion
 
 using ClassicUO.Configuration;
+// ## BEGIN - END ## // VISUAL HELPERS
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // VISUAL HELPERS
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
 using ClassicUO.IO;
@@ -116,6 +119,35 @@ namespace ClassicUO.Game.GameObjects
 
             //Engine.DebugInfo.MultiRendered++;
 
+            // ## BEGIN - END ## // VISUAL HELPERS
+            if (ProfileManager.CurrentProfile.HighlightTileAtRange && Distance == ProfileManager.CurrentProfile.HighlightTileAtRangeRange)
+            {
+                hueVec.X = ProfileManager.CurrentProfile.HighlightTileRangeHue;
+                hueVec.Y = 1;
+            }
+            if (ProfileManager.CurrentProfile.HighlightTileAtRangeSpell)
+            {
+                if (GameCursor._spellTime >= 1 && Distance == ProfileManager.CurrentProfile.HighlightTileAtRangeRangeSpell)
+                {
+                    hueVec.X = ProfileManager.CurrentProfile.HighlightTileRangeHueSpell;
+                    hueVec.Y = 1;
+                }
+            }
+            if (ProfileManager.CurrentProfile.PreviewFields)
+            {
+                if (CombatCollection.MultiFieldPreview(this))
+                {
+                    hueVec.X = 0x0040;
+                    hueVec.Y = 1;
+                }
+                if (SelectedObject.LastObject == this)
+                {
+                    hueVec.X = 0x0023;
+                    hueVec.Y = 1;
+                }
+            }
+            // ## BEGIN - END ## // VISUAL HELPERS
+
             if (IsHousePreview)
             {
                 hueVec.Z = 0.5f;
@@ -128,6 +160,19 @@ namespace ClassicUO.Game.GameObjects
             {
                 hueVec.Z = 1f - AlphaHue / 255f;
             }
+
+            // ## BEGIN - END ## // MISC2
+            if (ProfileManager.CurrentProfile.TransparentHousesEnabled)
+            {
+                if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ)
+                    hueVec.Z = (float) ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
+            }
+            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled && (Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ)
+            {
+                //DO NOT DRAW IT
+                return false;
+            }
+            // ## BEGIN - END ## // MISC2
 
             DrawStaticAnimated
             (

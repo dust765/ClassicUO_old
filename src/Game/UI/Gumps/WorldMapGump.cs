@@ -60,6 +60,19 @@ namespace ClassicUO.Game.UI.Gumps
         private static Point _last_position = new Point(100, 100);
         private Point _center, _lastScroll;
 
+        // ## BEGIN - END ## // AUTOMATIONS
+        public int _tempX = 0;
+        public int _tempY = 0;
+        public int _tempTmapStartX = 0;
+        public int _tempTmapStartY = 0;
+        public int _tempTmapEndX = 0;
+        public int _tempTmapEndY = 0;
+        public int _tempTmapWidth = 0;
+        public int _tempTmapHeight = 0;
+        public int _tempTmapX = 0;
+        public int _tempTmapY = 0;
+        // ## BEGIN - END ## // AUTOMATIONS
+
         private bool _flipMap = true;
         private bool _freeView;
         private List<string> _hiddenMarkerFiles;
@@ -1754,6 +1767,131 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 }
             }
+
+            // ## BEGIN - END ## // MISC2
+            //DEATH
+            //RESET INCASE LONGER THAN 5MIN //FAILSAFE
+            if ((Time.Ticks - World.Player.DeathTick) > 300000 && World.Player.DeathX != 0 && World.Player.DeathY != 0 && World.Player.DeathTick != 0)
+            {
+                World.Player.DeathTick = 0;
+                World.Player.DeathX = 0;
+                World.Player.DeathY = 0;
+            }
+            if (ProfileManager.CurrentProfile.ShowDeathOnWorldmap)
+            {
+                if (World.Player.DeathX != 0 && World.Player.DeathY != 0 && World.Player.DeathTick != 0)
+                {
+                    //DESTINATION
+                    int sx = World.Player.DeathX - _center.X;
+                    int sy = World.Player.DeathY - _center.Y;
+
+                    (int rotX, int rotY) = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                    rotX += gX + halfWidth;
+                    rotY += gY + halfHeight;
+
+                    const int DOT_SIZE = 4;
+                    const int DOT_SIZE_HALF = DOT_SIZE >> 1;
+
+                    /*
+                    if (rotX < gX || rotX > gX + Width - 8 - DOT_SIZE || rotY < gY || rotY > gY + Height - 8 - DOT_SIZE)
+                    {
+                        return;
+                    }
+                    */
+
+                    batcher.Draw2D
+                    (
+                        SolidColorTextureCache.GetTexture(Color.YellowGreen), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, DOT_SIZE,
+                        DOT_SIZE, ref HueVector
+                    );
+
+                    //PLAYER
+                    int psx = World.Player.X - _center.X;
+                    int psy = World.Player.Y - _center.Y;
+
+                    (int protX, int protY) = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                    protX += gX + halfWidth;
+                    protY += gY + halfHeight;
+
+                    int ox = (rotX - DOT_SIZE_HALF + protX - DOT_SIZE_HALF) / 2;
+                    int oy = (rotY - DOT_SIZE_HALF + protY - DOT_SIZE_HALF) / 2;
+                    batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.YellowGreen), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, protX - DOT_SIZE_HALF, protY - DOT_SIZE_HALF, ox, oy);
+                }
+            }
+            // ## BEGIN - END ## // MISC2
+            // ## BEGIN - END ## // AUTOMATIONS
+            //TMAP
+            if (_tempTmapX != 0 && _tempTmapY != 0)
+            {
+                //DESTINATION
+                int sx = _tempTmapX - _center.X;
+                int sy = _tempTmapY - _center.Y;
+
+                (int rotX, int rotY) = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                rotX += gX + halfWidth;
+                rotY += gY + halfHeight;
+
+                const int DOT_SIZE = 4;
+                const int DOT_SIZE_HALF = DOT_SIZE >> 1;
+
+                batcher.Draw2D
+                (
+                    SolidColorTextureCache.GetTexture(Color.Orange), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, DOT_SIZE,
+                    DOT_SIZE, ref HueVector
+                );
+
+                //PLAYER
+                int psx = World.Player.X - _center.X;
+                int psy = World.Player.Y - _center.Y;
+
+                (int protX, int protY) = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                protX += gX + halfWidth;
+                protY += gY + halfHeight;
+
+                int ox = (rotX - DOT_SIZE_HALF + protX - DOT_SIZE_HALF) / 2;
+                int oy = (rotY - DOT_SIZE_HALF + protY - DOT_SIZE_HALF) / 2;
+                batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.DarkRed), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, protX - DOT_SIZE_HALF, protY - DOT_SIZE_HALF, ox, oy);
+            }
+
+            //COMMAND
+            if (_tempX != 0 && _tempY != 0)
+            {
+                //DESTINATION
+                int sx = _tempX - _center.X;
+                int sy = _tempY - _center.Y;
+
+                (int rotX, int rotY) = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                rotX += gX + halfWidth;
+                rotY += gY + halfHeight;
+
+                const int DOT_SIZE = 4;
+                const int DOT_SIZE_HALF = DOT_SIZE >> 1;
+
+                batcher.Draw2D
+                (
+                    SolidColorTextureCache.GetTexture(Color.Orange), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, DOT_SIZE,
+                    DOT_SIZE, ref HueVector
+                );
+
+                //PLAYER
+                int psx = World.Player.X - _center.X;
+                int psy = World.Player.Y - _center.Y;
+
+                (int protX, int protY) = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                protX += gX + halfWidth;
+                protY += gY + halfHeight;
+
+                int ox = (rotX - DOT_SIZE_HALF + protX - DOT_SIZE_HALF) / 2;
+                int oy = (rotY - DOT_SIZE_HALF + protY - DOT_SIZE_HALF) / 2;
+                batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.DarkRed), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, protX - DOT_SIZE_HALF, protY - DOT_SIZE_HALF, ox, oy);
+            }
+            // ## BEGIN - END ## // AUTOMATIONS
 
             DrawMobile
             (

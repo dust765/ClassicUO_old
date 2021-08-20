@@ -33,6 +33,9 @@
 using System.Collections.Generic;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // ART / HUE CHANGES
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // ART / HUE CHANGES
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
 using ClassicUO.IO;
@@ -82,6 +85,30 @@ namespace ClassicUO.Game.GameObjects
             ushort hue = Hue;
             ushort graphic = DisplayedGraphic;
             bool partial = ItemData.IsPartialHue;
+
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            if (CombatCollection.IsStealthArt(Graphic))
+            {
+                if (ProfileManager.CurrentProfile.ColorStealth || ProfileManager.CurrentProfile.StealthNeonType != 0)
+                    hue = CombatCollection.StealthtHue(hue);
+            }
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            // ## BEGIN - END ## // MISC
+            if (ProfileManager.CurrentProfile.BlockWoS)
+            {
+                if (StaticFilters.IsWallOfStone(Graphic) || Graphic == ProfileManager.CurrentProfile.BlockWoSArt)
+                {
+                    if (ProfileManager.CurrentProfile.BlockWoSFelOnly && World.MapIndex != 0)
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+                    }
+                    else
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+                    }
+                }
+            }
+            // ## BEGIN - END ## // MISC
 
             if (OnGround)
             {
@@ -176,6 +203,19 @@ namespace ClassicUO.Game.GameObjects
             {
                 hueVec.Z = 0.5f;
             }
+
+            // ## BEGIN - END ## // MISC2
+            if (ProfileManager.CurrentProfile.TransparentHousesEnabled)
+            {
+                if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ)
+                    hueVec.Z = (float) ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
+            }
+            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled && (Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ)
+            {
+                //DO NOT DRAW IT
+                return false;
+            }
+            // ## BEGIN - END ## // MISC2
 
             DrawStaticAnimated
             (
