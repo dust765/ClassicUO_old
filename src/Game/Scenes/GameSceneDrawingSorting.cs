@@ -34,6 +34,9 @@ using System;
 using System.Runtime.InteropServices;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // ART / HUE CHANGES
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // ART / HUE CHANGES
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Map;
@@ -378,10 +381,23 @@ namespace ClassicUO.Game.Scenes
                         }
 
                         //we avoid to hide impassable foliage or bushes, if present...
+
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        /*
                         if (ProfileManager.CurrentProfile.TreeToStumps && itemData.IsFoliage && !itemData.IsMultiMovable && !(obj is Multi) || ProfileManager.CurrentProfile.HideVegetation && (obj is Multi mm && mm.IsVegetation || obj is Static st && st.IsVegetation))
                         {
                             continue;
                         }
+                        */
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        if (obj is Static st)
+                        {
+                            st = CombatCollection.GSDSFilters(st);
+                        }
+                        if ((ProfileManager.CurrentProfile.TreeType != 0 && itemData.IsFoliage && !itemData.IsMultiMovable && !(obj is Multi)) ||
+                            (ProfileManager.CurrentProfile.HideVegetation && ((obj is Multi mm && mm.IsVegetation) || (obj is Static sta && sta.IsVegetation))))
+                            continue;
+                        // ## BEGIN - END ## // ART / HUE CHANGES
 
 
                         if (itemData.Height != 0xFF /*&& itemData.Flags != 0*/)

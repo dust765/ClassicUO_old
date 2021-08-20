@@ -33,6 +33,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using ClassicUO.Configuration;
+// ## BEGIN - END ## // MISC2
+using ClassicUO.Game.Data;
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MISC2
 using ClassicUO.IO;
 using ClassicUO.IO.Resources;
 using ClassicUO.Renderer;
@@ -156,7 +160,47 @@ namespace ClassicUO.Game.GameObjects
                 );
             }
         }
+        // ## BEGIN - END ## // MISC2
+        protected static void DrawLandWF(UltimaBatcher2D batcher, ushort graphic, int x, int y, ref Vector3 hue, bool isImpassable)
+        {
+            UOTexture texture = ArtLoader.Instance.GetLandTextureWF(graphic, isImpassable);
 
+            if (texture != null)
+            {
+                texture.Ticks = Time.Ticks;
+
+                batcher.DrawSprite(texture, x, y, false, ref hue);
+            }
+        }
+        protected static void DrawLandWF
+        (
+            UltimaBatcher2D batcher,
+            ushort graphic,
+            int x,
+            int y,
+            ref UltimaBatcher2D.YOffsets yOffsets,
+            ref Vector3 nTop,
+            ref Vector3 nRight,
+            ref Vector3 nLeft,
+            ref Vector3 nBottom,
+            ref Vector3 hue,
+            bool isImpassable
+        )
+        {
+            UOTexture texture = TexmapsLoader.Instance.GetTextureWF(TileDataLoader.Instance.LandData[graphic].TexID, isImpassable);
+
+            if (texture != null)
+            {
+                texture.Ticks = Time.Ticks;
+
+                batcher.DrawSpriteLand(texture, x, y, ref yOffsets, ref nTop, ref nRight, ref nLeft, ref nBottom, ref hue);
+            }
+            else
+            {
+                DrawStatic(batcher, graphic, x, y, ref hue);
+            }
+        }
+        // ## BEGIN - END ## // MISC2
         protected static void DrawLand
         (
             UltimaBatcher2D batcher,
@@ -297,6 +341,16 @@ namespace ClassicUO.Game.GameObjects
               
                 x -= index.Width;
                 y -= index.Height;
+
+                // ## BEGIN - END ## // MISC2
+                if (ProfileManager.CurrentProfile.IgnoreCoTEnabled)
+                {
+                    if (StaticFilters.IsIgnoreCoT(graphic) || ProfileManager.CurrentProfile.TreeType == 1 && graphic == CombatCollection.TREE_REPLACE_GRAPHIC || ProfileManager.CurrentProfile.TreeType == 2 & graphic == CombatCollection.TREE_REPLACE_GRAPHIC_TILE)
+                    {
+                        transparent = false;
+                    }
+                }
+                // ## BEGIN - END ## // MISC2
 
                 if (transparent)
                 {

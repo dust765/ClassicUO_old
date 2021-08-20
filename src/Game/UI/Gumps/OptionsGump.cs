@@ -36,6 +36,9 @@ using System.IO;
 using System.Linq;
 using ClassicUO.Configuration;
 using ClassicUO.Data;
+// ## BEGIN - END ## // UI/GUMPS
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // UI/GUMPS
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -109,7 +112,9 @@ namespace ClassicUO.Game.UI.Gumps
                          _showHpMobile,
                          _highlightByState,
                          _drawRoofs,
-                         _treeToStumps,
+                         // ## BEGIN - END ## // ART / HUE CHANGES
+                         //_treeToStumps,
+                         // ## BEGIN - END ## // ART / HUE CHANGES
                          _hideVegetation,
                          _noColorOutOfRangeObjects,
                          _useCircleOfTransparency,
@@ -170,6 +175,94 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _showStatsMessage, _showSkillsMessage;
         private HSliderBar _showSkillsMessageDelta;
 
+        // ## BEGIN - END ## // BASICSETUP
+        // ## BEGIN - END ## // ART / HUE CHANGES
+        private Checkbox _colorStealth, _colorEnergyBolt, _colorGold, _colorTreeTile, _colorBlockerTile;
+        private ClickableColorBox _stealthColorPickerBox, _energyBoltColorPickerBox, _goldColorPickerBox, _treeTileColorPickerBox, _blockerTileColorPickerBox;
+        private Combobox _goldType, _treeType, _blockerType, _stealthNeonType, _energyBoltNeonType, _energyBoltArtType;
+        // ## BEGIN - END ## // ART / HUE CHANGES
+        // ## BEGIN - END ## // VISUAL HELPERS
+        private Checkbox _highlightTileRange, _highlightTileRangeSpell, _ownAuraByHP, _previewFields;
+        private HSliderBar _highlightTileRangeRange, _highlightTileRangeRangeSpell;
+        private ClickableColorBox _highlightTileRangeColorPickerBox, _highlightTileRangeColorPickerBoxSpell, _highlightLastTargetTypeColorPickerBox, _highlightLastTargetTypeColorPickerBoxPoison, _highlightLastTargetTypeColorPickerBoxPara, _highlightGlowingWeaponsTypeColorPickerBoxHue, _hueImpassableViewColorPickerBox;
+        private Combobox _glowingWeaponsType, _highlightLastTargetType, _highlightLastTargetTypePoison, _highlightLastTargetTypePara;
+        // ## BEGIN - END ## // VISUAL HELPERS
+        // ## BEGIN - END ## // HEALTHBAR
+        private Checkbox _highlightLastTargetHealthBarOutline, _highlightHealthBarByState, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
+        private HSliderBar _flashingHealthbarTreshold;
+        // ## BEGIN - END ## // HEALTHBAR
+        // ## BEGIN - END ## // CURSOR
+        private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY;
+        private Checkbox _spellOnCursor;
+        // ## BEGIN - END ## // CURSOR
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        private Checkbox _overheadRange;
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        // ## BEGIN - END ## // OLDHEALTLINES
+        private Checkbox _multipleUnderlinesSelfParty, _multipleUnderlinesSelfPartyBigBars, _useOldHealthBars;
+        private HSliderBar _multipleUnderlinesSelfPartyTransparency;
+        // ## BEGIN - END ## // OLDHEALTLINES
+        // ## BEGIN - END ## // MISC
+        private Checkbox _offscreenTargeting, _SpecialSetLastTargetCliloc, _blackOutlineStatics, _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _lockWoSArtForceAoS;
+        private InputField _SpecialSetLastTargetClilocText, _blockWoSArt;
+        // ## BEGIN - END ## // MISC
+        // ## BEGIN - END ## // MACROS
+        private HSliderBar _lastTargetRange;
+        // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // MISC2
+        private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap;
+        private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ;
+        // ## BEGIN - END ## // MISC2
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        private Checkbox _showHPLineInNOH;
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        // ## BEGIN - END ## // UI/GUMPS
+        private Checkbox _bandageGump, _uccEnableLTBar;
+        private InputField _bandageGumpOffsetX, _bandageGumpOffsetY;
+        // ## BEGIN - END ## // UI/GUMPS
+        // ## BEGIN - END ## // TEXTUREMANAGER
+        private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _textureManagerHumansOnly, _textureManagerPurple, _textureManagerGreen, _textureManagerRed, _textureManagerOrange, _textureManagerBlue, _textureManagerHumansOnlyArrows, _textureManagerPurpleArrows, _textureManagerGreenArrows, _textureManagerRedArrows, _textureManagerOrangeArrows, _textureManagerBlueArrows;
+        // ## BEGIN - END ## // TEXTUREMANAGER
+        // ## BEGIN - END ## // LINES
+        private Checkbox _uccEnableLines;
+        // ## BEGIN - END ## // LINES
+        // ## BEGIN - END ## // AUTOLOOT
+        private Checkbox _uccEnableAL, _uccEnableGridLootColoring, _uccBEnableLootAboveID;
+        private InputField _uccLootDelay, _uccPurgeDelay, _uccQueueSpeed;
+        private InputField _uccLootAboveID, _uccSL_Gray, _uccSL_Blue, _uccSL_Green, _uccSL_Red;
+        // ## BEGIN - END ## // AUTOLOOT
+        // ## BEGIN - END ## // BUFFBAR
+        private Checkbox _uccEnableBuffbar, _uccLocked, _uccSwing, _uccDoD, _uccGotD;
+        // ## BEGIN - END ## // BUFFBAR
+        // ## BEGIN - END ## // UCCSETTINGS
+        private InputField _uccDisarmStrikeCooldown, _uccDisarmAttemptCooldown, _uccDisarmedCooldown;
+        // ## BEGIN - END ## // UCCSETTINGS
+        // ## BEGIN - END ## // SELF
+        private Checkbox _uccEnableSelf, _uccBandiesPoison, _uccNoRefreshPotAfterHamstrung;
+        private InputField _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
+        private Checkbox _uccClilocTrigger, _uccMacroTrigger;
+        // ## BEGIN - END ## // SELF
+        // ## BEGIN - END ## // ADVMACROS
+        private InputField _pullFriendlyBarsX, _pullFriendlyBarsY, _pullFriendlyBarsFinalLocationX, _pullFriendlyBarsFinalLocationY;
+        private InputField _pullEnemyBarsX, _pullEnemyBarsY, _pullEnemyBarsFinalLocationX, _pullEnemyBarsFinalLocationY;
+        private InputField _pullPartyAllyBarsX, _pullPartyAllyBarsY, _pullPartyAllyBarsFinalLocationX, _pullPartyAllyBarsFinalLocationY;
+        // ## BEGIN - END ## // ADVMACROS
+        // ## BEGIN - END ## // AUTOMATIONS
+        private Checkbox _autoWorldmapMarker;
+        // ## BEGIN - END ## // AUTOMATIONS
+        // ## BEGIN - END ## // OUTLANDS
+        /*
+        private Checkbox _infernoBridge, _overheadSummonTime, _overheadPeaceTime, _mobileHamstrungTime;
+        private InputField _mobileHamstrungTimeCooldown;
+        //##UCC##//
+        private InputField _uccHamstringStrikeCooldown, _uccHamstringAttemptCooldown, _uccHamstrungCooldown;
+        private Checkbox _uccDoH, _uccGotH;
+        */
+        // ## BEGIN - END ## // OUTLANDS
+        // ## BEGIN - END ## // LOBBY
+        private InputField _lobbyIP, _lobbyPort;
+        // ## BEGIN - END ## // LOBBY
+        // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
 
@@ -346,6 +439,11 @@ namespace ClassicUO.Game.UI.Gumps
                 ) { ButtonParameter = 12 }
             );
 
+            // ## BEGIN - END ## // BASICSETUP
+            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Dust") { ButtonParameter = 13 });
+            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "765") { ButtonParameter = 14 });
+            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Mods") { ButtonParameter = 15 });
+            // ## BEGIN - END ## // BASICSETUP
 
             Add
             (
@@ -422,6 +520,11 @@ namespace ClassicUO.Game.UI.Gumps
             BuildInfoBar();
             BuildContainers();
             BuildExperimental();
+            // ## BEGIN - END ## // BASICSETUP
+            BuildDust();
+            Build765();
+            BuildMods();
+            // ## BEGIN - END ## // BASICSETUP
 
             ChangePage(1);
         }
@@ -1252,6 +1355,8 @@ namespace ClassicUO.Game.UI.Gumps
                 )
             );
 
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            /*
             section5.Add
             (
                 _treeToStumps = AddCheckBox
@@ -1263,6 +1368,8 @@ namespace ClassicUO.Game.UI.Gumps
                     startY
                 )
             );
+            */
+            // ## BEGIN - END ## // ART / HUE CHANGES
 
             section5.Add
             (
@@ -3323,6 +3430,1548 @@ namespace ClassicUO.Game.UI.Gumps
             Add(rightArea, PAGE);
         }
 
+        // ## BEGIN - END ## // BASICSETUP
+        private void BuildDust()
+        {
+            const int PAGE = 13;
+            ScrollArea rightArea = new ScrollArea(190, 20, WIDTH - 210, 420, true);
+
+            int startX = 5;
+            int startY = 5;
+
+            DataBox box = new DataBox(startX, startY, rightArea.Width - 15, 1);
+            box.WantUpdateSize = true;
+            rightArea.Add(box);
+
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            SettingsSection section = AddSettingsSection(box, "-----ART / HUE CHANGES-----");
+
+            section.Add(_colorStealth = AddCheckBox(null, "Color stealth ON / OFF", _currentProfile.ColorStealth, startX, startY));
+            startY += _colorStealth.Height + 2;
+
+            section.Add(_stealthColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.StealthHue, ""));
+            startY += _stealthColorPickerBox.Height + 2;
+
+            section.AddRight(AddLabel(null, "Stealth color", 0, 0), 2);
+
+            section.Add(AddLabel(null, "or neon:", startX, startY));
+
+            int mode = _currentProfile.StealthNeonType;
+            section.AddRight(_stealthNeonType = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire" }, mode, startX, startY, 100));
+            startY += _stealthNeonType.Height + 2;
+
+            section.Add(_colorEnergyBolt = AddCheckBox(null, "Color energy bolt ON / OFF", _currentProfile.ColorEnergyBolt, startX, startY));
+            startY += _colorEnergyBolt.Height + 2;
+
+            section.Add(_energyBoltColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.EnergyBoltHue, ""));
+            startY += _energyBoltColorPickerBox.Height + 2;
+
+            section.AddRight(AddLabel(null, "Energy bolt color", 0, 0), 2);
+
+            section.Add(AddLabel(null, "or neon: ", startX, startY));
+
+            mode = _currentProfile.EnergyBoltNeonType;
+            section.AddRight(_energyBoltNeonType = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire" }, mode, startX, startY, 100));
+            startY += _energyBoltNeonType.Height + 2;
+
+            section.Add(AddLabel(null, "Change energy bolt art to:", startX, startY));
+
+            mode = _currentProfile.EnergyBoltArtType;
+            section.AddRight(_energyBoltArtType = AddCombobox(null, new[] { "Normal", "Explo", "Bagball" }, mode, startX, startY, 100));
+            startY += _energyBoltArtType.Height + 2;
+
+            section.Add(AddLabel(null, "Change gold art to:", startX, startY));
+
+            mode = _currentProfile.GoldType;
+            section.AddRight(_goldType = AddCombobox(null, new[] { "Normal", "Cannonball", "Prev Coin" }, mode, startX, startY, 100));
+            startY += _goldType.Height + 2;
+
+            section.Add(_colorGold = AddCheckBox(null, "Color cannonball or prev coin ON / OFF", _currentProfile.ColorGold, startX, startY));
+            startY += _colorGold.Height + 2;
+
+            section.Add(_goldColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.GoldHue, ""));
+            startY += _goldColorPickerBox.Height + 2;
+
+            section.AddRight(AddLabel(null, "Cannonball or prev coin color", 0, 0), 2);
+
+            section.Add(AddLabel(null, "Change tree art to:", startX, startY));
+
+            mode = _currentProfile.TreeType;
+            section.AddRight(_treeType = AddCombobox(null, new[] { "Normal", "Stump", "Tile" }, mode, startX, startY, 100));
+            startY += _treeType.Height + 2;
+
+            section.Add(_colorTreeTile = AddCheckBox(null, "Color stump or tile ON / OFF", _currentProfile.ColorTreeTile, startX, startY));
+            startY += _colorTreeTile.Height + 2;
+
+            section.Add(_treeTileColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.TreeTileHue, ""));
+            startY += _treeTileColorPickerBox.Height + 2;
+
+            section.AddRight(AddLabel(null, "Stump or tile color", 0, 0), 2);
+
+            section.Add(AddLabel(null, "Blocker Type:", startX, startY));
+
+            mode = _currentProfile.BlockerType;
+            section.AddRight(_blockerType = AddCombobox(null, new[] { "Normal", "Stump", "Tile" }, mode, startX, startY, 100));
+            startY += _blockerType.Height + 2;
+
+            section.Add(_colorBlockerTile = AddCheckBox(null, "Color stump or tile", _currentProfile.ColorBlockerTile, startX, startY));
+            startY += _colorBlockerTile.Height + 2;
+
+            section.Add(_blockerTileColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.BlockerTileHue, ""));
+            startY += _blockerTileColorPickerBox.Height + 2;
+
+            section.AddRight(AddLabel(null, "Stump or tile color", 0, 0), 2);
+            // ## BEGIN - END ## // ART / HUE CHANGES
+
+            // ## BEGIN - END ## // VISUAL HELPERS
+            SettingsSection section2 = AddSettingsSection(box, "-----VISUAL HELPERS-----");
+            section2.Y = section.Bounds.Bottom + 40;
+
+            startY = section.Bounds.Bottom + 40;
+
+            section2.Add(_highlightTileRange = AddCheckBox(null, "Highlight tiles on range", _currentProfile.HighlightTileAtRange, startX, startY));
+            startY += _highlightTileRange.Height + 2;
+
+            section2.Add(AddLabel(null, "@ range: ", startX, startY));
+
+            section2.AddRight(_highlightTileRangeRange = AddHSlider(null, 1, 20, _currentProfile.HighlightTileAtRangeRange, startX, startY, 200));
+            startY += _highlightTileRangeRange.Height + 2;
+
+            section2.Add(_highlightTileRangeColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.HighlightTileRangeHue, ""));
+            startY += _highlightTileRangeColorPickerBox.Height + 2;
+            section2.AddRight(AddLabel(null, "Tile color", 0, 0), 2);
+
+            section2.Add(_highlightTileRangeSpell = AddCheckBox(null, "Highlight tiles on range for spells", _currentProfile.HighlightTileAtRangeSpell, startX, startY));
+            startY += _highlightTileRangeSpell.Height + 2;
+
+            section2.Add(AddLabel(null, "@ range: ", startX, startY));
+
+            section2.AddRight(_highlightTileRangeRangeSpell = AddHSlider(null, 1, 20, _currentProfile.HighlightTileAtRangeRangeSpell, startX, startY, 200));
+            startY += _highlightTileRangeRangeSpell.Height + 2;
+
+            section2.Add(_highlightTileRangeColorPickerBoxSpell = AddColorBox(null, startX, startY, _currentProfile.HighlightTileRangeHueSpell, ""));
+            startY += _highlightTileRangeColorPickerBoxSpell.Height + 2;
+            section2.AddRight(AddLabel(null, "Tile color", 0, 0), 2);
+
+            section2.Add(_previewFields = AddCheckBox(null, "Preview fields", _currentProfile.PreviewFields, startX, startY));
+            startY += _previewFields.Height + 2;
+
+            section2.Add(_ownAuraByHP = AddCheckBox(null, "Color own aura by HP (needs aura enabled)", _currentProfile.OwnAuraByHP, startX, startY));
+            startY += _ownAuraByHP.Height + 2;
+
+            section2.Add(AddLabel(null, "Glowing Weapons:", startX, startY));
+
+            mode = _currentProfile.GlowingWeaponsType;
+            section2.Add(_glowingWeaponsType = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Custom" }, mode, startX, startY, 100));
+            startY += _glowingWeaponsType.Height + 2;
+
+            section2.Add(_highlightGlowingWeaponsTypeColorPickerBoxHue = AddColorBox(null, startX, startY, _currentProfile.HighlightGlowingWeaponsTypeHue, ""));
+            startY += _highlightGlowingWeaponsTypeColorPickerBoxHue.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color", 0, 0), 2);
+
+            section2.Add(AddLabel(null, "Highlight lasttarget:", startX, startY));
+
+            mode = _currentProfile.HighlightLastTargetType;
+            section2.Add(_highlightLastTargetType = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Custom" }, mode, startX, startY, 100));
+            startY += _highlightLastTargetType.Height + 2;
+
+            section2.Add(_highlightLastTargetTypeColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.HighlightLastTargetTypeHue, ""));
+            startY += _highlightLastTargetTypeColorPickerBox.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color lasttarget", 0, 0), 2);
+
+            section2.Add(AddLabel(null, "Highlight lasttarget poisoned:", startX, startY));
+
+            mode = _currentProfile.HighlightLastTargetTypePoison;
+            section2.Add(_highlightLastTargetTypePoison = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Special", "Custom" }, mode, startX, startY, 100));
+            startY += _highlightLastTargetTypePoison.Height + 2;
+
+            section2.Add(_highlightLastTargetTypeColorPickerBoxPoison = AddColorBox(null, startX, startY, _currentProfile.HighlightLastTargetTypePoisonHue, ""));
+            startY += _highlightLastTargetTypeColorPickerBoxPoison.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color poison", 0, 0), 2);
+
+            section2.Add(AddLabel(null, "Highlight lasttarget paralyzed:", startX, startY));
+
+            mode = _currentProfile.HighlightLastTargetTypePara;
+            section2.Add(_highlightLastTargetTypePara = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Special", "Custom" }, mode, startX, startY, 100));
+            startY += _highlightLastTargetTypePara.Height + 2;
+
+            section2.Add(_highlightLastTargetTypeColorPickerBoxPara = AddColorBox(null, startX, startY, _currentProfile.HighlightLastTargetTypeParaHue, ""));
+            startY += _highlightLastTargetTypeColorPickerBoxPara.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color paralyzed", 0, 0), 2);
+            // ## BEGIN - END ## // VISUAL HELPERS
+
+            // ## BEGIN - END ## // HEALTHBAR
+            SettingsSection section3 = AddSettingsSection(box, "-----HEALTHBAR-----");
+            section3.Y = section2.Bounds.Bottom + 40;
+
+            startY = section2.Bounds.Bottom + 40;
+
+            section3.Add(_highlightLastTargetHealthBarOutline = AddCheckBox(null, "Highlight LT healthbar", _currentProfile.HighlightLastTargetHealthBarOutline, startX, startY));
+            startY += _highlightLastTargetHealthBarOutline.Height + 2;
+            section3.Add(_highlightHealthBarByState = AddCheckBox(null, "Highlight healthbar border by state", _currentProfile.HighlightHealthBarByState, startX, startY));
+            startY += _highlightHealthBarByState.Height + 2;
+            section3.Add(_flashingHealthbarOutlineSelf = AddCheckBox(null, "Flashing healthbar outline - self", _currentProfile.FlashingHealthbarOutlineSelf, startX, startY));
+            startY += _flashingHealthbarOutlineSelf.Height + 2;
+            section3.Add(_flashingHealthbarOutlineParty = AddCheckBox(null, "Flashing healthbar outline - party", _currentProfile.FlashingHealthbarOutlineParty, startX, startY));
+            startY += _flashingHealthbarOutlineParty.Height + 2;
+            section3.Add(_flashingHealthbarOutlineGreen = AddCheckBox(null, "Flashing healthbar outline - ally", _currentProfile.FlashingHealthbarOutlineGreen, startX, startY));
+            startY += _flashingHealthbarOutlineGreen.Height + 2;
+            section3.Add(_flashingHealthbarOutlineOrange = AddCheckBox(null, "Flashing healthbar outline - enemy", _currentProfile.FlashingHealthbarOutlineOrange, startX, startY));
+            startY += _flashingHealthbarOutlineOrange.Height + 2;
+            section3.Add(_flashingHealthbarOutlineAll = AddCheckBox(null, "Flashing healthbar outline - all", _currentProfile.FlashingHealthbarOutlineAll, startX, startY));
+            startY += _flashingHealthbarOutlineAll.Height + 2;
+            section3.Add(_flashingHealthbarNegativeOnly = AddCheckBox(null, "Flashing healthbar outline on negative changes only", _currentProfile.FlashingHealthbarNegativeOnly, startX, startY));
+            startY += _flashingHealthbarNegativeOnly.Height + 2;
+
+            section3.Add(AddLabel(null, "only flash on HP change >= : ", startX, startY));
+
+            section3.AddRight(_flashingHealthbarTreshold = AddHSlider(null, 1, 50, _currentProfile.FlashingHealthbarTreshold, startX, startY, 200));
+            startY += _flashingHealthbarTreshold.Height + 2;
+            // ## BEGIN - END ## // HEALTHBAR
+
+            // ## BEGIN - END ## // CURSOR
+            SettingsSection section4 = AddSettingsSection(box, "-----CURSOR-----");
+            section4.Y = section3.Bounds.Bottom + 40;
+
+            startY = section3.Bounds.Bottom + 40;
+
+            section4.Add(_spellOnCursor = AddCheckBox(null, "Show spells on cursor", _currentProfile.SpellOnCursor, startX, startY));
+            startY += _spellOnCursor.Height + 2;
+
+            section4.Add(AddLabel(null, "Spellicon offset: ", startX, startY));
+
+            section4.Add
+            (
+                _spellOnCursorOffsetX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _spellOnCursorOffsetX.SetText(_currentProfile.SpellOnCursorOffset.X.ToString());
+            section4.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _spellOnCursorOffsetX.Height + 2;
+
+            section4.Add
+            (
+                _spellOnCursorOffsetY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _spellOnCursorOffsetY.SetText(_currentProfile.SpellOnCursorOffset.Y.ToString());
+            section4.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _spellOnCursorOffsetY.Height + 2;
+            // ## BEGIN - END ## // CURSOR
+
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            SettingsSection section5 = AddSettingsSection(box, "-----OVERHEAD / UNDERFEET-----");
+            section5.Y = section4.Bounds.Bottom + 40;
+            startY = section4.Bounds.Bottom + 40;
+
+            section5.Add(_overheadRange = AddCheckBox(null, "Display range in overhead (needs HP overhead enabled)", _currentProfile.OverheadRange, startX, startY));
+            startY += _overheadRange.Height + 2;
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+
+            // ## BEGIN - END ## // OLDHEALTLINES
+            SettingsSection section6 = AddSettingsSection(box, "-----OLDHEALTLINES-----");
+            section6.Y = section5.Bounds.Bottom + 40;
+
+            startY = section5.Bounds.Bottom + 40;
+
+            section6.Add(_useOldHealthBars = AddCheckBox(null, "Use old healthlines", _currentProfile.UseOldHealthBars, startX, startY));
+            startY += _useOldHealthBars.Height + 2;
+            section6.Add(_multipleUnderlinesSelfParty = AddCheckBox(null, "Display Mana / Stam in underline for self and party (requires old healthbars)", _currentProfile.MultipleUnderlinesSelfParty, startX, startY));
+            startY += _multipleUnderlinesSelfParty.Height + 2;
+            section6.Add(_multipleUnderlinesSelfPartyBigBars = AddCheckBox(null, "Use bigger underlines for self and party (requires old healthbars)", _currentProfile.MultipleUnderlinesSelfPartyBigBars, startX, startY));
+            startY += _multipleUnderlinesSelfPartyBigBars.Height + 2;
+
+            section6.Add(AddLabel(null, "Transparency for self and party (close client completly), ", startX, startY));
+            section6.Add(AddLabel(null, "(requires old healthlines): ", startX, startY));
+
+            section6.Add(_multipleUnderlinesSelfPartyTransparency = AddHSlider(null, 1, 10, _currentProfile.MultipleUnderlinesSelfPartyTransparency, startX, startY, 200));
+            startY += _multipleUnderlinesSelfPartyTransparency.Height + 2;
+            // ## BEGIN - END ## // OLDHEALTLINES
+
+            // ## BEGIN - END ## // MISC
+            SettingsSection section7 = AddSettingsSection(box, "-----MISC-----");
+            section7.Y = section6.Bounds.Bottom + 40;
+
+            startY = section6.Bounds.Bottom + 40;
+
+            section7.Add(_offscreenTargeting = AddCheckBox(null, "Offscreen targeting (always on)", true, startX, startY)); //has no effect but feature list
+            startY += _offscreenTargeting.Height + 2;
+            section7.Add(_SpecialSetLastTargetCliloc = AddCheckBox(null, "Razor * Target * to lasttarget string", _currentProfile.SpecialSetLastTargetCliloc, startX, startY));
+            startY += _SpecialSetLastTargetCliloc.Height + 2;
+
+            section7.Add
+            (
+                _SpecialSetLastTargetClilocText = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    150,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    false,
+                    50000
+                )
+            );
+            _SpecialSetLastTargetClilocText.SetText(_currentProfile.SpecialSetLastTargetClilocText.ToString());
+
+            section7.Add(_blackOutlineStatics = AddCheckBox(null, "Outline statics black", _currentProfile.BlackOutlineStatics, startX, startY));
+            startY += _blackOutlineStatics.Height + 2;
+
+            section7.Add(_ignoreStaminaCheck = AddCheckBox(null, "Ignore stamina check", _currentProfile.IgnoreStaminaCheck, startX, startY));
+            startY += _ignoreStaminaCheck.Height + 2;
+
+            section7.Add(_blockWoS = AddCheckBox(null, "Block Wall of Stone", _currentProfile.BlockWoS, startX, startY));
+            startY += _blockWoS.Height + 2;
+
+            section7.Add(_blockWoSFelOnly = AddCheckBox(null, "Block Wall of Stone Fel only", _currentProfile.BlockWoSFelOnly, startX, startY));
+            startY += _blockWoSFelOnly.Height + 2;
+
+            section7.Add(AddLabel(null, "Wall of Stone Art (-info -> DisplayedGraphic): ", startX, startY));
+            section7.Add
+            (
+                _blockWoSArt = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _blockWoSArt.SetText(_currentProfile.BlockWoSArt.ToString());
+            startY += _blockWoSArt.Height + 2;
+
+            section7.Add(_lockWoSArtForceAoS = AddCheckBox(null, "Force WoS to Art above (AoS only?) and hue 945", _currentProfile.BlockWoSArtForceAoS, startX, startY));
+            startY += _lockWoSArtForceAoS.Height + 2;
+            // ## BEGIN - END ## // MISC
+            // ## BEGIN - END ## // MISC2
+            SettingsSection section8 = AddSettingsSection(box, "-----MISC2-----");
+            section8.Y = section7.Bounds.Bottom + 40;
+
+            startY = section7.Bounds.Bottom + 40;
+
+            section8.Add(_wireframeView = AddCheckBox(null, "Enable WireFrame view (restart needed)", _currentProfile.WireFrameView, startX, startY));
+            startY += _wireframeView.Height + 2;
+
+            section8.Add(_hueImpassableView = AddCheckBox(null, "Hue impassable Tiles", _currentProfile.HueImpassableView, startX, startY));
+            startY += _hueImpassableView.Height + 2;
+
+            section8.Add(_hueImpassableViewColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.HueImpassableViewHue, ""));
+            startY += _hueImpassableViewColorPickerBox.Height + 2;
+            section8.AddRight(AddLabel(null, "Hue", 0, 0), 2);
+
+            section8.Add(_transparentHouses = AddCheckBox(null, "Transparent Houses and Items (Z level):", _currentProfile.TransparentHousesEnabled, startX, startY));
+            startY += _transparentHouses.Height + 2;
+
+            section8.Add(_transparentHousesZ = AddHSlider(null, 1, 100, _currentProfile.TransparentHousesZ, startX, startY, 200));
+            startY += _transparentHousesZ.Height + 2;
+
+            section8.Add(AddLabel(null, "Transparency:", startX, startY));
+            section8.Add(_transparentHousesTransparency = AddHSlider(null, 1, 9, _currentProfile.TransparentHousesTransparency, startX, startY, 200));
+            startY += _transparentHousesTransparency.Height + 2;
+
+            section8.Add(_invisibleHouses = AddCheckBox(null, "Invisible Houses and Items (Z level):", _currentProfile.InvisibleHousesEnabled, startX, startY));
+            startY += _invisibleHouses.Height + 2;
+
+            section8.Add(_invisibleHousesZ = AddHSlider(null, 1, 100, _currentProfile.InvisibleHousesZ, startX, startY, 200));
+            startY += _invisibleHousesZ.Height + 2;
+
+            section8.Add(_ignoreCoT = AddCheckBox(null, "Enable ignorelist for circle of transparency:", _currentProfile.IgnoreCoTEnabled, startX, startY));
+            startY += _ignoreCoT.Height + 2;
+
+            section8.Add(_showDeathOnWorldmap = AddCheckBox(null, "Show death location on world map for 5min:", _currentProfile.ShowDeathOnWorldmap, startX, startY));
+            startY += _showDeathOnWorldmap.Height + 2;
+            // ## BEGIN - END ## // MISC2
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            SettingsSection section9 = AddSettingsSection(box, "-----NAMEOVERHEAD-----");
+            section9.Y = section8.Bounds.Bottom + 40;
+
+            startY = section8.Bounds.Bottom + 40;
+
+            section9.Add(_showHPLineInNOH = AddCheckBox(null, "Show HPLine in NameOverheadGump:", _currentProfile.ShowHPLineInNOH, startX, startY));
+            startY += _showHPLineInNOH.Height + 2;
+
+            // ## BEGIN - END ## // NAMEOVERHEAD
+
+            Add(rightArea, PAGE);
+        }
+        private void Build765()
+        {
+            const int PAGE = 14;
+            ScrollArea rightArea = new ScrollArea(190, 20, WIDTH - 210, 420, true);
+
+            int startX = 5;
+            int startY = 5;
+
+            DataBox box = new DataBox(startX, startY, rightArea.Width - 15, 1);
+            box.WantUpdateSize = true;
+            rightArea.Add(box);
+
+            // ## BEGIN - END ## // MACROS
+            SettingsSection section = AddSettingsSection(box, "-----FEATURES MACROS-----");
+
+            section.Add(AddLabel(null, "HighlightTileAtRange (toggle HighlightTileAtRange on / off)", startX, startY));
+            // ## BEGIN - END ## // MISC2
+            section.Add(AddLabel(null, "ToggleTransparentHouses (toggle TransparentHouses on / off)", startX, startY));
+            section.Add(AddLabel(null, "ToggleInvisibleHouses (toggle InvisibleHouses on / off)", startX, startY));
+            // ## BEGIN - END ## // MISC2
+            // ## BEGIN - END ## // LINES
+            section.Add(AddLabel(null, "UCCLinesToggleLT (toggle on / off UCC Lines LastTarget)", startX, startY));
+            section.Add(AddLabel(null, "UCCLinesToggleHM (toggle on / off UCC Lines Hunting Mode)", startX, startY));
+            // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // AUTOMATIONS
+            section.Add(AddLabel(null, "AutoMeditate (toggle on / off automed)", startX, startY));
+            // ## BEGIN - END ## // AUTOMATIONS
+
+            SettingsSection section2 = AddSettingsSection(box, "-----SIMPLE MACROS-----");
+            section2.Y = section.Bounds.Bottom + 40;
+
+            section2.Add(AddLabel(null, "LastTargetRC (last target with custom range check)", startX, startY));
+            section2.Add(AddLabel(null, "LastTargetRC - Range:", startX, startY));
+
+            section2.AddRight(_lastTargetRange = AddHSlider(null, 1, 30, _currentProfile.LastTargetRange, startX, startY, 200));
+            startY += _lastTargetRange.Height + 2;
+
+            section2.Add(AddLabel(null, "ObjectInfo (macro for -info command)", startX, startY));
+            section2.Add(AddLabel(null, "HideX (remove landtile, entity, mobile or item)", startX, startY));
+            section2.Add(AddLabel(null, "HealOnHPChange (keep pressed, casts heal on own hp change)", startX, startY));
+            section2.Add(AddLabel(null, "HarmOnSwing (keep pressed, casts harm on next own swing animation)", startX, startY));
+            section2.Add(AddLabel(null, "CureGH (if poisoned cure, else greater heal)", startX, startY));
+            section2.Add(AddLabel(null, "SetTargetClientSide (set target client side only)", startX, startY));
+            section2.Add(AddLabel(null, "OpenJournal2 (opens a second journal)", startX, startY));
+            section2.Add(AddLabel(null, "OpenCorpses (opens 0x2006 corpses within 2 tiles)", startX, startY));
+            // ## BEGIN - END ## // MACROS
+            // ## BEGIN - END ## // ADVMACROS
+            SettingsSection section3 = AddSettingsSection(box, "-----Advanced macros-----");
+            section3.Y = section2.Bounds.Bottom + 40;
+            startY = section2.Bounds.Bottom + 40;
+            section3.Add(AddLabel(null, "use macro to run advanced scripts ONCE:", startX, startY));
+            section3.Add(AddLabel(null, "OpenCorpsesSafeLoot (opens non blue 0x2006 corpses within 2 tiles)", startX, startY));
+            section3.Add(AddLabel(null, "EquipManager (equip an item)", startX, startY));
+            section3.Add(AddLabel(null, "SetMimic_PlayerSerial (set master or custom serial for EquipManager)", startX, startY));
+            section3.Add(AddLabel(null, "AutoPot (disarm 2h layer -> \n healpot below 85%, \n pouch if paralyzed, \n cure if poisoned and not full hp, \n refresh if below 23, \n str pot if str below 100, \n agi pot if dex above 89)", startX, startY));
+            section3.Add(AddLabel(null, "DefendPartyKey (if ally / party member in 12 tile range and hits < 64: \n if targeting -> target them, else cast gheal \n if own hits < 64: \n if targeting -> target self and use gheal pot, \n else start casting gheal)", startX, startY));
+            section3.Add(AddLabel(null, "DefendSelfKey (if own hits < 64, \n if targeting -> target self and use gheal pot, \n else start casting gheal)", startX, startY));
+            section3.Add(AddLabel(null, "CustomInterrupt (fast macro to interrupt active spellcasting)", startX, startY));
+
+            section3.Add(AddLabel(null, "GrabFriendlyBars (grab all innocent bars)", startX, startY));
+            section3.Add
+            (
+                _pullFriendlyBarsX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullFriendlyBarsX.SetText(_currentProfile.PullFriendlyBars.X.ToString());
+            section3.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _pullFriendlyBarsX.Height + 2;
+
+            section3.Add
+            (
+                _pullFriendlyBarsY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullFriendlyBarsY.SetText(_currentProfile.PullFriendlyBars.Y.ToString());
+            section3.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _pullFriendlyBarsY.Height + 2;
+            //
+            section3.Add
+            (
+                _pullFriendlyBarsFinalLocationX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullFriendlyBarsFinalLocationX.SetText(_currentProfile.PullFriendlyBarsFinalLocation.X.ToString());
+            section3.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _pullFriendlyBarsFinalLocationX.Height + 2;
+
+            section3.Add
+            (
+                _pullFriendlyBarsFinalLocationY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullFriendlyBarsFinalLocationY.SetText(_currentProfile.PullFriendlyBarsFinalLocation.Y.ToString());
+            section3.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _pullFriendlyBarsFinalLocationY.Height + 2;
+
+            section3.Add(AddLabel(null, "GrabEnemyBars (grab all criminal, enemy, gray, murderer bars)", startX, startY));
+            section3.Add
+            (
+                _pullEnemyBarsX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullEnemyBarsX.SetText(_currentProfile.PullEnemyBars.X.ToString());
+            section3.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _pullEnemyBarsX.Height + 2;
+
+            section3.Add
+            (
+                _pullEnemyBarsY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullEnemyBarsY.SetText(_currentProfile.PullEnemyBars.Y.ToString());
+            section3.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _pullEnemyBarsY.Height + 2;
+            //
+            section3.Add
+            (
+                _pullEnemyBarsFinalLocationX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullEnemyBarsFinalLocationX.SetText(_currentProfile.PullEnemyBarsFinalLocation.X.ToString());
+            section3.AddRight(AddLabel(null, "FX", 0, 0), 2);
+            startY += _pullEnemyBarsFinalLocationX.Height + 2;
+
+            section3.Add
+            (
+                _pullEnemyBarsFinalLocationY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullEnemyBarsFinalLocationY.SetText(_currentProfile.PullEnemyBarsFinalLocation.Y.ToString());
+            section3.AddRight(AddLabel(null, "FY", 0, 0), 2);
+            startY += _pullEnemyBarsFinalLocationY.Height + 2;
+
+            section3.Add(AddLabel(null, "GrabPartyAllyBars (grab all ally and party bars)", startX, startY));
+            section3.Add
+            (
+                _pullPartyAllyBarsX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullPartyAllyBarsX.SetText(_currentProfile.PullPartyAllyBars.X.ToString());
+            section3.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _pullPartyAllyBarsX.Height + 2;
+
+            section3.Add
+            (
+                _pullPartyAllyBarsY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullPartyAllyBarsY.SetText(_currentProfile.PullPartyAllyBars.Y.ToString());
+            section3.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _pullPartyAllyBarsY.Height + 2;
+            //
+            section3.Add
+            (
+                _pullPartyAllyBarsFinalLocationX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullPartyAllyBarsFinalLocationX.SetText(_currentProfile.PullPartyAllyBarsFinalLocation.X.ToString());
+            section3.AddRight(AddLabel(null, "FX", 0, 0), 2);
+            startY += _pullPartyAllyBarsFinalLocationX.Height + 2;
+
+            section3.Add
+            (
+                _pullPartyAllyBarsFinalLocationY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _pullPartyAllyBarsFinalLocationY.SetText(_currentProfile.PullPartyAllyBarsFinalLocation.Y.ToString());
+            section3.AddRight(AddLabel(null, "FY", 0, 0), 2);
+            startY += _pullPartyAllyBarsFinalLocationY.Height + 2;
+            // ## BEGIN - END ## // ADVMACROS
+            // ## BEGIN - END ## // AUTOMATIONS
+            SettingsSection section4 = AddSettingsSection(box, "-----Automations-----");
+            section4.Y = section3.Bounds.Bottom + 40;
+            startY = section3.Bounds.Bottom + 40;
+
+            section4.Add(AddLabel(null, "write in chat or use macro to enable / disable:", startX, startY));
+            section4.Add(AddLabel(null, "(runs in background until disabled)", startX, startY));
+            section4.Add(AddLabel(null, "-automed or macro AutoMeditate (auto meditates \n with 2.5s delay and not targeting)", startX, startY));
+            section4.Add(AddLabel(null, "-engange (auto engage and pathfind to last target)", startX, startY));
+
+            SettingsSection section5 = AddSettingsSection(box, "-----MISC-----");
+            section5.Y = section4.Bounds.Bottom + 40;
+            startY = section4.Bounds.Bottom + 40;
+
+            section5.Add(AddLabel(null, "write in chat to enable / disable:", startX, startY));
+            section5.Add(AddLabel(null, "-mimic (mimic harmful spells 1:1, on beneficial macro defendSelf/defendParty)", startX, startY));
+            section5.Add(AddLabel(null, "Macro: SetMimic_PlayerSerial (define the player to mimic)", startX, startY));
+            section5.Add(AddLabel(null, "-marker X Y (place a dot and line to X Y on world map \n use -marker to remove it)", startX, startY));
+            section5.Add(_autoWorldmapMarker = AddCheckBox(null, "Auto add marker for MapGumps (ie. T-Maps)", _currentProfile.AutoWorldmapMarker, startX, startY));
+            startY += _autoWorldmapMarker.Height + 2;
+            section5.Add(AddLabel(null, "-df (if GreaterHeal cursor is up and you or a party member \n " +
+                                                "gets hit by EB, Explor or FS \n " +
+                                                "and your or the party members condition is met \n " +
+                                                "greater heal will be cast on you or party member \n " +
+                                                "Condition: Poisoned and HP smaller than random between 65 - 80 \n " +
+                                                "Condition: HP smaller than random between 40-70)", startX, startY));
+            // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // OUTLANDS
+            /*
+            section7.Add(_infernoBridge = AddCheckBox(null, "Solve Inferno bridge (needs relog)", ProfileManager.CurrentProfile.InfernoBridge, startX, startY));
+            startY += _infernoBridge.Height + 2;
+
+            section5.Add(_overheadSummonTime = AddCheckBox(null, "Overhead summon time (needs HP overhead enabled) or in healthbar", ProfileManager.CurrentProfile.OverheadSummonTime, startX, startY));
+            startY += _overheadSummonTime.Height + 2;
+            section5.Add(_overheadPeaceTime = AddCheckBox(null, "Overhead peacemaking time (needs HP overhead enabled) or in healthbar", ProfileManager.CurrentProfile.OverheadPeaceTime, startX, startY));
+            startY += _overheadPeaceTime.Height + 2;
+            section5.Add(_mobileHamstrungTime = AddCheckBox(null, "Show hamstrung time on mobile (needs HP lines or HP overhead ernabled) or in healthbar", true, startX, startY)); //has no effect but feature list
+            startY += _mobileHamstrungTime.Height + 2;
+
+            section5.Add(AddLabel(null, "Cooldown (ms): ", startX, startY));
+
+            section5.Add
+            (
+                _mobileHamstrungTimeCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _mobileHamstrungTimeCooldown.SetText(ProfileManager.CurrentProfile.MobileHamstrungTimeCooldown.ToString());
+
+            section6.Add(AddLabel(null, "Cooldown after successfull hamstring (ms)", startX, startY));
+
+            section6.Add
+            (
+                _uccHamstringStrikeCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _uccHamstringStrikeCooldown.SetText(ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstringStrikeCooldown.ToString());
+
+            section6.Add(AddLabel(null, "Cooldown after failed hamstring (ms)", startX, startY));
+
+            section6.Add
+            (
+                _uccHamstringAttemptCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _uccHamstringAttemptCooldown.SetText(ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstringAttemptCooldown.ToString());
+
+            section3.Add(_uccDoH = AddCheckBox(null, "Show Do Hamstring Line (Outlands)", ProfileManager.CurrentProfile.UOClassicCombatBuffbar_DoHEnabled, startX, startY));
+            startY += _uccDoH.Height + 2;
+            section3.Add(_uccGotH = AddCheckBox(null, "Show Got Hamstung Line (Outlands)", ProfileManager.CurrentProfile.UOClassicCombatBuffbar_GotHEnabled, startX, startY));
+            startY += _uccGotH.Height + 2;
+
+            */
+            // ## BEGIN - END ## // OUTLANDS
+            // ## BEGIN - END ## // LOBBY
+            SettingsSection section6 = AddSettingsSection(box, "-----LOBBY-----");
+            section6.Y = section5.Bounds.Bottom + 40;
+            startY = section5.Bounds.Bottom + 40;
+
+            section6.Add(AddLabel(null, "write in chat to enable / disable:", startX, startY));
+            section6.Add(AddLabel(null, "-lobby help (show help menu)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby status (show status)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby connect <IP> (connect to IP)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby diconnect (disconnect)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby target (send your lasttarget to be everyones)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby cast <SPELLNAME> (makes everyone cast a spell)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby drop (drop everyones spell on last target)", startX, startY));
+            section6.Add(AddLabel(null, "-lobby attack (send your lasttarget to be everyones and everyone attacks it)", startX, startY));
+
+            section6.Add(AddLabel(null, "-autohid ((needs connected lobby) broadcast your position when hidden)", startX, startY));
+
+            section6.Add(AddLabel(null, "Macro: LobbyConnect (connect to IP and Port)", startX, startY));
+            section6.Add
+            (
+                _lobbyIP = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    150,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    35
+                )
+            );
+            _lobbyIP.SetText(_currentProfile.LobbyIP.ToString());
+
+            startY += _lobbyIP.Height + 2;
+            section6.AddRight(AddLabel(null, "Lobby IP", 0, 0), 2);
+
+            section6.Add
+            (
+                _lobbyPort = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    19935
+                )
+            );
+            _lobbyPort.SetText(_currentProfile.LobbyPort.ToString());
+            startY += _lobbyPort.Height + 2;
+            section6.AddRight(AddLabel(null, "Lobby Port", 0, 0), 2);
+
+            section6.Add(AddLabel(null, "Macro: LobbyDisconnect (disconnect)", startX, startY));
+            section6.Add(AddLabel(null, "Macro: LobbyTarget (send your lasttarget to be everyones)", startX, startY));
+            section6.Add(AddLabel(null, "Macro: LobbyCastLightning (everyone casts Lightning)", startX, startY));
+            section6.Add(AddLabel(null, "Macro: LobbyCastEB (everyone casts Energy Bolt)", startX, startY));
+            section6.Add(AddLabel(null, "Macro: LobbyDrop (everyone drops spell on target)", startX, startY));
+            // ## BEGIN - END ## // LOBBY
+
+            Add(rightArea, PAGE);
+        }
+        private void BuildMods()
+        {
+            const int PAGE = 15;
+            ScrollArea rightArea = new ScrollArea(190, 20, WIDTH - 210, 420, true);
+
+            int startX = 5;
+            int startY = 5;
+
+            DataBox box = new DataBox(startX, startY, rightArea.Width - 15, 1);
+            box.WantUpdateSize = true;
+            rightArea.Add(box);
+
+            // ## BEGIN - END ## // UI/GUMPS
+            SettingsSection section = AddSettingsSection(box, "-----UI / Gumps-----");
+
+            section.Add(_uccEnableLTBar = AddCheckBox(null, "Enable UCC - LastTarget Bar", _currentProfile.UOClassicCombatLTBar, startX, startY));
+            startY += _uccEnableLTBar.Height + 2;
+            section.Add(AddLabel(null, "(Doubleklick to lock in place)", startX, startY));
+
+            section.Add(_bandageGump = AddCheckBox(null, "Show gump when using bandages", _currentProfile.BandageGump, startX, startY));
+            startY += _highlightContainersWhenMouseIsOver.Height + 2;
+
+            section.Add(AddLabel(null, "Bandage Timer Offset: ", startX, startY));
+
+            section.Add
+            (
+                _bandageGumpOffsetX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _bandageGumpOffsetX.SetText(_currentProfile.BandageGumpOffset.X.ToString());
+            startY += _bandageGumpOffsetX.Height + 2;
+            section.AddRight(AddLabel(null, "X", 0, 0), 2);
+
+            section.Add
+            (
+                _bandageGumpOffsetY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _bandageGumpOffsetY.SetText(_currentProfile.BandageGumpOffset.Y.ToString());
+
+            startY += _bandageGumpOffsetY.Height + 2;
+            section.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            SettingsSection section2 = AddSettingsSection(box, "-----Texture Manager-----");
+            section2.Y = section.Bounds.Bottom + 40;
+
+            startY = section.Bounds.Bottom + 40;
+
+            section2.Add(_textureManagerEnabled = AddCheckBox(null, "Enable TextureManager", _currentProfile.TextureManagerEnabled, startX, startY));
+            startY += _textureManagerEnabled.Height + 2;
+            section2.Add(_textureManagerHalosEnabled = AddCheckBox(null, "Enable TextureManager Halos", _currentProfile.TextureManagerHalos, startX, startY));
+            startY += _textureManagerHalosEnabled.Height + 2;
+            //
+            section2.Add(_textureManagerHumansOnly = AddCheckBox(null, "Humans only", _currentProfile.TextureManagerHumansOnly, startX, startY));
+            startY += _textureManagerHumansOnly.Height + 2;
+            section2.Add(_textureManagerPurple = AddCheckBox(null, "Purple (last attack / last target)", _currentProfile.TextureManagerPurple, startX, startY));
+            startY += _textureManagerPurple.Height + 2;
+            section2.Add(_textureManagerGreen = AddCheckBox(null, "Green (allys / party)", _currentProfile.TextureManagerGreen, startX, startY));
+            startY += _textureManagerGreen.Height + 2;
+            section2.Add(_textureManagerRed = AddCheckBox(null, "Red (criminal / gray / murderer)", _currentProfile.TextureManagerRed, startX, startY));
+            startY += _textureManagerRed.Height + 2;
+            section2.Add(_textureManagerOrange = AddCheckBox(null, "Orange (enemy)", _currentProfile.TextureManagerOrange, startX, startY));
+            startY += _textureManagerOrange.Height + 2;
+            section2.Add(_textureManagerBlue = AddCheckBox(null, "Blue (innocent)", _currentProfile.TextureManagerBlue, startX, startY));
+            startY += _textureManagerBlue.Height + 2;
+            //
+            section2.Add(_textureManagerArrowsEnabled = AddCheckBox(null, "Enable TextureManager Arrows", _currentProfile.TextureManagerArrows, startX, startY));
+            startY += _textureManagerArrowsEnabled.Height + 2;
+            //
+            section2.Add(_textureManagerHumansOnlyArrows = AddCheckBox(null, "Humans only", _currentProfile.TextureManagerHumansOnlyArrows, startX, startY));
+            startY += _textureManagerHumansOnlyArrows.Height + 2;
+            section2.Add(_textureManagerPurpleArrows = AddCheckBox(null, "Purple (last attack / last target)", _currentProfile.TextureManagerPurpleArrows, startX, startY));
+            startY += _textureManagerPurpleArrows.Height + 2;
+            section2.Add(_textureManagerGreenArrows = AddCheckBox(null, "Green (allys / party)", _currentProfile.TextureManagerGreenArrows, startX, startY));
+            startY += _textureManagerGreenArrows.Height + 2;
+            section2.Add(_textureManagerRedArrows = AddCheckBox(null, "Red (criminal / gray / murderer)", _currentProfile.TextureManagerRedArrows, startX, startY));
+            startY += _textureManagerRedArrows.Height + 2;
+            section2.Add(_textureManagerOrangeArrows = AddCheckBox(null, "Orange (enemy)", _currentProfile.TextureManagerOrangeArrows, startX, startY));
+            startY += _textureManagerOrangeArrows.Height + 2;
+            section2.Add(_textureManagerBlueArrows = AddCheckBox(null, "Blue (innocent)", _currentProfile.TextureManagerBlueArrows, startX, startY));
+            startY += _textureManagerBlueArrows.Height + 2;
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            // ## BEGIN - END ## // LINES
+            SettingsSection section3 = AddSettingsSection(box, "-----LINES (LINES UI)-----");
+            section3.Y = section2.Bounds.Bottom + 40;
+
+            startY = section2.Bounds.Bottom + 40;
+
+            section3.Add(_uccEnableLines = AddCheckBox(null, "Enable UCC - Lines", _currentProfile.UOClassicCombatLines, startX, startY));
+            startY += _uccEnableLines.Height + 2;
+            // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // AUTOLOOT
+            SettingsSection section4 = AddSettingsSection(box, "-----AUTOLOOT (AL UI)-----");
+            section4.Y = section3.Bounds.Bottom + 40;
+
+            startY = section3.Bounds.Bottom + 40;
+
+            section4.Add(_uccEnableAL = AddCheckBox(null, "Enable UCC - AL", _currentProfile.UOClassicCombatAL, startX, startY));
+            startY += _uccEnableAL.Height + 2;
+            section4.Add(_uccEnableGridLootColoring = AddCheckBox(null, "Enable GridLootColoring", _currentProfile.UOClassicCombatAL_EnableGridLootColoring, startX, startY));
+            startY += _uccEnableGridLootColoring.Height + 2;
+            section4.Add(_uccBEnableLootAboveID = AddCheckBox(null, "Enable LootAboveID", _currentProfile.UOClassicCombatAL_EnableLootAboveID, startX, startY));
+            startY += _uccBEnableLootAboveID.Height + 2;
+
+            SettingsSection section5 = AddSettingsSection(box, "-----SETTINGS (AL)-----");
+            section5.Y = section4.Bounds.Bottom + 40;
+
+            startY = section4.Bounds.Bottom + 40;
+
+            section5.Add(AddLabel(null, "-----DISABLE / ENABLE AL ON CHANGES BELOW-----", startX, startY));
+
+            section5.Add(AddLabel(null, "Time between looting two items(ms)", startX, startY));
+
+            section5.Add
+            (
+                _uccLootDelay = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccLootDelay.SetText(_currentProfile.UOClassicCombatAL_LootDelay.ToString());
+
+            section5.Add(AddLabel(null, "Time to purge the queue of old items (ms)", startX, startY));
+
+            section5.Add
+            (
+                _uccPurgeDelay = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _uccPurgeDelay.SetText(_currentProfile.UOClassicCombatAL_PurgeDelay.ToString());
+
+            section5.Add(AddLabel(null, "Time between processing the queue (ms)", startX, startY));
+
+            section5.Add
+            (
+                _uccQueueSpeed = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccQueueSpeed.SetText(_currentProfile.UOClassicCombatAL_QueueSpeed.ToString());
+
+            section5.Add(AddLabel(null, "Loot above ID", startX, startY));
+
+            section5.Add
+            (
+                _uccLootAboveID = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    500000
+                )
+            );
+            _uccLootAboveID.SetText(_currentProfile.UOClassicCombatAL_LootAboveID.ToString());
+
+            section5.Add(AddLabel(null, "Gray corpse color", startX, startY));
+
+            section5.Add
+            (
+                _uccSL_Gray = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccSL_Gray.SetText(_currentProfile.UOClassicCombatAL_SL_Gray.ToString());
+
+            section5.Add(AddLabel(null, "Blue corpse color", startX, startY));
+
+            section5.Add
+            (
+                _uccSL_Blue = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccSL_Blue.SetText(_currentProfile.UOClassicCombatAL_SL_Blue.ToString());
+
+            section5.Add(AddLabel(null, "Green corpse color", startX, startY));
+
+            section5.Add
+            (
+                _uccSL_Green = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccSL_Green.SetText(_currentProfile.UOClassicCombatAL_SL_Green.ToString());
+
+            section5.Add(AddLabel(null, "Red corpse color", startX, startY));
+
+            section5.Add
+            (
+                _uccSL_Red = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _uccSL_Red.SetText(_currentProfile.UOClassicCombatAL_SL_Red.ToString());
+            // ## BEGIN - END ## // AUTOLOOT
+            // ## BEGIN - END ## // BUFFBAR
+            SettingsSection section6 = AddSettingsSection(box, "-----BUFFBAR (COOLDOWN UI)-----");
+            section6.Y = section5.Bounds.Bottom + 40;
+
+            startY = section5.Bounds.Bottom + 40;
+
+            section6.Add(_uccEnableBuffbar = AddCheckBox(null, "Enable UCC - Buffbar", _currentProfile.UOClassicCombatBuffbar, startX, startY));
+            startY += _uccEnableBuffbar.Height + 2;
+
+            section6.Add(AddLabel(null, "-----DISABLE / ENABLE BUFFBAR ON CHANGES BELOW-----", startX, startY));
+
+            section6.Add(_uccSwing = AddCheckBox(null, "Show Swing Line", _currentProfile.UOClassicCombatBuffbar_SwingEnabled, startX, startY));
+            startY += _uccSwing.Height + 2;
+            section6.Add(_uccDoD = AddCheckBox(null, "Show Do Disarm Line", _currentProfile.UOClassicCombatBuffbar_DoDEnabled, startX, startY));
+            startY += _uccDoD.Height + 2;
+            section6.Add(_uccGotD = AddCheckBox(null, "Show Got Disarmed Line", _currentProfile.UOClassicCombatBuffbar_GotDEnabled, startX, startY));
+            startY += _uccGotD.Height + 2;
+            section6.Add(_uccLocked = AddCheckBox(null, "Lock in place", _currentProfile.UOClassicCombatBuffbar_Locked, startX, startY));
+            startY += _uccLocked.Height + 2;
+            // ## BEGIN - END ## // BUFFBAR
+            // ## BEGIN - END ## // UCCSETTINGS
+            SettingsSection section7 = AddSettingsSection(box, "-----SETTINGS (BUFFBAR AND SELF)-----");
+            section7.Y = section6.Bounds.Bottom + 40;
+
+            startY = section6.Bounds.Bottom + 40;
+
+            section7.Add(AddLabel(null, "General cooldown when you get disarmed (ms)", startX, startY));
+
+            section7.Add
+            (
+                _uccDisarmedCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _uccDisarmedCooldown.SetText(_currentProfile.UOClassicCombatSelf_DisarmedCooldown.ToString());
+
+            section7.Add(AddLabel(null, "Cooldown after successfull disarm (ms)", startX, startY));
+
+            section7.Add
+            (
+                _uccDisarmStrikeCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccDisarmStrikeCooldown.SetText(_currentProfile.UOClassicCombatSelf_DisarmStrikeCooldown.ToString());
+
+            section7.Add(AddLabel(null, "Cooldown after failed disarm (ms)", startX, startY));
+
+            section7.Add
+            (
+                _uccDisarmAttemptCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _uccDisarmAttemptCooldown.SetText(_currentProfile.UOClassicCombatSelf_DisarmAttemptCooldown.ToString());
+            // ## BEGIN - END ## // UCCSETTINGS
+            // ## BEGIN - END ## // SELF
+            SettingsSection section8 = AddSettingsSection(box, "-----SELF (AUTOMATIONS UI)-----");
+            section8.Y = section7.Bounds.Bottom + 40;
+
+            startY = section7.Bounds.Bottom + 40;
+
+            section8.Add(_uccEnableSelf = AddCheckBox(null, "Enable UCC - Self", _currentProfile.UOClassicCombatSelf, startX, startY));
+            startY += _uccEnableSelf.Height + 2;
+
+            SettingsSection section9 = AddSettingsSection(box, "-----SETTINGS (SELF)-----");
+            section9.Y = section8.Bounds.Bottom + 40;
+
+            startY = section8.Bounds.Bottom + 40;
+
+            //COOLDOWN SETTINGS
+            section9.Add(AddLabel(null, "-----SETTINGS (COOLDOWNS)-----", startX, startY));
+
+            section9.Add(AddLabel(null, "ActionCooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccActionCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccActionCooldown.SetText(_currentProfile.UOClassicCombatSelf_ActionCooldown.ToString());
+
+            section9.Add(AddLabel(null, "Repeated Pouche Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccPoucheCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccPoucheCooldown.SetText(_currentProfile.UOClassicCombatSelf_PoucheCooldown.ToString());
+
+            section9.Add(AddLabel(null, "Repeated Curepot Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccCurepotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccCurepotCooldown.SetText(_currentProfile.UOClassicCombatSelf_CurepotCooldown.ToString());
+
+            section9.Add(AddLabel(null, "Repeated Healpot Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccHealpotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccHealpotCooldown.SetText(_currentProfile.UOClassicCombatSelf_HealpotCooldown.ToString());
+
+            section9.Add(AddLabel(null, "Repeated Refreshpot Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccRefreshpotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccRefreshpotCooldown.SetText(_currentProfile.UOClassicCombatSelf_RefreshpotCooldown.ToString());
+
+            section9.Add(AddLabel(null, "WaitForTarget (oldBandies) (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccWaitForTarget = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccWaitForTarget.SetText(_currentProfile.UOClassicCombatSelf_WaitForTarget.ToString());
+
+            //TRESHOLD SETTINGS
+            SettingsSection section10 = AddSettingsSection(box, "-----SETTINGS (TRESHOLDS)-----");
+            section10.Y = section9.Bounds.Bottom + 40;
+
+            startY = section9.Bounds.Bottom + 40;
+
+            section10.Add(AddLabel(null, "Bandies treshold (diffhits >= ):", startX, startY));
+
+            section10.Add
+            (
+                _uccBandiesHPTreshold = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccBandiesHPTreshold.SetText(_currentProfile.UOClassicCombatSelf_BandiesHPTreshold.ToString());
+
+            section10.Add(_uccBandiesPoison = AddCheckBox(null, "Bandies when poisoned", _currentProfile.UOClassicCombatSelf_BandiesPoison, startX, startY));
+            startY += _uccBandiesPoison.Height + 2;
+
+            section10.Add(AddLabel(null, "Curepot HP treshold (diffhits >= ): ", startX, startY));
+
+            section10.Add
+            (
+                _uccCurepotHPTreshold = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccCurepotHPTreshold.SetText(_currentProfile.UOClassicCombatSelf_CurepotHPTreshold.ToString());
+
+            section10.Add(AddLabel(null, " HP treshold (diffhits >= ): ", startX, startY));
+
+            section10.Add
+            (
+                _uccHealpotHPTreshold = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccHealpotHPTreshold.SetText(_currentProfile.UOClassicCombatSelf_HealpotHPTreshold.ToString());
+
+            section10.Add(AddLabel(null, "Refreshpot Stam treshold (diffstam >= ): ", startX, startY));
+
+            section10.Add
+            (
+                _uccRefreshpotStamTreshold = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccRefreshpotStamTreshold.SetText(_currentProfile.UOClassicCombatSelf_RefreshpotStamTreshold.ToString());
+
+            //MISC SETTINGS AREA
+            SettingsSection section11 = AddSettingsSection(box, "-----SETTINGS (MISC)-----");
+            section11.Y = section10.Bounds.Bottom + 40;
+
+            startY = section10.Bounds.Bottom + 40;
+
+            section11.Add(AddLabel(null, "Auto rearm weps held before got disarmeded (ms)", startX, startY));
+
+            section11.Add
+            (
+                _uccAutoRearmAfterDisarmedCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccAutoRearmAfterDisarmedCooldown.SetText(_currentProfile.UOClassicCombatSelf_AutoRearmAfterDisarmedCooldown.ToString());
+
+            section11.Add(_uccClilocTrigger = AddCheckBox(null, "Use Cliloc Triggers (up time on cliloc and uoc hotkey)", _currentProfile.UOClassicCombatSelf_ClilocTriggers, startX, startY));
+            startY += _uccClilocTrigger.Height + 2;
+
+            section11.Add(_uccMacroTrigger = AddCheckBox(null, "Use Macro Triggers (change uoc hotkey to disarm / pot / rearm through ucc)", _currentProfile.UOClassicCombatSelf_MacroTriggers, startX, startY));
+            startY += _uccMacroTrigger.Height + 2;
+
+            section11.Add(AddLabel(null, "Strength Pot Cooldown (ms)", startX, startY));
+            section11.Add
+            (
+                _uccStrengthPotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    70,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccStrengthPotCooldown.SetText(_currentProfile.UOClassicCombatSelf_StrengthPotCooldown.ToString());
+
+            section11.Add(AddLabel(null, "Agility Pot Cooldown (ms)", startX, startY));
+            section11.Add
+            (
+                _uccDexPotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    70,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccDexPotCooldown.SetText(_currentProfile.UOClassicCombatSelf_DexPotCooldown.ToString());
+
+            section11.Add(AddLabel(null, "Min RNG (ms)", startX, startY));
+
+            section11.Add
+            (
+                _uccRNGMin = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccRNGMin.SetText(_currentProfile.UOClassicCombatSelf_MinRNG.ToString());
+
+            section11.Add(AddLabel(null, "Max RNG (ms)", startX, startY));
+
+            section11.Add
+            (
+                _uccRNGMax = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccRNGMax.SetText(_currentProfile.UOClassicCombatSelf_MaxRNG.ToString());
+            // ## BEGIN - END ## // SELF
+
+            Add(rightArea, PAGE);
+        }
+        // ## BEGIN - END ## // BASICSETUP
 
         public override void OnButtonClick(int buttonID)
         {
@@ -3391,7 +5040,9 @@ namespace ClassicUO.Game.UI.Gumps
                     _invulnerableColorPickerBox.Hue = 0x0030;
                     _drawRoofs.IsChecked = false;
                     _enableCaveBorder.IsChecked = false;
-                    _treeToStumps.IsChecked = false;
+                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    //_treeToStumps.IsChecked = false;
+                    // ## BEGIN - END ## // ART / HUE CHANGES
                     _hideVegetation.IsChecked = false;
                     _noColorOutOfRangeObjects.IsChecked = false;
                     _circleOfTranspRadius.Value = Constants.MIN_CIRCLE_OF_TRANSPARENCY_RADIUS;
@@ -3640,11 +5291,15 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.EnableCaveBorder = _enableCaveBorder.IsChecked;
             }
 
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            /*
             if (_currentProfile.TreeToStumps != _treeToStumps.IsChecked)
             {
                 StaticFilters.CleanTreeTextures();
                 _currentProfile.TreeToStumps = _treeToStumps.IsChecked;
             }
+            */
+            // ## BEGIN - END ## // ART / HUE CHANGES
 
             _currentProfile.FieldsType = _fieldsType.SelectedIndex;
             _currentProfile.HideVegetation = _hideVegetation.IsChecked;
@@ -4130,6 +5785,380 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.TooltipBackgroundOpacity = _tooltip_background_opacity.Value;
             _currentProfile.TooltipDisplayZoom = _tooltip_zoom.Value;
             _currentProfile.TooltipFont = _tooltip_font_selector.GetSelectedFont();
+
+            // ## BEGIN - END ## // BASICSETUP
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            _currentProfile.ColorStealth = _colorStealth.IsChecked;
+            _currentProfile.StealthHue = _stealthColorPickerBox.Hue;
+            _currentProfile.GoldType = _goldType.SelectedIndex;
+            _currentProfile.GoldHue = _goldColorPickerBox.Hue;
+            _currentProfile.ColorGold = _colorGold.IsChecked;
+            _currentProfile.ColorEnergyBolt = _colorEnergyBolt.IsChecked;
+            _currentProfile.EnergyBoltHue = _energyBoltColorPickerBox.Hue;
+            _currentProfile.ColorTreeTile = _colorTreeTile.IsChecked;
+            _currentProfile.TreeTileHue = _treeTileColorPickerBox.Hue;
+            _currentProfile.ColorBlockerTile = _colorBlockerTile.IsChecked;
+            _currentProfile.BlockerTileHue = _blockerTileColorPickerBox.Hue;
+            _currentProfile.BlockerType = _blockerType.SelectedIndex;
+            _currentProfile.StealthNeonType = _stealthNeonType.SelectedIndex;
+            _currentProfile.EnergyBoltNeonType = _energyBoltNeonType.SelectedIndex;
+            _currentProfile.EnergyBoltArtType = _energyBoltArtType.SelectedIndex;
+            if (_currentProfile.TreeType != _treeType.SelectedIndex)
+            {
+                if (_treeType.SelectedIndex == 0)
+                {
+                    StaticFilters.CleanTreeTextures();
+                }
+                _currentProfile.TreeType = _treeType.SelectedIndex;
+            }
+            // ## BEGIN - END ## // ART / HUE CHANGES
+            // ## BEGIN - END ## // VISUAL HELPERS
+            _currentProfile.HighlightTileAtRange = _highlightTileRange.IsChecked;
+            _currentProfile.HighlightTileAtRangeRange = _highlightTileRangeRange.Value;
+            _currentProfile.HighlightTileRangeHue = _highlightTileRangeColorPickerBox.Hue;
+            _currentProfile.HighlightTileAtRangeSpell = _highlightTileRangeSpell.IsChecked;
+            _currentProfile.HighlightTileAtRangeRangeSpell = _highlightTileRangeRangeSpell.Value;
+            _currentProfile.HighlightTileRangeHueSpell = _highlightTileRangeColorPickerBoxSpell.Hue;
+            _currentProfile.GlowingWeaponsType = _glowingWeaponsType.SelectedIndex;
+            _currentProfile.PreviewFields = _previewFields.IsChecked;
+            _currentProfile.OwnAuraByHP = _ownAuraByHP.IsChecked;
+            _currentProfile.HighlightGlowingWeaponsTypeHue = _highlightGlowingWeaponsTypeColorPickerBoxHue.Hue;
+            _currentProfile.HighlightLastTargetType = _highlightLastTargetType.SelectedIndex;
+            _currentProfile.HighlightLastTargetTypePoison = _highlightLastTargetTypePoison.SelectedIndex;
+            _currentProfile.HighlightLastTargetTypePara = _highlightLastTargetTypePara.SelectedIndex;
+            _currentProfile.HighlightLastTargetTypeHue = _highlightLastTargetTypeColorPickerBox.Hue;
+            _currentProfile.HighlightLastTargetTypePoisonHue = _highlightLastTargetTypeColorPickerBoxPoison.Hue;
+            _currentProfile.HighlightLastTargetTypeParaHue = _highlightLastTargetTypeColorPickerBoxPara.Hue;
+            // ## BEGIN - END ## // VISUAL HELPERS
+            // ## BEGIN - END ## // HEALTHBAR
+            _currentProfile.HighlightHealthBarByState = _highlightHealthBarByState.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineSelf = _flashingHealthbarOutlineSelf.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineParty = _flashingHealthbarOutlineParty.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineGreen = _flashingHealthbarOutlineGreen.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineOrange = _flashingHealthbarOutlineOrange.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineAll = _flashingHealthbarOutlineAll.IsChecked;
+            _currentProfile.FlashingHealthbarNegativeOnly = _flashingHealthbarNegativeOnly.IsChecked;
+            _currentProfile.FlashingHealthbarTreshold = _flashingHealthbarTreshold.Value;
+            _currentProfile.HighlightLastTargetHealthBarOutline = _highlightLastTargetHealthBarOutline.IsChecked;
+            // ## BEGIN - END ## // HEALTHBAR
+            // ## BEGIN - END ## // CURSOR
+            _currentProfile.SpellOnCursor = _spellOnCursor.IsChecked;
+            int.TryParse(_spellOnCursorOffsetX.Text, out int spellOnCursorOffsetX);
+            int.TryParse(_spellOnCursorOffsetY.Text, out int spellOnCursorOffsetY);
+            _currentProfile.SpellOnCursorOffset = new Point(spellOnCursorOffsetX, spellOnCursorOffsetY);
+            // ## BEGIN - END ## // CURSOR
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            _currentProfile.OverheadRange = _overheadRange.IsChecked;
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            // ## BEGIN - END ## // OLDHEALTLINES
+            _currentProfile.MultipleUnderlinesSelfParty = _multipleUnderlinesSelfParty.IsChecked;
+            _currentProfile.MultipleUnderlinesSelfPartyBigBars = _multipleUnderlinesSelfPartyBigBars.IsChecked;
+            _currentProfile.MultipleUnderlinesSelfPartyTransparency = _multipleUnderlinesSelfPartyTransparency.Value;
+            _currentProfile.UseOldHealthBars = _useOldHealthBars.IsChecked;
+            // ## BEGIN - END ## // OLDHEALTLINES
+            // ## BEGIN - END ## // MISC
+            _currentProfile.BlackOutlineStatics = _blackOutlineStatics.IsChecked;
+            _currentProfile.IgnoreStaminaCheck = _ignoreStaminaCheck.IsChecked;
+            _currentProfile.SpecialSetLastTargetCliloc = _SpecialSetLastTargetCliloc.IsChecked;
+            _currentProfile.SpecialSetLastTargetClilocText = _SpecialSetLastTargetClilocText.Text;
+            _currentProfile.BlockWoSArtForceAoS = _lockWoSArtForceAoS.IsChecked;
+            _currentProfile.BlockWoSArt = uint.Parse(_blockWoSArt.Text);
+            if (_currentProfile.BlockWoS != _blockWoS.IsChecked)
+            {
+                if (_blockWoS.IsChecked)
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = true;
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = true;
+                }
+                else
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = false;
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = false;
+                }
+                _currentProfile.BlockWoS = _blockWoS.IsChecked;
+            }
+            if (_currentProfile.BlockWoSFelOnly != _blockWoSFelOnly.IsChecked)
+            {
+                if (_blockWoSFelOnly.IsChecked && World.MapIndex == 0)
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = true;
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = true;
+                }
+                else
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = false;
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = false;
+                }
+                _currentProfile.BlockWoSFelOnly = _blockWoSFelOnly.IsChecked;
+            }
+            // ## BEGIN - END ## // MISC
+            // ## BEGIN - END ## // MACROS
+            _currentProfile.LastTargetRange = _lastTargetRange.Value;
+            // ## BEGIN - END ## // MACROS
+            // ## BEGIN - END ## // MISC2
+            _currentProfile.WireFrameView = _wireframeView.IsChecked;
+            _currentProfile.HueImpassableView = _hueImpassableView.IsChecked;
+            _currentProfile.HueImpassableViewHue = _hueImpassableViewColorPickerBox.Hue;
+            _currentProfile.TransparentHousesEnabled = _transparentHouses.IsChecked;
+            _currentProfile.TransparentHousesZ = _transparentHousesZ.Value;
+            _currentProfile.TransparentHousesTransparency = _transparentHousesTransparency.Value;
+            _currentProfile.InvisibleHousesEnabled = _invisibleHouses.IsChecked;
+            _currentProfile.InvisibleHousesZ = _invisibleHousesZ.Value;
+            _currentProfile.IgnoreCoTEnabled = _ignoreCoT.IsChecked;
+            _currentProfile.ShowDeathOnWorldmap = _showDeathOnWorldmap.IsChecked;
+            // ## BEGIN - END ## // MISC2
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            _currentProfile.ShowHPLineInNOH = _showHPLineInNOH.IsChecked;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            // ## BEGIN - END ## // UI/GUMPS
+            _currentProfile.BandageGump = _bandageGump.IsChecked;
+
+            int.TryParse(_bandageGumpOffsetX.Text, out int bandageGumpOffsetX);
+            int.TryParse(_bandageGumpOffsetY.Text, out int bandageGumpOffsetY);
+
+            _currentProfile.BandageGumpOffset = new Point(bandageGumpOffsetX, bandageGumpOffsetY);
+
+            if (_currentProfile.UOClassicCombatLTBar != _uccEnableLTBar.IsChecked)
+            {
+                UOClassicCombatLTBar UOClassicCombatLTBar = UIManager.GetGump<UOClassicCombatLTBar>();
+
+                if (_uccEnableLTBar.IsChecked)
+                {
+                    if (UOClassicCombatLTBar != null)
+                        UOClassicCombatLTBar.Dispose();
+
+                    UOClassicCombatLTBar = new UOClassicCombatLTBar
+                    {
+                        X = _currentProfile.UOClassicCombatLTBarLocation.X,
+                        Y = _currentProfile.UOClassicCombatLTBarLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatLTBar);
+                }
+                else
+                {
+                    if (UOClassicCombatLTBar != null)
+                        UOClassicCombatLTBar.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatLTBar = _uccEnableLTBar.IsChecked;
+            }
+            // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            _currentProfile.TextureManagerEnabled = _textureManagerEnabled.IsChecked;
+            _currentProfile.TextureManagerArrows = _textureManagerArrowsEnabled.IsChecked;
+            _currentProfile.TextureManagerHumansOnlyArrows = _textureManagerHumansOnlyArrows.IsChecked;
+            _currentProfile.TextureManagerPurpleArrows = _textureManagerPurpleArrows.IsChecked;
+            _currentProfile.TextureManagerGreenArrows = _textureManagerGreenArrows.IsChecked;
+            _currentProfile.TextureManagerRedArrows = _textureManagerRedArrows.IsChecked;
+            _currentProfile.TextureManagerOrangeArrows = _textureManagerOrangeArrows.IsChecked;
+            _currentProfile.TextureManagerBlueArrows = _textureManagerBlueArrows.IsChecked;
+            _currentProfile.TextureManagerHalos = _textureManagerHalosEnabled.IsChecked;
+            _currentProfile.TextureManagerHumansOnly = _textureManagerHumansOnly.IsChecked;
+            _currentProfile.TextureManagerPurple = _textureManagerPurple.IsChecked;
+            _currentProfile.TextureManagerGreen = _textureManagerGreen.IsChecked;
+            _currentProfile.TextureManagerRed = _textureManagerRed.IsChecked;
+            _currentProfile.TextureManagerOrange = _textureManagerOrange.IsChecked;
+            _currentProfile.TextureManagerBlue = _textureManagerBlue.IsChecked;
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            // ## BEGIN - END ## // LINES
+            if (_currentProfile.UOClassicCombatLines != _uccEnableLines.IsChecked)
+            {
+                UOClassicCombatLines UOClassicCombatLines = UIManager.GetGump<UOClassicCombatLines>();
+
+                if (_uccEnableLines.IsChecked)
+                {
+                    if (UOClassicCombatLines != null)
+                        UOClassicCombatLines.Dispose();
+
+                    UOClassicCombatLines = new UOClassicCombatLines
+                    {
+                        X = _currentProfile.UOClassicCombatLinesLocation.X,
+                        Y = _currentProfile.UOClassicCombatLinesLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatLines);
+                }
+                else
+                {
+                    if (UOClassicCombatLines != null)
+                        UOClassicCombatLines.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatLines = _uccEnableLines.IsChecked;
+            }
+            // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // AUTOLOOT
+            _currentProfile.UOClassicCombatAL_LootDelay = uint.Parse(_uccLootDelay.Text);
+            _currentProfile.UOClassicCombatAL_PurgeDelay = uint.Parse(_uccPurgeDelay.Text);
+            _currentProfile.UOClassicCombatAL_QueueSpeed = uint.Parse(_uccQueueSpeed.Text);
+
+            _currentProfile.UOClassicCombatAL_EnableGridLootColoring = _uccEnableGridLootColoring.IsChecked;
+            _currentProfile.UOClassicCombatAL_EnableLootAboveID = _uccBEnableLootAboveID.IsChecked;
+
+            _currentProfile.UOClassicCombatAL_LootAboveID = uint.Parse(_uccLootAboveID.Text);
+            _currentProfile.UOClassicCombatAL_SL_Gray = uint.Parse(_uccSL_Gray.Text);
+            _currentProfile.UOClassicCombatAL_SL_Blue = uint.Parse(_uccSL_Blue.Text);
+            _currentProfile.UOClassicCombatAL_SL_Green = uint.Parse(_uccSL_Green.Text);
+            _currentProfile.UOClassicCombatAL_SL_Red = uint.Parse(_uccSL_Red.Text);
+
+            if (_currentProfile.UOClassicCombatAL != _uccEnableAL.IsChecked)
+            {
+                UOClassicCombatAL UOClassicCombatAL = UIManager.GetGump<UOClassicCombatAL>();
+
+                if (_uccEnableAL.IsChecked)
+                {
+                    if (UOClassicCombatAL != null)
+                        UOClassicCombatAL.Dispose();
+
+                    UOClassicCombatAL = new UOClassicCombatAL
+                    {
+                        X = _currentProfile.UOClassicCombatALLocation.X,
+                        Y = _currentProfile.UOClassicCombatALLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatAL);
+                }
+                else
+                {
+                    if (UOClassicCombatAL != null)
+                        UOClassicCombatAL.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatAL = _uccEnableAL.IsChecked;
+            }
+            // ## BEGIN - END ## // AUTOLOOT
+            // ## BEGIN - END ## // BUFFBAR
+            _currentProfile.UOClassicCombatBuffbar_SwingEnabled = _uccSwing.IsChecked;
+            _currentProfile.UOClassicCombatBuffbar_DoDEnabled = _uccDoD.IsChecked;
+            _currentProfile.UOClassicCombatBuffbar_GotDEnabled = _uccGotD.IsChecked;
+            _currentProfile.UOClassicCombatBuffbar_Locked = _uccLocked.IsChecked;
+
+            if (_currentProfile.UOClassicCombatBuffbar != _uccEnableBuffbar.IsChecked)
+            {
+                UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
+
+                if (_uccEnableBuffbar.IsChecked)
+                {
+                    if (UOClassicCombatBuffbar != null)
+                        UOClassicCombatBuffbar.Dispose();
+
+                    UOClassicCombatBuffbar = new UOClassicCombatBuffbar
+                    {
+                        X = _currentProfile.UOClassicCombatBuffbarLocation.X,
+                        Y = _currentProfile.UOClassicCombatBuffbarLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatBuffbar);
+                }
+                else
+                {
+                    if (UOClassicCombatBuffbar != null)
+                        UOClassicCombatBuffbar.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatBuffbar = _uccEnableBuffbar.IsChecked;
+            }
+            // ## BEGIN - END ## // BUFFBAR
+            // ## BEGIN - END ## // UCCSETTINGS
+            _currentProfile.UOClassicCombatSelf_DisarmStrikeCooldown = uint.Parse(_uccDisarmStrikeCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_DisarmAttemptCooldown = uint.Parse(_uccDisarmAttemptCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_DisarmedCooldown = uint.Parse(_uccDisarmedCooldown.Text);
+            // ## BEGIN - END ## // UCCSETTINGS
+            // ## BEGIN - END ## // SELF
+            _currentProfile.UOClassicCombatSelf_ActionCooldown = uint.Parse(_uccActionCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_PoucheCooldown = uint.Parse(_uccPoucheCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_CurepotCooldown = uint.Parse(_uccCurepotCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_HealpotCooldown = uint.Parse(_uccHealpotCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_RefreshpotCooldown = uint.Parse(_uccRefreshpotCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_WaitForTarget = uint.Parse(_uccWaitForTarget.Text);
+
+            _currentProfile.UOClassicCombatSelf_BandiesHPTreshold = uint.Parse(_uccBandiesHPTreshold.Text);
+            _currentProfile.UOClassicCombatSelf_BandiesPoison = _uccBandiesPoison.IsChecked;
+            _currentProfile.UOClassicCombatSelf_CurepotHPTreshold = uint.Parse(_uccCurepotHPTreshold.Text);
+            _currentProfile.UOClassicCombatSelf_HealpotHPTreshold = uint.Parse(_uccHealpotHPTreshold.Text);
+            _currentProfile.UOClassicCombatSelf_RefreshpotStamTreshold = uint.Parse(_uccRefreshpotStamTreshold.Text);
+
+            _currentProfile.UOClassicCombatSelf_AutoRearmAfterDisarmedCooldown = uint.Parse(_uccAutoRearmAfterDisarmedCooldown.Text);
+
+            _currentProfile.UOClassicCombatSelf_StrengthPotCooldown = uint.Parse(_uccStrengthPotCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_DexPotCooldown = uint.Parse(_uccDexPotCooldown.Text);
+
+            _currentProfile.UOClassicCombatSelf_MinRNG = int.Parse(_uccRNGMin.Text);
+            _currentProfile.UOClassicCombatSelf_MaxRNG = int.Parse(_uccRNGMax.Text);
+
+            _currentProfile.UOClassicCombatSelf_ClilocTriggers = _uccClilocTrigger.IsChecked;
+            _currentProfile.UOClassicCombatSelf_MacroTriggers = _uccMacroTrigger.IsChecked;
+
+            UOClassicCombatSelf UOClassicCombatSelfCurrent = UIManager.GetGump<UOClassicCombatSelf>();
+            if (UOClassicCombatSelfCurrent != null)
+                UOClassicCombatSelfCurrent.UpdateVars();
+
+            if (_currentProfile.UOClassicCombatSelf != _uccEnableSelf.IsChecked)
+            {
+                UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();
+
+                if (_uccEnableSelf.IsChecked)
+                {
+                    if (UOClassicCombatSelf != null)
+                        UOClassicCombatSelf.Dispose();
+
+                    UOClassicCombatSelf = new UOClassicCombatSelf
+                    {
+                        X = _currentProfile.UOClassicCombatSelfLocation.X,
+                        Y = _currentProfile.UOClassicCombatSelfLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatSelf);
+                }
+                else
+                {
+                    if (UOClassicCombatSelf != null)
+                        UOClassicCombatSelf.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatSelf = _uccEnableSelf.IsChecked;
+            }
+            // ## BEGIN - END ## // SELF
+            // ## BEGIN - END ## // ADVMACROS
+            int.TryParse(_pullFriendlyBarsX.Text, out int pullFriendlyBarsX);
+            int.TryParse(_pullFriendlyBarsY.Text, out int pullFriendlyBarsY);
+            _currentProfile.PullFriendlyBars = new Point(pullFriendlyBarsX, pullFriendlyBarsY);
+            int.TryParse(_pullFriendlyBarsFinalLocationX.Text, out int pullFriendlyBarsFinalLocationX);
+            int.TryParse(_pullFriendlyBarsFinalLocationY.Text, out int pullFriendlyBarsFinalLocationY);
+            _currentProfile.PullFriendlyBarsFinalLocation = new Point(pullFriendlyBarsFinalLocationX, pullFriendlyBarsFinalLocationY);
+
+            int.TryParse(_pullEnemyBarsX.Text, out int pullEnemyBarsX);
+            int.TryParse(_pullEnemyBarsY.Text, out int pullEnemyBarsY);
+            _currentProfile.PullEnemyBars = new Point(pullEnemyBarsX, pullEnemyBarsY);
+            int.TryParse(_pullEnemyBarsFinalLocationX.Text, out int pullEnemyBarsFinalLocationX);
+            int.TryParse(_pullEnemyBarsFinalLocationY.Text, out int pullEnemyBarsFinalLocationY);
+            _currentProfile.PullEnemyBarsFinalLocation = new Point(pullEnemyBarsFinalLocationX, pullEnemyBarsFinalLocationY);
+
+            int.TryParse(_pullPartyAllyBarsX.Text, out int pullPartyAllyBarsX);
+            int.TryParse(_pullPartyAllyBarsY.Text, out int pullPartyAllyBarsY);
+            _currentProfile.PullPartyAllyBars = new Point(pullPartyAllyBarsX, pullPartyAllyBarsY);
+            int.TryParse(_pullPartyAllyBarsFinalLocationX.Text, out int pullPartyAllyBarsFinalLocationX);
+            int.TryParse(_pullPartyAllyBarsFinalLocationY.Text, out int pullPartyAllyBarsFinalLocationY);
+            _currentProfile.PullPartyAllyBarsFinalLocation = new Point(pullPartyAllyBarsFinalLocationX, pullPartyAllyBarsFinalLocationY);
+            // ## BEGIN - END ## // ADVMACROS
+            // ## BEGIN - END ## // AUTOMATIONS
+            _currentProfile.AutoWorldmapMarker = _autoWorldmapMarker.IsChecked;
+            // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // OUTLANDS
+            /*
+            ProfileManager.CurrentProfile.InfernoBridge = _infernoBridge.IsChecked;
+            ProfileManager.CurrentProfile.OverheadSummonTime = _overheadSummonTime.IsChecked;
+            ProfileManager.CurrentProfile.OverheadPeaceTime = _overheadPeaceTime.IsChecked;
+            ProfileManager.CurrentProfile.MobileHamstrungTime = _mobileHamstrungTime.IsChecked;
+            ProfileManager.CurrentProfile.MobileHamstrungTimeCooldown = uint.Parse(_mobileHamstrungTimeCooldown.Text);
+            ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstringStrikeCooldown = uint.Parse(_uccHamstringStrikeCooldown.Text);
+            ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstringAttemptCooldown = uint.Parse(_uccHamstringAttemptCooldown.Text);
+            ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstrungCooldown = uint.Parse(_uccHamstrungCooldown.Text);
+            ProfileManager.CurrentProfile.UOClassicCombatBuffbar_DoHEnabled = _uccDoH.IsChecked;
+            ProfileManager.CurrentProfile.UOClassicCombatBuffbar_GotHEnabled = _uccGotH.IsChecked;
+            */
+            // ## BEGIN - END ## // OUTLANDS
+            // ## BEGIN - END ## // LOBBY
+            _currentProfile.LobbyIP = _lobbyIP.Text;
+            _currentProfile.LobbyPort = _lobbyPort.Text;
+            // ## BEGIN - END ## // LOBBY
+            // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
         }
