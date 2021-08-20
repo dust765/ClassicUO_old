@@ -54,6 +54,10 @@ namespace ClassicUO.Game.GameObjects
 
         public ushort OriginalGraphic { get; private set; }
 
+        // ## BEGIN - END ## // ART / HUE CHANGES
+        public ushort OriginalHue { get; private set; }
+        // ## BEGIN - END ## // ART / HUE CHANGES
+
         public ref StaticTiles ItemData => ref TileDataLoader.Instance.StaticData[Graphic];
 
         public bool IsVegetation;
@@ -63,7 +67,11 @@ namespace ClassicUO.Game.GameObjects
         {
             Static s = _pool.GetOne();
             s.Graphic = s.OriginalGraphic = graphic;
-            s.Hue = hue;
+            // ## BEGIN - END ## // ART / HUE CHANGES FIX1
+            //s.Hue = hue;
+            // ## BEGIN - END ## // ART / HUE CHANGES FIX1
+            s.Hue = s.OriginalHue = hue;
+            // ## BEGIN - END ## // ART / HUE CHANGES FIX1
             s.UpdateGraphicBySeason();
 
             if (s.ItemData.Height > 5 || s.ItemData.Height == 0)
@@ -113,5 +121,12 @@ namespace ClassicUO.Game.GameObjects
             base.Destroy();
             _pool.ReturnOne(this);
         }
+
+        // ## BEGIN - END ## // ART / HUE CHANGES
+        public void RestoreOriginalHue()
+        {
+            Hue = OriginalHue;
+        }
+        // ## BEGIN - END ## // ART / HUE CHANGES
     }
 }
