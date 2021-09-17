@@ -2862,6 +2862,7 @@ namespace ClassicUO.Network
                 {
                     if (World.Player.IsDead)
                     {
+                        NetClient.Socket.Send_DeathScreen();
                         World.ChangeSeason(Game.Managers.Season.Desolation, 42);
                     }
                     else
@@ -3049,6 +3050,12 @@ namespace ClassicUO.Network
             Entity corpse = World.Get(serial);
 
             if (corpse == null)
+            {
+                return;
+            }
+
+            // if it's not a corpse we should skip this [?]
+            if (corpse.Graphic != 0x2006)
             {
                 return;
             }
@@ -4806,6 +4813,22 @@ namespace ClassicUO.Network
 
         private static void Logout(ref StackDataReader p)
         {
+            // http://docs.polserver.com/packets/index.php?Packet=0xD1
+
+            if (Client.Game.GetScene<GameScene>().DisconnectionRequested &&
+                (World.ClientFeatures.Flags & CharacterListFlags.CLF_OWERWRITE_CONFIGURATION_BUTTON) != 0)
+            {
+                if (p.ReadBool())
+                {
+                    // client can disconnect
+                    NetClient.Socket.Disconnect();
+                    Client.Game.SetScene(new LoginScene());
+                }
+                else
+                {
+                    Log.Warn("0x1D - client asked to disconnect but server answered 'NO!'");
+                }
+            }
         }
 
         private static void MegaCliloc(ref StackDataReader p)

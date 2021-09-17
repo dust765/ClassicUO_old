@@ -1096,7 +1096,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                                             for (int c = 0; c < count; ++c, ++sb)
                                             {
-                                                if (sb->Color != 0 && sb->Color != 0xFFFF && !GameObjectHelper.IsNoDrawable(sb->Color))
+                                                if (sb->Color != 0 && sb->Color != 0xFFFF && GameObject.CanBeDrawn(sb->Color))
                                                 {
                                                     int block = (mapY + sb->Y + OFFSET_PIX_HALF) * (realWidth + OFFSET_PIX) + mapX + sb->X + OFFSET_PIX_HALF;
 
@@ -1166,17 +1166,13 @@ namespace ClassicUO.Game.UI.Gumps
                                     realHeight += OFFSET_PIX;
                                 }
 
-                                if (_mapTexture == null || _mapTexture.IsDisposed)
-                                {
-                                    _mapTexture = new UOTexture(realWidth, realHeight);
-                                }
-                                
+                                _mapTexture = new UOTexture(realWidth, realHeight);
                                 _mapTexture.SetData(buffer, 0, realWidth * realHeight);
                             }
                             finally
                             {
                                 System.Buffers.ArrayPool<sbyte>.Shared.Return(allZ);
-                                System.Buffers.ArrayPool<uint>.Shared.Return(buffer);
+                                System.Buffers.ArrayPool<uint>.Shared.Return(buffer, true);
                             }
                         }
                         catch (Exception ex)
@@ -1290,36 +1286,38 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (mapFile != null && Path.GetExtension(mapFile).ToLower().Equals(".xml")) // Ultima Mapper
                             {
-                                XmlTextReader reader = new XmlTextReader(mapFile);
-
-                                while (reader.Read())
+                                using (XmlTextReader reader = new XmlTextReader(File.Open(mapFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
                                 {
-                                    if (reader.Name.Equals("Marker"))
+                                    while (reader.Read())
                                     {
-                                        WMapMarker marker = new WMapMarker
+                                        if (reader.Name.Equals("Marker"))
                                         {
-                                            X = int.Parse(reader.GetAttribute("X")),
-                                            Y = int.Parse(reader.GetAttribute("Y")),
-                                            Name = reader.GetAttribute("Name"),
-                                            MapId = int.Parse(reader.GetAttribute("Facet")),
-                                            Color = Color.White,
-                                            ZoomIndex = 3
-                                        };
+                                            WMapMarker marker = new WMapMarker
+                                            {
+                                                X = int.Parse(reader.GetAttribute("X")),
+                                                Y = int.Parse(reader.GetAttribute("Y")),
+                                                Name = reader.GetAttribute("Name"),
+                                                MapId = int.Parse(reader.GetAttribute("Facet")),
+                                                Color = Color.White,
+                                                ZoomIndex = 3
+                                            };
 
-                                        if (_markerIcons.TryGetValue(reader.GetAttribute("Icon").ToLower(), out Texture2D value))
-                                        {
-                                            marker.MarkerIcon = value;
+                                            if (_markerIcons.TryGetValue(reader.GetAttribute("Icon").ToLower(), out Texture2D value))
+                                            {
+                                                marker.MarkerIcon = value;
 
-                                            marker.MarkerIconName = reader.GetAttribute("Icon").ToLower();
+                                                marker.MarkerIconName = reader.GetAttribute("Icon").ToLower();
+                                            }
+
+                                            markerFile.Markers.Add(marker);
                                         }
-
-                                        markerFile.Markers.Add(marker);
                                     }
+
                                 }
                             }
                             else if (mapFile != null && Path.GetExtension(mapFile).ToLower().Equals(".map")) //UOAM
                             {
-                                using (StreamReader reader = new StreamReader(mapFile))
+                                using (StreamReader reader = new StreamReader(File.Open(mapFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
                                 {
                                     while (!reader.EndOfStream)
                                     {
@@ -1371,7 +1369,7 @@ namespace ClassicUO.Game.UI.Gumps
                             }
                             else if (mapFile != null) //CSV x,y,mapindex,name of marker,iconname,color,zoom
                             {
-                                using (StreamReader reader = new StreamReader(mapFile))
+                                using (StreamReader reader = new StreamReader(File.Open(mapFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
                                 {
                                     while (!reader.EndOfStream)
                                     {

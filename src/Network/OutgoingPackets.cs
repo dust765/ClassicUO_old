@@ -1544,9 +1544,9 @@ namespace ClassicUO.Network
             writer.Dispose();
         }
 
-        public static void Send_LogoutNotification(this NetClient socket, uint serial, uint gold, uint platinum)
+        public static void Send_LogoutNotification(this NetClient socket)
         {
-            const byte ID = 0x05;
+            const byte ID = 0xD1;
 
             int length = PacketsTable.GetPacketLength(ID);
 
@@ -1559,7 +1559,7 @@ namespace ClassicUO.Network
                 writer.WriteZero(2);
             }
 
-            writer.WriteUInt32BE(0xFFFF_FFFF);
+            writer.WriteUInt8(0x00);
 
             if (length < 0)
             {
@@ -4454,6 +4454,37 @@ namespace ClassicUO.Network
             {
                 writer.Seek(1, SeekOrigin.Begin);
                 writer.WriteUInt16BE((ushort) writer.BytesWritten);
+            }
+            else
+            {
+                writer.WriteZero(length - writer.BytesWritten);
+            }
+
+            socket.Send(writer.AllocatedBuffer, writer.BytesWritten);
+            writer.Dispose();
+        }
+
+        public static void Send_DeathScreen(this NetClient socket)
+        {
+            const byte ID = 0x2C;
+
+            int length = PacketsTable.GetPacketLength(ID);
+
+            StackDataWriter writer = new StackDataWriter(length < 0 ? 64 : length);
+
+            writer.WriteUInt8(ID);
+
+            if (length < 0)
+            {
+                writer.WriteZero(2);
+            }
+
+            writer.WriteUInt8(0x02); // Ghost
+
+            if (length < 0)
+            {
+                writer.Seek(1, SeekOrigin.Begin);
+                writer.WriteUInt16BE((ushort)writer.BytesWritten);
             }
             else
             {
