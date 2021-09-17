@@ -422,7 +422,7 @@ namespace ClassicUO.Game.UI.Gumps.Login
                new HtmlControl
                (
                    htmlX + 150, htmlY, 150, 15, false, false, false,
-                   "<body link=\"#ad9413\" vlink=\"#00FF00\" ><a href=\"https://github.com/dust765\">Project dust765",
+                   "<body link=\"#FF00FF00\" vlink=\"#FF00FF00\" ><a href=\"https://github.com/dust765/ClassicUO/tree/dev_dust765\">Project dust765",
                    0x32, true, isunicode: true, style: FontStyle.BlackBorder
                )
            );

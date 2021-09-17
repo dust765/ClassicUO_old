@@ -585,6 +585,13 @@ namespace ClassicUO.Game.Scenes
                 {
                     ref var itemData = ref staticc.ItemData;
 
+                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    if (obj is Static st)
+                    {
+                        st = CombatCollection.GSDSFilters(st);
+                    }
+                    // ## BEGIN - END ## // ART / HUE CHANGES
+
                     if (itemData.IsInternal)
                     {
                         continue;
@@ -601,7 +608,11 @@ namespace ClassicUO.Game.Scenes
                     }
 
                     //we avoid to hide impassable foliage or bushes, if present...
-                    if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    //if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
+                    // ## BEGIN - END ## // ART / HUE CHANGES
                     {
                         continue;
                     }
@@ -652,7 +663,11 @@ namespace ClassicUO.Game.Scenes
 
                     if (!itemData.IsMultiMovable)
                     {
-                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        //if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
                         {
                             continue;
                         }
@@ -662,24 +677,6 @@ namespace ClassicUO.Game.Scenes
                             continue;
                         }
                     }          
-                        //we avoid to hide impassable foliage or bushes, if present...
-
-                        // ## BEGIN - END ## // ART / HUE CHANGES
-                        /*
-                        if (ProfileManager.CurrentProfile.TreeToStumps && itemData.IsFoliage && !itemData.IsMultiMovable && !(obj is Multi) || ProfileManager.CurrentProfile.HideVegetation && (obj is Multi mm && mm.IsVegetation || obj is Static st && st.IsVegetation))
-                        {
-                            continue;
-                        }
-                        */
-                        // ## BEGIN - END ## // ART / HUE CHANGES
-                        if (obj is Static st)
-                        {
-                            st = CombatCollection.GSDSFilters(st);
-                        }
-                        if ((ProfileManager.CurrentProfile.TreeType != 0 && itemData.IsFoliage && !itemData.IsMultiMovable && !(obj is Multi)) ||
-                            (ProfileManager.CurrentProfile.HideVegetation && ((obj is Multi mm && mm.IsVegetation) || (obj is Static sta && sta.IsVegetation))))
-                            continue;
-                        // ## BEGIN - END ## // ART / HUE CHANGES
 
                     byte height = 0;
 
@@ -762,7 +759,11 @@ namespace ClassicUO.Game.Scenes
                         continue;
                     }
 
-                    if (!itemData.IsMultiMovable && itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    //if (!itemData.IsMultiMovable && itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    if (!itemData.IsMultiMovable && itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
+                    // ## BEGIN - END ## // ART / HUE CHANGES
                     {
                         continue;
                     }
@@ -876,7 +877,11 @@ namespace ClassicUO.Game.Scenes
                         }
 
                         //we avoid to hide impassable foliage or bushes, if present...
-                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        //if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
                         {
                             continue;
                         }
@@ -925,7 +930,11 @@ namespace ClassicUO.Game.Scenes
                         }
 
                         //we avoid to hide impassable foliage or bushes, if present...
-                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        //if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
                         {
                             continue;
                         }
@@ -1022,7 +1031,11 @@ namespace ClassicUO.Game.Scenes
                             continue;
                         }
 
-                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        //if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
+                        // ## BEGIN - END ## // ART / HUE CHANGES
                         {
                             continue;
                         }
