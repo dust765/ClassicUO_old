@@ -369,7 +369,7 @@ namespace ClassicUO.Dust765.Dust765
             p1.X = (int) (mobile.RealScreenPosition.X + mobile.Offset.X + 22);
             p1.Y = (int) (mobile.RealScreenPosition.Y + (mobile.Offset.Y - mobile.Offset.Z) - (height + centerY + 8 + 22) + (mobile.IsGargoyle && mobile.IsFlying ? -22 : !mobile.IsMounted ? 22 : 0));
 
-            if (mobile.ObjectHandlesOpened)
+            if (mobile.ObjectHandlesStatus == ObjectHandlesStatus.DISPLAYING)
             {
                 p1.Y -= Constants.OBJECT_HANDLES_GUMP_HEIGHT + 5;
             }
