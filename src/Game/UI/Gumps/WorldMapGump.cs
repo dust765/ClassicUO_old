@@ -1785,10 +1785,10 @@ namespace ClassicUO.Game.UI.Gumps
                     int sx = World.Player.DeathX - _center.X;
                     int sy = World.Player.DeathY - _center.Y;
 
-                    (int rotX, int rotY) = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
+                    Point pdrot = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
 
-                    rotX += gX + halfWidth;
-                    rotY += gY + halfHeight;
+                    pdrot.X += gX + halfWidth;
+                    pdrot.Y += gY + halfHeight;
 
                     const int DOT_SIZE = 4;
                     const int DOT_SIZE_HALF = DOT_SIZE >> 1;
@@ -1802,7 +1802,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                     batcher.Draw2D
                     (
-                        SolidColorTextureCache.GetTexture(Color.YellowGreen), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, DOT_SIZE,
+                        SolidColorTextureCache.GetTexture(Color.YellowGreen), pdrot.X - DOT_SIZE_HALF, pdrot.Y - DOT_SIZE_HALF, DOT_SIZE,
                         DOT_SIZE, ref HueVector
                     );
 
@@ -1810,14 +1810,14 @@ namespace ClassicUO.Game.UI.Gumps
                     int psx = World.Player.X - _center.X;
                     int psy = World.Player.Y - _center.Y;
 
-                    (int protX, int protY) = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
+                    Point prot = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
 
-                    protX += gX + halfWidth;
-                    protY += gY + halfHeight;
+                    prot.X += gX + halfWidth;
+                    prot.Y += gY + halfHeight;
 
-                    int ox = (rotX - DOT_SIZE_HALF + protX - DOT_SIZE_HALF) / 2;
-                    int oy = (rotY - DOT_SIZE_HALF + protY - DOT_SIZE_HALF) / 2;
-                    batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.YellowGreen), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, protX - DOT_SIZE_HALF, protY - DOT_SIZE_HALF, ox, oy);
+                    int ox = (prot.X - DOT_SIZE_HALF + prot.X - DOT_SIZE_HALF) / 2;
+                    int oy = (prot.Y - DOT_SIZE_HALF + prot.Y - DOT_SIZE_HALF) / 2;
+                    batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.YellowGreen), prot.X - DOT_SIZE_HALF, prot.Y - DOT_SIZE_HALF, prot.X - DOT_SIZE_HALF, prot.Y - DOT_SIZE_HALF, ox, oy);
                 }
             }
             // ## BEGIN - END ## // MISC2
@@ -1829,17 +1829,17 @@ namespace ClassicUO.Game.UI.Gumps
                 int sx = _tempTmapX - _center.X;
                 int sy = _tempTmapY - _center.Y;
 
-                (int rotX, int rotY) = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
+                Point trot = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
 
-                rotX += gX + halfWidth;
-                rotY += gY + halfHeight;
+                trot.X += gX + halfWidth;
+                trot.Y += gY + halfHeight;
 
                 const int DOT_SIZE = 4;
                 const int DOT_SIZE_HALF = DOT_SIZE >> 1;
 
                 batcher.Draw2D
                 (
-                    SolidColorTextureCache.GetTexture(Color.Orange), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, DOT_SIZE,
+                    SolidColorTextureCache.GetTexture(Color.Orange), trot.X - DOT_SIZE_HALF, trot.Y - DOT_SIZE_HALF, DOT_SIZE,
                     DOT_SIZE, ref HueVector
                 );
 
@@ -1847,14 +1847,14 @@ namespace ClassicUO.Game.UI.Gumps
                 int psx = World.Player.X - _center.X;
                 int psy = World.Player.Y - _center.Y;
 
-                (int protX, int protY) = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
+                Point prot = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
 
-                protX += gX + halfWidth;
-                protY += gY + halfHeight;
+                prot.X += gX + halfWidth;
+                prot.Y += gY + halfHeight;
 
-                int ox = (rotX - DOT_SIZE_HALF + protX - DOT_SIZE_HALF) / 2;
-                int oy = (rotY - DOT_SIZE_HALF + protY - DOT_SIZE_HALF) / 2;
-                batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.DarkRed), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, protX - DOT_SIZE_HALF, protY - DOT_SIZE_HALF, ox, oy);
+                int ox = (prot.X - DOT_SIZE_HALF + prot.X - DOT_SIZE_HALF) / 2;
+                int oy = (prot.Y - DOT_SIZE_HALF + prot.Y - DOT_SIZE_HALF) / 2;
+                batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.DarkRed), prot.X - DOT_SIZE_HALF, prot.Y - DOT_SIZE_HALF, prot.X - DOT_SIZE_HALF, prot.Y - DOT_SIZE_HALF, ox, oy);
             }
 
             //COMMAND
@@ -1864,17 +1864,17 @@ namespace ClassicUO.Game.UI.Gumps
                 int sx = _tempX - _center.X;
                 int sy = _tempY - _center.Y;
 
-                (int rotX, int rotY) = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
+                Point dprot = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
 
-                rotX += gX + halfWidth;
-                rotY += gY + halfHeight;
+                dprot.X += gX + halfWidth;
+                dprot.Y += gY + halfHeight;
 
                 const int DOT_SIZE = 4;
                 const int DOT_SIZE_HALF = DOT_SIZE >> 1;
 
                 batcher.Draw2D
                 (
-                    SolidColorTextureCache.GetTexture(Color.Orange), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, DOT_SIZE,
+                    SolidColorTextureCache.GetTexture(Color.Orange), dprot.X - DOT_SIZE_HALF, dprot.Y - DOT_SIZE_HALF, DOT_SIZE,
                     DOT_SIZE, ref HueVector
                 );
 
@@ -1882,14 +1882,14 @@ namespace ClassicUO.Game.UI.Gumps
                 int psx = World.Player.X - _center.X;
                 int psy = World.Player.Y - _center.Y;
 
-                (int protX, int protY) = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
+                Point prot = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
 
-                protX += gX + halfWidth;
-                protY += gY + halfHeight;
+                prot.X += gX + halfWidth;
+                prot.Y += gY + halfHeight;
 
-                int ox = (rotX - DOT_SIZE_HALF + protX - DOT_SIZE_HALF) / 2;
-                int oy = (rotY - DOT_SIZE_HALF + protY - DOT_SIZE_HALF) / 2;
-                batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.DarkRed), rotX - DOT_SIZE_HALF, rotY - DOT_SIZE_HALF, protX - DOT_SIZE_HALF, protY - DOT_SIZE_HALF, ox, oy);
+                int ox = (prot.X - DOT_SIZE_HALF + prot.X - DOT_SIZE_HALF) / 2;
+                int oy = (prot.Y - DOT_SIZE_HALF + prot.Y - DOT_SIZE_HALF) / 2;
+                batcher.DrawLine(SolidColorTextureCache.GetTexture(Color.DarkRed), prot.X - DOT_SIZE_HALF, prot.Y - DOT_SIZE_HALF, prot.X - DOT_SIZE_HALF, prot.Y - DOT_SIZE_HALF, ox, oy);
             }
             // ## BEGIN - END ## // AUTOMATIONS
 
