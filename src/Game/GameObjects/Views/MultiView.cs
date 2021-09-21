@@ -133,6 +133,11 @@ namespace ClassicUO.Game.GameObjects
                     hueVec.Y = 1;
                 }
             }
+            if (ProfileManager.CurrentProfile.AutoRangeDisplayActive && Distance == ProfileManager.CurrentProfile.AutoRangeDisplayActiveRange)
+            {
+                hueVec.X = ProfileManager.CurrentProfile.AutoRangeDisplayHue;
+                hueVec.Y = 1;
+            }
             if (ProfileManager.CurrentProfile.PreviewFields)
             {
                 if (CombatCollection.MultiFieldPreview(this))
@@ -164,13 +169,24 @@ namespace ClassicUO.Game.GameObjects
             // ## BEGIN - END ## // MISC2
             if (ProfileManager.CurrentProfile.TransparentHousesEnabled)
             {
-                if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ)
-                    hueVec.Z = (float) ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
+                GameObject tile = World.Map.GetTile(X, Y);
+
+                if (tile != null)
+                {
+                    if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ && (Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
+                        hueVec.Z = (float) ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
+                }
             }
-            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled && (Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ)
+            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled)
             {
-                //DO NOT DRAW IT
-                return false;
+                GameObject tile = World.Map.GetTile(X, Y);
+
+                if (tile != null)
+                {
+                    if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ && (Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
+                        //DO NOT DRAW IT
+                        return false;
+                }
             }
             // ## BEGIN - END ## // MISC2
 

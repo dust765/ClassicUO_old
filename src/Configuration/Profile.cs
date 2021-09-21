@@ -349,6 +349,10 @@ namespace ClassicUO.Configuration
         public bool BlockWoSFelOnly { get; set; } = false;
         public uint BlockWoSArt { get; set; } = 1872;
         public bool BlockWoSArtForceAoS { get; set; } = false;
+        public bool BlockEnergyF { get; set; } = false;
+        public bool BlockEnergyFFelOnly { get; set; } = false;
+        public uint BlockEnergyFArt { get; set; } = 1872;
+        public bool BlockEnergyFArtForceAoS { get; set; } = false;
         public bool BlackOutlineStatics { get; set; } = false;
         // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // MACROS
@@ -368,6 +372,7 @@ namespace ClassicUO.Configuration
         public int TransparentHousesTransparency { get; set; }
         public bool InvisibleHousesEnabled { get; set; } = false;
         public int InvisibleHousesZ { get; set; }
+        public int DontRemoveHouseBelowZ { get; set; } = 5;
         public bool IgnoreCoTEnabled { get; set; } = false;
         public bool ShowDeathOnWorldmap { get; set; } = false;
         // ## BEGIN - END ## // MISC2
@@ -452,6 +457,10 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // SELF
         public bool UOClassicCombatSelf { get; set; } = false;
         public Point UOClassicCombatSelfLocation { get; set; } = new Point(25, 25);
+        public bool UOClassicCombatSelf_ColoredPouches { get; set; } = false;
+        public ushort UOClassicCombatSelf_ColoredPouchesColor { get; set; } = 38;
+        public bool UOClassicCombatSelf_AutoEApple { get; set; } = true;
+        public uint UOClassicCombatSelf_EAppleCooldown { get; set; } = 31000;
         public bool UOClassicCombatSelf_AutoBandage { get; set; } = true;
         public bool UOClassicCombatSelf_AutoPouche { get; set; } = true;
         public bool UOClassicCombatSelf_AutoCurepot { get; set; } = true;
@@ -517,6 +526,12 @@ namespace ClassicUO.Configuration
         public string LobbyIP { get; set; } = "127.0.0.1";
         public string LobbyPort { get; set; } = "2596";
         // ## BEGIN - END ## // LOBBY
+        // ## BEGIN - END ## // AUTOS
+        public bool AutoRangeDisplayAlways { get; set; } = false;
+        public bool AutoRangeDisplayActive { get; set; } = false;
+        public int AutoRangeDisplayActiveRange { get; set; } = 10;
+        public ushort AutoRangeDisplayHue { get; set; } = 0x0074;
+        // ## BEGIN - END ## // AUTOS
         // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;

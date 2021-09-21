@@ -5750,6 +5750,19 @@ namespace ClassicUO.Network
                 graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockWoSArt);
                 hue = 945;
             }
+            if (ProfileManager.CurrentProfile.BlockEnergyFArtForceAoS)
+            {
+                if (graphic >= 14662 && graphic <= 14692) //Regular EField //graphic >= 0x3946 && graphic <= 0x3964
+                {
+                    graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockEnergyFArt);
+                    hue = 293;
+                }
+                if (graphic == 10408 && hue == 0x0125) //Razor CE - WallStaticID - Filters/WallStaticFilter.cs / Razor Enhanced - WallStaticID - Filters.cs / (hue: 0x0125)
+                {
+                    graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockEnergyFArt);
+                    hue = 293;
+                }
+            }
             // ## BEGIN - END ## // MISC
 
             if (serial != World.Player)

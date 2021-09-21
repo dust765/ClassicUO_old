@@ -205,15 +205,15 @@ namespace ClassicUO.Game.UI.Gumps
         private HSliderBar _multipleUnderlinesSelfPartyTransparency;
         // ## BEGIN - END ## // OLDHEALTLINES
         // ## BEGIN - END ## // MISC
-        private Checkbox _offscreenTargeting, _SpecialSetLastTargetCliloc, _blackOutlineStatics, _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _lockWoSArtForceAoS;
-        private InputField _SpecialSetLastTargetClilocText, _blockWoSArt;
+        private Checkbox _offscreenTargeting, _SpecialSetLastTargetCliloc, _blackOutlineStatics, _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _blockWoSArtForceAoS, _blockEnergyF, _blockEnergyFFelOnly, _blockEnergyFArtForceAoS;
+        private InputField _SpecialSetLastTargetClilocText, _blockWoSArt, _blockEnergyFArt;
         // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // MACROS
         private HSliderBar _lastTargetRange;
         // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // MISC2
         private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap;
-        private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ;
+        private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ, _dontRemoveHouseBelowZ;
         // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // NAMEOVERHEAD
         private Checkbox _showHPLineInNOH;
@@ -240,8 +240,8 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _uccDisarmStrikeCooldown, _uccDisarmAttemptCooldown, _uccDisarmedCooldown;
         // ## BEGIN - END ## // UCCSETTINGS
         // ## BEGIN - END ## // SELF
-        private Checkbox _uccEnableSelf, _uccBandiesPoison, _uccNoRefreshPotAfterHamstrung;
-        private InputField _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
+        private Checkbox _uccEnableSelf, _uccColoredPouches, _uccBandiesPoison, _uccNoRefreshPotAfterHamstrung;
+        private InputField _uccColoredPouchesColor, _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccEAppleCooldown, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
         private Checkbox _uccClilocTrigger, _uccMacroTrigger;
         // ## BEGIN - END ## // SELF
         // ## BEGIN - END ## // ADVMACROS
@@ -251,6 +251,8 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // ADVMACROS
         // ## BEGIN - END ## // AUTOMATIONS
         private Checkbox _autoWorldmapMarker;
+        private Checkbox _autoRangeDisplayAlways;
+        private ClickableColorBox _autoRangeDisplayHue;
         // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // OUTLANDS
         /*
@@ -3800,8 +3802,36 @@ namespace ClassicUO.Game.UI.Gumps
             _blockWoSArt.SetText(_currentProfile.BlockWoSArt.ToString());
             startY += _blockWoSArt.Height + 2;
 
-            section7.Add(_lockWoSArtForceAoS = AddCheckBox(null, "Force WoS to Art above (AoS only?) and hue 945", _currentProfile.BlockWoSArtForceAoS, startX, startY));
-            startY += _lockWoSArtForceAoS.Height + 2;
+            section7.Add(_blockWoSArtForceAoS = AddCheckBox(null, "Force WoS to Art above (AoS only?) and hue 945", _currentProfile.BlockWoSArtForceAoS, startX, startY));
+            startY += _blockWoSArtForceAoS.Height + 2;
+
+            section7.Add(_blockEnergyF = AddCheckBox(null, "Block Energy Field", _currentProfile.BlockEnergyF, startX, startY));
+            startY += _blockEnergyF.Height + 2;
+
+            section7.Add(_blockEnergyFFelOnly = AddCheckBox(null, "Block Energy Field Fel only", _currentProfile.BlockEnergyFFelOnly, startX, startY));
+            startY += _blockEnergyFFelOnly.Height + 2;
+
+            section7.Add(AddLabel(null, "Energy Field Art (-info -> DisplayedGraphic): ", startX, startY));
+            section7.Add
+            (
+                _blockEnergyFArt = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _blockEnergyFArt.SetText(_currentProfile.BlockEnergyFArt.ToString());
+            startY += _blockEnergyFArt.Height + 2;
+
+            section7.Add(_blockEnergyFArtForceAoS = AddCheckBox(null, "Force EnergyF to Art above (AoS only?) and hue 293", _currentProfile.BlockEnergyFArtForceAoS, startX, startY));
+            startY += _blockEnergyFArtForceAoS.Height + 2;
             // ## BEGIN - END ## // MISC
             // ## BEGIN - END ## // MISC2
             SettingsSection section8 = AddSettingsSection(box, "-----MISC2-----");
@@ -3834,6 +3864,10 @@ namespace ClassicUO.Game.UI.Gumps
 
             section8.Add(_invisibleHousesZ = AddHSlider(null, 1, 100, _currentProfile.InvisibleHousesZ, startX, startY, 200));
             startY += _invisibleHousesZ.Height + 2;
+
+            section8.Add(AddLabel(null, "Dont make Invisible or Transparent below (Z level)", startX, startY));
+            section8.Add(_dontRemoveHouseBelowZ = AddHSlider(null, 1, 100, _currentProfile.DontRemoveHouseBelowZ, startX, startY, 200));
+            startY += _dontRemoveHouseBelowZ.Height + 2;
 
             section8.Add(_ignoreCoT = AddCheckBox(null, "Enable ignorelist for circle of transparency:", _currentProfile.IgnoreCoTEnabled, startX, startY));
             startY += _ignoreCoT.Height + 2;
@@ -4170,6 +4204,16 @@ namespace ClassicUO.Game.UI.Gumps
                                                 "greater heal will be cast on you or party member \n " +
                                                 "Condition: Poisoned and HP smaller than random between 65 - 80 \n " +
                                                 "Condition: HP smaller than random between 40-70)", startX, startY));
+
+            //
+            section5.Add(AddLabel(null, "-autorange (show range depending on archery equipment)", startX, startY));
+            section5.Add(AddLabel(null, "(configure range for every ranged weapon in the autorange.txt file!)", startX, startY));
+            section5.Add(_autoRangeDisplayAlways = AddCheckBox(null, "always have -autorange ON", _currentProfile.AutoRangeDisplayAlways, startX, startY));
+            startY += _autoRangeDisplayAlways.Height + 2;
+            section5.Add(_autoRangeDisplayHue = AddColorBox(null, startX, startY, _currentProfile.AutoRangeDisplayHue, ""));
+            startY += _autoRangeDisplayHue.Height + 2;
+            section5.AddRight(AddLabel(null, "Hue", 0, 0), 2);
+            //
             // ## BEGIN - END ## // AUTOMATIONS
             // ## BEGIN - END ## // OUTLANDS
             /*
@@ -4694,6 +4738,29 @@ namespace ClassicUO.Game.UI.Gumps
 
             startY = section8.Bounds.Bottom + 40;
 
+
+            section9.Add(_uccColoredPouches = AddCheckBox(null, "Are trapped pouches colored from server?", _currentProfile.UOClassicCombatSelf_ColoredPouches, startX, startY));
+            startY += _uccColoredPouches.Height + 2;
+
+            section9.Add(AddLabel(null, "Color (decimal not hex): ", startX, startY));
+
+            section9.Add
+            (
+                _uccColoredPouchesColor = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccColoredPouchesColor.SetText(_currentProfile.UOClassicCombatSelf_ColoredPouchesColor.ToString());
+
             //COOLDOWN SETTINGS
             section9.Add(AddLabel(null, "-----SETTINGS (COOLDOWNS)-----", startX, startY));
 
@@ -4810,6 +4877,25 @@ namespace ClassicUO.Game.UI.Gumps
                 )
             );
             _uccWaitForTarget.SetText(_currentProfile.UOClassicCombatSelf_WaitForTarget.ToString());
+
+            section9.Add(AddLabel(null, "Enhanced Apple Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccEAppleCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccEAppleCooldown.SetText(_currentProfile.UOClassicCombatSelf_EAppleCooldown.ToString());
 
             //TRESHOLD SETTINGS
             SettingsSection section10 = AddSettingsSection(box, "-----SETTINGS (TRESHOLDS)-----");
@@ -5898,7 +5984,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.IgnoreStaminaCheck = _ignoreStaminaCheck.IsChecked;
             _currentProfile.SpecialSetLastTargetCliloc = _SpecialSetLastTargetCliloc.IsChecked;
             _currentProfile.SpecialSetLastTargetClilocText = _SpecialSetLastTargetClilocText.Text;
-            _currentProfile.BlockWoSArtForceAoS = _lockWoSArtForceAoS.IsChecked;
+            _currentProfile.BlockWoSArtForceAoS = _blockWoSArtForceAoS.IsChecked;
             _currentProfile.BlockWoSArt = uint.Parse(_blockWoSArt.Text);
             if (_currentProfile.BlockWoS != _blockWoS.IsChecked)
             {
@@ -5928,6 +6014,49 @@ namespace ClassicUO.Game.UI.Gumps
                 }
                 _currentProfile.BlockWoSFelOnly = _blockWoSFelOnly.IsChecked;
             }
+            _currentProfile.BlockEnergyFArtForceAoS = _blockEnergyFArtForceAoS.IsChecked;
+            _currentProfile.BlockEnergyFArt = uint.Parse(_blockEnergyFArt.Text);
+            if (_currentProfile.BlockEnergyF != _blockEnergyF.IsChecked)
+            {
+                if (_blockEnergyF.IsChecked)
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        //0x3946 to 0x3964 / 14662 to 14692
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = true;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = true;
+                }
+                else
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = false;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = false;
+                }
+                _currentProfile.BlockEnergyF = _blockEnergyF.IsChecked;
+            }
+            if (_currentProfile.BlockEnergyFFelOnly != _blockEnergyFFelOnly.IsChecked)
+            {
+                if (_blockEnergyFFelOnly.IsChecked && World.MapIndex == 0)
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = true;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = true;
+                }
+                else
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = false;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = false;
+                }
+                _currentProfile.BlockEnergyFFelOnly = _blockEnergyFFelOnly.IsChecked;
+            }
             // ## BEGIN - END ## // MISC
             // ## BEGIN - END ## // MACROS
             _currentProfile.LastTargetRange = _lastTargetRange.Value;
@@ -5941,6 +6070,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.TransparentHousesTransparency = _transparentHousesTransparency.Value;
             _currentProfile.InvisibleHousesEnabled = _invisibleHouses.IsChecked;
             _currentProfile.InvisibleHousesZ = _invisibleHousesZ.Value;
+            _currentProfile.DontRemoveHouseBelowZ = _dontRemoveHouseBelowZ.Value;
             _currentProfile.IgnoreCoTEnabled = _ignoreCoT.IsChecked;
             _currentProfile.ShowDeathOnWorldmap = _showDeathOnWorldmap.IsChecked;
             // ## BEGIN - END ## // MISC2
@@ -6099,12 +6229,15 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.UOClassicCombatSelf_DisarmedCooldown = uint.Parse(_uccDisarmedCooldown.Text);
             // ## BEGIN - END ## // UCCSETTINGS
             // ## BEGIN - END ## // SELF
+            _currentProfile.UOClassicCombatSelf_ColoredPouches = _uccColoredPouches.IsChecked;
+            _currentProfile.UOClassicCombatSelf_ColoredPouchesColor = Convert.ToUInt16(_uccColoredPouchesColor.Text);
             _currentProfile.UOClassicCombatSelf_ActionCooldown = uint.Parse(_uccActionCooldown.Text);
             _currentProfile.UOClassicCombatSelf_PoucheCooldown = uint.Parse(_uccPoucheCooldown.Text);
             _currentProfile.UOClassicCombatSelf_CurepotCooldown = uint.Parse(_uccCurepotCooldown.Text);
             _currentProfile.UOClassicCombatSelf_HealpotCooldown = uint.Parse(_uccHealpotCooldown.Text);
             _currentProfile.UOClassicCombatSelf_RefreshpotCooldown = uint.Parse(_uccRefreshpotCooldown.Text);
             _currentProfile.UOClassicCombatSelf_WaitForTarget = uint.Parse(_uccWaitForTarget.Text);
+            _currentProfile.UOClassicCombatSelf_EAppleCooldown = uint.Parse(_uccEAppleCooldown.Text);
 
             _currentProfile.UOClassicCombatSelf_BandiesHPTreshold = uint.Parse(_uccBandiesHPTreshold.Text);
             _currentProfile.UOClassicCombatSelf_BandiesPoison = _uccBandiesPoison.IsChecked;
@@ -6176,6 +6309,8 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // ADVMACROS
             // ## BEGIN - END ## // AUTOMATIONS
             _currentProfile.AutoWorldmapMarker = _autoWorldmapMarker.IsChecked;
+            _currentProfile.AutoRangeDisplayAlways = _autoRangeDisplayAlways.IsChecked;
+            _currentProfile.AutoRangeDisplayHue = _autoRangeDisplayHue.Hue;
             // ## BEGIN - END ## // AUTOMATIONS
             // ## BEGIN - END ## // OUTLANDS
             /*

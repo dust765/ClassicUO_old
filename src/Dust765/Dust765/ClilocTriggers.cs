@@ -213,6 +213,11 @@ namespace ClassicUO.Dust765.Dust765
                 UOClassicCombatSelf?.ClilocTriggerFSFullStamina();
                 return;
             }
+            if (text.StartsWith("A tasty bite of the enchanted apple lifts all curses from your soul."))
+            {
+                UOClassicCombatSelf?.ClilocTriggerEApple();
+                return;
+            }
 
         }
         public void OnCliloc(uint cliloc)

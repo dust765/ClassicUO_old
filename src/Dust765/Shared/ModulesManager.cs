@@ -31,6 +31,7 @@ namespace ClassicUO.Game.Managers // only exception to not being in the 'Interop
     {
         public static void Load()
         {
+            AutoRangeDisplay.Initialize(); //AutoRangeDisplay//
             AutoMeditate.Initialize();  //AUTOMEDITATE##//
             AutoEngage.Initialize();  //AUTOENGAGE##//
             AutoMimic.Initialize();  //##AUTO MIMIC##//
@@ -58,6 +59,7 @@ namespace ClassicUO.Game.Managers // only exception to not being in the 'Interop
         /// <param name="totalMS"></param>
         public static void OnWorldUpdate( double totalMS )
         {
+            AutoRangeDisplay.Update(); //AutoRangeDisplay//
             AutoMeditate.Update();  //AUTOMEDITATE##//
             AutoEngage.Update();  //AUTOENGAGE##//
             Defender.Update(totalMS);
