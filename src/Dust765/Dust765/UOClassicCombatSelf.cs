@@ -46,10 +46,10 @@ namespace ClassicUO.Dust765.Dust765
         private readonly Label _title;
 
         //UI
-        private Label _uiTimerAutoBandage, _uiTimerAutoPouche, _uiTimerAutoCurepot, _uiTimerAutoHealpot, _uiTimerAutoRefreshpot, _uiTimerAutoRearmAfterDisarmed, _uiTimerStrengthpot, _uiTimerDexpot;
-        private Label _uiTextAutoBandage, _uiTextAutoPouche, _uiTextAutoCurepot, _uiTextAutoHealpot, _uiTextAutoRefreshpot;
-        private Checkbox _uiCboxAutoBandage, _uiCboxAutoPouche, _uiCboxAutoCurepot, _uiCboxAutoHealpot, _uiCboxAutoRefreshpot, _uiCboxRearmAfterPot, _uiCboxAutoRearmAfterDisarmed, _uiCboxConsiderHidden, _uiCboxConsiderSpells, _uiCboxIsDuelingOrTankMage; //NEW _uiCboxIsDuelingOrTankMage
-        private TextureControl _uiIconAutoBandage, _uiIconAutoPouche, _uiIconAutoCurepot, _uiIconAutoHealpot, _uiIconAutoRefreshpot, _uiIconStrengthpot, _uiIconDexpot, _uiIconAutoRearmAfterDisarmed, _uiIconConsiderHidden, _uiIconConsiderSpells;
+        private Label _uiTimerAutoBandage, _uiTimerAutoPouche, _uiTimerAutoCurepot, _uiTimerAutoHealpot, _uiTimerAutoRefreshpot, _uiTimerAutoEApple, _uiTimerAutoRearmAfterDisarmed, _uiTimerStrengthpot, _uiTimerDexpot;
+        private Label _uiTextAutoBandage, _uiTextAutoPouche, _uiTextAutoCurepot, _uiTextAutoHealpot, _uiTextAutoRefreshpot, _uiTextAutoEApple;
+        private Checkbox _uiCboxAutoBandage, _uiCboxAutoPouche, _uiCboxAutoCurepot, _uiCboxAutoHealpot, _uiCboxAutoRefreshpot, _uiCboxAutoEApple, _uiCboxRearmAfterPot, _uiCboxAutoRearmAfterDisarmed, _uiCboxConsiderHidden, _uiCboxConsiderSpells, _uiCboxIsDuelingOrTankMage; //NEW _uiCboxIsDuelingOrTankMage
+        private TextureControl _uiIconAutoBandage, _uiIconAutoPouche, _uiIconAutoCurepot, _uiIconAutoHealpot, _uiIconAutoRefreshpot, _uiIconAutoEApple, _uiIconStrengthpot, _uiIconDexpot, _uiIconAutoRearmAfterDisarmed, _uiIconConsiderHidden, _uiIconConsiderSpells;
         private Label _uiTextGotDisarmed; //, _uiTextGotHamstrung;
         private Label _uiTimerGotDisarmed; //, _uiTimerGotHamstrung;
         private Label _uiTextTimerDoDisarm; //, _uiTextTimerDoHamstring;
@@ -90,6 +90,11 @@ namespace ClassicUO.Dust765.Dust765
         private uint _tickStartAutoRefreshpot;
         private uint _timerAutoRefreshpot { get; set; }
         //AUTOREFRESH
+
+        //AUTOEAPPLE
+        private uint _tickStartAutoEApple;
+        private uint _timerAutoEApple { get; set; }
+        //AUTOEAPPLE
 
         //REARM WEP AFTER POT
         private Item _tempItemInLeftHand; //temp var, wep that was in hand for re equip
@@ -143,6 +148,12 @@ namespace ClassicUO.Dust765.Dust765
         //MACROPOT
 
         //OPTIONS TO VARS
+        private bool UCCS_ColoredPouches = ProfileManager.CurrentProfile.UOClassicCombatSelf_ColoredPouches;
+        private ushort UCCS_ColoredPouchesColor = ProfileManager.CurrentProfile.UOClassicCombatSelf_ColoredPouchesColor;
+
+        private bool UCCS_AutoEApple = ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoEApple;
+        private uint UCCS_EAppleCooldown = ProfileManager.CurrentProfile.UOClassicCombatSelf_EAppleCooldown;
+
         private bool UCCS_AutoBandage = ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoBandage;
 
         private bool UCCS_AutoPouche = ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoPouche;
@@ -221,7 +232,7 @@ namespace ClassicUO.Dust765.Dust765
 
             //MAIN CONSTRUCT
             Width = 95;
-            Height = 280;
+            Height = 330;
 
             Add(_background = new AlphaBlendControl()
             {
@@ -450,6 +461,48 @@ namespace ClassicUO.Dust765.Dust765
             Add(_uiCboxAutoRefreshpot);
             //AUTOREFRESHPOT
 
+            //AUTOEAPPLE
+            _uiIconAutoEApple = new TextureControl()
+            {
+                AcceptMouseInput = false
+            };
+
+            _uiIconAutoEApple.Texture = ArtLoader.Instance.GetTexture(0x2fd8); //apple
+            _uiIconAutoEApple.Hue = 0x0488;
+            _uiIconAutoEApple.X = -13;
+            _uiIconAutoEApple.Y = _uiIconAutoRefreshpot.Bounds.Bottom - 19;
+            _uiIconAutoEApple.Width = _uiIconAutoEApple.Texture.Width;
+            _uiIconAutoEApple.Height = _uiIconAutoEApple.Texture.Height;
+            Add(_uiIconAutoEApple);
+
+            _uiTimerAutoEApple = new Label($"{_timerAutoEApple}", true, HUE_FONTS_YELLOW, 0, 1, FontStyle.BlackBorder)
+            {
+                X = _uiIconAutoEApple.Bounds.Right,
+                Y = _uiIconAutoEApple.Y + 7
+            };
+            Add(_uiTimerAutoEApple);
+
+            _uiTextAutoEApple = new Label("OFF", true, HUE_FONTS_RED, 0, 1, FontStyle.BlackBorder)
+            {
+                X = _uiTimerAutoEApple.Bounds.Right,
+                Y = _uiIconAutoEApple.Y + 7
+            };
+            Add(_uiTextAutoEApple);
+
+            _uiCboxAutoEApple = new Checkbox(0x00D2, 0x00D3, "", FONT, HUE_FONT)
+            {
+                X = _uiTextAutoEApple.Bounds.Right,
+                Y = _uiIconAutoEApple.Y + 8,
+                IsChecked = ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoEApple
+            };
+            _uiCboxAutoEApple.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoEApple = _uiCboxAutoEApple.IsChecked;
+                UpdateVars();
+            };
+            Add(_uiCboxAutoEApple);
+            //AUTOEAPPLE
+
             //STRENGTH
             _uiIconStrengthpot = new TextureControl()
             {
@@ -459,7 +512,7 @@ namespace ClassicUO.Dust765.Dust765
             _uiIconStrengthpot.Texture = ArtLoader.Instance.GetTexture(0xF09); //strength
             _uiIconStrengthpot.Hue = 0;
             _uiIconStrengthpot.X = -13;
-            _uiIconStrengthpot.Y = _uiTextAutoRefreshpot.Bounds.Bottom;
+            _uiIconStrengthpot.Y = _uiIconAutoEApple.Bounds.Bottom;
             _uiIconStrengthpot.Width = _uiIconStrengthpot.Texture.Width;
             _uiIconStrengthpot.Height = _uiIconStrengthpot.Texture.Height;
             Add(_uiIconStrengthpot);
@@ -738,6 +791,9 @@ namespace ClassicUO.Dust765.Dust765
         public void UpdateVars()
         {
             //UPDATE VARS
+            UCCS_ColoredPouches = ProfileManager.CurrentProfile.UOClassicCombatSelf_ColoredPouches;
+            UCCS_ColoredPouchesColor = ProfileManager.CurrentProfile.UOClassicCombatSelf_ColoredPouchesColor;
+
             UCCS_AutoBandage = ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoBandage;
 
             UCCS_AutoPouche = ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoPouche;
@@ -751,6 +807,9 @@ namespace ClassicUO.Dust765.Dust765
 
             UCCS_AutoRefreshpot = ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoRefreshpot;
             UCCS_RefreshpotCooldown = ProfileManager.CurrentProfile.UOClassicCombatSelf_RefreshpotCooldown;
+
+            UCCS_AutoEApple = ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoEApple;
+            UCCS_EAppleCooldown = ProfileManager.CurrentProfile.UOClassicCombatSelf_EAppleCooldown;
 
             UCCS_RearmAfterPot = ProfileManager.CurrentProfile.UOClassicCombatSelf_RearmAfterPot;
 
@@ -794,6 +853,7 @@ namespace ClassicUO.Dust765.Dust765
             _uiCboxAutoCurepot.IsChecked = UCCS_AutoCurepot;
             _uiCboxAutoHealpot.IsChecked = UCCS_AutoHealpot;
             _uiCboxAutoRefreshpot.IsChecked = UCCS_AutoRefreshpot;
+            _uiCboxAutoEApple.IsChecked = UCCS_AutoEApple;
 
             _uiCboxIsDuelingOrTankMage.IsChecked = UCCS_IsDuelingOrTankMage;
             _uiCboxRearmAfterPot.IsChecked = UCCS_RearmAfterPot;
@@ -852,6 +912,16 @@ namespace ClassicUO.Dust765.Dust765
                 _uiTextAutoRefreshpot.Text = "OFF";
                 _uiTextAutoRefreshpot.Hue = HUE_FONTS_RED;
             }
+            if (UCCS_AutoEApple)
+            {
+                _uiTextAutoEApple.Text = "ON";
+                _uiTextAutoEApple.Hue = HUE_FONTS_GREEN;
+            }
+            else
+            {
+                _uiTextAutoEApple.Text = "OFF";
+                _uiTextAutoEApple.Hue = HUE_FONTS_RED;
+            }
             //ON OFF STATUS
         }
         public override void Dispose()
@@ -883,6 +953,10 @@ namespace ClassicUO.Dust765.Dust765
                 _uiTimerAutoRefreshpot.Hue = HUE_FONTS_GREEN;
             else
                 _uiTimerAutoRefreshpot.Hue = HUE_FONTS_YELLOW;
+            if (_timerAutoEApple == 0)
+                _uiTimerAutoEApple.Hue = HUE_FONTS_GREEN;
+            else
+                _uiTimerAutoEApple.Hue = HUE_FONTS_YELLOW;
             if (_timerStrengthpot == 0)
                 _uiTimerStrengthpot.Hue = HUE_FONTS_GREEN;
             else
@@ -1019,6 +1093,19 @@ namespace ClassicUO.Dust765.Dust765
                 _timerAutoRefreshpot = 0;
             }
             _uiTimerAutoRefreshpot.Text = $"{_timerAutoRefreshpot}";
+
+            //AUTOEAPPLE
+            if (_tickStartAutoEApple != 0)
+            {
+                if (_tickStartAutoEApple < Time.Ticks)
+                    _timerAutoEApple = (UCCS_EAppleCooldown / 1000) - (Time.Ticks - _tickStartAutoEApple) / 1000;
+            }
+            if (_tickStartAutoEApple != 0 && (_tickStartAutoEApple + UCCS_EAppleCooldown) <= Time.Ticks)
+            {
+                _tickStartAutoEApple = 0;
+                _timerAutoEApple = 0;
+            }
+            _uiTimerAutoEApple.Text = $"{_timerAutoEApple}";
 
             //MACROSTRENGTH
             if (_tickStartStrengthpot != 0)
@@ -1213,7 +1300,7 @@ namespace ClassicUO.Dust765.Dust765
             if (UCCS_ConsiderHidden && World.Player.IsHidden)
                 return;
 
-            if (UCCS_ConsiderSpells && GameCursor._spellTime >= 1)
+            if (UCCS_ConsiderSpells && GameCursor._spellTime >= 1 || UCCS_ConsiderSpells && TargetManager.IsTargeting)
                 return;
 
             //RNG (NEW RNG EVERY 3 SEC)
@@ -1406,13 +1493,64 @@ namespace ClassicUO.Dust765.Dust765
                 }
 
             }
+
+            //ENCHANTED APPLE
+            if (/*_lastMacroPot == 0xF0B || */UCCS_AutoEApple && World.Player.IsYellowHits) //cannot eat apple when paralyzed? !World.Player.IsParalyzed
+            {
+                //no disarm check needed
+
+                var apple = World.Player.FindItemByGraphic(0x2fd8);
+                if (apple != null)
+                {
+                    if ((_tickLastActionTime + UCCS_ActionCooldown) <= Time.Ticks && (_tickStartAutoEApple + UCCS_EAppleCooldown) <= Time.Ticks)
+                    {
+                        //RNG
+                        if (_doneWaitRNG == false)
+                        {
+                            _waitRNG = true;
+                            _tickWaitRNG = Time.Ticks;
+                            return;
+                        }
+
+                        GameActions.DoubleClick(apple);
+                        GameActions.Print("UCC Self: Apple Enhanced Used.");
+                        _tickLastActionTime = Time.Ticks;
+                        //_tickStartAutoEApple = Time.Ticks;  //triggered from cliloc as you can fail
+                        _lastMacroPot = 0;
+
+                        //RNG
+                        _doneWaitRNG = false;
+                    }
+                }
+                else
+                {
+                    UCCS_AutoEApple = false;
+                    ProfileManager.CurrentProfile.UOClassicCombatSelf_AutoEApple = false;
+
+                    UpdateVars();
+
+                    _lastMacroPot = 0;
+                }
+            }
+
             //AUTOPOUCHE
             if (UCCS_AutoPouche)
             {
                 if (World.Player.IsParalyzed)
                 {
+
                     Item backpack = World.Player.FindItemByLayer(Layer.Backpack);
-                    var redpouche = backpack.FindItem(0x0E79, 0x0026);
+                    Item redpouche = null;
+
+                    if (UCCS_ColoredPouches)
+                    {
+                        //redpouche = backpack.FindItem(0x0E79, 0x0026);
+                        redpouche = backpack.FindItem(0x0E79, UCCS_ColoredPouchesColor);
+                    } 
+                    else
+                    {
+                        redpouche = World.Player.FindItemByGraphic(0x0E79);
+                    }
 
                     if (redpouche != null)
                     {
@@ -2231,6 +2369,18 @@ namespace ClassicUO.Dust765.Dust765
             _tickGotHamstrung = Time.Ticks;
         }
         */
+        public void ClilocTriggerEApple()
+        {
+            //if (UCCS_ClilocTriggers == false)
+            //    return;
+
+            //TRIGGER FROM "A tasty bite of the enchanted apple lifts all curses from your soul." MESSAGE
+
+            _tickStartAutoEApple = Time.Ticks;
+            //_timerAutoEApple = 0;
+
+            _tickLastActionTime = Time.Ticks;
+        }
         #endregion
         //FAILSAFE CLILOC TRIGGERS
         #region FAILSAFE CLILOC TRIGGERS

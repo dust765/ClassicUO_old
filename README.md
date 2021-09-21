@@ -20,13 +20,17 @@ alt="chat on Discord"></a>
 # Project dust765
 This project is to address a problem constructed within the toxicity of this community. This is to show the community, open source projects are not meant for cliques and high school drama but rather the expansion of something greater, innovation. -A penny for your thoughts, the adder that prays beneath the rose.
 
+# contact
+
+Discord: dust765#2787
+
 # feature showcase
 
-[Video Part 1 on MetaCafe]( https://www.metacafe.com/watch/12177837/project-dust765/)
+[Video Part 1 on YouTube](https://youtu.be/074Osj1Fcrg)
 
-[Video Part 2 on MetaCafe](https://www.metacafe.com/watch/12177839/project-dust765-2/)
+[Video Part 2 on YouTube](https://youtu.be/P7YBrI3s6ZI)
 
-[Video Part 3 on MetaCafe](https://www.metacafe.com/watch/12177847/project-dust765-3/)
+[Video Part 3 on YouTube](https://youtu.be/aqHiiOhx8Q8)
 
 # art / hue changes
 
@@ -90,13 +94,15 @@ Ignore stamina check
 
 Block Wall of Stone
 
+Block Energy Field
+
 # misc 2
 
 wireframe view
 
 hue impassable tiles
 
-transparent / invisible house and items by Z level from player
+transparent / invisible house and items by Z level from player and min Z from ground
 
 ignore list for circle of transparency (txt file created in your /Data/Client folder)
 
@@ -128,7 +134,7 @@ UI UCC AL - Is an autoloot feature / UI. Only works with GridLoot enabled. You c
 
 UI UCC BUFFBAR - Provides a visible timer for next swing and disarm. You can enable lines individually enable them and also lock the UI to prevent moving it. There is a txt in /Data/Client to modify the timers for weapons. It does NOT change calculation with SSI or the like.
 
-UI UCC SELF - Is an Automation feature to bandaid yourself, use pouches and pots and auto rearms a weapon after being disarmed. 
+UI UCC SELF - Is an Automation feature to bandaid yourself, use pouches, pots and enhanced apple (auto rearms a weapon after being disarmed).
 
 Checkboxes on the UI
 
@@ -205,6 +211,8 @@ auto add marker for T-Maps
 -automed (auto meditate)
 
 -engage (auto pathfind and attack lasttarget)
+
+-autorange (auto show range indicator when weapon is equipped)
 
 # outlands
 
