@@ -108,6 +108,20 @@ namespace ClassicUO.Game.GameObjects
                     }
                 }
             }
+            if (ProfileManager.CurrentProfile.BlockEnergyF)
+            {
+                if (StaticFilters.IsEnergyField(Graphic) || Graphic == ProfileManager.CurrentProfile.BlockEnergyFArt)
+                {
+                    if (ProfileManager.CurrentProfile.BlockEnergyFFelOnly && World.MapIndex != 0)
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+                    }
+                    else
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+                    }
+                }
+            }
             // ## BEGIN - END ## // MISC
 
             if (OnGround)
@@ -207,13 +221,24 @@ namespace ClassicUO.Game.GameObjects
             // ## BEGIN - END ## // MISC2
             if (ProfileManager.CurrentProfile.TransparentHousesEnabled)
             {
-                if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ)
-                    hueVec.Z = (float) ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
+                GameObject tile = World.Map.GetTile(X, Y);
+
+                if (tile != null)
+                {
+                    if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.TransparentHousesZ && (Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
+                        hueVec.Z = (float) ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
+                }
             }
-            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled && (Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ)
+            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled)
             {
-                //DO NOT DRAW IT
-                return false;
+                GameObject tile = World.Map.GetTile(X, Y);
+
+                if (tile != null)
+                {
+                    if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ && (Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
+                        //DO NOT DRAW IT
+                        return false;
+                }
             }
             // ## BEGIN - END ## // MISC2
 
