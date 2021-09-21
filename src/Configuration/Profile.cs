@@ -349,6 +349,10 @@ namespace ClassicUO.Configuration
         public bool BlockWoSFelOnly { get; set; } = false;
         public uint BlockWoSArt { get; set; } = 1872;
         public bool BlockWoSArtForceAoS { get; set; } = false;
+        public bool BlockEnergyF { get; set; } = false;
+        public bool BlockEnergyFFelOnly { get; set; } = false;
+        public uint BlockEnergyFArt { get; set; } = 1872;
+        public bool BlockEnergyFArtForceAoS { get; set; } = false;
         public bool BlackOutlineStatics { get; set; } = false;
         // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // MACROS

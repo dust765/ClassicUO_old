@@ -108,6 +108,20 @@ namespace ClassicUO.Game.GameObjects
                     }
                 }
             }
+            if (ProfileManager.CurrentProfile.BlockEnergyF)
+            {
+                if (StaticFilters.IsEnergyField(Graphic) || Graphic == ProfileManager.CurrentProfile.BlockEnergyFArt)
+                {
+                    if (ProfileManager.CurrentProfile.BlockEnergyFFelOnly && World.MapIndex != 0)
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+                    }
+                    else
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+                    }
+                }
+            }
             // ## BEGIN - END ## // MISC
 
             if (OnGround)

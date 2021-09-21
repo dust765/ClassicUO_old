@@ -205,8 +205,8 @@ namespace ClassicUO.Game.UI.Gumps
         private HSliderBar _multipleUnderlinesSelfPartyTransparency;
         // ## BEGIN - END ## // OLDHEALTLINES
         // ## BEGIN - END ## // MISC
-        private Checkbox _offscreenTargeting, _SpecialSetLastTargetCliloc, _blackOutlineStatics, _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _lockWoSArtForceAoS;
-        private InputField _SpecialSetLastTargetClilocText, _blockWoSArt;
+        private Checkbox _offscreenTargeting, _SpecialSetLastTargetCliloc, _blackOutlineStatics, _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _blockWoSArtForceAoS, _blockEnergyF, _blockEnergyFFelOnly, _blockEnergyFArtForceAoS;
+        private InputField _SpecialSetLastTargetClilocText, _blockWoSArt, _blockEnergyFArt;
         // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // MACROS
         private HSliderBar _lastTargetRange;
@@ -3800,8 +3800,36 @@ namespace ClassicUO.Game.UI.Gumps
             _blockWoSArt.SetText(_currentProfile.BlockWoSArt.ToString());
             startY += _blockWoSArt.Height + 2;
 
-            section7.Add(_lockWoSArtForceAoS = AddCheckBox(null, "Force WoS to Art above (AoS only?) and hue 945", _currentProfile.BlockWoSArtForceAoS, startX, startY));
-            startY += _lockWoSArtForceAoS.Height + 2;
+            section7.Add(_blockWoSArtForceAoS = AddCheckBox(null, "Force WoS to Art above (AoS only?) and hue 945", _currentProfile.BlockWoSArtForceAoS, startX, startY));
+            startY += _blockWoSArtForceAoS.Height + 2;
+
+            section7.Add(_blockEnergyF = AddCheckBox(null, "Block Energy Field", _currentProfile.BlockEnergyF, startX, startY));
+            startY += _blockEnergyF.Height + 2;
+
+            section7.Add(_blockEnergyFFelOnly = AddCheckBox(null, "Block Energy Field Fel only", _currentProfile.BlockEnergyFFelOnly, startX, startY));
+            startY += _blockEnergyFFelOnly.Height + 2;
+
+            section7.Add(AddLabel(null, "Energy Field Art (-info -> DisplayedGraphic): ", startX, startY));
+            section7.Add
+            (
+                _blockEnergyFArt = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _blockEnergyFArt.SetText(_currentProfile.BlockEnergyFArt.ToString());
+            startY += _blockEnergyFArt.Height + 2;
+
+            section7.Add(_blockEnergyFArtForceAoS = AddCheckBox(null, "Force EnergyF to Art above (AoS only?) and hue 293", _currentProfile.BlockEnergyFArtForceAoS, startX, startY));
+            startY += _blockEnergyFArtForceAoS.Height + 2;
             // ## BEGIN - END ## // MISC
             // ## BEGIN - END ## // MISC2
             SettingsSection section8 = AddSettingsSection(box, "-----MISC2-----");
@@ -5898,7 +5926,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.IgnoreStaminaCheck = _ignoreStaminaCheck.IsChecked;
             _currentProfile.SpecialSetLastTargetCliloc = _SpecialSetLastTargetCliloc.IsChecked;
             _currentProfile.SpecialSetLastTargetClilocText = _SpecialSetLastTargetClilocText.Text;
-            _currentProfile.BlockWoSArtForceAoS = _lockWoSArtForceAoS.IsChecked;
+            _currentProfile.BlockWoSArtForceAoS = _blockWoSArtForceAoS.IsChecked;
             _currentProfile.BlockWoSArt = uint.Parse(_blockWoSArt.Text);
             if (_currentProfile.BlockWoS != _blockWoS.IsChecked)
             {
@@ -5927,6 +5955,49 @@ namespace ClassicUO.Game.UI.Gumps
                     TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = false;
                 }
                 _currentProfile.BlockWoSFelOnly = _blockWoSFelOnly.IsChecked;
+            }
+            _currentProfile.BlockEnergyFArtForceAoS = _blockEnergyFArtForceAoS.IsChecked;
+            _currentProfile.BlockEnergyFArt = uint.Parse(_blockEnergyFArt.Text);
+            if (_currentProfile.BlockEnergyF != _blockEnergyF.IsChecked)
+            {
+                if (_blockEnergyF.IsChecked)
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        //0x3946 to 0x3964 / 14662 to 14692
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = true;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = true;
+                }
+                else
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = false;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = false;
+                }
+                _currentProfile.BlockEnergyF = _blockEnergyF.IsChecked;
+            }
+            if (_currentProfile.BlockEnergyFFelOnly != _blockEnergyFFelOnly.IsChecked)
+            {
+                if (_blockEnergyFFelOnly.IsChecked && World.MapIndex == 0)
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = true;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = true;
+                }
+                else
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = false;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = false;
+                }
+                _currentProfile.BlockEnergyFFelOnly = _blockEnergyFFelOnly.IsChecked;
             }
             // ## BEGIN - END ## // MISC
             // ## BEGIN - END ## // MACROS

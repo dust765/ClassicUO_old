@@ -5750,6 +5750,11 @@ namespace ClassicUO.Network
                 graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockWoSArt);
                 hue = 945;
             }
+            if (graphic == 14678 & ProfileManager.CurrentProfile.BlockEnergyFArtForceAoS)
+            {
+                graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockEnergyFArt);
+                hue = 293;
+            }
             // ## BEGIN - END ## // MISC
 
             if (serial != World.Player)
