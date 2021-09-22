@@ -521,6 +521,12 @@ namespace ClassicUO.Configuration
         public string LobbyIP { get; set; } = "127.0.0.1";
         public string LobbyPort { get; set; } = "2596";
         // ## BEGIN - END ## // LOBBY
+        // ## BEGIN - END ## // AUTOS
+        public bool AutoRangeDisplayAlways { get; set; } = false;
+        public bool AutoRangeDisplayActive { get; set; } = false;
+        public int AutoRangeDisplayActiveRange { get; set; } = 10;
+        public ushort AutoRangeDisplayHue { get; set; } = 0x0074;
+        // ## BEGIN - END ## // AUTOS
         // ## BEGIN - END ## // BASICSETUP
         public bool ShowJournalClient { get; set; } = true;
         public bool ShowJournalObjects { get; set; } = true;

@@ -251,6 +251,8 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // ADVMACROS
         // ## BEGIN - END ## // AUTOMATIONS
         private Checkbox _autoWorldmapMarker;
+        private Checkbox _autoRangeDisplayAlways;
+        private ClickableColorBox _autoRangeDisplayHue;
         // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // OUTLANDS
         /*
@@ -4198,6 +4200,16 @@ namespace ClassicUO.Game.UI.Gumps
                                                 "greater heal will be cast on you or party member \n " +
                                                 "Condition: Poisoned and HP smaller than random between 65 - 80 \n " +
                                                 "Condition: HP smaller than random between 40-70)", startX, startY));
+
+            //
+            section5.Add(AddLabel(null, "-autorange (show range depending on archery equipment)", startX, startY));
+            section5.Add(AddLabel(null, "(configure range for every ranged weapon in the autorange.txt file!)", startX, startY));
+            section5.Add(_autoRangeDisplayAlways = AddCheckBox(null, "always have -autorange ON", _currentProfile.AutoRangeDisplayAlways, startX, startY));
+            startY += _autoRangeDisplayAlways.Height + 2;
+            section5.Add(_autoRangeDisplayHue = AddColorBox(null, startX, startY, _currentProfile.AutoRangeDisplayHue, ""));
+            startY += _autoRangeDisplayHue.Height + 2;
+            section5.AddRight(AddLabel(null, "Hue", 0, 0), 2);
+            //
             // ## BEGIN - END ## // AUTOMATIONS
             // ## BEGIN - END ## // OUTLANDS
             /*
@@ -6247,6 +6259,8 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // ADVMACROS
             // ## BEGIN - END ## // AUTOMATIONS
             _currentProfile.AutoWorldmapMarker = _autoWorldmapMarker.IsChecked;
+            _currentProfile.AutoRangeDisplayAlways = _autoRangeDisplayAlways.IsChecked;
+            _currentProfile.AutoRangeDisplayHue = _autoRangeDisplayHue.Hue;
             // ## BEGIN - END ## // AUTOMATIONS
             // ## BEGIN - END ## // OUTLANDS
             /*
