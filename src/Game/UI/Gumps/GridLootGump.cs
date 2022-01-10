@@ -46,7 +46,7 @@ namespace ClassicUO.Game.UI.Gumps
     internal class GridLootGump : Gump
     {
         private const int MAX_WIDTH = 300;
-        private const int MAX_HEIGHT = 400;
+        private const int MAX_HEIGHT = 420;
 
         private static int _lastX = ProfileManager.CurrentProfile.GridLootType == 2 ? 200 : 100;
         private static int _lastY = 100;
@@ -56,6 +56,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         private int _currentPage = 1;
         private readonly Label _currentPageLabel;
+        private readonly Label _corpseNameLabel;
         private readonly bool _hideIfEmpty;
         private int _pagesCount;
 
@@ -141,8 +142,17 @@ namespace ClassicUO.Game.UI.Gumps
                     Y = Height - 20
                 }
             );
-        }
 
+            Add
+            (
+                _corpseNameLabel = new Label(GetCorpseName(), true, 0x0481, align: TEXT_ALIGN_TYPE.TS_CENTER, maxwidth:300)
+                {
+                    Width = 300,
+                    X = 0,
+                    Y = 0
+                }
+            );
+        }
 
         public override void OnButtonClick(int buttonID)
         {
@@ -227,7 +237,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                         y += gridItem.Height + 20;
 
-                        if (y >= MAX_HEIGHT - 40)
+                        if (y >= MAX_HEIGHT - 60)
                         {
                             _pagesCount++;
                             y = 20;
@@ -236,7 +246,7 @@ namespace ClassicUO.Game.UI.Gumps
                     }
 
                     gridItem.X = x;
-                    gridItem.Y = y;
+                    gridItem.Y = y + 20;
                     Add(gridItem, _pagesCount);
 
                     x += gridItem.Width + 20;
@@ -246,7 +256,7 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             _background.Width = (GRID_ITEM_SIZE + 20) * row + 20;
-            _background.Height = 20 + 40 + (GRID_ITEM_SIZE + 20) * line + 20;
+            _background.Height = 20 + 40 + (GRID_ITEM_SIZE + 20) * line + 40;
 
 
             if (_background.Height >= MAX_HEIGHT - 40)
@@ -308,9 +318,9 @@ namespace ClassicUO.Game.UI.Gumps
                 return false;
             }
 
-            ResetHueVector();
             base.Draw(batcher, x, y);
-            ResetHueVector();
+
+            Vector3 hueVector = ShaderHueTranslator.GetHueVector(0);
 
             batcher.DrawRectangle
             (
@@ -319,7 +329,7 @@ namespace ClassicUO.Game.UI.Gumps
                 y,
                 Width,
                 Height,
-                ref HueVector
+                hueVector
             );
 
             return true;
@@ -347,9 +357,9 @@ namespace ClassicUO.Game.UI.Gumps
                 _background.Width = 100;
             }
 
-            if (_background.Height < 100)
+            if (_background.Height < 120)
             {
-                _background.Height = 100;
+                _background.Height = 120;
             }
 
             Width = _background.Width;
@@ -363,6 +373,8 @@ namespace ClassicUO.Game.UI.Gumps
             _setlootbag.Y = Height - 23;
             _currentPageLabel.X = Width / 2 - 5;
             _currentPageLabel.Y = Height - 20;
+
+            _corpseNameLabel.Text = GetCorpseName();
 
             WantUpdateSize = true;
 
@@ -382,10 +394,14 @@ namespace ClassicUO.Game.UI.Gumps
             }
         }
 
-
+        private string GetCorpseName()
+        {
+            return _corpse.Name?.Length > 0 ? _corpse.Name : "a corpse";
+        }
+        
         private class GridLootItem : Control
         {
-            private readonly TextureControl _texture;
+            private readonly HitBox _hit;
 
             public GridLootItem(uint serial, int size)
             {
@@ -429,25 +445,15 @@ namespace ClassicUO.Game.UI.Gumps
                 Add(background);
 
 
-                _texture = new TextureControl();
-                _texture.IsPartial = item.ItemData.IsPartialHue;
-                _texture.ScaleTexture = true;
-                _texture.Hue = item.Hue;
-                _texture.Texture = ArtLoader.Instance.GetTexture(item.DisplayedGraphic);
-                _texture.Y = 15;
-                _texture.Width = size;
-                _texture.Height = size;
-                _texture.CanMove = false;
+                _hit = new HitBox(0, 15, size, size, null, 0f);
+                Add(_hit);
 
                 if (World.ClientFeatures.TooltipsEnabled)
                 {
-                    _texture.SetTooltip(item);
+                    _hit.SetTooltip(item);
                 }
 
-                Add(_texture);
-
-
-                _texture.MouseUp += (sender, e) =>
+                _hit.MouseUp += (sender, e) =>
                 {
                     if (e.Button == MouseButtonType.Left)
                     {
@@ -463,9 +469,56 @@ namespace ClassicUO.Game.UI.Gumps
 
             public override bool Draw(UltimaBatcher2D batcher, int x, int y)
             {
-                ResetHueVector();
                 base.Draw(batcher, x, y);
-                ResetHueVector();
+
+                Item item = World.Items.Get(LocalSerial);
+
+                Vector3 hueVector;
+
+                if (item != null)
+                {
+                    var texture = ArtLoader.Instance.GetStaticTexture(item.DisplayedGraphic, out var bounds);
+                    var rect = ArtLoader.Instance.GetRealArtBounds(item.DisplayedGraphic);
+
+                    hueVector = ShaderHueTranslator.GetHueVector(item.Hue, item.ItemData.IsPartialHue, 1f);
+
+                    Point originalSize = new Point(_hit.Width, _hit.Height);
+                    Point point = new Point();
+
+                    if (rect.Width < _hit.Width)
+                    {
+                        originalSize.X = rect.Width;
+                        point.X = (_hit.Width >> 1) - (originalSize.X >> 1);
+                    }
+
+                    if (rect.Height < _hit.Height)
+                    {
+                        originalSize.Y = rect.Height;
+                        point.Y = (_hit.Height >> 1) - (originalSize.Y >> 1);
+                    }
+
+                    batcher.Draw
+                    (
+                        texture,
+                        new Rectangle
+                        (
+                            x + point.X,
+                            y + point.Y + _hit.Y,
+                            originalSize.X,
+                            originalSize.Y
+                        ),
+                        new Rectangle
+                        (
+                            bounds.X + rect.X,
+                            bounds.Y + rect.Y,
+                            rect.Width,
+                            rect.Height
+                        ),
+                        hueVector
+                    );
+                }
+                
+                hueVector = ShaderHueTranslator.GetHueVector(0);
 
                 batcher.DrawRectangle
                 (
@@ -474,24 +527,27 @@ namespace ClassicUO.Game.UI.Gumps
                     y + 15,
                     Width,
                     Height - 15,
-                    ref HueVector
+                    hueVector
                 );
 
-                if (_texture.MouseIsOver)
+                if (_hit.MouseIsOver)
                 {
-                    HueVector.Z = 0.7f;
+                    hueVector.Z = 0.7f;
 
-                    batcher.Draw2D
+                    batcher.Draw
                     (
                         SolidColorTextureCache.GetTexture(Color.Yellow),
-                        x + 1,
-                        y + 15,
-                        Width - 1,
-                        Height - 15,
-                        ref HueVector
+                        new Rectangle
+                        (
+                            x + 1,
+                            y + 15,
+                            Width - 1,
+                            Height - 15
+                        ),
+                        hueVector
                     );
 
-                    HueVector.Z = 0;
+                    hueVector.Z = 1;
                 }
 
                 return true;
