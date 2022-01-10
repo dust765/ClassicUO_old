@@ -17,6 +17,39 @@ alt="chat on Discord"></a>
 [![Build status](https://ci.appveyor.com/api/projects/status/qvqctcf8oss5bqh8?svg=true)](https://ci.appveyor.com/project/andreakarasho/classicuo)
 [![GitHub Actions Status](https://github.com/ClassicUO/ClassicUO/workflows/Build/badge.svg)](https://github.com/ClassicUO/ClassicUO/actions)
 
+# Project dust765
+This project is to address a problem constructed within the toxicity of this community. This is to show the community, open source projects are not meant for cliques and high school drama but rather the expansion of something greater, innovation. -A penny for your thoughts, the adder that prays beneath the rose.
+
+# feature showcase
+
+[Video Part 1 on YouTube](https://youtu.be/074Osj1Fcrg)
+
+[Video Part 2 on YouTube](https://youtu.be/P7YBrI3s6ZI)
+
+[Video Part 3 on YouTube](https://youtu.be/aqHiiOhx8Q8)
+
+# Changed files and line number
+
+no comment possible:
+
+FILE        START   END     COMMIT
+README.md   20      *
+
+comments:
+
+FILE                                    START   END     COMMIT
+/src/Configuration/Profile.cs	        281     *     BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	    177     179     BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	    372     376     BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	    453     457     BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	    3403    3449    BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	    4275    4277    BASICSETUP
+
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
 
