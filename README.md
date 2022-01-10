@@ -28,6 +28,16 @@ This project is to address a problem constructed within the toxicity of this com
 
 [Video Part 3 on YouTube](https://youtu.be/aqHiiOhx8Q8)
 
+# changed constant
+
+WAIT_FOR_TARGET_DELAY 5000 -> 4000
+
+MAX_CIRCLE_OF_TRANSPARENCY_RADIUS 200 -> 1000
+
+DEATH_SCREEN_TIMER 1500 -> 750
+
+MAX_JOURNAL_HISTORY_COUNT 100 -> 250
+
 # Changed files and line number
 
 no comment possible:
@@ -38,7 +48,7 @@ README.md   20      *
 comments:
 
 FILE                                    START   END     COMMIT
-/src/Configuration/Profile.cs	        281     *     BASICSETUP
+/src/Configuration/Profile.cs	        281     *       BASICSETUP
 
 /src/Game/UI/Gumps/OptionsGump.cs	    177     179     BASICSETUP
 
@@ -49,6 +59,14 @@ FILE                                    START   END     COMMIT
 /src/Game/UI/Gumps/OptionsGump.cs	    3403    3449    BASICSETUP
 
 /src/Game/UI/Gumps/OptionsGump.cs	    4275    4277    BASICSETUP
+
+/src/Game/Constants.cs                  87              CONSTANTS
+
+/src/Game/Constants.cs                  108             CONSTANTS
+
+/src/Game/Constants.cs                  122             CONSTANTS
+
+/src/Game/Constants.cs                  127             CONSTANTS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
