@@ -62,6 +62,10 @@ color border by state
 
 flashing outline (many options)
 
+# cursor
+
+Show spell on cursor (and runout countdown)
+
 # Added files
 
 /src/Dust765
@@ -209,6 +213,16 @@ FILE                                            START   END     COMMIT
 /src/Game/UI/Gumps/HealthBarGump.cs             1311    1316    HEALTHBAR
 
 /src/Game/UI/Gumps/HealthBarGump.cs             1358    1361    HEALTHBAR
+
+/src/Game/GameCursor.cs                         38      40      CURSOR
+
+/src/Game/GameCursor.cs                         87      91      CURSOR
+
+/src/Game/GameCursor.cs                         370     383     CURSOR
+
+/src/Network/PacketHandlers.cs	                41      43     CURSOR
+
+/src/Network/PacketHandlers.cs	                846     849     CURSOR
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
