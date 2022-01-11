@@ -1555,6 +1555,13 @@ namespace ClassicUO.Game.Managers
                     ProfileManager.CurrentProfile.EnableCaveBorder = !ProfileManager.CurrentProfile.EnableCaveBorder;
 
                     break;
+
+                // ## BEGIN - END ## // VISUAL HELPERS
+                case MacroType.HighlightTileAtRange:
+                    ProfileManager.CurrentProfile.HighlightTileAtRange = !ProfileManager.CurrentProfile.HighlightTileAtRange;
+
+                    break;
+                // ## BEGIN - END ## // VISUAL HELPERS
             }
 
 
@@ -2040,10 +2047,41 @@ namespace ClassicUO.Game.Managers
         UsePotion,
         CloseAllHealthBars,
         RazorMacro,
+        // ## BEGIN - END ## // BASICSETUP
+        notimplemented,
+        notimplemented1,
+        notimplemented2,
+        notimplemented3,
+        notimplemented4,
+        notimplemented5,
+        notimplemented6,
+        notimplemented7,
+        // ## BEGIN - END ## // VISUAL HELPERS
+        HighlightTileAtRange,
+        // ## BEGIN - END ## // VISUAL HELPERS
+        notimplemented8,
+        notimplemented9,
+        notimplemented10,
+        notimplemented11,
+        notimplemented12,
+        notimplemented13,
+        notimplemented14,
+        notimplemented15,
+        notimplemented16,
+        notimplemented17,
+        notimplemented18,
+        notimplemented19,
+        notimplemented20,
+        notimplemented21,
+        // ## BEGIN - END ## // BASICSETUP
         ToggleDrawRoofs,
         ToggleTreeStumps,
         ToggleVegetation,
-        ToggleCaveTiles
+        ToggleCaveTiles,
+        // ## BEGIN - END ## // BASICSETUP
+        notimplemented22,
+        notimplemented23
+        // ## BEGIN - END ## // BASICSETUP
     }
 
     internal enum MacroSubType

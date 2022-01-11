@@ -182,6 +182,12 @@ namespace ClassicUO.Game.UI.Gumps
         private ClickableColorBox _stealthColorPickerBox, _energyBoltColorPickerBox, _goldColorPickerBox, _treeTileColorPickerBox, _blockerTileColorPickerBox;
         private Combobox _goldType, _treeType, _blockerType, _stealthNeonType, _energyBoltNeonType, _energyBoltArtType;
         // ## BEGIN - END ## // ART / HUE CHANGES
+        // ## BEGIN - END ## // VISUAL HELPERS
+        private Checkbox _highlightTileRange, _highlightTileRangeSpell, _ownAuraByHP, _previewFields;
+        private HSliderBar _highlightTileRangeRange, _highlightTileRangeRangeSpell;
+        private ClickableColorBox _highlightTileRangeColorPickerBox, _highlightTileRangeColorPickerBoxSpell, _highlightLastTargetTypeColorPickerBox, _highlightLastTargetTypeColorPickerBoxPoison, _highlightLastTargetTypeColorPickerBoxPara, _highlightGlowingWeaponsTypeColorPickerBoxHue, _hueImpassableViewColorPickerBox;
+        private Combobox _glowingWeaponsType, _highlightLastTargetType, _highlightLastTargetTypePoison, _highlightLastTargetTypePara;
+        // ## BEGIN - END ## // VISUAL HELPERS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3502,6 +3508,82 @@ namespace ClassicUO.Game.UI.Gumps
 
             section.AddRight(AddLabel(null, "Stump or tile color", 0, 0), 2);
             // ## BEGIN - END ## // ART / HUE CHANGES
+            // ## BEGIN - END ## // VISUAL HELPERS
+            SettingsSection section2 = AddSettingsSection(box, "-----VISUAL HELPERS-----");
+            section2.Y = section.Bounds.Bottom + 40;
+
+            startY = section.Bounds.Bottom + 40;
+
+            section2.Add(_highlightTileRange = AddCheckBox(null, "Highlight tiles on range", _currentProfile.HighlightTileAtRange, startX, startY));
+            startY += _highlightTileRange.Height + 2;
+
+            section2.Add(AddLabel(null, "@ range: ", startX, startY));
+
+            section2.AddRight(_highlightTileRangeRange = AddHSlider(null, 1, 20, _currentProfile.HighlightTileAtRangeRange, startX, startY, 200));
+            startY += _highlightTileRangeRange.Height + 2;
+
+            section2.Add(_highlightTileRangeColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.HighlightTileRangeHue, ""));
+            startY += _highlightTileRangeColorPickerBox.Height + 2;
+            section2.AddRight(AddLabel(null, "Tile color", 0, 0), 2);
+
+            section2.Add(_highlightTileRangeSpell = AddCheckBox(null, "Highlight tiles on range for spells", _currentProfile.HighlightTileAtRangeSpell, startX, startY));
+            startY += _highlightTileRangeSpell.Height + 2;
+
+            section2.Add(AddLabel(null, "@ range: ", startX, startY));
+
+            section2.AddRight(_highlightTileRangeRangeSpell = AddHSlider(null, 1, 20, _currentProfile.HighlightTileAtRangeRangeSpell, startX, startY, 200));
+            startY += _highlightTileRangeRangeSpell.Height + 2;
+
+            section2.Add(_highlightTileRangeColorPickerBoxSpell = AddColorBox(null, startX, startY, _currentProfile.HighlightTileRangeHueSpell, ""));
+            startY += _highlightTileRangeColorPickerBoxSpell.Height + 2;
+            section2.AddRight(AddLabel(null, "Tile color", 0, 0), 2);
+
+            section2.Add(_previewFields = AddCheckBox(null, "Preview fields", _currentProfile.PreviewFields, startX, startY));
+            startY += _previewFields.Height + 2;
+
+            section2.Add(_ownAuraByHP = AddCheckBox(null, "Color own aura by HP (needs aura enabled)", _currentProfile.OwnAuraByHP, startX, startY));
+            startY += _ownAuraByHP.Height + 2;
+
+            section2.Add(AddLabel(null, "Glowing Weapons:", startX, startY));
+
+            mode = _currentProfile.GlowingWeaponsType;
+            section2.Add(_glowingWeaponsType = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Custom" }, mode, startX, startY, 100));
+            startY += _glowingWeaponsType.Height + 2;
+
+            section2.Add(_highlightGlowingWeaponsTypeColorPickerBoxHue = AddColorBox(null, startX, startY, _currentProfile.HighlightGlowingWeaponsTypeHue, ""));
+            startY += _highlightGlowingWeaponsTypeColorPickerBoxHue.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color", 0, 0), 2);
+
+            section2.Add(AddLabel(null, "Highlight lasttarget:", startX, startY));
+
+            mode = _currentProfile.HighlightLastTargetType;
+            section2.Add(_highlightLastTargetType = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Custom" }, mode, startX, startY, 100));
+            startY += _highlightLastTargetType.Height + 2;
+
+            section2.Add(_highlightLastTargetTypeColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.HighlightLastTargetTypeHue, ""));
+            startY += _highlightLastTargetTypeColorPickerBox.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color lasttarget", 0, 0), 2);
+
+            section2.Add(AddLabel(null, "Highlight lasttarget poisoned:", startX, startY));
+
+            mode = _currentProfile.HighlightLastTargetTypePoison;
+            section2.Add(_highlightLastTargetTypePoison = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Special", "Custom" }, mode, startX, startY, 100));
+            startY += _highlightLastTargetTypePoison.Height + 2;
+
+            section2.Add(_highlightLastTargetTypeColorPickerBoxPoison = AddColorBox(null, startX, startY, _currentProfile.HighlightLastTargetTypePoisonHue, ""));
+            startY += _highlightLastTargetTypeColorPickerBoxPoison.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color poison", 0, 0), 2);
+
+            section2.Add(AddLabel(null, "Highlight lasttarget paralyzed:", startX, startY));
+
+            mode = _currentProfile.HighlightLastTargetTypePara;
+            section2.Add(_highlightLastTargetTypePara = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Special", "Custom" }, mode, startX, startY, 100));
+            startY += _highlightLastTargetTypePara.Height + 2;
+
+            section2.Add(_highlightLastTargetTypeColorPickerBoxPara = AddColorBox(null, startX, startY, _currentProfile.HighlightLastTargetTypeParaHue, ""));
+            startY += _highlightLastTargetTypeColorPickerBoxPara.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color paralyzed", 0, 0), 2);
+            // ## BEGIN - END ## // VISUAL HELPERS
 
             Add(rightArea, PAGE);
         }
@@ -4393,6 +4475,24 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.TreeType = _treeType.SelectedIndex;
             }
             // ## BEGIN - END ## // ART / HUE CHANGES
+            // ## BEGIN - END ## // VISUAL HELPERS
+            _currentProfile.HighlightTileAtRange = _highlightTileRange.IsChecked;
+            _currentProfile.HighlightTileAtRangeRange = _highlightTileRangeRange.Value;
+            _currentProfile.HighlightTileRangeHue = _highlightTileRangeColorPickerBox.Hue;
+            _currentProfile.HighlightTileAtRangeSpell = _highlightTileRangeSpell.IsChecked;
+            _currentProfile.HighlightTileAtRangeRangeSpell = _highlightTileRangeRangeSpell.Value;
+            _currentProfile.HighlightTileRangeHueSpell = _highlightTileRangeColorPickerBoxSpell.Hue;
+            _currentProfile.GlowingWeaponsType = _glowingWeaponsType.SelectedIndex;
+            _currentProfile.PreviewFields = _previewFields.IsChecked;
+            _currentProfile.OwnAuraByHP = _ownAuraByHP.IsChecked;
+            _currentProfile.HighlightGlowingWeaponsTypeHue = _highlightGlowingWeaponsTypeColorPickerBoxHue.Hue;
+            _currentProfile.HighlightLastTargetType = _highlightLastTargetType.SelectedIndex;
+            _currentProfile.HighlightLastTargetTypePoison = _highlightLastTargetTypePoison.SelectedIndex;
+            _currentProfile.HighlightLastTargetTypePara = _highlightLastTargetTypePara.SelectedIndex;
+            _currentProfile.HighlightLastTargetTypeHue = _highlightLastTargetTypeColorPickerBox.Hue;
+            _currentProfile.HighlightLastTargetTypePoisonHue = _highlightLastTargetTypeColorPickerBoxPoison.Hue;
+            _currentProfile.HighlightLastTargetTypeParaHue = _highlightLastTargetTypeColorPickerBoxPara.Hue;
+            // ## BEGIN - END ## // VISUAL HELPERS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
