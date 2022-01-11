@@ -188,6 +188,10 @@ namespace ClassicUO.Game.UI.Gumps
         private ClickableColorBox _highlightTileRangeColorPickerBox, _highlightTileRangeColorPickerBoxSpell, _highlightLastTargetTypeColorPickerBox, _highlightLastTargetTypeColorPickerBoxPoison, _highlightLastTargetTypeColorPickerBoxPara, _highlightGlowingWeaponsTypeColorPickerBoxHue, _hueImpassableViewColorPickerBox;
         private Combobox _glowingWeaponsType, _highlightLastTargetType, _highlightLastTargetTypePoison, _highlightLastTargetTypePara;
         // ## BEGIN - END ## // VISUAL HELPERS
+        // ## BEGIN - END ## // HEALTHBAR
+        private Checkbox _highlightLastTargetHealthBarOutline, _highlightHealthBarByState, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
+        private HSliderBar _flashingHealthbarTreshold;
+        // ## BEGIN - END ## // HEALTHBAR
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3584,6 +3588,34 @@ namespace ClassicUO.Game.UI.Gumps
             startY += _highlightLastTargetTypeColorPickerBoxPara.Height + 2;
             section2.AddRight(AddLabel(null, "Custom color paralyzed", 0, 0), 2);
             // ## BEGIN - END ## // VISUAL HELPERS
+            // ## BEGIN - END ## // HEALTHBAR
+            SettingsSection section3 = AddSettingsSection(box, "-----HEALTHBAR-----");
+            section3.Y = section2.Bounds.Bottom + 40;
+
+            startY = section2.Bounds.Bottom + 40;
+
+            section3.Add(_highlightLastTargetHealthBarOutline = AddCheckBox(null, "Highlight LT healthbar", _currentProfile.HighlightLastTargetHealthBarOutline, startX, startY));
+            startY += _highlightLastTargetHealthBarOutline.Height + 2;
+            section3.Add(_highlightHealthBarByState = AddCheckBox(null, "Highlight healthbar border by state", _currentProfile.HighlightHealthBarByState, startX, startY));
+            startY += _highlightHealthBarByState.Height + 2;
+            section3.Add(_flashingHealthbarOutlineSelf = AddCheckBox(null, "Flashing healthbar outline - self", _currentProfile.FlashingHealthbarOutlineSelf, startX, startY));
+            startY += _flashingHealthbarOutlineSelf.Height + 2;
+            section3.Add(_flashingHealthbarOutlineParty = AddCheckBox(null, "Flashing healthbar outline - party", _currentProfile.FlashingHealthbarOutlineParty, startX, startY));
+            startY += _flashingHealthbarOutlineParty.Height + 2;
+            section3.Add(_flashingHealthbarOutlineGreen = AddCheckBox(null, "Flashing healthbar outline - ally", _currentProfile.FlashingHealthbarOutlineGreen, startX, startY));
+            startY += _flashingHealthbarOutlineGreen.Height + 2;
+            section3.Add(_flashingHealthbarOutlineOrange = AddCheckBox(null, "Flashing healthbar outline - enemy", _currentProfile.FlashingHealthbarOutlineOrange, startX, startY));
+            startY += _flashingHealthbarOutlineOrange.Height + 2;
+            section3.Add(_flashingHealthbarOutlineAll = AddCheckBox(null, "Flashing healthbar outline - all", _currentProfile.FlashingHealthbarOutlineAll, startX, startY));
+            startY += _flashingHealthbarOutlineAll.Height + 2;
+            section3.Add(_flashingHealthbarNegativeOnly = AddCheckBox(null, "Flashing healthbar outline on negative changes only", _currentProfile.FlashingHealthbarNegativeOnly, startX, startY));
+            startY += _flashingHealthbarNegativeOnly.Height + 2;
+
+            section3.Add(AddLabel(null, "only flash on HP change >= : ", startX, startY));
+
+            section3.AddRight(_flashingHealthbarTreshold = AddHSlider(null, 1, 50, _currentProfile.FlashingHealthbarTreshold, startX, startY, 200));
+            startY += _flashingHealthbarTreshold.Height + 2;
+            // ## BEGIN - END ## // HEALTHBAR
 
             Add(rightArea, PAGE);
         }
@@ -4493,6 +4525,17 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.HighlightLastTargetTypePoisonHue = _highlightLastTargetTypeColorPickerBoxPoison.Hue;
             _currentProfile.HighlightLastTargetTypeParaHue = _highlightLastTargetTypeColorPickerBoxPara.Hue;
             // ## BEGIN - END ## // VISUAL HELPERS
+            // ## BEGIN - END ## // HEALTHBAR
+            _currentProfile.HighlightHealthBarByState = _highlightHealthBarByState.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineSelf = _flashingHealthbarOutlineSelf.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineParty = _flashingHealthbarOutlineParty.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineGreen = _flashingHealthbarOutlineGreen.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineOrange = _flashingHealthbarOutlineOrange.IsChecked;
+            _currentProfile.FlashingHealthbarOutlineAll = _flashingHealthbarOutlineAll.IsChecked;
+            _currentProfile.FlashingHealthbarNegativeOnly = _flashingHealthbarNegativeOnly.IsChecked;
+            _currentProfile.FlashingHealthbarTreshold = _flashingHealthbarTreshold.Value;
+            _currentProfile.HighlightLastTargetHealthBarOutline = _highlightLastTargetHealthBarOutline.IsChecked;
+            // ## BEGIN - END ## // HEALTHBAR
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
