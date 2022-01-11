@@ -357,6 +357,11 @@ namespace ClassicUO.Dust765.Dust765
         public static void UpdateSpelltime()
         {
             GameCursor._spellTime = 30 - ((Time.Ticks - GameCursor._startSpellTime) / 1000); // count down
+
+            // ## BEGIN - END ## // CURSOR
+            GameCursor._spellTimeText?.Destroy();
+            GameCursor._spellTimeText = RenderedText.Create(GameCursor._spellTime.ToString(), 0x0481, style: FontStyle.BlackBorder);
+            // ## BEGIN - END ## // CURSOR
         }
         public static void StartSpelltime()
         {
@@ -1305,5 +1310,49 @@ namespace ClassicUO.Dust765.Dust765
             return false;
         }
         // ## BEGIN - END ## // VISUAL HELPERS
+        // ## BEGIN - END ## // CURSOR
+        //GAME\GAMECURSOR.CS
+        public static ushort SpellIconHue(ushort hue)
+        {
+            switch (TargetManager.TargetingType)
+            {
+                case TargetType.Neutral:
+                    hue = 0x0000;  //BETTER HUE? 0x03B2
+                    return hue;
+
+                case TargetType.Harmful:
+                    hue = 0x0023;
+                    return hue;
+
+                case TargetType.Beneficial:
+                    hue = 0x005A;
+                    return hue;
+            }
+            return hue;
+        }
+
+        //NETWORK\PACKETHANDLERS.CS
+        public static void SpellCastFromCliloc(string text)
+        {
+            if (SpellDefinition.WordToTargettype.TryGetValue(text, out SpellDefinition spell))
+            {
+                GameActions.LastSpellIndexCursor = spell.ID;
+            }
+            else
+            {
+                //THIS IS INCASE RAZOR OR ANOTHER ASSISTANT REWRITES THE STRING
+
+                foreach (var key in SpellDefinition.WordToTargettype.Keys)
+                {
+                    if (text.Contains(key)) //SPELL FOUND
+                    {
+                        GameActions.LastSpellIndexCursor = SpellDefinition.WordToTargettype[key].ID;
+
+                        //break; //DONT BREAK LOOP BECAUSE OF IN NOX / IN NOX GRAV
+                    }
+                }
+            }
+        }
+        // ## BEGIN - END ## // CURSOR
     }
 }
