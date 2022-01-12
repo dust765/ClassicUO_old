@@ -199,6 +199,10 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         private Checkbox _overheadRange;
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        // ## BEGIN - END ## // OLDHEALTHLINES
+        private Checkbox _multipleUnderlinesSelfParty, _multipleUnderlinesSelfPartyBigBars, _useOldHealthBars;
+        private HSliderBar _multipleUnderlinesSelfPartyTransparency;
+        // ## BEGIN - END ## // OLDHEALTHLINES
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3680,6 +3684,25 @@ namespace ClassicUO.Game.UI.Gumps
             section5.Add(_overheadRange = AddCheckBox(null, "Display range in overhead (needs HP overhead enabled)", _currentProfile.OverheadRange, startX, startY));
             startY += _overheadRange.Height + 2;
             // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            // ## BEGIN - END ## // OLDHEALTHLINES
+            SettingsSection section6 = AddSettingsSection(box, "-----OLDHEALTHLINES-----");
+            section6.Y = section5.Bounds.Bottom + 40;
+
+            startY = section5.Bounds.Bottom + 40;
+
+            section6.Add(_useOldHealthBars = AddCheckBox(null, "Use old healthlines", _currentProfile.UseOldHealthBars, startX, startY));
+            startY += _useOldHealthBars.Height + 2;
+            section6.Add(_multipleUnderlinesSelfParty = AddCheckBox(null, "Display Mana / Stam in underline for self and party (requires old healthbars)", _currentProfile.MultipleUnderlinesSelfParty, startX, startY));
+            startY += _multipleUnderlinesSelfParty.Height + 2;
+            section6.Add(_multipleUnderlinesSelfPartyBigBars = AddCheckBox(null, "Use bigger underlines for self and party (requires old healthbars)", _currentProfile.MultipleUnderlinesSelfPartyBigBars, startX, startY));
+            startY += _multipleUnderlinesSelfPartyBigBars.Height + 2;
+
+            section6.Add(AddLabel(null, "Transparency for self and party (close client completly), ", startX, startY));
+            section6.Add(AddLabel(null, "(requires old healthlines): ", startX, startY));
+
+            section6.Add(_multipleUnderlinesSelfPartyTransparency = AddHSlider(null, 1, 10, _currentProfile.MultipleUnderlinesSelfPartyTransparency, startX, startY, 200));
+            startY += _multipleUnderlinesSelfPartyTransparency.Height + 2;
+            // ## BEGIN - END ## // OLDHEALTHLINES
 
             Add(rightArea, PAGE);
         }
@@ -4609,6 +4632,12 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
             _currentProfile.OverheadRange = _overheadRange.IsChecked;
             // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            // ## BEGIN - END ## // OLDHEALTLINES
+            _currentProfile.MultipleUnderlinesSelfParty = _multipleUnderlinesSelfParty.IsChecked;
+            _currentProfile.MultipleUnderlinesSelfPartyBigBars = _multipleUnderlinesSelfPartyBigBars.IsChecked;
+            _currentProfile.MultipleUnderlinesSelfPartyTransparency = _multipleUnderlinesSelfPartyTransparency.Value;
+            _currentProfile.UseOldHealthBars = _useOldHealthBars.IsChecked;
+            // ## BEGIN - END ## // OLDHEALTLINES
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
