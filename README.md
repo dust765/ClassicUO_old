@@ -78,6 +78,20 @@ mana / stamina lines, for self and party,
 
 bigger version and transparency
 
+# misc
+
+Offscreen targeting
+
+Razor lasttarget sync (Razor lasttarget string - set this to the same lasttarget overhead string as set in Razor, so the ClassicUO lasttarget will be the same as in Razor.)
+
+Black Outline for statics
+
+Ignore stamina check
+
+Block Wall of Stone
+
+Block Energy Field
+
 # Added files
 
 /src/Dust765
@@ -257,6 +271,34 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/HealthLinesManager.cs        281     301     OLDHEALTHLINES
 
 /src/Game/Managers/HealthLinesManager.cs        411     489     OLDHEALTHLINES
+
+/src/Network/PacketHandlers.cs	                42      44      MISC
+
+/src/Network/PacketHandlers.cs	                3560    3563    MISC
+
+/src/Network/PacketHandlers.cs	                5567    5586    MISC
+
+/src/Game/GameObjects/Views/ItemView.cs         89      117     MISC
+
+/src/IO/Resources/ArtLoader.cs                  416     420     MISC
+
+/src/IO/Resources/TileDataLoader.cs             358     360     MISC
+
+/src/IO/Resources/TileDataLoader.cs             375     379     MISC
+
+/src/Game/UI/Gumps/HealthBarGump.cs             75      77      MISC
+
+/src/Game/UI/Gumps/HealthBarGump.cs             181     185     MISC
+
+/src/Game/UI/Gumps/HealthBarGump.cs             190     192     MISC
+
+/src/Game/UI/Gumps/HealthBarGump.cs             236     238     MISC
+
+/src/Game/UI/Gumps/HealthBarGump.cs             240     249     MISC
+
+/src/Game/UI/Controls/Control.cs                36      38      MISC
+
+/src/Game/UI/Controls/Control.cs                81      83      MISC
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
