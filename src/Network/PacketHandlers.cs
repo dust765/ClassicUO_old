@@ -39,7 +39,9 @@ using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Data;
 // ## BEGIN - END ## // CURSOR
+// ## BEGIN - END ## // MISC
 using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MISC
 // ## BEGIN - END ## // CURSOR
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -3566,6 +3568,11 @@ namespace ClassicUO.Network
                 }
             }
 
+            // ## BEGIN - END ## // MISC
+            if (text.StartsWith(ProfileManager.CurrentProfile.SpecialSetLastTargetClilocText.ToString()))
+                CombatCollection.SpecialSetLastTargetCliloc(serial);
+            // ## BEGIN - END ## // MISC
+
             MessageManager.HandleMessage
             (
                 entity,
@@ -5568,6 +5575,26 @@ namespace ClassicUO.Network
             Flags flags = (Flags) p.ReadUInt8();
             ushort unk2 = p.ReadUInt16BE();
 
+            // ## BEGIN - END ## // MISC
+            if (graphic == 130 & ProfileManager.CurrentProfile.BlockWoSArtForceAoS)
+            {
+                graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockWoSArt);
+                hue = 945;
+            }
+            if (ProfileManager.CurrentProfile.BlockEnergyFArtForceAoS)
+            {
+                if (graphic >= 14662 && graphic <= 14692) //Regular EField //graphic >= 0x3946 && graphic <= 0x3964
+                {
+                    graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockEnergyFArt);
+                    hue = 293;
+                }
+                if (graphic == 10408 && hue == 0x0125) //Razor CE - WallStaticID - Filters/WallStaticFilter.cs / Razor Enhanced - WallStaticID - Filters.cs / (hue: 0x0125)
+                {
+                    graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockEnergyFArt);
+                    hue = 293;
+                }
+            }
+            // ## BEGIN - END ## // MISC
 
             if (serial != World.Player)
             {

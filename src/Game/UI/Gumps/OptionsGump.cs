@@ -203,6 +203,10 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _multipleUnderlinesSelfParty, _multipleUnderlinesSelfPartyBigBars, _useOldHealthBars;
         private HSliderBar _multipleUnderlinesSelfPartyTransparency;
         // ## BEGIN - END ## // OLDHEALTHLINES
+        // ## BEGIN - END ## // MISC
+        private Checkbox _offscreenTargeting, _SpecialSetLastTargetCliloc, _blackOutlineStatics, _ignoreStaminaCheck, _blockWoS, _blockWoSFelOnly, _blockWoSArtForceAoS, _blockEnergyF, _blockEnergyFFelOnly, _blockEnergyFArtForceAoS;
+        private InputField _SpecialSetLastTargetClilocText, _blockWoSArt, _blockEnergyFArt;
+        // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3689,6 +3693,96 @@ namespace ClassicUO.Game.UI.Gumps
             section6.Add(_multipleUnderlinesSelfPartyTransparency = AddHSlider(null, 1, 10, _currentProfile.MultipleUnderlinesSelfPartyTransparency, startX, startY, 200));
             startY += _multipleUnderlinesSelfPartyTransparency.Height + 2;
             // ## BEGIN - END ## // OLDHEALTHLINES
+            // ## BEGIN - END ## // MISC
+            SettingsSection section7 = AddSettingsSection(box, "-----MISC-----");
+            section7.Y = section6.Bounds.Bottom + 40;
+
+            startY = section6.Bounds.Bottom + 40;
+
+            section7.Add(_offscreenTargeting = AddCheckBox(null, "Offscreen targeting (always on)", true, startX, startY)); //has no effect but feature list
+            startY += _offscreenTargeting.Height + 2;
+            section7.Add(_SpecialSetLastTargetCliloc = AddCheckBox(null, "Razor * Target * to lasttarget string", _currentProfile.SpecialSetLastTargetCliloc, startX, startY));
+            startY += _SpecialSetLastTargetCliloc.Height + 2;
+
+            section7.Add
+            (
+                _SpecialSetLastTargetClilocText = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    150,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    false,
+                    50000
+                )
+            );
+            _SpecialSetLastTargetClilocText.SetText(_currentProfile.SpecialSetLastTargetClilocText.ToString());
+
+            section7.Add(_blackOutlineStatics = AddCheckBox(null, "Outline statics black", _currentProfile.BlackOutlineStatics, startX, startY));
+            startY += _blackOutlineStatics.Height + 2;
+
+            section7.Add(_ignoreStaminaCheck = AddCheckBox(null, "Ignore stamina check", _currentProfile.IgnoreStaminaCheck, startX, startY));
+            startY += _ignoreStaminaCheck.Height + 2;
+
+            section7.Add(_blockWoS = AddCheckBox(null, "Block Wall of Stone", _currentProfile.BlockWoS, startX, startY));
+            startY += _blockWoS.Height + 2;
+
+            section7.Add(_blockWoSFelOnly = AddCheckBox(null, "Block Wall of Stone Fel only", _currentProfile.BlockWoSFelOnly, startX, startY));
+            startY += _blockWoSFelOnly.Height + 2;
+
+            section7.Add(AddLabel(null, "Wall of Stone Art (-info -> DisplayedGraphic): ", startX, startY));
+            section7.Add
+            (
+                _blockWoSArt = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _blockWoSArt.SetText(_currentProfile.BlockWoSArt.ToString());
+            startY += _blockWoSArt.Height + 2;
+
+            section7.Add(_blockWoSArtForceAoS = AddCheckBox(null, "Force WoS to Art above (AoS only?) and hue 945", _currentProfile.BlockWoSArtForceAoS, startX, startY));
+            startY += _blockWoSArtForceAoS.Height + 2;
+
+            section7.Add(_blockEnergyF = AddCheckBox(null, "Block Energy Field", _currentProfile.BlockEnergyF, startX, startY));
+            startY += _blockEnergyF.Height + 2;
+
+            section7.Add(_blockEnergyFFelOnly = AddCheckBox(null, "Block Energy Field Fel only", _currentProfile.BlockEnergyFFelOnly, startX, startY));
+            startY += _blockEnergyFFelOnly.Height + 2;
+
+            section7.Add(AddLabel(null, "Energy Field Art (-info -> DisplayedGraphic): ", startX, startY));
+            section7.Add
+            (
+                _blockEnergyFArt = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _blockEnergyFArt.SetText(_currentProfile.BlockEnergyFArt.ToString());
+            startY += _blockEnergyFArt.Height + 2;
+
+            section7.Add(_blockEnergyFArtForceAoS = AddCheckBox(null, "Force EnergyF to Art above (AoS only?) and hue 293", _currentProfile.BlockEnergyFArtForceAoS, startX, startY));
+            startY += _blockEnergyFArtForceAoS.Height + 2;
+            // ## BEGIN - END ## // MISC
 
             Add(rightArea, PAGE);
         }
@@ -4623,6 +4717,85 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.MultipleUnderlinesSelfPartyTransparency = _multipleUnderlinesSelfPartyTransparency.Value;
             _currentProfile.UseOldHealthBars = _useOldHealthBars.IsChecked;
             // ## BEGIN - END ## // OLDHEALTLINES
+            // ## BEGIN - END ## // MISC
+            _currentProfile.BlackOutlineStatics = _blackOutlineStatics.IsChecked;
+            _currentProfile.IgnoreStaminaCheck = _ignoreStaminaCheck.IsChecked;
+            _currentProfile.SpecialSetLastTargetCliloc = _SpecialSetLastTargetCliloc.IsChecked;
+            _currentProfile.SpecialSetLastTargetClilocText = _SpecialSetLastTargetClilocText.Text;
+            _currentProfile.BlockWoSArtForceAoS = _blockWoSArtForceAoS.IsChecked;
+            _currentProfile.BlockWoSArt = uint.Parse(_blockWoSArt.Text);
+            if (_currentProfile.BlockWoS != _blockWoS.IsChecked)
+            {
+                if (_blockWoS.IsChecked)
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = true;
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = true;
+                }
+                else
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = false;
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = false;
+                }
+                _currentProfile.BlockWoS = _blockWoS.IsChecked;
+            }
+            if (_currentProfile.BlockWoSFelOnly != _blockWoSFelOnly.IsChecked)
+            {
+                if (_blockWoSFelOnly.IsChecked && World.MapIndex == 0)
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = true;
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = true;
+                }
+                else
+                {
+                    TileDataLoader.Instance.StaticData[0x038A].IsImpassable = false;
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockWoSArt].IsImpassable = false;
+                }
+                _currentProfile.BlockWoSFelOnly = _blockWoSFelOnly.IsChecked;
+            }
+            _currentProfile.BlockEnergyFArtForceAoS = _blockEnergyFArtForceAoS.IsChecked;
+            _currentProfile.BlockEnergyFArt = uint.Parse(_blockEnergyFArt.Text);
+            if (_currentProfile.BlockEnergyF != _blockEnergyF.IsChecked)
+            {
+                if (_blockEnergyF.IsChecked)
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        //0x3946 to 0x3964 / 14662 to 14692
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = true;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = true;
+                }
+                else
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = false;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = false;
+                }
+                _currentProfile.BlockEnergyF = _blockEnergyF.IsChecked;
+            }
+            if (_currentProfile.BlockEnergyFFelOnly != _blockEnergyFFelOnly.IsChecked)
+            {
+                if (_blockEnergyFFelOnly.IsChecked && World.MapIndex == 0)
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = true;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = true;
+                }
+                else
+                {
+                    for (int i = 0; i < 31; i++)
+                    {
+                        TileDataLoader.Instance.StaticData[0x3946 + i].IsImpassable = false;
+                    }
+                    TileDataLoader.Instance.StaticData[_currentProfile.BlockEnergyFArt].IsImpassable = false;
+                }
+                _currentProfile.BlockEnergyFFelOnly = _blockEnergyFFelOnly.IsChecked;
+            }
+            // ## BEGIN - END ## // MISC
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
