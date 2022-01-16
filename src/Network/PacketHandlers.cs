@@ -1629,6 +1629,12 @@ namespace ClassicUO.Network
                 }
 
                 GameActions.RequestWarMode(false);
+
+                // ## BEGIN - END ## // MISC2
+                World.Player.DeathX = World.Player.X;
+                World.Player.DeathY = World.Player.Y;
+                World.Player.DeathTick = Time.Ticks;
+                // ## BEGIN - END ## // MISC2
             }
         }
 

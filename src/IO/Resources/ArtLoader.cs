@@ -219,6 +219,153 @@ namespace ClassicUO.IO.Resources
 
             return spriteInfo.Texture;
         }
+        // ## BEGIN - END ## // MISC2
+        //FLATLAND
+        private void AddSpriteToAtlasWF(TextureAtlas atlas, int g, bool isTerrain, bool IsImpassable)
+        {
+            ref UOFileIndex entry = ref GetValidRefEntry(g);
+
+            if (isTerrain)
+            {
+                if (entry.Length == 0)
+                {
+                    return;
+                }
+
+                Span<uint> data = stackalloc uint[44 * 44];
+
+                _file.SetData(entry.Address, entry.FileSize);
+                _file.Seek(entry.Offset);
+
+                for (int i = 0; i < 22; ++i)
+                {
+                    int start = 22 - (i + 1);
+                    int pos = i * 44 + start;
+                    int end = start + ((i + 1) << 1);
+
+                    for (int j = start; j < end; ++j)
+                    {
+                        data[pos++] = HuesHelper.Color16To32(_file.ReadUShort()) | 0xFF_00_00_00;
+
+                        // ## BEGIN - END ## //
+                        if (j == end - 1)//| j == end - 3)// | j == end - 2 | j == end - 3)
+                        {
+                            if (IsImpassable)
+                            {
+                                data[pos++] = 0xFF_00_00_00;
+                            }
+                            else
+                            {
+                                data[pos++] = 0xAA_AA_AA_AA;
+                            }
+                        }
+                        // ## BEGIN - END ## //
+                    }
+                }
+
+                for (int i = 0; i < 22; ++i)
+                {
+                    int pos = (i + 22) * 44 + i;
+                    int end = i + ((22 - i) << 1);
+
+                    for (int j = i; j < end; ++j)
+                    {
+                        data[pos++] = HuesHelper.Color16To32(_file.ReadUShort()) | 0xFF_00_00_00;
+
+                        // ## BEGIN - END ## //
+                        if (j == end - 1 | j == end - 3)// | j == end - 2 | j == end - 3)
+                        {
+                            if (IsImpassable)
+                            {
+                                data[pos++] = 0xFF_00_00_00;
+                            }
+                            else
+                            {
+                                data[pos++] = 0xAA_AA_AA_AA;
+                            }
+                        }
+                        // ## BEGIN - END ## //
+                    }
+                }
+
+                ref var spriteInfo = ref _spriteInfos[g];
+
+                spriteInfo.Texture = atlas.AddSprite(data, 44, 44, out spriteInfo.UV);
+            }
+            else
+            {
+                if (ReadHeader(_file, ref entry, out short width, out short height))
+                {
+                    uint[] buffer = null;
+
+                    Span<uint> artPixels = width * height <= 1024 ? stackalloc uint[1024] : (buffer = System.Buffers.ArrayPool<uint>.Shared.Rent(width * height));
+
+                    try
+                    {
+                        ushort fixedGraphic = (ushort) (g - 0x4000);
+
+                        if (ReadData(artPixels, width, height, _file))
+                        {
+                            // keep the cursor graphic check to cleanup edges
+                            if ((fixedGraphic >= 0x2053 && fixedGraphic <= 0x2062) || (fixedGraphic >= 0x206A && fixedGraphic <= 0x2079))
+                            {
+                                for (int i = 0; i < width; i++)
+                                {
+                                    artPixels[i] = 0;
+                                    artPixels[(height - 1) * width + i] = 0;
+                                }
+
+                                for (int i = 0; i < height; i++)
+                                {
+                                    artPixels[i * width] = 0;
+                                    artPixels[i * width + width - 1] = 0;
+                                }
+                            }
+
+                            ref var spriteInfo = ref _spriteInfos[g];
+
+                            FinalizeData
+                            (
+                                artPixels,
+                                ref entry,
+                                fixedGraphic,
+                                width,
+                                height,
+                                out spriteInfo.ArtBounds
+                            );
+
+                            _picker.Set(fixedGraphic, width, height, artPixels);
+                            spriteInfo.Texture = atlas.AddSprite(artPixels, width, height, out spriteInfo.UV);
+                        }
+                    }
+                    finally
+                    {
+                        if (buffer != null)
+                        {
+                            System.Buffers.ArrayPool<uint>.Shared.Return(buffer, true);
+                        }
+                    }
+                }
+            }
+        }
+        public Texture2D GetLandTextureWF(uint g, out Rectangle bounds, bool IsImpassable)
+        {
+            g &= _graphicMask;
+
+            var atlas = TextureAtlas.Shared;
+
+            ref var spriteInfo = ref _spriteInfos[g];
+
+            if (spriteInfo.Texture == null)
+            {
+                AddSpriteToAtlasWF(atlas, (int) g, true, IsImpassable);
+            }
+
+            bounds = spriteInfo.UV;
+
+            return spriteInfo.Texture;
+        }
+        // ## BEGIN - END ## // MISC2
 
         public Texture2D GetStaticTexture(uint g, out Rectangle bounds)
         {
