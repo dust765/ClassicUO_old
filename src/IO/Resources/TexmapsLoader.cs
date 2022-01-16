@@ -33,6 +33,9 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+// ## BEGIN - END ## // MISC2
+using ClassicUO.Configuration;
+// ## BEGIN - END ## // MISC2
 using ClassicUO.Game;
 using ClassicUO.Renderer;
 using ClassicUO.Utility;
@@ -138,6 +141,85 @@ namespace ClassicUO.IO.Resources
 
             return spriteInfo.Texture;  //atlas.GetTexture(g, out bounds);
         }
+        // ## BEGIN - END ## // MISC2
+        //STRECHEDLAND
+        public Texture2D GetLandTextureWF(uint g, out Rectangle bounds, bool isImpassable)
+        {
+            // avoid to mix land with statics
+            //g += ushort.MaxValue;
+
+            var atlas = TextureAtlas.Shared;
+
+            ref var spriteInfo = ref _spriteInfos[g];
+
+            if (spriteInfo.Texture == null)
+            {
+                AddSpriteToAtlasWF(atlas, g, isImpassable);
+            }
+
+            bounds = spriteInfo.UV;
+
+            return spriteInfo.Texture;  //atlas.GetTexture(g, out bounds);
+        }
+        private unsafe void AddSpriteToAtlasWF(TextureAtlas atlas, uint index, bool IsImpassable)
+        {
+            ref UOFileIndex entry = ref GetValidRefEntry((int) (index));
+
+            if (entry.Length <= 0)
+            {
+                return;
+            }
+
+            _file.SetData(entry.Address, entry.FileSize);
+            _file.Seek(entry.Offset);
+
+            int size = entry.Length == 0x2000 ? 64 : 128;
+            Span<uint> data = stackalloc uint[size * size];
+
+            for (int i = 0; i < size; ++i)
+            {
+                int pos = i * size;
+
+                for (int j = 0; j < size; ++j)
+                {
+                    data[pos + j] = HuesHelper.Color16To32(_file.ReadUShort()) | 0xFF_00_00_00;
+
+                    // ## BEGIN - END ## // MISC2
+                    if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WireFrameView)
+                    {
+                        if (pos <= 100)
+                        {
+                            if (IsImpassable)
+                            {
+                                data[pos + j] = 0xFF_00_00_00;
+                            }
+                            else
+                            {
+                                data[pos + j] = 0xAA_AA_AA_AA;
+                            }
+                        }
+
+                        if (j == 0 | j == 1 | j == 2)
+                        {
+                            if (IsImpassable)
+                            {
+                                data[pos + j] = 0xFF_00_00_00;
+                            }
+                            else
+                            {
+                                data[pos + j] = 0xAA_AA_AA_AA;
+                            }
+                        }
+                    }
+                    // ## BEGIN - END ## // MISC2
+                }
+            }
+
+            ref var spriteInfo = ref _spriteInfos[index];
+
+            spriteInfo.Texture = atlas.AddSprite(data, size, size, out spriteInfo.UV);
+        }
+        // ## BEGIN - END ## // MISC2
 
         private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index)
         {

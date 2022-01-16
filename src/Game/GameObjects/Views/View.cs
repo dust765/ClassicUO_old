@@ -33,6 +33,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using ClassicUO.Configuration;
+// ## BEGIN - END ## // MISC2
+using ClassicUO.Game.Data;
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MISC2
 using ClassicUO.IO;
 using ClassicUO.IO.Resources;
 using ClassicUO.Renderer;
@@ -195,7 +199,77 @@ namespace ClassicUO.Game.GameObjects
                 );
             }
         }
+        // ## BEGIN - END ## // MISC2
+        //FLATLAND
+        protected static void DrawLandWF(UltimaBatcher2D batcher, ushort graphic, int x, int y, Vector3 hue, float depth, bool IsImpassable)
+        {
+            var texture = ArtLoader.Instance.GetLandTextureWF(graphic, out var bounds, IsImpassable);
 
+            if (texture != null)
+            {
+                batcher.Draw
+                (
+                    texture,
+                    new Vector2(x, y),
+                    bounds,
+                    hue,
+                    0f,
+                    Vector2.Zero,
+                    1f,
+                    SpriteEffects.None,
+                    depth + 0.5f
+                );
+            }
+        }
+        //STRECHEDLAND
+        protected static void DrawLandWF
+        (
+            UltimaBatcher2D batcher,
+            ushort graphic,
+            int x,
+            int y,
+            ref UltimaBatcher2D.YOffsets yOffsets,
+            ref Vector3 nTop,
+            ref Vector3 nRight,
+            ref Vector3 nLeft,
+            ref Vector3 nBottom,
+            Vector3 hue,
+            float depth,
+            bool isImpassable
+        )
+        {
+            var texture = TexmapsLoader.Instance.GetLandTextureWF(TileDataLoader.Instance.LandData[graphic].TexID, out var bounds, isImpassable);
+
+            if (texture != null)
+            {
+                batcher.DrawStretchedLand
+                (
+                    texture,
+                    new Vector2(x, y),
+                    bounds,
+                    ref yOffsets,
+                    ref nTop,
+                    ref nRight,
+                    ref nLeft,
+                    ref nBottom,
+                    hue,
+                    depth + 0.5f
+                );
+            }
+            else
+            {
+                DrawStatic
+                (
+                    batcher,
+                    graphic,
+                    x,
+                    y,
+                    hue,
+                    depth
+                );
+            }
+        }
+        // ## BEGIN - END ## // MISC2
         protected static void DrawStatic(UltimaBatcher2D batcher, ushort graphic, int x, int y, Vector3 hue, float depth)
         {
             var texture = ArtLoader.Instance.GetStaticTexture(graphic, out var bounds);
@@ -305,6 +379,16 @@ namespace ClassicUO.Game.GameObjects
                 y -= index.Height;
 
                 Vector2 pos = new Vector2(x, y);
+
+                // ## BEGIN - END ## // MISC2
+                if (ProfileManager.CurrentProfile.IgnoreCoTEnabled)
+                {
+                    if (StaticFilters.IsIgnoreCoT(graphic) || ProfileManager.CurrentProfile.TreeType == 1 && graphic == CombatCollection.TREE_REPLACE_GRAPHIC || ProfileManager.CurrentProfile.TreeType == 2 & graphic == CombatCollection.TREE_REPLACE_GRAPHIC_TILE)
+                    {
+                        shadow = false;
+                    }
+                }
+                // ## BEGIN - END ## // MISC2
 
                 if (shadow)
                 {
