@@ -92,6 +92,18 @@ Block Wall of Stone
 
 Block Energy Field
 
+# misc2
+
+wireframe view
+
+hue impassable tiles
+
+transparent / invisible house and items by Z level from player and min Z from ground
+
+ignore list for circle of transparency (txt file created in your /Data/Client folder)
+
+show death location on worldmap
+
 # Added files
 
 /src/Dust765
@@ -299,6 +311,50 @@ FILE                                            START   END     COMMIT
 /src/Game/UI/Controls/Control.cs                36      38      MISC
 
 /src/Game/UI/Controls/Control.cs                81      83      MISC
+
+/src/Game/GameObjects/Views/TileView.cs         35      37      MISC2
+
+/src/Game/GameObjects/Views/TileView.cs         111     120     MISC2
+
+/src/Game/GameObjects/Views/TileView.cs         126     170     MISC2
+
+/src/Game/GameObjects/Views/TileView.cs         174     204     MISC2
+
+/src/Game/GameObjects/Views/View.cs             36      39      MISC2
+
+/src/Game/GameObjects/Views/View.cs             202     272     MISC2
+
+/src/Game/GameObjects/Views/View.cs             383     391     MISC2
+
+/src/IO/Resources/TexmapsLoader.cs              36      38      MISC2
+
+/src/IO/Resources/TexmapsLoader.cs              144     222     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  222     368     MISC2
+
+/src/Game/Data/StaticFilters.cs                 52      54      MISC2
+
+/src/Game/Data/StaticFilters.cs                 63      65      MISC2
+
+/src/Game/Data/StaticFilters.cs                 79      118     MISC2
+
+/src/Game/Data/StaticFilters.cs                 405     411     MISC2
+
+/src/Game/GameObjects/Views/ItemView.cs         213     235     MISC2
+
+/src/Game/GameObjects/Views/MultiView.cs        155     177     MISC2
+
+/src/Game/Managers/MacroManager.cs              1565    1574    MISC2
+
+/src/Game/Managers/MacroManager.cs              2092    2095    MISC2
+
+/src/Game/UI/Gumps/WorldMapGump.cs              1960    2013    MISC2
+
+/src/Game/GameObjects/PlayerMobile.cs           51      55      MISC2
+
+/src/Network/PacketHandlers.cs	                1622    1626    MISC2
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs	    414     422     MISC2
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.

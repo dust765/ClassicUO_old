@@ -408,6 +408,16 @@ namespace ClassicUO.Game.Scenes
         {
             if (ProfileManager.CurrentProfile.UseCircleOfTransparency && obj.TransparentTest(maxZ))
             {
+                // ## BEGIN - END ## // MISC2
+                if (ProfileManager.CurrentProfile.IgnoreCoTEnabled)
+                {
+                    if (StaticFilters.IsIgnoreCoT(obj.Graphic) || ProfileManager.CurrentProfile.TreeType == 1 && obj.Graphic == CombatCollection.TREE_REPLACE_GRAPHIC || ProfileManager.CurrentProfile.TreeType == 2 & obj.Graphic == CombatCollection.TREE_REPLACE_GRAPHIC_TILE)
+                    {
+                        return false;
+                    }
+                }
+                // ## BEGIN - END ## // MISC2
+
                 int maxDist = ProfileManager.CurrentProfile.CircleOfTransparencyRadius + 0;
                 Vector2 pos = new Vector2(obj.RealScreenPosition.X, obj.RealScreenPosition.Y - 44);
                 Vector2.Distance(ref playerPos, ref pos, out float dist);
