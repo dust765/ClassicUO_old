@@ -91,6 +91,9 @@ namespace ClassicUO.Game.Scenes
         private long _alphaTimer;
         private bool _forceStopScene;
         private HealthLinesManager _healthLinesManager;
+        // ## BEGIN - END ## // TEXTUREMANAGER
+        private TextureManager _textureManager;
+        // ## BEGIN - END ## // TEXTUREMANAGER
 
         private Point _lastSelectedMultiPositionInHouseCustomization;
         private int _lightCount;
@@ -160,6 +163,9 @@ namespace ClassicUO.Game.Scenes
             InfoBars = new InfoBarManager();
             InfoBars.Load();
             _healthLinesManager = new HealthLinesManager();
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            _textureManager = new TextureManager();
+            // ## BEGIN - END ## // TEXTUREMANAGER
             Weather = new Weather();
 
             WorldViewportGump viewport = new WorldViewportGump(this);
@@ -1213,6 +1219,10 @@ namespace ClassicUO.Game.Scenes
 
         public void DrawOverheads(UltimaBatcher2D batcher, int x, int y)
         {
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            _textureManager.Draw(batcher);
+            // ## BEGIN - END ## // TEXTUREMANAGER
+
             _healthLinesManager.Draw(batcher);
 
             if (!UIManager.IsMouseOverWorld)

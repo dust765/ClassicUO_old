@@ -116,6 +116,18 @@ sticky last target healthbar (healthbar that always will be your last targets he
 
 bandage gump (bandage timer UI)
 
+# texturemanager
+
+texture manager (arrow or halo on mobiles)
+
+# macros
+
+HighlightTileAtRange (toggle)
+
+ToggleTransparentHouses (toggle)
+
+ToggleInvisibleHouses (toggle)
+
 # macros
 
 ObjectInfo (-info command)
@@ -141,6 +153,10 @@ CureGH (cure or gheal)
 /src/Dust765
 
 /src/Dust765/External
+
+/src/halo.png
+
+/src/arrow.png
 
 # changed constant
 
@@ -453,6 +469,14 @@ FILE                                            START   END     COMMIT
 /src/Network/PacketHandlers.cs	                4622    4624    UI/GUMPS
 
 /src/Game/UI/Gumps/OptionsGump.cs               39      41      UI/GUMPS
+
+/src/Game/Scenes/GameScene.cs                   94      96      TEXTUREMANAGER
+
+/src/Game/Scenes/GameScene.cs                   167     169     TEXTUREMANAGER
+
+/src/Game/Scenes/GameScene.cs                   1253    1255    TEXTUREMANAGER
+
+/src/ClassicUO.csproj	                        64      82      TEXTUREMANAGER
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
