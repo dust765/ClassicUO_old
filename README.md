@@ -120,6 +120,10 @@ bandage gump (bandage timer UI)
 
 texture manager (arrow or halo on mobiles)
 
+# UCC UI
+
+UI UCC LINES - Draws a line to HUMANS on your screen.
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -127,6 +131,10 @@ HighlightTileAtRange (toggle)
 ToggleTransparentHouses (toggle)
 
 ToggleInvisibleHouses (toggle)
+
+UCCLinesToggleLT (toggle)
+
+UCCLinesToggleHM (toggle)
 
 # macros
 
@@ -477,6 +485,18 @@ FILE                                            START   END     COMMIT
 /src/Game/Scenes/GameScene.cs                   1253    1255    TEXTUREMANAGER
 
 /src/ClassicUO.csproj	                        64      82      TEXTUREMANAGER
+
+/src/Game/Managers/MacroManager.cs              1700    1717    LINES
+
+/src/Game/Managers/MacroManager.cs              2223    2226    LINES
+
+/src/Game/Scenes/GameScene.cs                   97      99      LINES
+
+/src/Game/Scenes/GameScene.cs                   173     175     LINES
+
+/src/Game/Scenes/GameScene.cs                   230     240     LINES
+
+/src/Game/Scenes/GameScene.cs                   1273    1275    LINES
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
