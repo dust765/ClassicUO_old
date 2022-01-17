@@ -214,6 +214,9 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // MACROS
         private HSliderBar _lastTargetRange;
         // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        private Checkbox _showHPLineInNOH;
+        // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3822,6 +3825,16 @@ namespace ClassicUO.Game.UI.Gumps
             section8.Add(_showDeathOnWorldmap = AddCheckBox(null, "Show death location on world map for 5min:", _currentProfile.ShowDeathOnWorldmap, startX, startY));
             startY += _showDeathOnWorldmap.Height + 2;
             // ## BEGIN - END ## // MISC2
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            SettingsSection section9 = AddSettingsSection(box, "-----NAMEOVERHEAD-----");
+            section9.Y = section8.Bounds.Bottom + 40;
+
+            startY = section8.Bounds.Bottom + 40;
+
+            section9.Add(_showHPLineInNOH = AddCheckBox(null, "Show HPLine in NameOverheadGump:", _currentProfile.ShowHPLineInNOH, startX, startY));
+            startY += _showHPLineInNOH.Height + 2;
+
+            // ## BEGIN - END ## // NAMEOVERHEAD
 
             Add(rightArea, PAGE);
         }
@@ -4879,6 +4892,9 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // MACROS
             _currentProfile.LastTargetRange = _lastTargetRange.Value;
             // ## BEGIN - END ## // MACROS
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            _currentProfile.ShowHPLineInNOH = _showHPLineInNOH.IsChecked;
+            // ## BEGIN - END ## // NAMEOVERHEAD
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
