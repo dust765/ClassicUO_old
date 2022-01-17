@@ -440,6 +440,19 @@ namespace ClassicUO.Configuration
         public uint UOClassicCombatAL_SL_Green { get; set; } = 63;
         public uint UOClassicCombatAL_SL_Red { get; set; } = 34;
         // ## BEGIN - END ## // AUTOLOOT
+        // ## BEGIN - END ## // BUFFBAR
+        public bool UOClassicCombatBuffbar { get; set; } = false;
+        public Point UOClassicCombatBuffbarLocation { get; set; } = new Point(25, 25);
+        public bool UOClassicCombatBuffbar_SwingEnabled { get; set; } = false;
+        public bool UOClassicCombatBuffbar_DoDEnabled { get; set; } = false;
+        public bool UOClassicCombatBuffbar_GotDEnabled { get; set; } = false;
+        public bool UOClassicCombatBuffbar_Locked { get; set; } = true;
+        // ## BEGIN - END ## // BUFFBAR
+        // ## BEGIN - END ## // UCCSETTINGS
+        public uint UOClassicCombatSelf_DisarmedCooldown { get; set; } = 5000;
+        public uint UOClassicCombatSelf_DisarmStrikeCooldown { get; set; } = 30000;
+        public uint UOClassicCombatSelf_DisarmAttemptCooldown { get; set; } = 15000;
+        // ## BEGIN - END ## // UCCSETTINGS
         // ## BEGIN - END ## // BASICSETUP
 
         public bool IgnoreStaminaCheck { get; set; } = false;

@@ -128,6 +128,8 @@ Please specify the correct settings to make theese properly work!
 
 UI UCC AL - Is an autoloot feature / UI. Only works with GridLoot enabled. You can add items to the txt file created in your /Data/Client folder. Recommendation is to set high value items to the autolootlist.txt (items you potentialy would go gray for) and low value items to autolootlistlow. If you check SL (SafeLoot (available for both lists)), items will ONLY be auto looted if you have looting rights. Loot Above ID adds all items to the loot list higher than X, so you dont have to add hundreds of items to the list.
 
+UI UCC BUFFBAR - Provides a visible timer for next swing and disarm. You can enable lines individually enable them and also lock the UI to prevent moving it. There is a txt in /Data/Client to modify the timers for weapons. It does NOT change calculation with SSI or the like.
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -515,6 +517,14 @@ FILE                                            START   END     COMMIT
 /src/Game/UI/Gumps/GridLootGump.cs	            97      115     AUTOLOOT
 
 /src/Game/UI/Gumps/GridLootGump.cs	            228     235     AUTOLOOT
+
+/src/Game/Scenes/GameScene.cs                   252     262     BUFFBAR
+
+/src/Game/Scenes/GameScene.cs                   387     392     BUFFBAR
+
+/src/Game/World.cs                              98      100     BUFFBAR
+
+/src/Network/PacketHandlers.cs	                4645    4647    BUFFBAR
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
