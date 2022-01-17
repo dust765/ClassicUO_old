@@ -32,6 +32,9 @@
 
 using System.Linq;
 using ClassicUO.Configuration;
+// ## BEGIN - END ## // AUTOLOOT
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // AUTOLOOT
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
@@ -91,6 +94,25 @@ namespace ClassicUO.Game.UI.Gumps
             _background = new AlphaBlendControl();
             //_background.Width = MAX_WIDTH;
             //_background.Height = MAX_HEIGHT;
+            // ## BEGIN - END ## // AUTOLOOT
+            if (ProfileManager.CurrentProfile.UOClassicCombatAL_EnableGridLootColoring)
+            {
+                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Gray) //grey
+                    _background.Hue = 0x0040; //green
+                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Red) //red
+                    _background.Hue = 0x0040; //green
+                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Green) //green
+                    _background.Hue = 0x0040; //green
+                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Blue) //blue
+                    _background.Hue = 0x0021; //red
+            }
+            //TRIGGER AL IF ENABLED
+            if (ProfileManager.CurrentProfile.UOClassicCombatAL)
+            {
+                UOClassicCombatAL UOClassicCombatAL = UIManager.GetGump<UOClassicCombatAL>();
+                UOClassicCombatAL?.OpenCorpseTrigger(_corpse.Serial);
+            }
+            // ## BEGIN - END ## // AUTOLOOT
             Add(_background);
 
             Width = _background.Width;
@@ -203,6 +225,15 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void UpdateContents()
         {
+            // ## BEGIN - END ## // AUTOLOOT
+            //TRIGGER AL IF ENABLED
+            if (ProfileManager.CurrentProfile.UOClassicCombatAL)
+            {
+                UOClassicCombatAL UOClassicCombatAL = UIManager.GetGump<UOClassicCombatAL>();
+                UOClassicCombatAL?.UpdateCorpseTrigger(_corpse.Serial);
+            }
+            // ## BEGIN - END ## // AUTOLOOT
+
             const int GRID_ITEM_SIZE = 50;
 
             int x = 20;
