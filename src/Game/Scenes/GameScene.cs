@@ -94,6 +94,9 @@ namespace ClassicUO.Game.Scenes
         // ## BEGIN - END ## // TEXTUREMANAGER
         private TextureManager _textureManager;
         // ## BEGIN - END ## // TEXTUREMANAGER
+        // ## BEGIN - END ## // LINES
+        private UOClassicCombatLines _UOClassicCombatLines;
+        // ## BEGIN - END ## // LINES
 
         private bool _isListReady;
         private Point _lastSelectedMultiPositionInHouseCustomization;
@@ -167,6 +170,9 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // TEXTUREMANAGER
             _textureManager = new TextureManager();
             // ## BEGIN - END ## // TEXTUREMANAGER
+            // ## BEGIN - END ## // LINES
+            _UOClassicCombatLines = new UOClassicCombatLines();
+            // ## BEGIN - END ## // LINES
             Weather = new Weather();
 
             WorldViewportGump viewport = new WorldViewportGump(this);
@@ -221,6 +227,17 @@ namespace ClassicUO.Game.Scenes
                 UIManager.Add(new BandageGump());
             }
             // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // LINES
+            if (ProfileManager.CurrentProfile.UOClassicCombatLines)
+            {
+                UIManager.Add(new UOClassicCombatLines
+                {
+                    X = ProfileManager.CurrentProfile.UOClassicCombatLinesLocation.X,
+                    Y = ProfileManager.CurrentProfile.UOClassicCombatLinesLocation.Y
+                });
+
+            }
+            // ## BEGIN - END ## // LINES
 
             CircleOfTransparency.Create(ProfileManager.CurrentProfile.CircleOfTransparencyRadius);
             Plugin.OnConnected();
@@ -1253,6 +1270,9 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // TEXTUREMANAGER
             _textureManager.Draw(batcher);
             // ## BEGIN - END ## // TEXTUREMANAGER
+            // ## BEGIN - END ## // LINES
+            _UOClassicCombatLines.Draw(batcher);
+            // ## BEGIN - END ## // LINES
 
             _healthLinesManager.Draw(batcher);
 
