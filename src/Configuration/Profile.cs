@@ -396,6 +396,23 @@ namespace ClassicUO.Configuration
         public Point BandageGumpOffset { get; set; } = new Point(0, 0);
         public bool BandageGump { get; set; }
         // ## BEGIN - END ## // UI/GUMPS
+        // ## BEGIN - END ## // TEXTUREMANAGER
+        public bool TextureManagerEnabled { get; set; } = false;
+        public bool TextureManagerHalos { get; set; } // Halos
+        public bool TextureManagerHumansOnly { get; set; } = false;
+        public bool TextureManagerPurple { get; set; } = true;
+        public bool TextureManagerGreen { get; set; } = true;
+        public bool TextureManagerRed { get; set; } = true;
+        public bool TextureManagerOrange { get; set; } = true;
+        public bool TextureManagerBlue { get; set; } = true;
+        public bool TextureManagerArrows { get; set; } // Arrows
+        public bool TextureManagerHumansOnlyArrows { get; set; } = false;
+        public bool TextureManagerPurpleArrows { get; set; } = true;
+        public bool TextureManagerGreenArrows { get; set; } = true;
+        public bool TextureManagerRedArrows { get; set; } = true;
+        public bool TextureManagerOrangeArrows { get; set; } = true;
+        public bool TextureManagerBlueArrows { get; set; } = true;
+        // ## BEGIN - END ## // TEXTUREMANAGER
         // ## BEGIN - END ## // BASICSETUP
 
         public bool IgnoreStaminaCheck { get; set; } = false;
