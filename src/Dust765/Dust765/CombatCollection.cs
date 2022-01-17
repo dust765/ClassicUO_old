@@ -58,6 +58,13 @@ namespace ClassicUO.Dust765.Dust765
         public const ushort BRIGHT_POISON_COLOR = 0x0A0B;
         public const ushort BRIGHT_PARALYZE_COLOR = 0x0A13;
         // ## BEGIN - END ## // ART / HUE CHANGES
+        // ## BEGIN - END ## // MACROS
+        //USED VARS
+        public static bool _HealOnHPChangeON = false;
+        public static int _HealOnHPChangeHP = 0;
+        public static bool _HarmOnSwingON = false;
+        public static bool _HarmOnSwingTrigger = false;
+        // ## BEGIN - END ## // MACROS
 
         // ## BEGIN - END ## // ART / HUE CHANGES
         //GAME\SCENES\GAMESCENEDRAWINGSORTING.CS
@@ -1443,5 +1450,32 @@ namespace ClassicUO.Dust765.Dust765
             }
         }
         // ## BEGIN - END ## // MISC
+        // ## BEGIN - END ## // MACROS
+        //GAME\SCENES\GAMESCENEINPUTHANDLER.CS
+        //GAME\MANAGERS\MACROMANAGER.CS
+        public static void HealOnHPChange()
+        {
+            if (_HealOnHPChangeON)
+            {
+                if (_HealOnHPChangeHP != World.Player.Hits)
+                {
+                    GameActions.CastSpell(29); //greater heal
+                    _HealOnHPChangeON = false;
+                }
+            }
+        }
+        public static void HarmOnSwing()
+        {
+            if (_HarmOnSwingON)
+            {
+                if (_HarmOnSwingTrigger)
+                {
+                    GameActions.CastSpell(12); //harm
+                    _HarmOnSwingTrigger = false;
+                    _HarmOnSwingON = false;
+                }
+            }
+        }
+        // ## BEGIN - END ## // MACROS
     }
 }
