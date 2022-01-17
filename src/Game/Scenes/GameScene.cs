@@ -238,6 +238,17 @@ namespace ClassicUO.Game.Scenes
 
             }
             // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // AUTOLOOT
+            if (ProfileManager.CurrentProfile.UOClassicCombatAL)
+            {
+                UIManager.Add(new UOClassicCombatAL
+                {
+                    X = ProfileManager.CurrentProfile.UOClassicCombatALLocation.X,
+                    Y = ProfileManager.CurrentProfile.UOClassicCombatALLocation.Y
+                });
+
+            }
+            // ## BEGIN - END ## // AUTOLOOT
 
             CircleOfTransparency.Create(ProfileManager.CurrentProfile.CircleOfTransparencyRadius);
             Plugin.OnConnected();

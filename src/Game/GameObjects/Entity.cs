@@ -96,6 +96,9 @@ namespace ClassicUO.Game.GameObjects
         public bool ExecuteAnimation = true;
         internal long LastAnimationChangeTime;
         public HitsRequestStatus HitsRequest;
+        // ## BEGIN - END ## // AUTOLOOT
+        public ushort LootFlag;
+        // ## BEGIN - END ## // AUTOLOOT
 
         public void FixHue(ushort hue)
         {

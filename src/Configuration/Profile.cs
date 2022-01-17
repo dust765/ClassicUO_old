@@ -423,6 +423,24 @@ namespace ClassicUO.Configuration
         public bool UOClassicCombatLines_ToggleHMOrange { get; set; } = false;
         public bool UOClassicCombatLines_ToggleHMCriminal { get; set; } = false;
         // ## BEGIN - END ## // LINES
+        // ## BEGIN - END ## // AUTOLOOT
+        public bool UOClassicCombatAL { get; set; } = false;
+        public Point UOClassicCombatALLocation { get; set; } = new Point(25, 25);
+        public bool UOClassicCombatAL_EnableAL { get; set; } = false;
+        public bool UOClassicCombatAL_EnableSL { get; set; } = false;
+        public bool UOClassicCombatAL_EnableALLow { get; set; } = false;
+        public bool UOClassicCombatAL_EnableSLLow { get; set; } = false;
+        public uint UOClassicCombatAL_LootDelay { get; set; } = 500;
+        public uint UOClassicCombatAL_PurgeDelay { get; set; } = 10000;
+        public uint UOClassicCombatAL_QueueSpeed { get; set; } = 100;
+        public bool UOClassicCombatAL_EnableGridLootColoring { get; set; } = false;
+        public bool UOClassicCombatAL_EnableLootAboveID { get; set; } = false;
+        public uint UOClassicCombatAL_LootAboveID { get; set; } = 22400;
+        public uint UOClassicCombatAL_SL_Gray { get; set; } = 946;
+        public uint UOClassicCombatAL_SL_Blue { get; set; } = 89;
+        public uint UOClassicCombatAL_SL_Green { get; set; } = 63;
+        public uint UOClassicCombatAL_SL_Red { get; set; } = 34;
+        // ## BEGIN - END ## // AUTOLOOT
         // ## BEGIN - END ## // BASICSETUP
 
         public bool IgnoreStaminaCheck { get; set; } = false;
