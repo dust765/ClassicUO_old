@@ -375,6 +375,19 @@ namespace ClassicUO.Configuration
         public bool ShowJournal2System { get; set; } = true;
         public bool ShowJournal2GuildAlly { get; set; } = true;
         // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        public bool ShowHPLineInNOH { get; set; } = false;
+        public bool NOH_cbcorpses { get; set; } = false;
+        public bool NOH_cbitems { get; set; } = false;
+        public bool NOH_cbmobiles { get; set; } = false;
+        public bool NOH_cbhumanMobilesOnly { get; set; } = false;
+        public bool NOH_cbnotoall { get; set; } = false;
+        public bool NOH_cbnotoblue { get; set; } = false;
+        public bool NOH_cbnotored { get; set; } = false;
+        public bool NOH_cbnotoorange { get; set; } = false;
+        public bool NOH_cbnotocriminal { get; set; } = false;
+        public bool NOH_cbnotoally { get; set; } = false;
+        // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // BASICSETUP
 
         public bool IgnoreStaminaCheck { get; set; } = false;

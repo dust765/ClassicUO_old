@@ -104,6 +104,12 @@ ignore list for circle of transparency (txt file created in your /Data/Client fo
 
 show death location on worldmap
 
+# nameoverhead
+
+hp line in nameoverheads
+
+more filters for nameoverheads
+
 # macros
 
 ObjectInfo (-info command)
@@ -403,6 +409,28 @@ FILE                                            START   END     COMMIT
 /src/Configuration/Profile.cs                   629     634     MACROS
 
 /src/Game/UI/Gumps/GumpType.cs                  60      62      MACROS
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        56      123     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        157     197     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        615     666     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	37      39      NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	72      78      NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	154     312     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	315     322     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	358     408     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       37      39      NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       50      55      NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       101     250     NAMEOVERHEAD
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
