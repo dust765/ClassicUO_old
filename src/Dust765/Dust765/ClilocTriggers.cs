@@ -72,11 +72,40 @@ namespace ClassicUO.Dust765.Dust765
         };
         public void OnMessage(string text, ushort hue, string name, bool isunicode = true)
         {
+            UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>(); // ## BEGIN - END ## // SELF
             UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
 
             //SYS MESSAGES ONLY
             if (name != "System" && text.Length <= 0)
                 return;
+
+            // ## BEGIN - END ## // SELF
+            //STOP BANDIES TIMER
+            for (int i = 0; i < _stopBandiesAtClilocs.Length; i++)
+            {
+                if (ClilocLoader.Instance.GetString(_stopBandiesAtClilocs[i]) == null)
+                    continue;
+
+                if (text.StartsWith(ClilocLoader.Instance.GetString(_stopBandiesAtClilocs[i])))
+                {
+                    UOClassicCombatSelf?.ClilocTriggerStopBandies();
+                    return;
+                }
+            }
+
+            //START BANDIES TIMER
+            for (int i = 0; i < _startBandiesAtClilocs.Length; i++)
+            {
+                if (ClilocLoader.Instance.GetString(_startBandiesAtClilocs[i]) == null)
+                    continue;
+
+                if (text.StartsWith(ClilocLoader.Instance.GetString(_startBandiesAtClilocs[i])))
+                {
+                    UOClassicCombatSelf?.ClilocTriggerStartBandies();
+                    return;
+                }
+            }
+            // ## BEGIN - END ## // SELF
 
             //GOT DISARMED
             for (int i = 0; i < _disarmedAtClilocs.Length; i++)
@@ -86,6 +115,7 @@ namespace ClassicUO.Dust765.Dust765
 
                 if (text.StartsWith(ClilocLoader.Instance.GetString(_disarmedAtClilocs[i])))
                 {
+                    UOClassicCombatSelf?.ClilocTriggerGotDisarmed();// ## BEGIN - END ## // SELF
                     UOClassicCombatBuffbar?.ClilocTriggerGotDisarmed();
 
                     return;
@@ -93,6 +123,7 @@ namespace ClassicUO.Dust765.Dust765
             }
             if (text.StartsWith("Their attack disarms you!"))
             {
+                UOClassicCombatSelf?.ClilocTriggerGotDisarmed();// ## BEGIN - END ## // SELF
                 UOClassicCombatBuffbar?.ClilocTriggerGotDisarmed();
                 return;
             }
@@ -100,51 +131,130 @@ namespace ClassicUO.Dust765.Dust765
             //DISARM
             if (text.StartsWith("You will now attempt to disarm your opponents."))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmON();// ## BEGIN - END ## // SELF
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmON();
                 return;
             }
             if (text.StartsWith("You refrain from making disarm attempts."))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmOFF();// ## BEGIN - END ## // SELF
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmOFF();
                 return;
             }
             //SUCCESSFUL DISARM MSGES
             if (text.StartsWith("You disarm their weapon!"))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmStriked();// ## BEGIN - END ## // SELF
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmStriked();
                 return;
             }
             if (text.StartsWith("Your strike disarms your target!"))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmStriked();// ## BEGIN - END ## // SELF
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmStriked();
                 return;
             }
             if (text.StartsWith("You successfully disarm your opponent!"))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmStriked();// ## BEGIN - END ## // SELF
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmStriked();
                 return;
             }
             //FAILED DISARM MSGES
             if (text.StartsWith("You fail to disarm your opponent."))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmFailed();// ## BEGIN - END ## // SELF
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmFailed();
                 return;
             }
             if (text.StartsWith("You failed in your attempt do disarm."))
             {
+                UOClassicCombatSelf?.ClilocTriggerDisarmFailed();// ## BEGIN - END ## // SELF
                 UOClassicCombatBuffbar?.ClilocTriggerDisarmFailed();
                 return;
             }
+            // ## BEGIN - END ## // SELF
+            //UCCSELF CLILOC TRIGGERS
+            if (text.Contains("You must have a free hand"))
+            {
+                UOClassicCombatSelf?.ClilocTriggerFSFreeHands();
+                return;
+            }
+            if (text.Contains("You must wait") && text.Contains("second before using another") && text.Contains("potion"))
+            {
+
+                string seconds = Regex.Match(text, @"\d+").Value; //first number
+                int secondsS = Int32.Parse(seconds);
+
+                ushort potion = 0;
+
+                if (text.Contains("health"))
+                {
+                    potion = 0x0F0C;
+                }
+                else if (text.Contains("cure"))
+                {
+                    potion = 0x0F07;
+                }
+
+                UOClassicCombatSelf?.ClilocTriggerFSWaitX(secondsS, potion);
+                return;
+            }
+            if (text.StartsWith("You are already at full health."))
+            {
+                UOClassicCombatSelf?.ClilocTriggerFSFullHP();
+                return;
+            }
+            if (text.StartsWith("You are not poisoned."))
+            {
+                UOClassicCombatSelf?.ClilocTriggerFSNoPoison();
+                return;
+            }
+            if (text.StartsWith("You decide against drinking this potion, as you are already at full stamina."))
+            {
+                UOClassicCombatSelf?.ClilocTriggerFSFullStamina();
+                return;
+            }
+            if (text.StartsWith("A tasty bite of the enchanted apple lifts all curses from your soul."))
+            {
+                UOClassicCombatSelf?.ClilocTriggerEApple();
+                return;
+            }
+            // ## BEGIN - END ## // SELF
         }
         public void OnCliloc(uint cliloc)
         {
+            UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();// ## BEGIN - END ## // SELF
             UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
+
+            // ## BEGIN - END ## // SELF
+            //STOP BANDIES TIMER
+            for (int i = 0; i < _stopBandiesAtClilocs.Length; i++)
+            {
+                if (_stopBandiesAtClilocs[i] == cliloc)
+                {
+                    UOClassicCombatSelf?.ClilocTriggerStopBandies();
+                    return;
+                }
+            }
+
+            //START BANDIES TIMER
+            for (int i = 0; i < _startBandiesAtClilocs.Length; i++)
+            {
+                if (_startBandiesAtClilocs[i] == cliloc)
+                {
+                    UOClassicCombatSelf?.ClilocTriggerStartBandies();
+                    return;
+                }
+            }
+            // ## BEGIN - END ## // SELF
 
             //GOT DISARMED
             for (int i = 0; i < _disarmedAtClilocs.Length; i++)
             {
                 if (_disarmedAtClilocs[i] == cliloc)
                 {
+                    UOClassicCombatSelf?.ClilocTriggerGotDisarmed();// ## BEGIN - END ## // SELF
                     UOClassicCombatBuffbar?.ClilocTriggerGotDisarmed();
                     return;
                 }
