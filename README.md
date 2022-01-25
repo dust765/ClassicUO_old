@@ -174,11 +174,31 @@ HarmOnSwing (keep pressed, casts harm as soon as a swinganimation is issued from
 
 CureGH (cure or gheal)
 
+# advanced macros
+
+OpenCorpsesSafe (open corpses in 2 tiles safe to loot)
+
+GrabFriendlyBars, GrabEnemyBars, GrabPartyAllyBars (grab all bars with hotkey)
+
+AutoPot (one pot button)
+
+DefendSelfKey, DefendPartyKey (clever defend self or party)
+
+CustomInterrupt (interrupt current spellcast)
+
+EquipManager (fast equip)
+
+SetMimic_PlayerSerial (set master or custom serial for EquipManager)
+
 # Added files
 
 /src/Dust765
 
 /src/Dust765/External
+
+/src/Dust765/Macros
+
+/src/Dust765/Managers
 
 /src/halo.png
 
@@ -543,6 +563,28 @@ FILE                                            START   END     COMMIT
 /src/Game/Scenes/GameScene.cs                   399     404     SELF
 
 /src/Game/Managers/MacroManager.cs              1517    1529    SELF
+
+/src/Game/Managers/TargetManager.cs             59      61      ADVMACROS
+
+/src/Game/Managers/TargetManager.cs             428     450     ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              45      48      ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              1736    1946    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2275    2281    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2442    2447    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2449    2452    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2462    2464    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2472    2476    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              2725    2765    ADVMACROS
+
+/src/Game/GameObjects/PlayerMobile.cs           1393    1413    ADVMACROS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.

@@ -42,6 +42,10 @@ using ClassicUO.Data;
 using ClassicUO.Dust765.External;
 using ClassicUO.Dust765.Dust765;
 // ## BEGIN - END ## // MACROS
+// ## BEGIN - END ## // ADVMACROS
+using ClassicUO.Dust765.Macros;
+using ClassicUO.Dust765.Managers;
+// ## BEGIN - END ## // ADVMACROS
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Scenes;
@@ -1728,7 +1732,218 @@ namespace ClassicUO.Game.Managers
                     UOClassicCombatLines.ClilocTriggerToggleHM();
 
                     break;
-                    // ## BEGIN - END ## // LINES
+                // ## BEGIN - END ## // LINES
+                // ## BEGIN - END ## // ADVMACROS
+                case MacroType.GrabFriendlyBars:
+                    GrabBars.GrabFriendlyBars();
+
+                    break;
+
+                case MacroType.GrabEnemyBars:
+                    GrabBars.GrabEnemyBars();
+
+                    break;
+
+                case MacroType.GrabPartyAllyBars:
+                    GrabBars.GrabPartyAllyBars();
+
+                    break;
+
+                case MacroType.AutoPot:
+
+                    AutoPotion.UseAutoPotion();
+
+                    break;
+
+                case MacroType.DefendSelfKey: //Defend Self
+
+                    AutoDefender.DefendSelf();
+
+                    break;
+
+                case MacroType.DefendPartyKey: //Defend Party & Allies
+
+                    AutoDefender.DefendParty();
+
+                    break;
+
+                case MacroType.OpenCorpsesSafe:
+                    World.Player.OpenCorpsesSafe(2);
+
+                    break;
+                //##Equip Manager##//
+                case MacroType.EquipManager:
+
+                    switch (macro.SubCode)
+                    {
+                        case MacroSubType.EquipLeatherSuit:
+                            EquipManager.EquipLeather();
+
+                            break;
+                        case MacroSubType.EquipHally:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Hally);
+
+                            break;
+                        case MacroSubType.EquipBardiche:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Bardiche);
+
+                            break;
+                        case MacroSubType.EquipKatana:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Katana);
+
+                            break;
+                        case MacroSubType.EquipCutlass:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Cutlass);
+
+                            break;
+                        case MacroSubType.EquipVikingSword:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.VikingSword);
+
+                            break;
+                        case MacroSubType.EquipBroadSword:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.BroadSword);
+
+                            break;
+                        case MacroSubType.EquipLongSword:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.LongSword);
+
+                            break;
+                        case MacroSubType.EquipScimitar:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Scimitar);
+
+                            break;
+                        case MacroSubType.EquipBattleAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.BattleAxe);
+
+                            break;
+                        case MacroSubType.EquipLargeBattleAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.LargeBattleAxe);
+
+                            break;
+                        case MacroSubType.EquipDoubleAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.DoubleAxe);
+
+                            break;
+                        case MacroSubType.EquipTwoHandedAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.TwoHandedAxe);
+
+                            break;
+                        case MacroSubType.EquipExecutionerAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.ExecutionerAxe);
+
+                            break;
+                        case MacroSubType.EquipAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Axe);
+
+                            break;
+                        case MacroSubType.EquipXbow:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.HeavyXbow);
+
+                            break;
+                        case MacroSubType.EquipCrossBow:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.CrossBow);
+
+                            break;
+                        case MacroSubType.EquipBow:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Bow);
+
+                            break;
+                        case MacroSubType.EquipSpear:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Spear);
+
+                            break;
+                        case MacroSubType.EquipShortSpear:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.ShortSpear);
+
+                            break;
+                        case MacroSubType.EquipWarFork:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.WarFork);
+
+                            break;
+                        case MacroSubType.EquipKryss:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Kryss);
+
+                            break;
+                        case MacroSubType.EquipClub:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Club);
+
+                            break;
+                        case MacroSubType.EquipWarAxe:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.WarAxe);
+
+                            break;
+                        case MacroSubType.EquipHammerPick:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.HammerPick);
+
+                            break;
+                        case MacroSubType.EquipMaul:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Maul);
+
+                            break;
+                        case MacroSubType.EquipMace:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.Mace);
+
+                            break;
+                        case MacroSubType.EquipWarMace:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.WarMace);
+
+                            break;
+                        case MacroSubType.EquipQStaff:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.QuarterStaff);
+
+                            break;
+                        case MacroSubType.EquipGnarledStaff:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.GnarledStaff);
+
+                            break;
+                        case MacroSubType.EquipWarHammer:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.WarHammer);
+
+                            break;
+                        case MacroSubType.EquipChaosShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.ChaosShield);
+
+                            break;
+                        case MacroSubType.EquipOrderShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.OrderShield);
+
+                            break;
+                        case MacroSubType.EquipHeaterShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.HeaterShield);
+
+                            break;
+                        case MacroSubType.EquipBronzeShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.BronzeShield);
+
+                            break;
+                        case MacroSubType.EquipKiteShield:
+                            EquipManager.EquipWeapon(EquipManager.Weapons.KiteShield);
+
+                            break;
+                        case MacroSubType.EquipCustom:
+                            EquipManager.EquipCustom();
+
+                            break;
+                        case MacroSubType.SetCustomEquip:
+                            GameActions.Print("Target the [ITEM] for Custom Equip.", 101);
+                            TargetManager.SetTargeting(CursorTarget.SetCustomSerial, 0, TargetType.Neutral);
+
+                            break;
+                    }
+                    break;
+
+                case MacroType.CustomInterrupt:
+
+                    CustomInterrupt.Interrupt();
+
+                    break;
+
+                case MacroType.SetMimic_PlayerSerial:
+                    GameActions.Print("Target the mobile to set Mimic Player Serial.", 101);
+                    TargetManager.SetTargeting(CursorTarget.SetCustomSerial, 0, TargetType.Neutral);
+
+                    break;
+                    // ## BEGIN - END ## // ADVMACROS
             }
 
 
@@ -2056,6 +2271,14 @@ namespace ClassicUO.Game.Managers
                     count = 1 + MacroSubType.ZoomOut - MacroSubType.DefaultZoom;
 
                     break;
+
+                // ## BEGIN - END ## // ADVMACROS
+                case MacroType.EquipManager:
+                    offset = (int) MacroSubType.ZoomOut;
+                    count = MacroSubType.ZoomOut - MacroSubType.EmptySlot;
+
+                    break;
+                // ## BEGIN - END ## // ADVMACROS
             }
         }
     }
@@ -2216,13 +2439,17 @@ namespace ClassicUO.Game.Managers
         RazorMacro,
         // ## BEGIN - END ## // BASICSETUP
         ObjectInfo, // ## BEGIN - END ## // MACROS
-        notimplemented1,
-        notimplemented2,
-        notimplemented3,
-        notimplemented4,
+        // ## BEGIN - END ## // ADVMACROS
+        GrabFriendlyBars,
+        GrabEnemyBars,
+        GrabPartyAllyBars,
+        AutoPot,
+        // ## BEGIN - END ## // ADVMACROS
         OpenCorpses, // ## BEGIN - END ## // MACROS
-        notimplemented6,
-        notimplemented7,
+        // ## BEGIN - END ## // ADVMACROS
+        DefendSelfKey,
+        DefendPartyKey,
+        // ## BEGIN - END ## // ADVMACROS
         // ## BEGIN - END ## // VISUAL HELPERS
         HighlightTileAtRange,
         // ## BEGIN - END ## // VISUAL HELPERS
@@ -2232,7 +2459,9 @@ namespace ClassicUO.Game.Managers
         HealOnHPChange,
         HarmOnSwing,
         // ## BEGIN - END ## // MACROS
-        notimplemented12,
+        // ## BEGIN - END ## // ADVMACROS
+        EquipManager,
+        // ## BEGIN - END ## // ADVMACROS
         SetTargetClientSide, // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // LINES
         UCCLinesToggleLT,
@@ -2240,9 +2469,11 @@ namespace ClassicUO.Game.Managers
         // ## BEGIN - END ## // LINES
         CureGH, // ## BEGIN - END ## // MACROS
         notimplemented17,
-        notimplemented18,
-        notimplemented19,
-        notimplemented20,
+        // ## BEGIN - END ## // ADVMACROS
+        CustomInterrupt,
+        SetMimic_PlayerSerial,
+        OpenCorpsesSafe,
+        // ## BEGIN - END ## // ADVMACROS
         OpenJournal2, // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // BASICSETUP
         ToggleDrawRoofs,
@@ -2489,6 +2720,48 @@ namespace ClassicUO.Game.Managers
 
         DefaultZoom,
         ZoomIn,
-        ZoomOut
+        ZoomOut,
+
+        // ## BEGIN - END ## // ADVMACROS
+        EquipLeatherSuit,
+        EquipHally,
+        EquipBardiche,
+        EquipKatana,
+        EquipCutlass,
+        EquipVikingSword,
+        EquipBroadSword,
+        EquipLongSword,
+        EquipScimitar,
+        EquipBattleAxe,
+        EquipLargeBattleAxe,
+        EquipDoubleAxe,
+        EquipTwoHandedAxe,
+        EquipExecutionerAxe,
+        EquipAxe,
+        EquipXbow,
+        EquipCrossBow,
+        EquipBow,
+        EquipSpear,
+        EquipShortSpear,
+        EquipWarFork,
+        EquipKryss,
+        EquipClub,
+        EquipWarAxe,
+        EquipHammerPick,
+        EquipMaul,
+        EquipMace,
+        EquipWarMace,
+        EquipQStaff,
+        EquipGnarledStaff,
+        EquipWarHammer,
+        EquipChaosShield,
+        EquipOrderShield,
+        EquipHeaterShield,
+        EquipBronzeShield,
+        EquipKiteShield,
+        EquipCustom,
+        SetCustomEquip,
+        EmptySlot
+        // ## BEGIN - END ## // ADVMACROS
     }
 }
