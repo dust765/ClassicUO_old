@@ -501,6 +501,13 @@ namespace ClassicUO.Configuration
         public uint CustomSerial { get; set; }
         public uint Mimic_PlayerSerial { get; set; }
         // ## BEGIN - END ## // ADVMACROS
+        // ## BEGIN - END ## // AUTOMATIONS
+        public bool AutoWorldmapMarker { get; set; }
+        public bool AutoRangeDisplayAlways { get; set; } = false;
+        public bool AutoRangeDisplayActive { get; set; } = false;
+        public int AutoRangeDisplayActiveRange { get; set; } = 10;
+        public ushort AutoRangeDisplayHue { get; set; } = 0x0074;
+        // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // BASICSETUP
 
         public bool IgnoreStaminaCheck { get; set; } = false;
