@@ -154,6 +154,8 @@ UCCLinesToggleLT (toggle)
 
 UCCLinesToggleHM (toggle)
 
+AutoMeditate (toggle)
+
 # macros
 
 ObjectInfo (-info command)
@@ -190,6 +192,24 @@ EquipManager (fast equip)
 
 SetMimic_PlayerSerial (set master or custom serial for EquipManager)
 
+# commands
+
+type command in chat
+
+-mimic (mimic casting of master)
+
+-marker X Y (add world marker)
+
+auto add marker for T-Maps
+
+-df (defender)
+
+-automed (auto meditate)
+
+-engage (auto pathfind and attack lasttarget)
+
+-autorange (auto show range indicator when weapon is equipped)
+
 # Added files
 
 /src/Dust765
@@ -199,6 +219,10 @@ SetMimic_PlayerSerial (set master or custom serial for EquipManager)
 /src/Dust765/Macros
 
 /src/Dust765/Managers
+
+/src/Dust765/Autos
+
+/src/Dust765/Shared
 
 /src/halo.png
 
@@ -585,6 +609,30 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/MacroManager.cs              2725    2765    ADVMACROS
 
 /src/Game/GameObjects/PlayerMobile.cs           1393    1413    ADVMACROS
+
+/src/Game/Managers/MacroManager.cs              1947    1953    AUTOMATIONS
+
+/src/Game/Managers/MacroManager.cs              2478    2480    AUTOMATIONS
+
+/src/Game/Scenes/GameScene.cs                   274     276     AUTOMATIONS
+
+/src/Game/Scenes/GameScene.cs                   436     444     AUTOMATIONS
+
+/src/Game/World.cs                              352     354     AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                46      48      AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                861     864     AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                2142    2144    AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                2367    2369    AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                3053    3055    AUTOMATIONS
+
+/src/Game/UI/Gumps/WorldMapGump.cs              65      76      AUTOMATIONS
+
+/src/Game/UI/Gumps/WorldMapGump.cs              1823    1893    AUTOMATIONS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.

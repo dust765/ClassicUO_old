@@ -129,6 +129,13 @@ namespace ClassicUO.Game.GameObjects
                     hueVec.Y = 1;
                 }
             }
+            // ## BEGIN - END ## // AUTOMATIONS
+            if (ProfileManager.CurrentProfile.AutoRangeDisplayActive && Distance == ProfileManager.CurrentProfile.AutoRangeDisplayActiveRange)
+            {
+                hueVec.X = ProfileManager.CurrentProfile.AutoRangeDisplayHue;
+                hueVec.Y = 1;
+            }
+            // ## BEGIN - END ## // AUTOMATIONS
             if (ProfileManager.CurrentProfile.PreviewFields)
             {
                 if (CombatCollection.MultiFieldPreview(this))
