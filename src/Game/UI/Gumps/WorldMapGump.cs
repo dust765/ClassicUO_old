@@ -36,6 +36,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using System.Xml;
 using ClassicUO.Configuration;
@@ -76,7 +78,12 @@ namespace ClassicUO.Game.UI.Gumps
         private int _mapIndex;
         private bool _mapMarkersLoaded;
 
+        private List<string> _hiddenZoneFiles;
+        private ZoneSets _zoneSets = new ZoneSets();
+
         private static Texture2D _mapTexture;
+        private static uint[] _pixelBuffer;
+        private static sbyte[] _zBuffer;
 
         public static readonly List<WMapMarkerFile> _markerFiles = new List<WMapMarkerFile>();
 
@@ -126,6 +133,7 @@ namespace ClassicUO.Game.UI.Gumps
             OnResize();
 
             LoadMarkers();
+            LoadZones();
 
             World.WMapManager.SetEnable(true);
 
@@ -202,6 +210,7 @@ namespace ClassicUO.Game.UI.Gumps
 
 
             _hiddenMarkerFiles = string.IsNullOrEmpty(ProfileManager.CurrentProfile.WorldMapHiddenMarkerFiles) ? new List<string>() : ProfileManager.CurrentProfile.WorldMapHiddenMarkerFiles.Split(',').ToList();
+            _hiddenZoneFiles = string.IsNullOrEmpty(ProfileManager.CurrentProfile.WorldMapHiddenZoneFiles) ? new List<string>() : ProfileManager.CurrentProfile.WorldMapHiddenZoneFiles.Split(',').ToList();
         }
 
         public void SaveSettings()
@@ -234,6 +243,7 @@ namespace ClassicUO.Game.UI.Gumps
             ProfileManager.CurrentProfile.WorldMapShowMarkersNames = _showMarkerNames;
 
             ProfileManager.CurrentProfile.WorldMapHiddenMarkerFiles = string.Join(",", _hiddenMarkerFiles);
+            ProfileManager.CurrentProfile.WorldMapHiddenZoneFiles = string.Join(",", _hiddenZoneFiles);
         }
 
         private bool ParseBool(string boolStr)
@@ -385,6 +395,56 @@ namespace ClassicUO.Game.UI.Gumps
             _center.Y = y;
         }
 
+        private void BuildContextMenuForZones(ContextMenuControl parent)
+        {
+            ContextMenuItemEntry zoneOptions = new ContextMenuItemEntry(ResGumps.MapZoneOptions);
+
+            zoneOptions.Add(new ContextMenuItemEntry(ResGumps.MapZoneReload, () => { LoadZones(); BuildContextMenu(); }));
+            zoneOptions.Add(new ContextMenuItemEntry(""));
+
+            if (_zoneSets.ZoneSetDict.Count < 1)
+            {
+                zoneOptions.Add(new ContextMenuItemEntry(ResGumps.MapZoneNone));
+            }
+            else
+            {
+                foreach (KeyValuePair<string, ZoneSet> entry in _zoneSets.ZoneSetDict)
+                {
+                    string filename = entry.Key;
+                    ZoneSet zoneSet = entry.Value;
+
+                    zoneOptions.Add
+                    (
+                        new ContextMenuItemEntry
+                        (
+                            String.Format(ResGumps.MapZoneFileName, zoneSet.NiceFileName),
+                            () => {
+                                zoneSet.Hidden = !zoneSet.Hidden;
+
+                                if (!zoneSet.Hidden)
+                                {
+                                    string hiddenFile = _hiddenZoneFiles.FirstOrDefault(x => x.Equals(filename));
+
+                                    if (!string.IsNullOrEmpty(hiddenFile))
+                                    {
+                                        _hiddenZoneFiles.Remove(hiddenFile);
+                                    }
+                                }
+                                else
+                                {
+                                    _hiddenZoneFiles.Add(filename);
+                                }
+                            },
+                            true,
+                            !entry.Value.Hidden
+                        )
+                    );
+                }
+            }
+
+            parent.Add(zoneOptions);
+        }
+
         private void BuildContextMenu()
         {
             BuildOptionDictionary();
@@ -451,6 +511,8 @@ namespace ClassicUO.Game.UI.Gumps
 
 
             ContextMenu.Add(markersEntry);
+
+            BuildContextMenuForZones(ContextMenu);
 
             ContextMenuItemEntry namesHpBarEntry = new ContextMenuItemEntry(ResGumps.NamesHealthbars);
             namesHpBarEntry.Add(_options["show_your_name"]);
@@ -1138,6 +1200,115 @@ namespace ClassicUO.Game.UI.Gumps
             }
         }
 
+        //private unsafe Task Load()
+        //{
+        //    _mapIndex = World.MapIndex;
+
+        //    if (_mapIndex < 0 || _mapIndex > Constants.MAPS_COUNT)
+        //    {
+        //        return Task.CompletedTask;
+        //    }
+
+        //    return Task.Run
+        //    (
+        //        () =>
+        //        {
+        //            const int OFFSET_PIX = 2;
+        //            const int OFFSET_PIX_HALF = OFFSET_PIX / 2;
+
+        //            if (World.InGame)
+        //            {
+        //                int maxX = -1, maxY = -1;
+
+        //                for (int i = 0; i < MapLoader.Instance.MapsDefaultSize.GetLength(0); i++)
+        //                {
+        //                    if (maxX < MapLoader.Instance.MapsDefaultSize[i, 0])
+        //                    {
+        //                        maxX = MapLoader.Instance.MapsDefaultSize[i, 0];
+        //                    }
+
+        //                    if (maxY < MapLoader.Instance.MapsDefaultSize[i, 1])
+        //                    {
+        //                        maxY = MapLoader.Instance.MapsDefaultSize[i, 1];
+        //                    }
+        //                }
+
+        //                if (OFFSET_PIX > 0)
+        //                {
+        //                    maxX += OFFSET_PIX;
+        //                    maxY += OFFSET_PIX;
+        //                }
+
+        //                _mapTexture?.Dispose();
+
+        //                if (_mapTexture == null || _mapTexture.IsDisposed)
+        //                {
+        //                    _mapTexture = new Texture2D(Client.Game.GraphicsDevice, maxX, maxY, false, SurfaceFormat.Color);
+        //                }
+
+        //                try
+        //                {
+        //                    int realWidth = MapLoader.Instance.MapsDefaultSize[World.MapIndex, 0];
+        //                    int realHeight = MapLoader.Instance.MapsDefaultSize[World.MapIndex, 1];
+
+        //                    int fixedWidth = MapLoader.Instance.MapBlocksSize[World.MapIndex, 0];
+        //                    int fixedHeight = MapLoader.Instance.MapBlocksSize[World.MapIndex, 1];
+
+        //                    const int CHUNK_UNIT_SIZE = 8;
+        //                    const int CHUNK_LAND_SIZE = (CHUNK_UNIT_SIZE + OFFSET_PIX_HALF) * (CHUNK_UNIT_SIZE + OFFSET_PIX_HALF);
+
+        //                    Span<sbyte> allZ = stackalloc sbyte[CHUNK_LAND_SIZE];
+        //                    Span<uint> buffer = stackalloc uint[CHUNK_LAND_SIZE];
+
+        //                    fixed (uint* bufferPtr = buffer)
+        //                    {
+        //                        // cleanup
+        //                        //for (int x = 0, fixedMaxWidth = maxX / 8; x < fixedMaxWidth; x += 1)
+        //                        //{
+        //                        //    for (int y = 0, fixedMaxHeight = maxY / 8; y < fixedMaxHeight; y += 1)
+        //                        //    {
+        //                        //        _mapTexture.SetDataPointerEXT
+        //                        //        (
+        //                        //            0,
+        //                        //            new Rectangle(x * 8, y * 8, 8, 8),
+        //                        //            (IntPtr)bufferPtr,
+        //                        //            sizeof(uint) * buffer.Length
+        //                        //        );
+        //                        //    }
+        //                        //}
+
+        //                        var realAllZ = allZ.Slice(OFFSET_PIX_HALF * CHUNK_UNIT_SIZE, CHUNK_UNIT_SIZE * CHUNK_UNIT_SIZE);
+        //                        var realBuffer = buffer.Slice(OFFSET_PIX_HALF * CHUNK_UNIT_SIZE, CHUNK_UNIT_SIZE * CHUNK_UNIT_SIZE);
+
+        //                        for (int x = 0; x < fixedWidth; x += 1)
+        //                        {
+        //                            for (int y = 0; y < fixedHeight; y += 1)
+        //                            {
+        //                                LoadMapChunk(realBuffer, realAllZ, x, y);
+        //                                LoadMapDetails(realBuffer, realAllZ);
+
+        //                                _mapTexture.SetDataPointerEXT
+        //                                (
+        //                                    0,
+        //                                    new Rectangle(x * CHUNK_UNIT_SIZE + OFFSET_PIX_HALF, y * CHUNK_UNIT_SIZE + OFFSET_PIX_HALF, CHUNK_UNIT_SIZE, CHUNK_UNIT_SIZE),
+        //                                    (IntPtr)(bufferPtr + (OFFSET_PIX_HALF * CHUNK_UNIT_SIZE)),
+        //                                    sizeof(uint) * realBuffer.Length
+        //                                );
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    Log.Error($"error loading worldmap: {ex}");
+        //                }
+
+        //                GameActions.Print(ResGumps.WorldMapLoaded, 0x48);
+        //            }
+        //        }
+        //    );
+        //}
+
         private unsafe Task Load()
         {
             _mapIndex = World.MapIndex;
@@ -1151,37 +1322,37 @@ namespace ClassicUO.Game.UI.Gumps
             (
                 () =>
                 {
-                    const int OFFSET_PIX = 2;
-                    const int OFFSET_PIX_HALF = OFFSET_PIX / 2;
-
                     if (World.InGame)
                     {
-                        int maxX = -1, maxY = -1;
-
-                        for (int i = 0; i < MapLoader.Instance.MapsDefaultSize.GetLength(0); i++)
-                        {
-                            if (maxX < MapLoader.Instance.MapsDefaultSize[i, 0])
-                            {
-                                maxX = MapLoader.Instance.MapsDefaultSize[i, 0];
-                            }
-
-                            if (maxY < MapLoader.Instance.MapsDefaultSize[i, 1])
-                            {
-                                maxY = MapLoader.Instance.MapsDefaultSize[i, 1];
-                            }
-                        }
-
-                        if (OFFSET_PIX > 0)
-                        {
-                            maxX += OFFSET_PIX;
-                            maxY += OFFSET_PIX;
-                        }
-
-                        _mapTexture?.Dispose();
+                        const int OFFSET_PIX = 2;
+                        const int OFFSET_PIX_HALF = OFFSET_PIX / 2;
 
                         if (_mapTexture == null || _mapTexture.IsDisposed)
                         {
+                            int maxX = -1, maxY = -1;
+
+                            for (int i = 0; i < MapLoader.Instance.MapsDefaultSize.GetLength(0); i++)
+                            {
+                                if (maxX < MapLoader.Instance.MapsDefaultSize[i, 0])
+                                {
+                                    maxX = MapLoader.Instance.MapsDefaultSize[i, 0];
+                                }
+
+                                if (maxY < MapLoader.Instance.MapsDefaultSize[i, 1])
+                                {
+                                    maxY = MapLoader.Instance.MapsDefaultSize[i, 1];
+                                }
+                            }
+
+                            if (OFFSET_PIX > 0)
+                            {
+                                maxX += OFFSET_PIX;
+                                maxY += OFFSET_PIX;
+                            }
+
                             _mapTexture = new Texture2D(Client.Game.GraphicsDevice, maxX, maxY, false, SurfaceFormat.Color);
+                            _pixelBuffer = new uint[maxX * maxY];
+                            _zBuffer = new sbyte[maxX * maxY];
                         }
 
                         try
@@ -1192,48 +1363,143 @@ namespace ClassicUO.Game.UI.Gumps
                             int fixedWidth = MapLoader.Instance.MapBlocksSize[World.MapIndex, 0];
                             int fixedHeight = MapLoader.Instance.MapBlocksSize[World.MapIndex, 1];
 
-                            const int CHUNK_UNIT_SIZE = 8;
-                            const int CHUNK_LAND_SIZE = (CHUNK_UNIT_SIZE + OFFSET_PIX_HALF) * (CHUNK_UNIT_SIZE + OFFSET_PIX_HALF);
+                            int size = (realWidth + OFFSET_PIX) * (realHeight + OFFSET_PIX);
 
-                            Span<sbyte> allZ = stackalloc sbyte[CHUNK_LAND_SIZE];
-                            Span<uint> buffer = stackalloc uint[CHUNK_LAND_SIZE];
+                            sbyte[] allZ = _zBuffer;
+                            uint[] buffer = _pixelBuffer;
 
-                            fixed (uint* bufferPtr = buffer)
+                            // horrible tweak to cleanup texture... but works!
+                            buffer.AsSpan().Fill(0);
+
+                            fixed (uint* pixels = &buffer[0])
                             {
-                                // cleanup
-                                //for (int x = 0, fixedMaxWidth = maxX / 8; x < fixedMaxWidth; x += 1)
-                                //{
-                                //    for (int y = 0, fixedMaxHeight = maxY / 8; y < fixedMaxHeight; y += 1)
-                                //    {
-                                //        _mapTexture.SetDataPointerEXT
-                                //        (
-                                //            0,
-                                //            new Rectangle(x * 8, y * 8, 8, 8),
-                                //            (IntPtr)bufferPtr,
-                                //            sizeof(uint) * buffer.Length
-                                //        );
-                                //    }
-                                //}
+                                _mapTexture.SetDataPointerEXT(0, null, (IntPtr)pixels, sizeof(uint) * _mapTexture.Width * _mapTexture.Height);
+                            }
 
-                                var realAllZ = allZ.Slice(OFFSET_PIX_HALF * CHUNK_UNIT_SIZE, CHUNK_UNIT_SIZE * CHUNK_UNIT_SIZE);
-                                var realBuffer = buffer.Slice(OFFSET_PIX_HALF * CHUNK_UNIT_SIZE, CHUNK_UNIT_SIZE * CHUNK_UNIT_SIZE);
 
-                                for (int x = 0; x < fixedWidth; x += 1)
+                            var huesLoader = HuesLoader.Instance;
+
+                            int bx, by, mapX = 0, mapY = 0, x, y;
+
+                            for (bx = 0; bx < fixedWidth; ++bx)
+                            {
+                                mapX = bx << 3;
+
+                                for (by = 0; by < fixedHeight; ++by)
                                 {
-                                    for (int y = 0; y < fixedHeight; y += 1)
-                                    {
-                                        LoadMapChunk(realBuffer, realAllZ, x, y);
-                                        LoadMapDetails(realBuffer, realAllZ);
+                                    ref IndexMap indexMap = ref World.Map.GetIndex(bx, by);
 
-                                        _mapTexture.SetDataPointerEXT
-                                        (
-                                            0,
-                                            new Rectangle(x * CHUNK_UNIT_SIZE + OFFSET_PIX_HALF, y * CHUNK_UNIT_SIZE + OFFSET_PIX_HALF, CHUNK_UNIT_SIZE, CHUNK_UNIT_SIZE),
-                                            (IntPtr)(bufferPtr + (OFFSET_PIX_HALF * CHUNK_UNIT_SIZE)),
-                                            sizeof(uint) * realBuffer.Length
-                                        );
+                                    if (indexMap.MapAddress == 0)
+                                    {
+                                        continue;
+                                    }
+
+                                    MapBlock* mapBlock = (MapBlock*)indexMap.MapAddress;
+                                    MapCells* cells = (MapCells*)&mapBlock->Cells;
+
+                                    mapY = by << 3;
+
+                                    for (y = 0; y < 8; ++y)
+                                    {
+                                        int block = (mapY + y + OFFSET_PIX_HALF) * (realWidth + OFFSET_PIX) + mapX + OFFSET_PIX_HALF;
+
+                                        int pos = y << 3;
+
+                                        for (x = 0; x < 8; ++x, ++pos, ++block)
+                                        {
+                                            ushort color = (ushort)(0x8000 | huesLoader.GetRadarColorData(cells[pos].TileID & 0x3FFF));
+
+                                            buffer[block] = HuesHelper.Color16To32(color) | 0xFF_00_00_00;
+                                            allZ[block] = cells[pos].Z;
+                                        }
+                                    }
+
+
+                                    StaticsBlock* sb = (StaticsBlock*)indexMap.StaticAddress;
+
+                                    if (sb != null)
+                                    {
+                                        int count = (int)indexMap.StaticCount;
+
+                                        for (int c = 0; c < count; ++c, ++sb)
+                                        {
+                                            if (sb->Color != 0 && sb->Color != 0xFFFF && GameObject.CanBeDrawn(sb->Color))
+                                            {
+                                                int block = (mapY + sb->Y + OFFSET_PIX_HALF) * (realWidth + OFFSET_PIX) + mapX + sb->X + OFFSET_PIX_HALF;
+
+                                                if (sb->Z >= allZ[block])
+                                                {
+                                                    ushort color = (ushort)(0x8000 | (sb->Hue != 0 ? huesLoader.GetColor16(16384, sb->Hue) : huesLoader.GetRadarColorData(sb->Color + 0x4000)));
+
+                                                    buffer[block] = HuesHelper.Color16To32(color) | 0xFF_00_00_00;
+                                                    allZ[block] = sb->Z;
+                                                }
+                                            }
+                                        }
                                     }
                                 }
+                            }
+
+                            int real_width_less_one = realWidth - 1;
+                            int real_height_less_one = realHeight - 1;
+                            const float MAG_0 = 80f / 100f;
+                            const float MAG_1 = 100f / 80f;
+
+                            for (mapY = 1; mapY < real_height_less_one; ++mapY)
+                            {
+                                int blockCurrent = (mapY + OFFSET_PIX_HALF) * (realWidth + OFFSET_PIX) + OFFSET_PIX_HALF;
+                                int blockNext = (mapY + 1 + OFFSET_PIX_HALF) * (realWidth + OFFSET_PIX) + OFFSET_PIX_HALF;
+
+                                for (mapX = 1; mapX < real_width_less_one; ++mapX)
+                                {
+                                    sbyte z0 = allZ[++blockCurrent];
+                                    sbyte z1 = allZ[blockNext++];
+
+                                    if (z0 == z1)
+                                    {
+                                        continue;
+                                    }
+
+                                    ref uint cc = ref buffer[blockCurrent];
+
+                                    if (cc == 0)
+                                    {
+                                        continue;
+                                    }
+
+                                    byte r = (byte)(cc & 0xFF);
+                                    byte g = (byte)((cc >> 8) & 0xFF);
+                                    byte b = (byte)((cc >> 16) & 0xFF);
+                                    byte a = (byte)((cc >> 24) & 0xFF);
+
+                                    if (r != 0 || g != 0 || b != 0)
+                                    {
+                                        if (z0 < z1)
+                                        {
+                                            r = (byte)Math.Min(0xFF, r * MAG_0);
+                                            g = (byte)Math.Min(0xFF, g * MAG_0);
+                                            b = (byte)Math.Min(0xFF, b * MAG_0);
+                                        }
+                                        else
+                                        {
+                                            r = (byte)Math.Min(0xFF, r * MAG_1);
+                                            g = (byte)Math.Min(0xFF, g * MAG_1);
+                                            b = (byte)Math.Min(0xFF, b * MAG_1);
+                                        }
+
+                                        cc = (uint)(r | (g << 8) | (b << 16) | (a << 24));
+                                    }
+                                }
+                            }
+                            if (OFFSET_PIX > 0)
+                            {
+                                realWidth += OFFSET_PIX;
+                                realHeight += OFFSET_PIX;
+                            }
+
+                            fixed (uint* pixels = &buffer[0])
+                            {
+                                _mapTexture.SetDataPointerEXT(0, new Rectangle(0, 0, realWidth, realHeight), (IntPtr)pixels, sizeof(uint) * realWidth * realHeight);
                             }
                         }
                         catch (Exception ex)
@@ -1247,6 +1513,158 @@ namespace ClassicUO.Game.UI.Gumps
             );
         }
 
+        [DataContract]
+        internal class ZonesFileZoneData
+        {
+            [DataMember]
+            public string Label = null;
+
+            [DataMember]
+            public string Color = null;
+
+            [DataMember]
+            public List<List<int>> Polygon = null;
+        }
+
+        [DataContract]
+        internal class ZonesFile
+        {
+            [DataMember]
+            public int MapIndex;
+
+            [DataMember]
+            public List<ZonesFileZoneData> Zones;
+        }
+
+        private class Zone {
+            public string Label;
+            public Color Color;
+            public Rectangle BoundingRectangle;
+            public List<Point> Vertices;
+
+            public Zone(ZonesFileZoneData data)
+            {
+                Label = data.Label;
+                Color = _colorMap[data.Color];
+
+                Vertices = new List<Point>();
+
+                int xmin = int.MaxValue;
+                int xmax = int.MinValue;
+                int ymin = int.MaxValue;
+                int ymax = int.MinValue;
+
+                foreach (List<int> rawPoint in data.Polygon)
+                {
+                    Point p = new Point(rawPoint[0], rawPoint[1]);
+
+                    if (p.X < xmin) xmin = p.X;
+                    if (p.X > xmax) xmax = p.X;
+                    if (p.Y < ymin) ymin = p.Y;
+                    if (p.Y > ymax) ymax = p.Y;
+
+                    Vertices.Add(p);
+                }
+
+                BoundingRectangle = new Rectangle(xmin, ymin, xmax - xmin, ymax - ymin);
+            }
+        }
+
+        private class ZoneSet
+        {
+            public int MapIndex;
+            public List<Zone> Zones = new List<Zone>();
+            public bool Hidden = false;
+            public string NiceFileName;
+
+            public ZoneSet(ZonesFile zf, string filename, bool hidden)
+            {
+                MapIndex = zf.MapIndex;
+                foreach (ZonesFileZoneData data in zf.Zones)
+                {
+                    Zones.Add(new Zone(data));
+                }
+
+                Hidden = hidden;
+                NiceFileName = MakeNiceFileName(filename);
+            }
+
+            public static string MakeNiceFileName(string filename)
+            {
+                // Yes, we invoke the same method twice, because our filenames have two layers of extension
+                // we want to strip off (.zones.json)
+                return Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filename));
+            }
+        }
+
+        private class ZoneSets
+        {
+            public Dictionary<string, ZoneSet> ZoneSetDict = new Dictionary<string, ZoneSet>();
+
+            public void AddZoneSetByFileName(string filename, bool hidden)
+            {
+                FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read);
+                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(ZonesFile));
+                ZonesFile zf = null;
+
+                try
+                {
+                    zf = (ZonesFile) ser.ReadObject(fs);
+                }
+                catch (Exception ee)
+                {
+                    Log.Error($"{ee}");
+                }
+                finally
+                {
+                    fs.Dispose();
+                }
+
+                if (!(zf is null))
+                {
+                    ZoneSetDict[filename] = new ZoneSet(zf, filename, hidden);
+                    GameActions.Print(String.Format(ResGumps.MapZoneFileLoaded, ZoneSetDict[filename].NiceFileName), 0x3A /* yellow green */);
+                }
+            }
+
+            public IEnumerable<Zone> GetZonesForMapIndex(int mapIndex)
+            {
+                foreach (KeyValuePair<string, ZoneSet> entry in ZoneSetDict)
+                {
+                    if (entry.Value.MapIndex != mapIndex)
+                        continue;
+                    else if (entry.Value.Hidden)
+                        continue;
+
+                    foreach (Zone zone in entry.Value.Zones)
+                    {
+                        yield return zone;
+                    }
+                }
+            }
+
+            public void Clear()
+            {
+                ZoneSetDict.Clear();
+            }
+        }
+
+        private void LoadZones()
+        {
+            Log.Trace("LoadZones()...");
+
+            _zoneSets.Clear();
+
+            foreach (String filename in Directory.GetFiles(_mapFilesPath, "*.zones.json"))
+            {
+                bool shouldHide = !string.IsNullOrEmpty
+                (
+                    _hiddenZoneFiles.FirstOrDefault(x => x.Contains(filename))
+                );
+
+                _zoneSets.AddZoneSetByFileName(filename, shouldHide);
+            }
+        }
 
         private void LoadMarkers()
         {
@@ -1708,6 +2126,7 @@ namespace ClassicUO.Game.UI.Gumps
                     DrawAll
                     (
                         batcher,
+                        srcRect,
                         gX,
                         gY,
                         halfWidth,
@@ -1730,8 +2149,16 @@ namespace ClassicUO.Game.UI.Gumps
             return base.Draw(batcher, x, y);
         }
 
-        private void DrawAll(UltimaBatcher2D batcher, int gX, int gY, int halfWidth, int halfHeight)
+        private void DrawAll(UltimaBatcher2D batcher, Rectangle srcRect, int gX, int gY, int halfWidth, int halfHeight)
         {
+            foreach (Zone zone in _zoneSets.GetZonesForMapIndex(World.MapIndex))
+            {
+                if (zone.BoundingRectangle.Intersects(srcRect))
+                {
+                    DrawZone(batcher, zone, gX, gY, halfWidth, halfHeight, Zoom);
+                }
+            }
+
             if (_showMultis)
             {
                 foreach (House house in World.HouseManager.Houses)
@@ -2385,6 +2812,54 @@ namespace ClassicUO.Game.UI.Gumps
                 SpriteEffects.None,
                 0
             );
+        }
+
+        private Vector2 WorldPointToGumpPoint(int wpx, int wpy, int x, int y, int width, int height, float zoom)
+        {
+            int sx = wpx - _center.X;
+            int sy = wpy - _center.Y;
+
+            Point rot = RotatePoint
+            (
+                sx,
+                sy,
+                zoom,
+                1,
+                _flipMap ? 45f : 0f
+            );
+
+            /* N.B. You don't want AdjustPosition() here if you want to draw rects
+             * that extend beyond the gump's viewport without distoring them. */
+
+            rot.X += x + width;
+            rot.Y += y + height;
+
+            return new Vector2(rot.X, rot.Y);
+        }
+
+        private void DrawZone
+        (
+            UltimaBatcher2D batcher,
+            Zone zone,
+            int x,
+            int y,
+            int width,
+            int height,
+            float zoom
+        )
+        {
+            Vector3 hueVector = ShaderHueTranslator.GetHueVector(0);
+            Texture2D texture = SolidColorTextureCache.GetTexture(zone.Color);
+
+            for (int i = 0, j = 1; i < zone.Vertices.Count; i++, j++)
+            {
+                if (j >= zone.Vertices.Count) j = 0;
+
+                Vector2 start = WorldPointToGumpPoint(zone.Vertices[i].X, zone.Vertices[i].Y, x, y, width, height, zoom);
+                Vector2 end = WorldPointToGumpPoint(zone.Vertices[j].X, zone.Vertices[j].Y, x, y, width, height, zoom);
+
+                batcher.DrawLine(texture, start, end, hueVector, 1);
+            }
         }
 
         private void DrawWMEntity
