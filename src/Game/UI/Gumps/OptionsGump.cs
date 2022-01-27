@@ -256,6 +256,15 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _autoRangeDisplayAlways;
         private ClickableColorBox _autoRangeDisplayHue;
         // ## BEGIN - END ## // AUTOMATIONS
+        // ## BEGIN - END ## // OUTLANDS
+        /*
+        private Checkbox _infernoBridge, _overheadSummonTime, _overheadPeaceTime, _mobileHamstrungTime;
+        private InputField _mobileHamstrungTimeCooldown;
+        //##UCC##//
+        private InputField _uccHamstringStrikeCooldown, _uccHamstringAttemptCooldown, _uccHamstrungCooldown;
+        private Checkbox _uccDoH, _uccGotH;
+        */
+        // ## BEGIN - END ## // OUTLANDS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4205,6 +4214,82 @@ namespace ClassicUO.Game.UI.Gumps
             section5.AddRight(AddLabel(null, "Hue", 0, 0), 2);
             //
             // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // OUTLANDS
+            /*
+            section7.Add(_infernoBridge = AddCheckBox(null, "Solve Inferno bridge (needs relog)", ProfileManager.CurrentProfile.InfernoBridge, startX, startY));
+            startY += _infernoBridge.Height + 2;
+
+            section5.Add(_overheadSummonTime = AddCheckBox(null, "Overhead summon time (needs HP overhead enabled) or in healthbar", ProfileManager.CurrentProfile.OverheadSummonTime, startX, startY));
+            startY += _overheadSummonTime.Height + 2;
+            section5.Add(_overheadPeaceTime = AddCheckBox(null, "Overhead peacemaking time (needs HP overhead enabled) or in healthbar", ProfileManager.CurrentProfile.OverheadPeaceTime, startX, startY));
+            startY += _overheadPeaceTime.Height + 2;
+            section5.Add(_mobileHamstrungTime = AddCheckBox(null, "Show hamstrung time on mobile (needs HP lines or HP overhead ernabled) or in healthbar", true, startX, startY)); //has no effect but feature list
+            startY += _mobileHamstrungTime.Height + 2;
+
+            section5.Add(AddLabel(null, "Cooldown (ms): ", startX, startY));
+
+            section5.Add
+            (
+                _mobileHamstrungTimeCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _mobileHamstrungTimeCooldown.SetText(ProfileManager.CurrentProfile.MobileHamstrungTimeCooldown.ToString());
+
+            section6.Add(AddLabel(null, "Cooldown after successfull hamstring (ms)", startX, startY));
+
+            section6.Add
+            (
+                _uccHamstringStrikeCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _uccHamstringStrikeCooldown.SetText(ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstringStrikeCooldown.ToString());
+
+            section6.Add(AddLabel(null, "Cooldown after failed hamstring (ms)", startX, startY));
+
+            section6.Add
+            (
+                _uccHamstringAttemptCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5
+                )
+            );
+            _uccHamstringAttemptCooldown.SetText(ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstringAttemptCooldown.ToString());
+
+            section3.Add(_uccDoH = AddCheckBox(null, "Show Do Hamstring Line (Outlands)", ProfileManager.CurrentProfile.UOClassicCombatBuffbar_DoHEnabled, startX, startY));
+            startY += _uccDoH.Height + 2;
+            section3.Add(_uccGotH = AddCheckBox(null, "Show Got Hamstung Line (Outlands)", ProfileManager.CurrentProfile.UOClassicCombatBuffbar_GotHEnabled, startX, startY));
+            startY += _uccGotH.Height + 2;
+
+            */
+            // ## BEGIN - END ## // OUTLANDS
 
             Add(rightArea, PAGE);
         }
@@ -6175,6 +6260,20 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.AutoRangeDisplayAlways = _autoRangeDisplayAlways.IsChecked;
             _currentProfile.AutoRangeDisplayHue = _autoRangeDisplayHue.Hue;
             // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // OUTLANDS
+            /*
+            ProfileManager.CurrentProfile.InfernoBridge = _infernoBridge.IsChecked;
+            ProfileManager.CurrentProfile.OverheadSummonTime = _overheadSummonTime.IsChecked;
+            ProfileManager.CurrentProfile.OverheadPeaceTime = _overheadPeaceTime.IsChecked;
+            ProfileManager.CurrentProfile.MobileHamstrungTime = _mobileHamstrungTime.IsChecked;
+            ProfileManager.CurrentProfile.MobileHamstrungTimeCooldown = uint.Parse(_mobileHamstrungTimeCooldown.Text);
+            ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstringStrikeCooldown = uint.Parse(_uccHamstringStrikeCooldown.Text);
+            ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstringAttemptCooldown = uint.Parse(_uccHamstringAttemptCooldown.Text);
+            ProfileManager.CurrentProfile.UOClassicCombatSelf_HamstrungCooldown = uint.Parse(_uccHamstrungCooldown.Text);
+            ProfileManager.CurrentProfile.UOClassicCombatBuffbar_DoHEnabled = _uccDoH.IsChecked;
+            ProfileManager.CurrentProfile.UOClassicCombatBuffbar_GotHEnabled = _uccGotH.IsChecked;
+            */
+            // ## BEGIN - END ## // OUTLANDS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
