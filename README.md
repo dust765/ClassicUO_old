@@ -20,6 +20,12 @@ alt="chat on Discord"></a>
 # Project dust765
 This project is to address a problem constructed within the toxicity of this community. This is to show the community, open source projects are not meant for cliques and high school drama but rather the expansion of something greater, innovation. -A penny for your thoughts, the adder that prays beneath the rose.
 
+# contact and team info
+
+Discord: dust765#2787
+
+Dust765: 7 Link, 6 G..., 5 S...
+
 # feature showcase
 
 [Video Part 1 on YouTube](https://youtu.be/074Osj1Fcrg)
