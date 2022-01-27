@@ -145,6 +145,16 @@ namespace ClassicUO.Game.GameObjects
         public uint FlashTimeTick { get; set; } = 0;
         public ushort OldHits { get; set; } = 0;
         // ## BEGIN - END ## // HEALTHBAR
+        // ## BEGIN - END ## // OUTLANDS
+        /*
+        public uint SummonTimeTick { get; set; } = 0;
+        public int SummonTime { get; set; } = 0;
+        public uint PeaceTimeTick { get; set; } = 0;
+        public int PeaceTime { get; set; } = 0;
+        public uint HamstrungTimeTick { get; set; } = 0;
+        public uint HamstrungTime { get; set; } = 0;
+        */
+        // ## BEGIN - END ## // OUTLANDS
 
         public Mobile() : base(0)
         {
