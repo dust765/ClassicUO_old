@@ -2575,7 +2575,7 @@ namespace ClassicUO.Game.Managers
         LobbyTarget,
         LobbyCastLightning,
         LobbyCastEB,
-        LobbyDrop
+        LobbyDrop,
         // ## BEGIN - END ## // LOBBY
         // ## BEGIN - END ## // BASICSETUP
         CloseInactiveHealthBars,
