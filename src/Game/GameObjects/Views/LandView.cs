@@ -132,7 +132,12 @@ namespace ClassicUO.Game.GameObjects
             {
                 posY += Z << 2;
 
-                var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds);
+                // ## BEGIN - END ## // MISC2
+                //var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds);
+                // ## BEGIN - END ## // MISC2
+                //STRECHEDLAND
+                var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds, this.TileData.IsImpassable);
+                // ## BEGIN - END ## // MISC2
 
                 if (texture != null)
                 {
@@ -165,7 +170,12 @@ namespace ClassicUO.Game.GameObjects
             }
             else
             {
-                var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds);
+                // ## BEGIN - END ## // MISC2
+                //var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds);
+                // ## BEGIN - END ## // MISC2
+                //FLATLAND
+                var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds, this.TileData.IsImpassable);
+                // ## BEGIN - END ## // MISC2
 
                 if (texture != null)
                 {

@@ -348,9 +348,9 @@ FILE                                            START   END     COMMIT
 
 /src/Game/GameObjects/Views/StaticView.cs       97      129     VISUAL HELPERS
 
-/src/Game/GameObjects/Views/TileView.cs         34      36      VISUAL HELPERS
+/src/Game/GameObjects/Views/LandView.cs         34      36      VISUAL HELPERS
 
-/src/Game/GameObjects/Views/TileView.cs         81      113     VISUAL HELPERS
+/src/Game/GameObjects/Views/LandView.cs         81      113     VISUAL HELPERS
 
 /src/Game/GameCursor.cs                         37      39      VISUAL HELPERS
 
@@ -474,13 +474,13 @@ FILE                                            START   END     COMMIT
 
 /src/Game/UI/Controls/Control.cs                81      83      MISC
 
-/src/Game/GameObjects/Views/TileView.cs         35      37      MISC2
+/src/Game/GameObjects/Views/LandView.cs         35      37      MISC2
 
-/src/Game/GameObjects/Views/TileView.cs         111     120     MISC2
+/src/Game/GameObjects/Views/LandView.cs         113     122     MISC2
 
-/src/Game/GameObjects/Views/TileView.cs         126     170     MISC2
+/src/Game/GameObjects/Views/LandView.cs         128     133     MISC2
 
-/src/Game/GameObjects/Views/TileView.cs         174     204     MISC2
+/src/Game/GameObjects/Views/LandView.cs         166     171     MISC2
 
 /src/Game/GameObjects/Views/View.cs             36      39      MISC2
 
@@ -490,9 +490,25 @@ FILE                                            START   END     COMMIT
 
 /src/IO/Resources/TexmapsLoader.cs              36      38      MISC2
 
-/src/IO/Resources/TexmapsLoader.cs              144     222     MISC2
+/src/IO/Resources/TexmapsLoader.cs              126     131     MISC2
 
-/src/IO/Resources/ArtLoader.cs                  222     368     MISC2
+/src/IO/Resources/TexmapsLoader.cs              142     146     MISC2
+
+/src/IO/Resources/TexmapsLoader.cs              154     159     MISC2
+
+/src/IO/Resources/TexmapsLoader.cs              182     209     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  105     110     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  137     152     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  165     180     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  245     250     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  260     264     MISC2
+
+/src/IO/Resources/ArtLoader.cs                  282     286     MISC2
 
 /src/Game/Data/StaticFilters.cs                 52      54      MISC2
 
@@ -675,6 +691,8 @@ FILE                                            START   END     COMMIT
 /src/Game/UI/Gumps/WorldMapGump.cs              65      76      AUTOMATIONS
 
 /src/Game/UI/Gumps/WorldMapGump.cs              1823    1893    AUTOMATIONS
+
+/src/Game/GameObjects/Views/TileView.cs         99      105     AUTOMATIONS
 
 /src/Game/Map/Chunk.cs                          35      37      OUTLANDS
 

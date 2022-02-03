@@ -123,27 +123,12 @@ namespace ClassicUO.IO.Resources
 
         private SpriteInfo[] _spriteInfos;
 
-        public Texture2D GetLandTexture(uint g, out Rectangle bounds)
-        {
-            // avoid to mix land with statics
-            //g += ushort.MaxValue;
-
-            var atlas = TextureAtlas.Shared;
-
-            ref var spriteInfo = ref _spriteInfos[g];
-
-            if (spriteInfo.Texture == null)
-            {
-                AddSpriteToAtlas(atlas, g);
-            }
-
-            bounds = spriteInfo.UV;
-
-            return spriteInfo.Texture;  //atlas.GetTexture(g, out bounds);
-        }
         // ## BEGIN - END ## // MISC2
         //STRECHEDLAND
-        public Texture2D GetLandTextureWF(uint g, out Rectangle bounds, bool isImpassable)
+        //public Texture2D GetLandTexture(uint g, out Rectangle bounds)
+        // ## BEGIN - END ## // MISC2
+        public Texture2D GetLandTexture(uint g, out Rectangle bounds, bool isImpassable)
+        // ## BEGIN - END ## // MISC2
         {
             // avoid to mix land with statics
             //g += ushort.MaxValue;
@@ -154,14 +139,24 @@ namespace ClassicUO.IO.Resources
 
             if (spriteInfo.Texture == null)
             {
-                AddSpriteToAtlasWF(atlas, g, isImpassable);
+                // ## BEGIN - END ## // MISC2
+                //AddSpriteToAtlas(atlas, g);
+                // ## BEGIN - END ## // MISC2
+                AddSpriteToAtlas(atlas, g, isImpassable);
+                // ## BEGIN - END ## // MISC2
             }
 
             bounds = spriteInfo.UV;
 
             return spriteInfo.Texture;  //atlas.GetTexture(g, out bounds);
         }
-        private unsafe void AddSpriteToAtlasWF(TextureAtlas atlas, uint index, bool IsImpassable)
+
+        // ## BEGIN - END ## // MISC2
+        //STRECHEDLAND
+        //private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index)
+        // ## BEGIN - END ## // MISC2
+        private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index, bool IsImpassable)
+        // ## BEGIN - END ## // MISC2
         {
             ref UOFileIndex entry = ref GetValidRefEntry((int) (index));
 
@@ -212,37 +207,6 @@ namespace ClassicUO.IO.Resources
                         }
                     }
                     // ## BEGIN - END ## // MISC2
-                }
-            }
-
-            ref var spriteInfo = ref _spriteInfos[index];
-
-            spriteInfo.Texture = atlas.AddSprite(data, size, size, out spriteInfo.UV);
-        }
-        // ## BEGIN - END ## // MISC2
-
-        private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index)
-        {
-            ref UOFileIndex entry = ref GetValidRefEntry((int) (index));
-
-            if (entry.Length <= 0)
-            {
-                return;
-            }
-
-            _file.SetData(entry.Address, entry.FileSize);
-            _file.Seek(entry.Offset);
-
-            int size = entry.Length == 0x2000 ? 64 : 128;
-            Span<uint> data = stackalloc uint[size * size];
-
-            for (int i = 0; i < size; ++i)
-            {
-                int pos = i * size;
-
-                for (int j = 0; j < size; ++j)
-                {
-                    data[pos + j] = HuesHelper.Color16To32(_file.ReadUShort()) | 0xFF_00_00_00;
                 }
             }
 
