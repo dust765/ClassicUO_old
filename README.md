@@ -520,7 +520,7 @@ FILE                                            START   END     COMMIT
 
 /src/Game/GameObjects/Views/ItemView.cs         213     235     MISC2
 
-/src/Game/GameObjects/Views/MultiView.cs        155     177     MISC2
+/src/Game/GameObjects/Views/MultiView.cs        155     168     MISC2
 
 /src/Game/Managers/MacroManager.cs              1565    1574    MISC2
 
@@ -532,7 +532,9 @@ FILE                                            START   END     COMMIT
 
 /src/Network/PacketHandlers.cs	                1622    1626    MISC2
 
-/src/Game/Scenes/GameSceneDrawingSorting.cs	    414     422     MISC2
+/src/Game/Scenes/GameSceneDrawingSorting.cs	    404     418     MISC2
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs	    427     435     MISC2
 
 /src/Game/Managers/MacroManager.cs              41      44      MACROS
 
