@@ -131,7 +131,7 @@ namespace ClassicUO.Game.Scenes
         {
             base.Load();
 
-            ItemHold.Clear();
+            Client.Game.GameCursor.ItemHold.Clear();
             Hotkeys = new HotkeysManager();
             Macros = new MacroManager();
 
@@ -332,7 +332,7 @@ namespace ClassicUO.Game.Scenes
         {
             Client.Game.SetWindowTitle(string.Empty);
 
-            ItemHold.Clear();
+            Client.Game.GameCursor.ItemHold.Clear();
 
             try
             {
@@ -673,7 +673,7 @@ namespace ClassicUO.Game.Scenes
                     {
                         CalculateAlpha(ref f.AlphaHue, Constants.FOLIAGE_ALPHA);
                     }
-                    else
+                    else if (f.Z < _maxZ)
                     {
                         CalculateAlpha(ref f.AlphaHue, 0xFF);
                     }
@@ -780,7 +780,7 @@ namespace ClassicUO.Game.Scenes
 
             if (!UIManager.IsMouseOverWorld)
             {
-                SelectedObject.Object = SelectedObject.LastObject = null;
+                SelectedObject.Object = null;
             }
 
 
@@ -855,11 +855,11 @@ namespace ClassicUO.Game.Scenes
             }
 
 
-            if (_isMouseLeftDown && !ItemHold.Enabled)
+            if (_isMouseLeftDown && !Client.Game.GameCursor.ItemHold.Enabled)
             {
                 if (World.CustomHouseManager != null && World.CustomHouseManager.SelectedGraphic != 0 && !World.CustomHouseManager.SeekTile && !World.CustomHouseManager.Erasing && Time.Ticks > _timeToPlaceMultiInHouseCustomization)
                 {
-                    if (SelectedObject.LastObject is GameObject obj && (obj.X != _lastSelectedMultiPositionInHouseCustomization.X || obj.Y != _lastSelectedMultiPositionInHouseCustomization.Y))
+                    if (SelectedObject.Object is GameObject obj && (obj.X != _lastSelectedMultiPositionInHouseCustomization.X || obj.Y != _lastSelectedMultiPositionInHouseCustomization.Y))
                     {
                         World.CustomHouseManager.OnTargetWorld(obj);
                         _timeToPlaceMultiInHouseCustomization = Time.Ticks + 50;
@@ -869,7 +869,7 @@ namespace ClassicUO.Game.Scenes
                 }
                 else if (Time.Ticks - _holdMouse2secOverItemTime >= 1000)
                 {
-                    if (SelectedObject.LastObject is Item it && GameActions.PickUp(it.Serial, 0, 0))
+                    if (SelectedObject.Object is Item it && GameActions.PickUp(it.Serial, 0, 0))
                     {
                         _isMouseLeftDown = false;
                         _holdMouse2secOverItemTime = 0;
@@ -1198,8 +1198,6 @@ namespace ClassicUO.Game.Scenes
 
             World.WorldTextManager.ProcessWorldText(true);
             World.WorldTextManager.Draw(batcher, x, y);
-
-            SelectedObject.LastObject = SelectedObject.Object;
         }
 
         public void DrawSelection(UltimaBatcher2D batcher)
