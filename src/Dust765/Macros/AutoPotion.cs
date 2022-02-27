@@ -73,7 +73,7 @@ namespace ClassicUO.Dust765.Macros
                         GameActions.Print("AP: Disarming.");
                         GameActions.PickUp(_twohand.Serial, 0, 0, 1);
                         TimeSpan.FromMilliseconds(50);
-                        GameActions.DropItem(ItemHold.Serial, 0xFFFF, 0xFFFF, 0, _backpack.Serial);
+                        GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, _backpack.Serial);
                         TimeSpan.FromMilliseconds(50);
                     }
 

@@ -58,7 +58,7 @@ namespace ClassicUO.Dust765.Macros
 
                                 if (Math.Abs(offset.X) > Constants.MIN_PICKUP_DRAG_DISTANCE_PIXELS || Math.Abs(offset.Y) > Constants.MIN_PICKUP_DRAG_DISTANCE_PIXELS)
                                 {
-                                    GameObject obj = ProfileManager.CurrentProfile.SallosEasyGrab && SelectedObject.LastObject is GameObject o ? o : _dragginObject;
+                                    GameObject obj = ProfileManager.CurrentProfile.SallosEasyGrab && SelectedObject.Object is GameObject o ? o : _dragginObject;
                                     GameActions.RequestMobileStatus(entity.Serial);
                                     var customgump = UIManager.GetGump<HealthBarGumpCustom>(entity.Serial);
                                     if (customgump != null)
@@ -107,7 +107,7 @@ namespace ClassicUO.Dust765.Macros
 
                                 if (Math.Abs(offset.X) > Constants.MIN_PICKUP_DRAG_DISTANCE_PIXELS || Math.Abs(offset.Y) > Constants.MIN_PICKUP_DRAG_DISTANCE_PIXELS)
                                 {
-                                    GameObject obj = ProfileManager.CurrentProfile.SallosEasyGrab && SelectedObject.LastObject is GameObject o ? o : _dragginObject;
+                                    GameObject obj = ProfileManager.CurrentProfile.SallosEasyGrab && SelectedObject.Object is GameObject o ? o : _dragginObject;
                                     GameActions.RequestMobileStatus(entity.Serial);
                                     var customgump = UIManager.GetGump<HealthBarGumpCustom>(entity.Serial);
                                     if (customgump != null)
@@ -156,7 +156,7 @@ namespace ClassicUO.Dust765.Macros
 
                                 if (Math.Abs(offset.X) > Constants.MIN_PICKUP_DRAG_DISTANCE_PIXELS || Math.Abs(offset.Y) > Constants.MIN_PICKUP_DRAG_DISTANCE_PIXELS)
                                 {
-                                    GameObject obj = ProfileManager.CurrentProfile.SallosEasyGrab && SelectedObject.LastObject is GameObject o ? o : _dragginObject;
+                                    GameObject obj = ProfileManager.CurrentProfile.SallosEasyGrab && SelectedObject.Object is GameObject o ? o : _dragginObject;
                                     GameActions.RequestMobileStatus(entity.Serial);
                                     var customgump = UIManager.GetGump<HealthBarGumpCustom>(entity.Serial);
                                     if (customgump != null)

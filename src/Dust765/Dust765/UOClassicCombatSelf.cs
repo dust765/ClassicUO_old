@@ -1942,7 +1942,7 @@ namespace ClassicUO.Dust765.Dust765
         public void DisarmNEW()
         {
             GameScene gs = Client.Game.GetScene<GameScene>();
-            if (ItemHold.Enabled) //dont do while dragging already
+            if (Client.Game.GameCursor.ItemHold.Enabled) //dont do while dragging already
                 return;
 
             //CHECK IF ITS TIME ALRDY
@@ -1990,7 +1990,7 @@ namespace ClassicUO.Dust765.Dust765
                 else if (_tempItemInLeftHand != null && _tempItemInRightHand != null)
                 {
                     GameActions.PickUp(_tempItemInRightHand.Serial, 0, 0, 1);
-                    GameActions.DropItem(ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
+                    GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
                     _tickLastActionTime = Time.Ticks;
                     GameActions.Print($"UCC Self: Disarming: {_tempItemInRightHand.Graphic}");
 
@@ -2014,7 +2014,7 @@ namespace ClassicUO.Dust765.Dust765
                         return;
                     
                     GameActions.PickUp(_tempItemInRightHand.Serial, 0, 0, 1);
-                    GameActions.DropItem(ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
+                    GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
                     _tickLastActionTime = Time.Ticks;
                     GameActions.Print($"UCC Self: Disarming: {_tempItemInRightHand.Graphic}");
                     
@@ -2039,7 +2039,7 @@ namespace ClassicUO.Dust765.Dust765
             if ((_tickLastActionTime + UCCS_ActionCooldown) <= Time.Ticks)
             {
                 GameScene gs = Client.Game.GetScene<GameScene>();
-                if (ItemHold.Enabled) //dont do while dragging
+                if (Client.Game.GameCursor.ItemHold.Enabled) //dont do while dragging
                     return;
 
                 //GET GFX
@@ -2107,7 +2107,7 @@ namespace ClassicUO.Dust765.Dust765
         public void Disarm()
         {
             GameScene gs = Client.Game.GetScene<GameScene>();
-            if (ItemHold.Enabled) //dont do while dragging already
+            if (Client.Game.GameCursor.ItemHold.Enabled) //dont do while dragging already
                 return;
 
             //DISARM LEFT HAND (1H) IF LEFT (1H) AND RIGHT (2H) IS NOT EMPTY (=1H WEP AND SHIELD), ELSE IF, 
@@ -2137,7 +2137,7 @@ namespace ClassicUO.Dust765.Dust765
                 else if (_tempItemInRightHand != null)
                 {
                     GameActions.PickUp(_tempItemInRightHand.Serial, 0, 0, 1);
-                    GameActions.DropItem(ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
+                    GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
                     _tickLastActionTime = Time.Ticks;
                     GameActions.Print($"UCC Self: Disarming: {_tempItemInRightHand.Graphic}");
 
@@ -2161,7 +2161,7 @@ namespace ClassicUO.Dust765.Dust765
                     if (_tempItemInRightHand.Graphic >= 0x1B72 && _tempItemInRightHand.Graphic <= 0x1B7B || _tempItemInRightHand.Graphic >= 0x1BC3 && _tempItemInRightHand.Graphic <= 0x1BC7)
                         return;
                     GameActions.PickUp(_tempItemInRightHand.Serial, 0, 0, 1);
-                    GameActions.DropItem(ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
+                    GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
                     _tickLastActionTime = Time.Ticks;
                     GameActions.Print($"UCC Self: Disarming: {_tempItemInRightHand.Graphic}");
                     //ISSUE REARM AFTER POT IF ENABLED
@@ -2185,7 +2185,7 @@ namespace ClassicUO.Dust765.Dust765
             if ((_tickLastActionTime + UCCS_ActionCooldown) <= Time.Ticks)
             {
                 GameScene gs = Client.Game.GetScene<GameScene>();
-                if (ItemHold.Enabled) //dont do while dragging
+                if (Client.Game.GameCursor.ItemHold.Enabled) //dont do while dragging
                     return;
 
                 //GET GFX

@@ -328,7 +328,7 @@ namespace ClassicUO.Dust765.Dust765
                 if (Time.Ticks <= _tickLastActionTime + UCCAL_LootDelay) //break out of loop if just looted an item ie. shorter than delay
                     break;
 
-                if (ItemHold.Enabled) //dont do while dragging
+                if (Client.Game.GameCursor.ItemHold.Enabled) //dont do while dragging
                 {
                     _tickLastQueueProcessTime = Time.Ticks;
                     break;
@@ -397,7 +397,7 @@ namespace ClassicUO.Dust765.Dust765
                 {
                     //IF A SINGLE ITEM, DROP AT TOP LEFT IN BACKPACK
                     GameActions.PickUp(ToLootList[i].ToLootItemSerial, 0, 0, amount);
-                    GameActions.DropItem(ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
+                    GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, backpack.Serial);
                 }
                 else
                 {

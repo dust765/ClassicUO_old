@@ -1712,16 +1712,16 @@ namespace ClassicUO.Game.Managers
 
                 case MacroType.HideX:
 
-                    if (SelectedObject.LastObject is Land l)
+                    if (SelectedObject.Object is Land l)
                         l.AllowedToDraw = false;
 
-                    if (SelectedObject.LastObject is Item i)
+                    if (SelectedObject.Object is Item i)
                         i.AllowedToDraw = false;
 
-                    if (SelectedObject.LastObject is Entity e)
+                    if (SelectedObject.Object is Entity e)
                         e.AllowedToDraw = false;
 
-                    if (SelectedObject.LastObject is Mobile m)
+                    if (SelectedObject.Object is Mobile m)
                         m.AllowedToDraw = false;
 
                     break;

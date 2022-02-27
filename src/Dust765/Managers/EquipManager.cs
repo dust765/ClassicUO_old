@@ -126,20 +126,20 @@ namespace ClassicUO.Dust765.Managers
             if (_backpack == null)
                 return;
 
-            if (ItemHold.Enabled)
+            if (Client.Game.GameCursor.ItemHold.Enabled)
                 return;
 
             Item unequippedItem = EM_FindUsedLayer();
             if (unequippedItem != null)
             {
                 GameActions.PickUp(unequippedItem.Serial, 0, 0, 1);
-                if (ItemHold.Enabled && !ItemHold.Dropped)
+                if (Client.Game.GameCursor.ItemHold.Enabled && !Client.Game.GameCursor.ItemHold.Dropped)
                 {
                     int x = 0;
                     int y = 0;
                     TimeSpan.FromMilliseconds(50);
 
-                    GameActions.DropItem(ItemHold.Serial, 0xFFFF, 0xFFFF, 0, _backpack.Serial);
+                    GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, _backpack.Serial);
 
                     TimeSpan.FromMilliseconds(50);
                 }
@@ -153,7 +153,7 @@ namespace ClassicUO.Dust765.Managers
 
             Item equippedItem = EM_FindUsedLayer();
 
-            if (ItemHold.Enabled)
+            if (Client.Game.GameCursor.ItemHold.Enabled)
                 return;
             if (_backpack == null)
                 return;
@@ -170,7 +170,7 @@ namespace ClassicUO.Dust765.Managers
                     GameActions.PickUp(Weapon.Serial, 0, 0, 1);
                     TimeSpan.FromMilliseconds(50);
 
-                    if (ItemHold.Enabled && !ItemHold.Dropped)
+                    if (Client.Game.GameCursor.ItemHold.Enabled && !Client.Game.GameCursor.ItemHold.Dropped)
                         GameActions.Equip();
                     else
                         return;
@@ -184,7 +184,7 @@ namespace ClassicUO.Dust765.Managers
         {
             var _backpack = World.Player.FindItemByLayer(Layer.Backpack);
 
-            if (ItemHold.Enabled)
+            if (Client.Game.GameCursor.ItemHold.Enabled)
                 return;
             if (_backpack == null)
                 return;
@@ -289,7 +289,7 @@ namespace ClassicUO.Dust765.Managers
 
             if (World.Player != null && !World.Player.IsDead)
             {
-                if (ItemHold.Enabled)
+                if (Client.Game.GameCursor.ItemHold.Enabled)
                     return;
                 if (_backpack == null)
                     return;
@@ -326,13 +326,13 @@ namespace ClassicUO.Dust765.Managers
                     GameActions.PickUp(customweapon.Serial, 0, 0, 1);
                     TimeSpan.FromMilliseconds(50);
 
-                    if (ItemHold.Enabled && !ItemHold.Dropped)
+                    if (Client.Game.GameCursor.ItemHold.Enabled && !Client.Game.GameCursor.ItemHold.Dropped)
                         GameActions.Equip();
                     else
                         return;
 
-                    if (ItemHold.Dropped)
-                        ItemHold.Clear();
+                    if (Client.Game.GameCursor.ItemHold.Dropped)
+                        Client.Game.GameCursor.ItemHold.Clear();
                     else
                         return;
                 }

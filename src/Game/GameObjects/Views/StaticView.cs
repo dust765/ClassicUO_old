@@ -122,7 +122,7 @@ namespace ClassicUO.Game.GameObjects
                     hueVec.X = 0x0040;
                     hueVec.Y = 1;
                 }
-                if (SelectedObject.LastObject == this)
+                if (SelectedObject.Object == this)
                 {
                     hueVec.X = 0x0023;
                     hueVec.Y = 1;
