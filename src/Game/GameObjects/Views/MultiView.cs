@@ -170,17 +170,7 @@ namespace ClassicUO.Game.GameObjects
                         hueVec.Z = (float) ProfileManager.CurrentProfile.TransparentHousesTransparency / 10;
                 }
             }
-            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled)
-            {
-                GameObject tile = World.Map.GetTile(X, Y);
-
-                if (tile != null)
-                {
-                    if ((Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ && (Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
-                        //DO NOT DRAW IT
-                        return false;
-                }
-            }
+            
             // ## BEGIN - END ## // MISC2
 
             DrawStaticAnimated

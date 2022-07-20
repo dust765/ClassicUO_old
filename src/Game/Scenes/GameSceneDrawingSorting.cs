@@ -401,6 +401,22 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
+            // ## BEGIN - END ## // MISC2
+            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled)
+            {
+                GameObject tile = World.Map.GetTile(obj.X, obj.Y);
+
+                if (tile != null)
+                {
+                    if ((obj.Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ && (obj.Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
+                    {
+                        //DO NOT DRAW IT
+                        return false;
+                    }
+                }
+            }
+            // ## BEGIN - END ## // MISC2
+
             return true;
         }
 
