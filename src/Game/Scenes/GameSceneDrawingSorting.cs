@@ -84,11 +84,9 @@ namespace ClassicUO.Game.Scenes
         private GameObject _renderListAnimationsHead, _renderListAnimations;
         private int _renderListAnimationCount;
 
+        private GameObject _renderListEffectsHead, _renderListEffects;
+        private int _renderListEffectCount;
 
-
-
-
-        public Point ScreenOffset => _offset;
         public sbyte FoliageIndex { get; private set; }
 
 
@@ -723,17 +721,7 @@ namespace ClassicUO.Game.Scenes
                     }
                     else
                     {
-                        var alpha = obj.AlphaHue;
-
-                        // hack to fix transparent objects at the same level of a opaque one
-                        if (itemData.IsTranslucent || itemData.IsTransparent)
-                        {
-                            obj.AlphaHue = 0xFF;
-                        }
-
                         PushToRenderList(obj, ref _renderList, ref _renderListStaticsHead, ref _renderListStaticsCount, allowSelection);
-
-                        obj.AlphaHue = alpha;
                     } 
                 }
                 else if (obj is Multi multi)
@@ -791,17 +779,7 @@ namespace ClassicUO.Game.Scenes
                     }
                     else
                     {
-                        var alpha = obj.AlphaHue;
-
-                        // hack to fix transparent objects at the same level of a opaque one
-                        if (itemData.IsTranslucent || itemData.IsTransparent)
-                        {
-                            obj.AlphaHue = 0xFF;
-                        }
-
                         PushToRenderList(obj, ref _renderList, ref _renderListStaticsHead, ref _renderListStaticsCount, allowSelection);
-
-                        obj.AlphaHue = alpha;
                     }
                 }
                 else if (obj is Mobile mobile)
@@ -907,7 +885,9 @@ namespace ClassicUO.Game.Scenes
                     {
                     }
 
-                    PushToRenderList(obj, ref _renderList, ref _renderListStaticsHead, ref _renderListStaticsCount, false);
+                    //PushToRenderList(obj, ref _renderList, ref _renderListStaticsHead, ref _renderListStaticsCount, false);
+
+                    PushToRenderList(obj, ref _renderListEffects, ref _renderListEffectsHead, ref _renderListEffectCount, false);
                 }
             }
 

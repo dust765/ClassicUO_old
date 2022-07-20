@@ -48,11 +48,9 @@ namespace ClassicUO.Game.UI.Gumps
     internal class CombatBookGump : Gump
     {
         private readonly int _abilityCount = Constants.MAX_ABILITIES_COUNT;
-        private float _clickTiming;
         private int _dictionaryPagesCount = 3;
-        private Control _lastPressed;
         private GumpPic _pageCornerLeft, _pageCornerRight, _primAbility, _secAbility;
-
+        private int _enqueuePage = -1;
 
         public CombatBookGump(int x, int y) : base(0, 0)
         {
@@ -144,12 +142,7 @@ namespace ClassicUO.Game.UI.Gumps
                         {
                             if (s is HoveredLabel l && e.Button == MouseButtonType.Left)
                             {
-                                _clickTiming += Mouse.MOUSE_DELAY_DOUBLE_CLICK;
-
-                                if (_clickTiming > 0)
-                                {
-                                    _lastPressed = l;
-                                }
+                                _enqueuePage = (int)l.LocalSerial;
                             }
                         };
 
@@ -383,9 +376,9 @@ namespace ClassicUO.Game.UI.Gumps
             return null;
         }
 
-        public override void Update(double totalTime, double frameTime)
+        public override void Update()
         {
-            base.Update(totalTime, frameTime);
+            base.Update();
 
             if (IsDisposed)
             {
@@ -433,16 +426,10 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
-            if (_lastPressed != null)
+            if (_enqueuePage >= 0 && Time.Ticks - Mouse.LastLeftButtonClickTime >= Mouse.MOUSE_DELAY_DOUBLE_CLICK)
             {
-                _clickTiming -= (float) frameTime;
-
-                if (_clickTiming <= 0)
-                {
-                    _clickTiming = 0;
-                    SetActivePage((int) _lastPressed.LocalSerial);
-                    _lastPressed = null;
-                }
+                SetActivePage(_enqueuePage);
+                _enqueuePage = -1;
             }
         }
 
@@ -482,7 +469,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             _primAbility.IsVisible = _secAbility.IsVisible = page <= _dictionaryPagesCount - _abilityCount;
 
-            Client.Game.Scene.Audio.PlaySound(0x0055);
+            Client.Game.Audio.PlaySound(0x0055);
         }
 
 

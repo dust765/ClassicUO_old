@@ -415,7 +415,7 @@ namespace ClassicUO.Game.UI.Gumps
                             }
                             else
                             {
-                                Client.Game.Scene.Audio.PlaySound(0x0051);
+                                Client.Game.Audio.PlaySound(0x0051);
                             }
 
                             if (can_drop)
@@ -500,9 +500,9 @@ namespace ClassicUO.Game.UI.Gumps
             base.OnMouseExit(x, y);
         }
 
-        public override void Update(double totalTime, double frameTime)
+        public override void Update()
         {
-            base.Update(totalTime, frameTime);
+            base.Update();
 
             Entity entity = World.Get(LocalSerial);
 
@@ -531,11 +531,6 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 return false;
             }
-
-            int gx = ProfileManager.CurrentProfile.GameWindowPosition.X;
-            int gy = ProfileManager.CurrentProfile.GameWindowPosition.Y;
-            int w = ProfileManager.CurrentProfile.GameWindowSize.X;
-            int h = ProfileManager.CurrentProfile.GameWindowSize.Y;
 
             if (SerialHelper.IsMobile(LocalSerial))
             {
@@ -573,7 +568,6 @@ namespace ClassicUO.Game.UI.Gumps
                     );
 
                     x = (int) (m.RealScreenPosition.X + m.Offset.X + 22 + 5);
-
                     y = (int) (m.RealScreenPosition.Y + (m.Offset.Y - m.Offset.Z) - (height + centerY + 8) + (m.IsGargoyle && m.IsFlying ? -22 : !m.IsMounted ? 22 : 0));
                 }
             }
@@ -601,15 +595,16 @@ namespace ClassicUO.Game.UI.Gumps
             x = p.X - (Width >> 1);
             y = p.Y - (Height >> 1);
 
-            x += gx;
-            y += gy;
+            var camera = Client.Game.Scene.Camera;
+            x += camera.Bounds.X;
+            y += camera.Bounds.Y;
 
-            if (x < gx || x + Width > gx + w)
+            if (x < camera.Bounds.X || x + Width > camera.Bounds.Right)
             {
                 return false;
             }
 
-            if (y < gy || y + Height > gy + h)
+            if (y < camera.Bounds.Y || y + Height > camera.Bounds.Bottom)
             {
                 return false;
             }

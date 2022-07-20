@@ -131,7 +131,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (_data.OpenSound != 0 && playsound)
             {
-                Client.Game.Scene.Audio.PlaySound(_data.OpenSound);
+                Client.Game.Audio.PlaySound(_data.OpenSound);
             }
         }
 
@@ -324,7 +324,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                 if (!candrop && Client.Game.GameCursor.ItemHold.Enabled && !Client.Game.GameCursor.ItemHold.IsFixedPosition)
                 {
-                    Client.Game.Scene.Audio.PlaySound(0x0051);
+                    Client.Game.Audio.PlaySound(0x0051);
                 }
 
                 if (candrop && Client.Game.GameCursor.ItemHold.Enabled && !Client.Game.GameCursor.ItemHold.IsFixedPosition)
@@ -424,9 +424,9 @@ namespace ClassicUO.Game.UI.Gumps
             }
         }
 
-        public override void Update(double totalTime, double frameTime)
+        public override void Update()
         {
-            base.Update(totalTime, frameTime);
+            base.Update();
 
             if (IsDisposed)
             {
@@ -447,10 +447,10 @@ namespace ClassicUO.Game.UI.Gumps
                 SelectedObject.SelectedContainer = item;
             }
 
-            if (Graphic == CORPSES_GUMP && _corpseEyeTicks < totalTime)
+            if (Graphic == CORPSES_GUMP && _corpseEyeTicks < Time.Ticks)
             {
                 _eyeCorspeOffset = _eyeCorspeOffset == 0 ? 1 : 0;
-                _corpseEyeTicks = (long) totalTime + 750;
+                _corpseEyeTicks = (long)Time.Ticks + 750;
                 _eyeGumpPic.Graphic = (ushort) (0x0045 + _eyeCorspeOffset);
                 float scale = GetScale();
                 _eyeGumpPic.Width = (int) (_eyeGumpPic.Width * scale);
@@ -511,39 +511,56 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 Item item = (Item) i;
 
-                if (((item.Layer == 0 && 
-                    (Layer) item.ItemData.Layer != Layer.Face &&
-                    (Layer)item.ItemData.Layer != Layer.Beard &&
-                    (Layer)item.ItemData.Layer != Layer.Hair) || 
-                    (is_corpse && Constants.BAD_CONTAINER_LAYERS[(int) item.ItemData.Layer])) 
-                    && item.Amount > 0)
+                // NOTE: Switched from 'item.Layer' property which comes from server to 'ItemData.Layer' from tiledata.mul.
+                //       In the past I found some issues using the server property.
+                //       Probably lack of knowledge about some client behaviour.
+                //       Remember it.
+
+                if (item.Amount <= 0)
                 {
-                    ItemGump itemControl = new ItemGump
-                    (
-                        item.Serial,
-                        (ushort) (item.DisplayedGraphic - (IsChessboard ? Constants.ITEM_GUMP_TEXTURE_OFFSET : 0)),
-                        item.Hue,
-                        item.X,
-                        item.Y,
-                        IsChessboard
-                    );
-
-                    itemControl.IsVisible = !IsMinimized;
-
-                    float scale = GetScale();
-
-                    if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ScaleItemsInsideContainers)
-                    {
-                        itemControl.Width = (int) (itemControl.Width * scale);
-                        itemControl.Height = (int) (itemControl.Height * scale);
-                    }
-
-                    itemControl.X = (int) ((short) item.X * scale);
-                    itemControl.Y = (int) (((short) item.Y - (IsChessboard ? 20 : 0)) * scale);
-
-
-                    Add(itemControl);
+                    continue;
                 }
+
+                var layer = (Layer)item.ItemData.Layer;
+
+                if (is_corpse && item.Layer > 0 && !Constants.BAD_CONTAINER_LAYERS[(int) layer])
+                {
+                    continue;
+                }
+
+                // some items has layer = [face | beard | hair] and we need to check if it's a wearable item or not.
+                // when the item is wearable we dont add it to the container.
+                // Tested with --> client = 7.0.95.0 | graphic = 0x0A02
+                if (item.ItemData.IsWearable && (layer == Layer.Face || layer == Layer.Beard || layer == Layer.Hair))
+                {
+                    continue;
+                }
+
+                ItemGump itemControl = new ItemGump
+                (
+                    item.Serial,
+                    (ushort)(item.DisplayedGraphic - (IsChessboard ? Constants.ITEM_GUMP_TEXTURE_OFFSET : 0)),
+                    item.Hue,
+                    item.X,
+                    item.Y,
+                    IsChessboard
+                );
+
+                itemControl.IsVisible = !IsMinimized;
+
+                float scale = GetScale();
+
+                if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ScaleItemsInsideContainers)
+                {
+                    itemControl.Width = (int)(itemControl.Width * scale);
+                    itemControl.Height = (int)(itemControl.Height * scale);
+                }
+
+                itemControl.X = (int)((short)item.X * scale);
+                itemControl.Y = (int)(((short)item.Y - (IsChessboard ? 20 : 0)) * scale);
+
+
+                Add(itemControl);
             }
         }
 
@@ -651,7 +668,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (_data.ClosedSound != 0)
             {
-                Client.Game.Scene.Audio.PlaySound(_data.ClosedSound);
+                Client.Game.Audio.PlaySound(_data.ClosedSound);
             }
         }
 
