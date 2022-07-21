@@ -1238,6 +1238,11 @@ namespace ClassicUO.Game.Scenes
                     }
                 }
             }
+
+            if (e.keysym.sym != SDL.SDL_Keycode.SDLK_UNKNOWN)
+            {
+                NameOverHeadManager.RegisterKeyDown(e.keysym);
+            }
         }
 
 
@@ -1365,6 +1370,7 @@ namespace ClassicUO.Game.Scenes
                     GameActions.ToggleWarMode();
                 }
             }
+            NameOverHeadManager.RegisterKeyUp(e.keysym);
             // ## BEGIN - END ## // MACROS
             Macro macro2 = Macros.FindMacro(e.keysym.sym, Keyboard.Alt, Keyboard.Ctrl, Keyboard.Shift);
 
