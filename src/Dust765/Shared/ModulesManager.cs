@@ -56,12 +56,12 @@ namespace ClassicUO.Game.Managers // only exception to not being in the 'Interop
         ///     Placed above _effectManager.Update(totalMS, frameMS);
         /// </summary>
         /// <param name="totalMS"></param>
-        public static void OnWorldUpdate( double totalMS )
+        public static void OnWorldUpdate()
         {
             AutoRangeDisplay.Update(); //AutoRangeDisplay//
             AutoMeditate.Update();  //AUTOMEDITATE##//
             AutoEngage.Update();  //AUTOENGAGE##//
-            Defender.Update(totalMS);
+            Defender.Update();
             // ## BEGIN - END ## // LOBBY
             Lobby.Update();
             AutoLobbyStealthPosition.Update();

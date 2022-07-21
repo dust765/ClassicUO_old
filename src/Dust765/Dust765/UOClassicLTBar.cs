@@ -122,9 +122,9 @@ namespace ClassicUO.Dust765.Dust765
             Add(_line);
         }
 
-        public override void Update(double totalMS, double frameMS)
+        public override void Update()
         {
-            base.Update(totalMS, frameMS);
+            base.Update();
         }
     }
     internal class UOClassicCombatLTBar : Gump
@@ -232,7 +232,7 @@ namespace ClassicUO.Dust765.Dust765
             WantUpdateSize = false;
         }
         //MAIN
-        public override void Update(double totalMS, double frameMS)
+        public override void Update()
         {
             if (World.Player == null || World.Player.IsDestroyed /*|| World.Player.IsDead*/)
                 return;
@@ -348,7 +348,7 @@ namespace ClassicUO.Dust765.Dust765
                     }
                 }
             }
-            base.Update(totalMS, frameMS);
+            base.Update();
         }
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
         {

@@ -73,12 +73,12 @@ namespace ClassicUO.Dust765.Autos
             IsUsingAnimations = true;
         }
 
-        public static void Update(double totalMS)
+        public static void Update()
         {
             if (!IsEnabled || World.Player.IsDead)
                 return;
 
-            if (_timer <= totalMS)
+            if (_timer <= 125)
             {
                 if (TargetManager.IsTargeting)
                 {
