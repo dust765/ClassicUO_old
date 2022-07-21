@@ -156,8 +156,8 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _scaleSpeechDelay, _saveJournalCheckBox;
         private Checkbox _showHouseContent;
         private Checkbox _showInfoBar;
-        private Checkbox _ignoreAllianceMessages;
-        private Checkbox _ignoreGuildMessages;
+        private DataBox _journalBox;
+        private List<JournalBuilderControl> _journalBuilderControls;
 
         // general
         private HSliderBar _sliderFPS, _circleOfTranspRadius;
@@ -2561,28 +2561,6 @@ namespace ClassicUO.Game.UI.Gumps
                 startY
             );
 
-            startY += _hideChatGradient.Height + 2;
-
-            _ignoreGuildMessages = AddCheckBox
-            (
-                rightArea,
-                ResGumps.IgnoreGuildMessages,
-                _currentProfile.IgnoreGuildMessages,
-                startX,
-                startY
-            );
-
-            startY += _ignoreGuildMessages.Height + 2;
-
-            _ignoreAllianceMessages = AddCheckBox
-            (
-                rightArea,
-                ResGumps.IgnoreAllianceMessages,
-                _currentProfile.IgnoreAllianceMessages,
-                startX,
-                startY
-            );
-
             startY += 35;
 
             _randomizeColorsButton = new NiceButton
@@ -2712,6 +2690,51 @@ namespace ClassicUO.Game.UI.Gumps
 
             startY += _chatMessageColorPickerBox.Height + 2;
             startX = 5;
+
+            startY += 20;
+
+            NiceButton nb = new NiceButton
+                (startX, startY, 105, 20, ButtonAction.Activate, ResGumps.AddItem, 0, TEXT_ALIGN_TYPE.TS_LEFT)
+            {
+                ButtonParameter = -1,
+                IsSelectable = false,
+                IsSelected = false
+            };
+
+            nb.MouseUp += (sender, e) =>
+            {
+                uint serial = (uint)_journalBox.GetControls<JournalBuilderControl>().Count() + 1;
+                JournalBuilderControl jbc = new JournalBuilderControl(new JournalItem(ResGumps.Journal, 0, Enumerable.Repeat(true, Enum.GetValues(typeof(MessageType)).Length).ToArray(), serial));
+                jbc.X = 5;
+                jbc.Y = _journalBox.Children.Count * jbc.Height;
+                _journalBuilderControls.Add(jbc);
+                _journalBox.Add(jbc);
+                _journalBox.WantUpdateSize = true;
+                UIManager.Add(new JournalGump(serial, jbc.LabelText, jbc.Hue, jbc.Filter) { X = 64, Y = 64 });
+            };
+
+            rightArea.Add(nb);
+
+            startY += nb.Height + 2;
+
+            _journalBox = new DataBox(startX, startY, 10, 10)
+            {
+                WantUpdateSize = true
+            };
+
+            List<JournalItem> _journalItems = World.Journal.GetJournals();
+            _journalBuilderControls = new List<JournalBuilderControl>();
+
+            for (int i = 0; i < _journalItems.Count; i++)
+            {
+                JournalBuilderControl jbc = new JournalBuilderControl(_journalItems[i]);
+                jbc.X = 5;
+                jbc.Y = i * jbc.Height;
+                _journalBuilderControls.Add(jbc);
+                _journalBox.Add(jbc);
+            }
+
+            rightArea.Add(_journalBox);
 
             Add(rightArea, PAGE);
         }
@@ -5545,8 +5568,6 @@ namespace ClassicUO.Game.UI.Gumps
                     _chatShiftEnterCheckbox.IsChecked = true;
                     _saveJournalCheckBox.IsChecked = false;
                     _hideChatGradient.IsChecked = false;
-                    _ignoreGuildMessages.IsChecked = false;
-                    _ignoreAllianceMessages.IsChecked = false;
 
                     break;
 
@@ -5786,6 +5807,26 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.ActivateChatShiftEnterSupport = _chatShiftEnterCheckbox.IsChecked;
             _currentProfile.SaveJournalToFile = _saveJournalCheckBox.IsChecked;
 
+            World.Journal.Empty();
+
+            for (int i = 0; i < _journalBuilderControls.Count; i++)
+            {
+                JournalBuilderControl jbc = _journalBuilderControls[i];
+                if (!jbc.IsDisposed)
+                {
+                    World.Journal.AddJournal(new JournalItem(jbc.LabelText, jbc.Hue, jbc.Filter, jbc.LocalSerial));
+                    JournalGump journal = UIManager.GetGump<JournalGump>(jbc.LocalSerial);
+                    if (journal != null)
+                    {
+                        journal.Title = jbc.LabelText;
+                        journal.Hue = jbc.Hue;
+                        journal.Filter = jbc.Filter;
+                    }
+                }
+            }
+
+            World.Journal.Save();
+
             // video
             _currentProfile.EnableDeathScreen = _enableDeathScreen.IsChecked;
             _currentProfile.EnableBlackWhiteEffect = _enableBlackWhiteEffect.IsChecked;
@@ -5911,8 +5952,6 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.PartyAura = _partyAura.IsChecked;
             _currentProfile.PartyAuraHue = _partyAuraColorPickerBox.Hue;
             _currentProfile.HideChatGradient = _hideChatGradient.IsChecked;
-            _currentProfile.IgnoreGuildMessages = _ignoreGuildMessages.IsChecked;
-            _currentProfile.IgnoreAllianceMessages = _ignoreAllianceMessages.IsChecked;
 
             // fonts
             _currentProfile.ForceUnicodeJournal = _forceUnicodeJournal.IsChecked;

@@ -313,7 +313,7 @@ namespace ClassicUO.Dust765.External // ## BEGIN - END ## // MACROS
                 entry.Hue,
                 entry.IsUnicode,
                 entry.Time,
-                entry.TextType
+                (TextType)entry.TextType
             );
         }
 

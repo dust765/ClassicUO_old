@@ -401,7 +401,7 @@ namespace ClassicUO.Game.Scenes
                     text,
                     hue,
                     name,
-                    e.TextType,
+                    e.Type,
                     e.IsUnicode
                 );
             }
