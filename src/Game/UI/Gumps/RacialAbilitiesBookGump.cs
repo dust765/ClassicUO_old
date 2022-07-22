@@ -52,12 +52,11 @@ namespace ClassicUO.Game.UI.Gumps
         };
         private static readonly string[] _gargoyleNames = { "Flying", "Berserk", "Master Artisan", "Deadly Aim", "Mystic Insight" };
         private int _abilityCount = 4;
-        private float _clickTiming;
         private int _dictionaryPagesCount = 1;
-        private Control _lastPressed;
         private GumpPic _pageCornerLeft, _pageCornerRight;
         private int _pagesCount = 3;
         private int _tooltipOffset = 1112198;
+        private int _enqueuePage = -1;
 
         public RacialAbilitiesBookGump(int x, int y) : base(0, 0)
         {
@@ -324,12 +323,7 @@ namespace ClassicUO.Game.UI.Gumps
         {
             if (sender is HoveredLabel l && e.Button == MouseButtonType.Left)
             {
-                _clickTiming += Mouse.MOUSE_DELAY_DOUBLE_CLICK;
-
-                if (_clickTiming > 0)
-                {
-                    _lastPressed = l;
-                }
+                _enqueuePage = (int)l.LocalSerial;
             }
         }
 
@@ -366,28 +360,22 @@ namespace ClassicUO.Game.UI.Gumps
             _pageCornerLeft.Page = ActivePage != 1 ? 0 : int.MaxValue;
             _pageCornerRight.Page = ActivePage != _pagesCount ? 0 : int.MaxValue;
 
-            Client.Game.Scene.Audio.PlaySound(0x0055);
+            Client.Game.Audio.PlaySound(0x0055);
         }
 
-        public override void Update(double totalTime, double frameTime)
+        public override void Update()
         {
-            base.Update(totalTime, frameTime);
+            base.Update();
 
             if (IsDisposed)
             {
                 return;
             }
 
-            if (_lastPressed != null)
+            if (_enqueuePage >= 0 && Time.Ticks - Mouse.LastLeftButtonClickTime >= Mouse.MOUSE_DELAY_DOUBLE_CLICK)
             {
-                _clickTiming -= (float) frameTime;
-
-                if (_clickTiming <= 0)
-                {
-                    _clickTiming = 0;
-                    SetActivePage((int) _lastPressed.LocalSerial);
-                    _lastPressed = null;
-                }
+                SetActivePage(_enqueuePage);
+                _enqueuePage = -1;
             }
         }
     }

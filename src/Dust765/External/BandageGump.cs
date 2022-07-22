@@ -162,9 +162,9 @@ namespace ClassicUO.Dust765.External
             return base.Draw(batcher, x, y);
         }
 
-        public override void Update(double totalMS, double frameMS)
+        public override void Update()
         {
-            base.Update(totalMS, frameMS);
+            base.Update();
 
             if (IsDisposed)
                 return;
@@ -175,9 +175,9 @@ namespace ClassicUO.Dust765.External
                 return;
             }
 
-            if (_updateTime < totalMS)
+            if (_startTime > _updateTime)
             {
-                _updateTime = (float) totalMS + 125;
+                _updateTime = (float) _startTime  + 125;
                 IsVisible = false;
                 Timer = 0;
 

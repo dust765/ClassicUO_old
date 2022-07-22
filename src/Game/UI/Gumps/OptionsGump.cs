@@ -60,7 +60,7 @@ namespace ClassicUO.Game.UI.Gumps
         private const byte FONT = 0xFF;
         private const ushort HUE_FONT = 0xFFFF;
         private const int WIDTH = 700;
-        private const int HEIGHT = 500;
+        private const int HEIGHT = 550;
         private const int TEXTBOX_HEIGHT = 25;
 
         private static Texture2D _logoTexture2D;
@@ -149,13 +149,15 @@ namespace ClassicUO.Game.UI.Gumps
         private NiceButton _randomizeColorsButton;
         private Checkbox _restorezoomCheckbox, _zoomCheckbox;
         private InputField _rows, _columns, _highlightAmount, _abbreviatedAmount;
+        // name overhead
+        private NameOverheadAssignControl _nameOverheadControl;
 
         // speech
         private Checkbox _scaleSpeechDelay, _saveJournalCheckBox;
         private Checkbox _showHouseContent;
         private Checkbox _showInfoBar;
-        private Checkbox _ignoreAllianceMessages;
-        private Checkbox _ignoreGuildMessages;
+        private DataBox _journalBox;
+        private List<JournalBuilderControl> _journalBuilderControls;
 
         // general
         private HSliderBar _sliderFPS, _circleOfTranspRadius;
@@ -466,6 +468,21 @@ namespace ClassicUO.Game.UI.Gumps
             Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "765") { ButtonParameter = 17 });
             Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Mods") { ButtonParameter = 18 });
             // ## BEGIN - END ## // BASICSETUP
+            Add
+            (
+                new NiceButton
+                (
+                    10,
+                    10 + 30 * i++,
+                    140,
+                    25,
+                    ButtonAction.SwitchPage,
+                    "Name Overhead Options"
+                )
+                {
+                    ButtonParameter = 13
+                }
+            );
 
             Add
             (
@@ -542,6 +559,7 @@ namespace ClassicUO.Game.UI.Gumps
             BuildInfoBar();
             BuildContainers();
             BuildExperimental();
+            BuildNameOverhead();
             // ## BEGIN - END ## // BASICSETUP
             BuildDust();
             Build765();
@@ -1349,10 +1367,10 @@ namespace ClassicUO.Game.UI.Gumps
             );
 
             section4.Add(new Label(ResGumps.DragSelectStartingPosX, true, HUE_FONT));
-            section4.Add(_dragSelectStartX = new HSliderBar(startX, startY, 200, 0, _currentProfile.GameWindowSize.X, _currentProfile.DragSelectStartX, HSliderBarStyle.MetalWidgetRecessedBar, true, 0, HUE_FONT));
+            section4.Add(_dragSelectStartX = new HSliderBar(startX, startY, 200, 0, Client.Game.Scene.Camera.Bounds.Width, _currentProfile.DragSelectStartX, HSliderBarStyle.MetalWidgetRecessedBar, true, 0, HUE_FONT));
 
             section4.Add(new Label(ResGumps.DragSelectStartingPosY, true, HUE_FONT));
-            section4.Add(_dragSelectStartY = new HSliderBar(startX, startY, 200, 0, _currentProfile.GameWindowSize.Y, _currentProfile.DragSelectStartY, HSliderBarStyle.MetalWidgetRecessedBar, true, 0, HUE_FONT));
+            section4.Add(_dragSelectStartY = new HSliderBar(startX, startY, 200, 0, Client.Game.Scene.Camera.Bounds.Height, _currentProfile.DragSelectStartY, HSliderBarStyle.MetalWidgetRecessedBar, true, 0, HUE_FONT));
             section4.Add
             (
                 _dragSelectAsAnchor = AddCheckBox
@@ -1716,7 +1734,9 @@ namespace ClassicUO.Game.UI.Gumps
                 4
             );
 
-            _gameWindowPositionX.SetText(_currentProfile.GameWindowPosition.X.ToString());
+            var camera = Client.Game.Scene.Camera;
+
+            _gameWindowPositionX.SetText(camera.Bounds.X.ToString());
 
             section.AddRight
             (
@@ -1734,7 +1754,7 @@ namespace ClassicUO.Game.UI.Gumps
                 )
             );
 
-            _gameWindowPositionY.SetText(_currentProfile.GameWindowPosition.Y.ToString());
+            _gameWindowPositionY.SetText(camera.Bounds.Y.ToString());
 
 
             section.Add(AddLabel(null, ResGumps.GamePlayWindowSize, startX, startY));
@@ -1755,7 +1775,7 @@ namespace ClassicUO.Game.UI.Gumps
                 )
             );
 
-            _gameWindowWidth.SetText(_currentProfile.GameWindowSize.X.ToString());
+            _gameWindowWidth.SetText(camera.Bounds.Width.ToString());
 
             section.AddRight
             (
@@ -1773,12 +1793,15 @@ namespace ClassicUO.Game.UI.Gumps
                 )
             );
 
-            _gameWindowHeight.SetText(_currentProfile.GameWindowSize.Y.ToString());
+            _gameWindowHeight.SetText(camera.Bounds.Height.ToString());
 
 
             SettingsSection section2 = AddSettingsSection(box, "Zoom");
             section2.Y = section.Bounds.Bottom + 40;
             section2.Add(AddLabel(null, ResGumps.DefaultZoom, startX, startY));
+
+            var cameraZoomCount = (int)((camera.ZoomMax - camera.ZoomMin) / camera.ZoomStep);
+            var cameraZoomIndex = cameraZoomCount - (int)((camera.ZoomMax - camera.Zoom) / camera.ZoomStep);
 
             section2.AddRight
             (
@@ -1786,8 +1809,8 @@ namespace ClassicUO.Game.UI.Gumps
                 (
                     null,
                     0,
-                    Client.Game.Scene.Camera.ZoomValuesCount,
-                    Client.Game.Scene.Camera.ZoomIndex,
+                    cameraZoomCount,
+                    cameraZoomIndex,
                     startX,
                     startY,
                     100
@@ -2082,7 +2105,8 @@ namespace ClassicUO.Game.UI.Gumps
                                 name
                             )
                             {
-                                ButtonParameter = (int) Buttons.Last + 1 + rightArea.Children.Count
+                                ButtonParameter = (int) Buttons.Last + 1 + rightArea.Children.Count,
+                                CanMove = true
                             }
                         );
 
@@ -2109,24 +2133,12 @@ namespace ClassicUO.Game.UI.Gumps
                                 return;
                             }
 
-                            if (Math.Max(Math.Abs(Mouse.LDragOffset.X), Math.Abs(Mouse.LDragOffset.Y)) < 5 || nb.ScreenCoordinateX > Mouse.LClickPosition.X || nb.ScreenCoordinateX < Mouse.LClickPosition.X - nb.Width || nb.ScreenCoordinateY > Mouse.LClickPosition.Y || nb.ScreenCoordinateY + nb.Height < Mouse.LClickPosition.Y)
-                            {
-                                return;
-                            }
+                            UIManager.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == _macroControl.Macro)?.Dispose();
 
-                            MacroControl control = _macroControl.FindControls<MacroControl>().SingleOrDefault();
+                            MacroButtonGump macroButtonGump = new MacroButtonGump(_macroControl.Macro, Mouse.Position.X, Mouse.Position.Y);
 
-                            if (control == null)
-                            {
-                                return;
-                            }
-
-                            UIManager.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == control.Macro)?.Dispose();
-
-                            MacroButtonGump macroButtonGump = new MacroButtonGump(control.Macro, Mouse.Position.X, Mouse.Position.Y);
-
-                            macroButtonGump.X = Mouse.LClickPosition.X + (macroButtonGump.Width >> 1);
-                            macroButtonGump.Y = Mouse.LClickPosition.Y + (macroButtonGump.Height >> 1);
+                            macroButtonGump.X = Mouse.Position.X - (macroButtonGump.Width >> 1);
+                            macroButtonGump.Y = Mouse.Position.Y - (macroButtonGump.Height >> 1);
 
                             UIManager.Add(macroButtonGump);
 
@@ -2208,7 +2220,8 @@ namespace ClassicUO.Game.UI.Gumps
                     )
                     {
                         ButtonParameter = (int) Buttons.Last + 1 + rightArea.Children.Count,
-                        Tag = macro
+                        Tag = macro,
+                        CanMove = true
                     }
                 );
 
@@ -2230,17 +2243,12 @@ namespace ClassicUO.Game.UI.Gumps
                         return;
                     }
 
-                    if (Math.Max(Math.Abs(Mouse.LDragOffset.X), Math.Abs(Mouse.LDragOffset.Y)) < 5 || nb.ScreenCoordinateX > Mouse.LClickPosition.X || nb.ScreenCoordinateX < Mouse.LClickPosition.X - nb.Width || nb.ScreenCoordinateY > Mouse.LClickPosition.Y || nb.ScreenCoordinateY + nb.Height < Mouse.LClickPosition.Y)
-                    {
-                        return;
-                    }
-
                     UIManager.Gumps.OfType<MacroButtonGump>().FirstOrDefault(s => s._macro == m)?.Dispose();
 
                     MacroButtonGump macroButtonGump = new MacroButtonGump(m, Mouse.Position.X, Mouse.Position.Y);
 
-                    macroButtonGump.X = Mouse.LClickPosition.X + (macroButtonGump.Width >> 1);
-                    macroButtonGump.Y = Mouse.LClickPosition.Y + (macroButtonGump.Height >> 1);
+                    macroButtonGump.X = Mouse.Position.X - (macroButtonGump.Width >> 1);
+                    macroButtonGump.Y = Mouse.Position.Y - (macroButtonGump.Height >> 1);
 
                     UIManager.Add(macroButtonGump);
 
@@ -2553,28 +2561,6 @@ namespace ClassicUO.Game.UI.Gumps
                 startY
             );
 
-            startY += _hideChatGradient.Height + 2;
-
-            _ignoreGuildMessages = AddCheckBox
-            (
-                rightArea,
-                ResGumps.IgnoreGuildMessages,
-                _currentProfile.IgnoreGuildMessages,
-                startX,
-                startY
-            );
-
-            startY += _ignoreGuildMessages.Height + 2;
-
-            _ignoreAllianceMessages = AddCheckBox
-            (
-                rightArea,
-                ResGumps.IgnoreAllianceMessages,
-                _currentProfile.IgnoreAllianceMessages,
-                startX,
-                startY
-            );
-
             startY += 35;
 
             _randomizeColorsButton = new NiceButton
@@ -2704,6 +2690,51 @@ namespace ClassicUO.Game.UI.Gumps
 
             startY += _chatMessageColorPickerBox.Height + 2;
             startX = 5;
+
+            startY += 20;
+
+            NiceButton nb = new NiceButton
+                (startX, startY, 105, 20, ButtonAction.Activate, ResGumps.AddItem, 0, TEXT_ALIGN_TYPE.TS_LEFT)
+            {
+                ButtonParameter = -1,
+                IsSelectable = false,
+                IsSelected = false
+            };
+
+            nb.MouseUp += (sender, e) =>
+            {
+                uint serial = (uint)_journalBox.GetControls<JournalBuilderControl>().Count() + 1;
+                JournalBuilderControl jbc = new JournalBuilderControl(new JournalItem(ResGumps.Journal, 0, Enumerable.Repeat(true, Enum.GetValues(typeof(MessageType)).Length).ToArray(), serial));
+                jbc.X = 5;
+                jbc.Y = _journalBox.Children.Count * jbc.Height;
+                _journalBuilderControls.Add(jbc);
+                _journalBox.Add(jbc);
+                _journalBox.WantUpdateSize = true;
+                UIManager.Add(new JournalGump(serial, jbc.LabelText, jbc.Hue, jbc.Filter) { X = 64, Y = 64 });
+            };
+
+            rightArea.Add(nb);
+
+            startY += nb.Height + 2;
+
+            _journalBox = new DataBox(startX, startY, 10, 10)
+            {
+                WantUpdateSize = true
+            };
+
+            List<JournalItem> _journalItems = World.Journal.GetJournals();
+            _journalBuilderControls = new List<JournalBuilderControl>();
+
+            for (int i = 0; i < _journalItems.Count; i++)
+            {
+                JournalBuilderControl jbc = new JournalBuilderControl(_journalItems[i]);
+                jbc.X = 5;
+                jbc.Y = i * jbc.Height;
+                _journalBuilderControls.Add(jbc);
+                _journalBox.Add(jbc);
+            }
+
+            rightArea.Add(_journalBox);
 
             Add(rightArea, PAGE);
         }
@@ -3479,6 +3510,239 @@ namespace ClassicUO.Game.UI.Gumps
 
             button.MouseUp += (sender, e) => { ContainerManager.BuildContainerFile(true); };
             rightArea.Add(button);
+
+            Add(rightArea, PAGE);
+        }
+
+        private void BuildNameOverhead()
+        {
+            const int PAGE = 13;
+
+            ScrollArea rightArea = new ScrollArea
+            (
+                190,
+                52 + 25 + 4,
+                150,
+                360,
+                true
+            );
+
+            Add
+            (
+                new Line
+                (
+                    190,
+                    52 + 25 + 2,
+                    150,
+                    1,
+                    Color.Gray.PackedValue
+                ),
+                PAGE
+            );
+
+            Add
+            (
+                new Line
+                (
+                    191 + 150,
+                    21,
+                    1,
+                    418,
+                    Color.Gray.PackedValue
+                ),
+                PAGE
+            );
+
+            NiceButton addButton = new NiceButton
+            (
+                190,
+                20,
+                130,
+                20,
+                ButtonAction.Activate,
+                "New entry"
+            )
+            { IsSelectable = false, ButtonParameter = (int)Buttons.NewNameOverheadEntry };
+
+            Add(addButton, PAGE);
+
+            NiceButton delButton = new NiceButton
+            (
+                190,
+                52,
+                130,
+                20,
+                ButtonAction.Activate,
+                "Delete entry"
+            )
+            { IsSelectable = false, ButtonParameter = (int)Buttons.DeleteOverheadEntry };
+
+            Add(delButton, PAGE);
+
+
+            int startX = 5;
+            int startY = 5;
+
+            DataBox databox = new DataBox(startX, startY, 1, 1);
+            databox.WantUpdateSize = true;
+            rightArea.Add(databox);
+
+
+            addButton.MouseUp += (sender, e) =>
+            {
+                EntryDialog dialog = new
+                (
+                    250,
+                    150,
+                    "Name overhead entry name",
+                    name =>
+                    {
+                        if (string.IsNullOrWhiteSpace(name))
+                        {
+                            return;
+                        }
+
+                        if (NameOverHeadManager.FindOption(name) != null)
+                        {
+                            return;
+                        }
+
+                        NiceButton nb;
+
+                        databox.Add
+                        (
+                            nb = new NiceButton
+                            (
+                                0,
+                                0,
+                                130,
+                                25,
+                                ButtonAction.Activate,
+                                name
+                            )
+                            {
+                                ButtonParameter = (int)Buttons.Last + 1 + rightArea.Children.Count
+                            }
+                        );
+
+                        databox.ReArrangeChildren();
+
+                        nb.IsSelected = true;
+
+                        _nameOverheadControl?.Dispose();
+
+                        var option = new NameOverheadOption(name);
+                        NameOverHeadManager.AddOption(option);
+
+                        _nameOverheadControl = new NameOverheadAssignControl(option)
+                        {
+                            X = 400,
+                            Y = 20
+                        };
+
+                        Add(_nameOverheadControl, PAGE);
+
+                        nb.MouseUp += (sss, eee) =>
+                        {
+                            _nameOverheadControl?.Dispose();
+
+                            _nameOverheadControl = new NameOverheadAssignControl(option)
+                            {
+                                X = 400,
+                                Y = 20
+                            };
+
+                            Add(_nameOverheadControl, PAGE);
+                        };
+                    }
+                )
+                {
+                    CanCloseWithRightClick = true
+                };
+
+                UIManager.Add(dialog);
+            };
+
+            delButton.MouseUp += (ss, ee) =>
+            {
+                NiceButton nb = databox.FindControls<NiceButton>().SingleOrDefault(a => a.IsSelected);
+
+                if (nb != null)
+                {
+                    QuestionGump dialog = new QuestionGump
+                    (
+                        ResGumps.MacroDeleteConfirmation,
+                        b =>
+                        {
+                            if (!b)
+                            {
+                                return;
+                            }
+
+                            if (_nameOverheadControl != null)
+                            {
+                                NameOverHeadManager.RemoveOption(_nameOverheadControl.Option);
+
+                                _nameOverheadControl.Dispose();
+                            }
+
+                            nb.Dispose();
+                            databox.ReArrangeChildren();
+                        }
+                    );
+
+                    UIManager.Add(dialog);
+                }
+            };
+
+
+            foreach (var option in NameOverHeadManager.GetAllOptions())
+            {
+                NiceButton nb;
+
+                databox.Add
+                (
+                    nb = new NiceButton
+                    (
+                        0,
+                        0,
+                        130,
+                        25,
+                        ButtonAction.Activate,
+                        option.Name
+                    )
+                    {
+                        ButtonParameter = (int)Buttons.Last + 1 + rightArea.Children.Count,
+                        Tag = option
+                    }
+                );
+
+                nb.IsSelected = true;
+
+                nb.MouseUp += (sss, eee) =>
+                {
+                    NiceButton mupNiceButton = (NiceButton)sss;
+
+                    var option = mupNiceButton.Tag as NameOverheadOption;
+
+                    if (option == null)
+                    {
+                        return;
+                    }
+
+                    _nameOverheadControl?.Dispose();
+
+                    _nameOverheadControl = new NameOverheadAssignControl(option)
+                    {
+                        X = 400,
+                        Y = 20
+                    };
+
+                    Add(_nameOverheadControl, PAGE);
+                };
+            }
+
+            databox.ReArrangeChildren();
 
             Add(rightArea, PAGE);
         }
@@ -5304,8 +5568,6 @@ namespace ClassicUO.Game.UI.Gumps
                     _chatShiftEnterCheckbox.IsChecked = true;
                     _saveJournalCheckBox.IsChecked = false;
                     _hideChatGradient.IsChecked = false;
-                    _ignoreGuildMessages.IsChecked = false;
-                    _ignoreAllianceMessages.IsChecked = false;
 
                     break;
 
@@ -5510,17 +5772,17 @@ namespace ClassicUO.Game.UI.Gumps
             Settings.GlobalSettings.LoginMusicVolume = _loginMusicVolume.Value;
             Settings.GlobalSettings.LoginMusic = _loginMusic.IsChecked;
 
-            Client.Game.Scene.Audio.UpdateCurrentMusicVolume();
-            Client.Game.Scene.Audio.UpdateCurrentSoundsVolume();
+            Client.Game.Audio.UpdateCurrentMusicVolume();
+            Client.Game.Audio.UpdateCurrentSoundsVolume();
 
             if (!_currentProfile.EnableMusic)
             {
-                Client.Game.Scene.Audio.StopMusic();
+                Client.Game.Audio.StopMusic();
             }
 
             if (!_currentProfile.EnableSound)
             {
-                Client.Game.Scene.Audio.StopSounds();
+                Client.Game.Audio.StopSounds();
             }
 
             // speech
@@ -5545,12 +5807,33 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.ActivateChatShiftEnterSupport = _chatShiftEnterCheckbox.IsChecked;
             _currentProfile.SaveJournalToFile = _saveJournalCheckBox.IsChecked;
 
+            World.Journal.Empty();
+
+            for (int i = 0; i < _journalBuilderControls.Count; i++)
+            {
+                JournalBuilderControl jbc = _journalBuilderControls[i];
+                if (!jbc.IsDisposed)
+                {
+                    World.Journal.AddJournal(new JournalItem(jbc.LabelText, jbc.Hue, jbc.Filter, jbc.LocalSerial));
+                    JournalGump journal = UIManager.GetGump<JournalGump>(jbc.LocalSerial);
+                    if (journal != null)
+                    {
+                        journal.Title = jbc.LabelText;
+                        journal.Hue = jbc.Hue;
+                        journal.Filter = jbc.Filter;
+                    }
+                }
+            }
+
+            World.Journal.Save();
+
             // video
             _currentProfile.EnableDeathScreen = _enableDeathScreen.IsChecked;
             _currentProfile.EnableBlackWhiteEffect = _enableBlackWhiteEffect.IsChecked;
 
-            Client.Game.Scene.Camera.ZoomIndex = _sliderZoom.Value;
-            _currentProfile.DefaultScale = Client.Game.Scene.Camera.Zoom;
+            var camera = Client.Game.Scene.Camera;
+            _currentProfile.DefaultScale = camera.Zoom = (_sliderZoom.Value * camera.ZoomStep) + camera.ZoomMin;
+
             _currentProfile.EnableMousewheelScaleZoom = _zoomCheckbox.IsChecked;
             _currentProfile.RestoreScaleAfterUnpressCtrl = _restorezoomCheckbox.IsChecked;
 
@@ -5571,7 +5854,7 @@ namespace ClassicUO.Game.UI.Gumps
             int.TryParse(_gameWindowWidth.Text, out int gameWindowSizeWidth);
             int.TryParse(_gameWindowHeight.Text, out int gameWindowSizeHeight);
 
-            if (gameWindowSizeWidth != _currentProfile.GameWindowSize.X || gameWindowSizeHeight != _currentProfile.GameWindowSize.Y)
+            if (gameWindowSizeWidth != Client.Game.Scene.Camera.Bounds.Width || gameWindowSizeHeight != Client.Game.Scene.Camera.Bounds.Height)
             {
                 if (vp != null)
                 {
@@ -5585,11 +5868,12 @@ namespace ClassicUO.Game.UI.Gumps
             int.TryParse(_gameWindowPositionX.Text, out int gameWindowPositionX);
             int.TryParse(_gameWindowPositionY.Text, out int gameWindowPositionY);
 
-            if (gameWindowPositionX != _currentProfile.GameWindowPosition.X || gameWindowPositionY != _currentProfile.GameWindowPosition.Y)
+            if (gameWindowPositionX != camera.Bounds.X || gameWindowPositionY != camera.Bounds.Y)
             {
                 if (vp != null)
                 {
-                    vp.Location = _currentProfile.GameWindowPosition = new Point(gameWindowPositionX, gameWindowPositionY);
+                    vp.SetGameWindowPosition(new Point(gameWindowPositionX, gameWindowPositionY));
+                    _currentProfile.GameWindowPosition = vp.Location;
                 }
             }
 
@@ -5603,14 +5887,6 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.GameWindowLock = _gameWindowLock.IsChecked;
             }
 
-            if (_gameWindowFullsize.IsChecked && (gameWindowPositionX != -5 || gameWindowPositionY != -5))
-            {
-                if (_currentProfile.GameWindowFullSize == _gameWindowFullsize.IsChecked)
-                {
-                    _gameWindowFullsize.IsChecked = false;
-                }
-            }
-
             if (_currentProfile.GameWindowFullSize != _gameWindowFullsize.IsChecked)
             {
                 Point n = Point.Zero, loc = Point.Zero;
@@ -5620,8 +5896,8 @@ namespace ClassicUO.Game.UI.Gumps
                     if (vp != null)
                     {
                         n = vp.ResizeGameWindow(new Point(Client.Game.Window.ClientBounds.Width, Client.Game.Window.ClientBounds.Height));
-
-                        loc = _currentProfile.GameWindowPosition = vp.Location = new Point(-5, -5);
+                        vp.SetGameWindowPosition(new Point(-5, -5));
+                        _currentProfile.GameWindowPosition = vp.Location;
                     }
                 }
                 else
@@ -5629,7 +5905,8 @@ namespace ClassicUO.Game.UI.Gumps
                     if (vp != null)
                     {
                         n = vp.ResizeGameWindow(new Point(600, 480));
-                        loc = vp.Location = _currentProfile.GameWindowPosition = new Point(20, 20);
+                        vp.SetGameWindowPosition(new Point(20, 20));
+                        _currentProfile.GameWindowPosition = vp.Location;
                     }
                 }
 
@@ -5675,8 +5952,6 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.PartyAura = _partyAura.IsChecked;
             _currentProfile.PartyAuraHue = _partyAuraColorPickerBox.Hue;
             _currentProfile.HideChatGradient = _hideChatGradient.IsChecked;
-            _currentProfile.IgnoreGuildMessages = _ignoreGuildMessages.IsChecked;
-            _currentProfile.IgnoreAllianceMessages = _ignoreAllianceMessages.IsChecked;
 
             // fonts
             _currentProfile.ForceUnicodeJournal = _forceUnicodeJournal.IsChecked;
@@ -6361,10 +6636,12 @@ namespace ClassicUO.Game.UI.Gumps
 
         internal void UpdateVideo()
         {
-            _gameWindowWidth.SetText(_currentProfile.GameWindowSize.X.ToString());
-            _gameWindowHeight.SetText(_currentProfile.GameWindowSize.Y.ToString());
-            _gameWindowPositionX.SetText(_currentProfile.GameWindowPosition.X.ToString());
-            _gameWindowPositionY.SetText(_currentProfile.GameWindowPosition.Y.ToString());
+            var camera = Client.Game.Scene.Camera;
+
+            _gameWindowPositionX.SetText(camera.Bounds.X.ToString());
+            _gameWindowPositionY.SetText(camera.Bounds.Y.ToString());
+            _gameWindowWidth.SetText(camera.Bounds.Width.ToString());
+            _gameWindowHeight.SetText(camera.Bounds.Height.ToString());
         }
 
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
@@ -6609,7 +6886,10 @@ namespace ClassicUO.Game.UI.Gumps
             NewMacro,
             DeleteMacro,
 
-            Last = DeleteMacro
+            NewNameOverheadEntry,
+            DeleteOverheadEntry,
+
+            Last = DeleteMacro,
         }
 
 

@@ -31,7 +31,11 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
 using ClassicUO.Utility;
@@ -49,12 +53,18 @@ namespace ClassicUO.Game.Managers
 
         public event EventHandler<JournalEntry> EntryAdded;
 
+        private readonly List<JournalItem> journals;
 
-        public void Add(string text, ushort hue, string name, TextType type, bool isunicode = true)
+        public JournalManager()
+        {
+            journals = new List<JournalItem>();
+        }
+
+        public void Add(string text, ushort hue, string name, MessageType type, bool isunicode = true)
         {
             JournalEntry entry = Entries.Count >= Constants.MAX_JOURNAL_HISTORY_COUNT ? Entries.RemoveFromFront() : new JournalEntry();
 
-            byte font = (byte) (isunicode ? 0 : 9);
+            byte font = (byte)(isunicode ? 0 : 9);
 
             if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.OverrideAllFonts)
             {
@@ -137,6 +147,102 @@ namespace ClassicUO.Game.Managers
             //Entries.Clear();
             CloseWriter();
         }
+
+        public void Empty()
+        {
+            journals.Clear();
+        }
+
+        public List<JournalItem> GetJournals()
+        {
+            return journals;
+        }
+
+        public void AddJournal(JournalItem ibi)
+        {
+            journals.Add(ibi);
+        }
+
+        public void RemoveJournal(JournalItem item)
+        {
+            journals.Remove(item);
+        }
+
+        public void Save()
+        {
+            string path = Path.Combine(ProfileManager.ProfilePath, "journals.xml");
+
+            using (XmlTextWriter xml = new XmlTextWriter(path, Encoding.UTF8)
+            {
+                Formatting = Formatting.Indented,
+                IndentChar = '\t',
+                Indentation = 1
+            })
+            {
+                xml.WriteStartDocument(true);
+                xml.WriteStartElement("journals");
+
+                foreach (JournalItem info in journals)
+                {
+                    info.Save(xml);
+                }
+
+                xml.WriteEndElement();
+                xml.WriteEndDocument();
+            }
+        }
+
+        public void Load()
+        {
+            string path = Path.Combine(ProfileManager.ProfilePath, "journals.xml");
+
+            if (!File.Exists(path))
+            {
+                CreateDefault();
+                Save();
+                return;
+            }
+
+            XmlDocument doc = new XmlDocument();
+
+            try
+            {
+                doc.Load(path);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+
+                return;
+            }
+
+            journals.Clear();
+
+            XmlElement root = doc["journals"];
+
+            if (root != null)
+            {
+                foreach (XmlElement xml in root.GetElementsByTagName("journal"))
+                {
+                    JournalItem item = new JournalItem(xml);
+                    journals.Add(item);
+                    var gump = UIManager.GetGump<UI.Gumps.JournalGump>(item.serial);
+                    if (gump != null)
+                    {
+                        gump.Hue = item.hue;
+                        gump.Title = item.label;
+                        gump.Filter = item.filter;
+                    }
+                }
+            }
+        }
+
+        public void CreateDefault()
+        {
+            journals.Clear();
+
+            journals.Add(new JournalItem(string.Empty, 0, Enumerable.Repeat(true, Enum.GetValues(typeof(MessageType)).Length).ToArray(), 0));
+        }
     }
 
     internal class JournalEntry
@@ -148,7 +254,52 @@ namespace ClassicUO.Game.Managers
         public string Name;
         public string Text;
 
-        public TextType TextType;
+        public MessageType TextType;
         public DateTime Time;
+    }
+
+    internal class JournalItem
+    {
+        public JournalItem(string label, ushort labelColor, bool[] filter, uint serial)
+        {
+            this.label = label;
+            this.serial = serial;
+            this.filter = filter;
+            hue = labelColor;
+        }
+
+
+        public JournalItem(XmlElement xml)
+        {
+            if (xml == null)
+            {
+                return;
+            }
+
+            label = xml.GetAttribute("text");
+            hue = ushort.Parse(xml.GetAttribute("hue"));
+            filter = xml.GetAttribute("filter").Split(sep).Select(x => bool.Parse(x)).ToArray();
+            serial = uint.Parse(xml.GetAttribute("serial"));
+        }
+
+        public ushort hue;
+
+        public string label;
+
+        public uint serial;
+
+        public bool[] filter;
+
+        private const char sep = ',';
+
+        public void Save(XmlTextWriter writer)
+        {
+            writer.WriteStartElement("journal");
+            writer.WriteAttributeString("text", label);
+            writer.WriteAttributeString("hue", hue.ToString());
+            writer.WriteAttributeString("serial", serial.ToString());
+            writer.WriteAttributeString("filter", string.Join(sep.ToString(), filter));
+            writer.WriteEndElement();
+        }
     }
 }

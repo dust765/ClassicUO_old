@@ -245,7 +245,7 @@ namespace ClassicUO.Game.UI.Controls
             return false;
         }
 
-        public override void Update(double totalTime, double frameTime)
+        public override void Update()
         {
             if (Mouse.LButtonPressed && _isExpanding)
             {
@@ -270,7 +270,8 @@ namespace ClassicUO.Game.UI.Controls
                 _gumplingTitleGumpIDDelta = false;
 
                 _gumplingTitle?.Dispose();
-                Add(_gumplingTitle = new GumpPic(0, 0, (ushort) _gumplingTitleGumpID, 0));
+                if (_gumplingTitleGumpID > 0)
+                    Add(_gumplingTitle = new GumpPic(0, 0, (ushort)_gumplingTitleGumpID, 0));
             }
 
             //if (!IsVisible)
@@ -304,7 +305,7 @@ namespace ClassicUO.Game.UI.Controls
             WantUpdateSize = true;
             Parent?.OnPageChanged();
 
-            base.Update(totalTime, frameTime);
+            base.Update();
         }
 
 

@@ -212,7 +212,7 @@ namespace ClassicUO.Dust765.Dust765
 
         }
         //MAIN
-        public override void Update(double totalMS, double frameMS)
+        public override void Update()
         {
             if (World.Player == null || World.Player.IsDestroyed)
                 return;
@@ -223,7 +223,7 @@ namespace ClassicUO.Dust765.Dust765
             //MAIN LOOP
             MainLoop();
 
-            base.Update(totalMS, frameMS);
+            base.Update();
         }
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
         {

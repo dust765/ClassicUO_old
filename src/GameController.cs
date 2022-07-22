@@ -89,6 +89,8 @@ namespace ClassicUO
 
         public Scene Scene { get; private set; }
         public GameCursor GameCursor { get; private set; }
+        public AudioManager Audio { get; private set; }
+
 
         public GraphicsDeviceManager GraphicManager { get; }
         public readonly uint[] FrameDelay = new uint[2];
@@ -134,12 +136,11 @@ namespace ClassicUO
                 _hueSamplers[0].SetDataPointerEXT(0, null, (IntPtr) ptr, TEXTURE_WIDTH * TEXTURE_HEIGHT * sizeof(uint));
                 _hueSamplers[1].SetDataPointerEXT(0, null, (IntPtr) ptr + TEXTURE_WIDTH * TEXTURE_HEIGHT * sizeof(uint), TEXTURE_WIDTH * TEXTURE_HEIGHT * sizeof(uint));
 
-                LightColors.CreateLookupTables(buffer);
+                LightColors.CreateLightTextures(buffer, LIGHTS_TEXTURE_HEIGHT);
                 _hueSamplers[2].SetDataPointerEXT(0, null, (IntPtr)ptr, LIGHTS_TEXTURE_WIDTH * LIGHTS_TEXTURE_HEIGHT * sizeof(uint));
             }      
         
             System.Buffers.ArrayPool<uint>.Shared.Return(buffer, true);
-
 
             GraphicsDevice.Textures[1] = _hueSamplers[0];
             GraphicsDevice.Textures[2] = _hueSamplers[1];
@@ -149,9 +150,11 @@ namespace ClassicUO
             LightsLoader.Instance.CreateAtlas(GraphicsDevice);
             AnimationsLoader.Instance.CreateAtlas(GraphicsDevice);
 
-            AnimatedStaticsManager.Initialize();
+            LightColors.LoadLights();
 
             GameCursor = new GameCursor();
+            Audio = new AudioManager();
+            Audio.Initialize();
 
             SetScene(new LoginScene());
             SetWindowPositionBySettings();
@@ -170,7 +173,7 @@ namespace ClassicUO
 
             Settings.GlobalSettings.WindowPosition = new Point(Math.Max(0, Window.ClientBounds.X - left), Math.Max(0, Window.ClientBounds.Y - top));
 
-            Scene?.Unload();
+            Audio?.StopMusic();
             Settings.GlobalSettings.Save();
             Plugin.OnClosing();
 
@@ -228,12 +231,7 @@ namespace ClassicUO
         {
             Scene?.Dispose();
             Scene = scene;
-
-            if (scene != null)
-            {
-                Window.AllowUserResizing = scene.CanResize;
-                scene.Load();
-            }
+            Scene?.Load();
         }
 
         public void SetVSync(bool value)
@@ -392,19 +390,20 @@ namespace ClassicUO
             }
 
             Time.Ticks = (uint) gameTime.TotalGameTime.TotalMilliseconds;
+            Time.Delta = (float) gameTime.ElapsedGameTime.TotalSeconds;
 
             Mouse.Update();
-            OnNetworkUpdate(gameTime.TotalGameTime.TotalMilliseconds, gameTime.ElapsedGameTime.TotalMilliseconds);
+            OnNetworkUpdate();
             Plugin.Tick();
 
             if (Scene != null && Scene.IsLoaded && !Scene.IsDestroyed)
             {
                 Profiler.EnterContext("Update");
-                Scene.Update(gameTime.TotalGameTime.TotalMilliseconds, gameTime.ElapsedGameTime.TotalMilliseconds);
+                Scene.Update();
                 Profiler.ExitContext("Update");
             }
 
-            UIManager.Update(gameTime.TotalGameTime.TotalMilliseconds, gameTime.ElapsedGameTime.TotalMilliseconds);
+            UIManager.Update();
 
             _totalElapsed += gameTime.ElapsedGameTime.TotalMilliseconds;
             _currentFpsTime += gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -435,7 +434,8 @@ namespace ClassicUO
                 }
             }
 
-            GameCursor?.Update(gameTime.ElapsedGameTime.TotalMilliseconds, gameTime.TotalGameTime.TotalMilliseconds);
+            GameCursor?.Update();
+            Audio?.Update();
 
             base.Update(gameTime);
         }
@@ -490,7 +490,7 @@ namespace ClassicUO
             Plugin.ProcessDrawCmdList(GraphicsDevice);
         }
 
-        private void OnNetworkUpdate(double totalTime, double frameTime)
+        private void OnNetworkUpdate()
         {
             if (NetClient.LoginSocket.IsDisposed && NetClient.LoginSocket.IsConnected)
             {
@@ -499,12 +499,12 @@ namespace ClassicUO
             else if (!NetClient.Socket.IsConnected)
             {
                 NetClient.LoginSocket.Update();
-                UpdateSocketStats(NetClient.LoginSocket, totalTime);
+                UpdateSocketStats(NetClient.LoginSocket);
             }
             else if (!NetClient.Socket.IsDisposed)
             {
                 NetClient.Socket.Update();
-                UpdateSocketStats(NetClient.Socket, totalTime);
+                UpdateSocketStats(NetClient.Socket);
             }
         }
 
@@ -513,12 +513,12 @@ namespace ClassicUO
             return !_suppressedDraw && base.BeginDraw();
         }
 
-        private void UpdateSocketStats(NetClient socket, double totalTime)
+        private void UpdateSocketStats(NetClient socket)
         {
-            if (_statisticsTimer < totalTime)
+            if (_statisticsTimer < Time.Ticks)
             {
                 socket.Statistics.Update();
-                _statisticsTimer = totalTime + 500;
+                _statisticsTimer = Time.Ticks + 500;
             }
         }
 
@@ -832,6 +832,13 @@ namespace ClassicUO
             }
 
             return 1;
+        }
+
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            Scene?.Dispose();
+
+            base.OnExiting(sender, args);
         }
 
         private void TakeScreenshot()
