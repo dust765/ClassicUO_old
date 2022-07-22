@@ -61,8 +61,10 @@ namespace ClassicUO.Dust765.External
             AcceptMouseInput = false;
             CanCloseWithEsc = false;
             CanCloseWithRightClick = false;
+            // EDIT: MARK
             _useTime = false;
             IsVisible = false;
+            // EDIT-END: MARK
 
             BuildGump();
         }
