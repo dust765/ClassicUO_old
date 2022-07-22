@@ -175,7 +175,7 @@ namespace ClassicUO.Dust765.External
                 return;
             }
 
-            if (_updateTime < _startTime)
+            if (_startTime > _updateTime)
             {
                 _updateTime = (float) _startTime  + 125;
                 IsVisible = false;
