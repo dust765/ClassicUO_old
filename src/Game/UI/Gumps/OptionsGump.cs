@@ -183,7 +183,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         // ## BEGIN - END ## // BASICSETUP
         // ## BEGIN - END ## // ART / HUE CHANGES
-        private Checkbox _colorStealth, _colorEnergyBolt, _colorGold, _colorTreeTile, _colorBlockerTile;
+        private Checkbox _showAllLayers, _colorStealth, _colorEnergyBolt, _colorGold, _colorTreeTile, _colorBlockerTile;
         private ClickableColorBox _stealthColorPickerBox, _energyBoltColorPickerBox, _goldColorPickerBox, _treeTileColorPickerBox, _blockerTileColorPickerBox;
         private Combobox _goldType, _treeType, _blockerType, _stealthNeonType, _energyBoltNeonType, _energyBoltArtType;
         // ## BEGIN - END ## // ART / HUE CHANGES
@@ -3761,6 +3761,10 @@ namespace ClassicUO.Game.UI.Gumps
 
             // ## BEGIN - END ## // ART / HUE CHANGES
             SettingsSection section = AddSettingsSection(box, "-----ART / HUE CHANGES-----");
+            // EDIT: MARK
+            section.Add(_showAllLayers = AddCheckBox(null, "Show All Layers ON / OFF", _currentProfile.ShowAllLayers, startX, startY));
+            startY += _showAllLayers.Height + 2;
+            // EDIT-END: MARK
 
             section.Add(_colorStealth = AddCheckBox(null, "Color stealth ON / OFF", _currentProfile.ColorStealth, startX, startY));
             startY += _colorStealth.Height + 2;
@@ -6210,6 +6214,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             // ## BEGIN - END ## // BASICSETUP
             // ## BEGIN - END ## // ART / HUE CHANGES
+            _currentProfile.ShowAllLayers = _showAllLayers.IsChecked;   // EDIT: MARK
             _currentProfile.ColorStealth = _colorStealth.IsChecked;
             _currentProfile.StealthHue = _stealthColorPickerBox.Hue;
             _currentProfile.GoldType = _goldType.SelectedIndex;
