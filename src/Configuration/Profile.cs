@@ -282,6 +282,8 @@ namespace ClassicUO.Configuration
 
         // ## BEGIN - END ## // BASICSETUP
         // ## BEGIN - END ## // ART / HUE CHANGES
+
+        public bool ShowAllLayers { get; set; } // EDIT: MARK
         public bool ColorStealth { get; set; }
         public ushort StealthHue { get; set; } = 0x0044;
         public int StealthNeonType { get; set; } = 0; // 0 = off, 1 = white, 2 = pink, 3 = ice, 4 = fire

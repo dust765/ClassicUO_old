@@ -1163,7 +1163,12 @@ namespace ClassicUO.Game.GameObjects
             {
                 return false;
             }
-
+            // EDIT: MARK
+            if (ProfileManager.CurrentProfile.ShowAllLayers)
+            {
+                return false;
+            }
+            // EDIT-END: MARK
             switch (layer)
             {
                 case Layer.Shoes:
