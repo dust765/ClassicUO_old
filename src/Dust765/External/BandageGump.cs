@@ -4,6 +4,7 @@ using ClassicUO.Game.UI.Controls;
 using ClassicUO.Game.UI.Gumps;
 using ClassicUO.IO.Resources;
 using ClassicUO.Renderer;
+using System;   // EDIT: MARK
 
 namespace ClassicUO.Dust765.External
 {
@@ -60,6 +61,8 @@ namespace ClassicUO.Dust765.External
             AcceptMouseInput = false;
             CanCloseWithEsc = false;
             CanCloseWithRightClick = false;
+            _useTime = false;
+            IsVisible = false;
 
             BuildGump();
         }
@@ -68,6 +71,17 @@ namespace ClassicUO.Dust765.External
         {
             _useTime = true;
             _startTime = Time.Ticks;
+            IsVisible = true;
+            // EDIT: MARK
+            if (World.Player.Dexterity >= 80)
+            {
+                Timer = Convert.ToUInt32(8 - Math.Floor((World.Player.Dexterity - 80) * 1.0) / 20) - 1;
+            }
+            else
+            {
+                Timer = 8;
+            }
+            // EDIT-END: MARK
         }
 
         public void Stop()
@@ -175,11 +189,11 @@ namespace ClassicUO.Dust765.External
                 return;
             }
 
-            if (_startTime > _updateTime)
-            {
-                _updateTime = (float) _startTime  + 125;
-                IsVisible = false;
-                Timer = 0;
+            //if (_startTime < _updateTime)
+            //{
+                //_updateTime = (float) _updateTime + 125;
+                //IsVisible = false;
+                //Timer = 0;
 
                 // ## BEGIN - END ## // OUTLANDS
                 /*
@@ -212,17 +226,25 @@ namespace ClassicUO.Dust765.External
                 if (_useTime)
                 {
                     IsVisible = true;
-                    Timer = (Time.Ticks - _startTime) / 1000;
-                    if (Timer > 20) // fail-safe (this can never be reached)
+                    //Timer = (Time.Ticks - _startTime) / 1000;
+                    // EDIT: MARK
+                    if ((Time.Ticks - _startTime) / 1000 > 0.750)
+                    {
+                        _startTime = Time.Ticks;
+                        Timer = Timer - 1;
+                    }
+                    
+                    if (Timer > 20 || Timer <= 0) // fail-safe (this can never be reached)
                     {
                         Stop();
                         IsVisible = false;
-                    }
+                    }                    
                 }
 
                 if (IsVisible)
                     _text.Text = $"{Timer}";
-            }
+                // EDIT-END: MARK
+            //}
         }
 
         private void BuildGump()
