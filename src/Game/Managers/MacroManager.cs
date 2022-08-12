@@ -1767,6 +1767,13 @@ namespace ClassicUO.Game.Managers
                     ProfileManager.CurrentProfile.EnableCaveBorder = !ProfileManager.CurrentProfile.EnableCaveBorder;
 
                     break;
+
+                // ## BEGIN - END ## // VISUAL HELPERS
+                case MacroType.HighlightTileAtRange:
+                    ProfileManager.CurrentProfile.HighlightTileAtRange = !ProfileManager.CurrentProfile.HighlightTileAtRange;
+
+                    break;
+                // ## BEGIN - END ## // VISUAL HELPERS
             }
 
 
@@ -2268,7 +2275,9 @@ namespace ClassicUO.Game.Managers
         notimplemented5,
         notimplemented6,
         notimplemented7,
-        notimplemented8,
+        // ## BEGIN - END ## // VISUAL HELPERS
+        HighlightTileAtRange,
+        // ## BEGIN - END ## // VISUAL HELPERS
         notimplemented9,
         notimplemented10,
         notimplemented11,
