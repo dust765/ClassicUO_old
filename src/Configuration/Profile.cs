@@ -336,6 +336,9 @@ namespace ClassicUO.Configuration
         public Point SpellOnCursorOffset { get; set; } = new Point(25, 30);
         public bool SpellOnCursor { get; set; }
         // ## BEGIN - END ## // CURSOR
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        public bool OverheadRange { get; set; }
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;

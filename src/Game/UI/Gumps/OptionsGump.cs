@@ -198,6 +198,9 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY;
         private Checkbox _spellOnCursor;
         // ## BEGIN - END ## // CURSOR
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        private Checkbox _overheadRange;
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3686,6 +3689,14 @@ namespace ClassicUO.Game.UI.Gumps
             section4.AddRight(AddLabel(null, "Y", 0, 0), 2);
             startY += _spellOnCursorOffsetY.Height + 2;
             // ## BEGIN - END ## // CURSOR
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            SettingsSection section5 = AddSettingsSection(box, "-----OVERHEAD / UNDERFEET-----");
+            section5.Y = section4.Bounds.Bottom + 40;
+            startY = section4.Bounds.Bottom + 40;
+
+            section5.Add(_overheadRange = AddCheckBox(null, "Display range in overhead (needs HP overhead enabled)", _currentProfile.OverheadRange, startX, startY));
+            startY += _overheadRange.Height + 2;
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
 
             Add(rightArea, PAGE);
         }
@@ -4616,6 +4627,9 @@ namespace ClassicUO.Game.UI.Gumps
             int.TryParse(_spellOnCursorOffsetY.Text, out int spellOnCursorOffsetY);
             _currentProfile.SpellOnCursorOffset = new Point(spellOnCursorOffsetX, spellOnCursorOffsetY);
             // ## BEGIN - END ## // CURSOR
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            _currentProfile.OverheadRange = _overheadRange.IsChecked;
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
