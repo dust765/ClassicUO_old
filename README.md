@@ -17,6 +17,49 @@ alt="chat on Discord"></a>
 [![GitHub Actions Status](https://github.com/ClassicUO/ClassicUO/workflows/Build-Test/badge.svg)](https://github.com/ClassicUO/ClassicUO/actions)
 [![GitHub Actions Status](https://github.com/ClassicUO/ClassicUO/workflows/Deploy/badge.svg)](https://github.com/ClassicUO/ClassicUO/actions)
 
+# Project dust765
+This project is to address a problem constructed within the toxicity of this community. This is to show the community, open source projects are not meant for cliques and high school drama but rather the expansion of something greater, innovation. -A penny for your thoughts, the adder that prays beneath the rose.
+
+# contact and team info
+
+Discord: dust765#2787
+
+Dust765: 7 Link, 6 G..., 5 S...
+
+# feature showcase
+
+[Video Part 1 on YouTube](https://youtu.be/074Osj1Fcrg)
+
+[Video Part 2 on YouTube](https://youtu.be/P7YBrI3s6ZI)
+
+[Video Part 3 on YouTube](https://youtu.be/aqHiiOhx8Q8)
+
+# Changed files and line number
+
+no comment possible:
+
+FILE        START   END     COMMIT
+README.md   20      *
+
+comments:
+
+FILE                                            START   END     COMMIT
+/src/Configuration/Profile.cs	                282     *       BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	            177     179     BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	            372     376     BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	            453     457     BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	            3380    3426    BASICSETUP
+
+/src/Game/UI/Gumps/OptionsGump.cs	            4246    4248    BASICSETUP
+
+/src/Game/Managers/MacroManager.cs              2252    2276    BASICSETUP
+
+/src/Game/Managers/MacroManager.cs              2281    2284    BASICSETUP
+
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
 
