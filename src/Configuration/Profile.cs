@@ -336,6 +336,12 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         public bool OverheadRange { get; set; }
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        // ## BEGIN - END ## // OLDHEALTHLINES
+        public bool MultipleUnderlinesSelfParty { get; set; }
+        public bool MultipleUnderlinesSelfPartyBigBars { get; set; }
+        public int MultipleUnderlinesSelfPartyTransparency { get; set; } = 10;
+        public bool UseOldHealthBars { get; set; } = false;
+        // ## BEGIN - END ## // OLDHEALTHLINES
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
