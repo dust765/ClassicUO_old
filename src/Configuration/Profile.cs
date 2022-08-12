@@ -345,6 +345,19 @@ namespace ClassicUO.Configuration
         public int MultipleUnderlinesSelfPartyTransparency { get; set; } = 10;
         public bool UseOldHealthBars { get; set; } = false;
         // ## BEGIN - END ## // OLDHEALTHLINES
+        // ## BEGIN - END ## // MISC
+        public bool SpecialSetLastTargetCliloc { get; set; } = false;
+        public string SpecialSetLastTargetClilocText { get; set; } = "- Target -";
+        public bool BlockWoS { get; set; } = false;
+        public bool BlockWoSFelOnly { get; set; } = false;
+        public uint BlockWoSArt { get; set; } = 1872;
+        public bool BlockWoSArtForceAoS { get; set; } = false;
+        public bool BlockEnergyF { get; set; } = false;
+        public bool BlockEnergyFFelOnly { get; set; } = false;
+        public uint BlockEnergyFArt { get; set; } = 1872;
+        public bool BlockEnergyFArtForceAoS { get; set; } = false;
+        public bool BlackOutlineStatics { get; set; } = false;
+        // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
