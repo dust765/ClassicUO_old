@@ -34,6 +34,16 @@ Dust765: 7 Link, 6 G..., 5 S...
 
 [Video Part 3 on YouTube](https://youtu.be/aqHiiOhx8Q8)
 
+# changed constants
+
+WAIT_FOR_TARGET_DELAY 5000 -> 4000
+
+MAX_CIRCLE_OF_TRANSPARENCY_RADIUS 200 -> 1000
+
+DEATH_SCREEN_TIMER 1500 -> 750
+
+MAX_JOURNAL_HISTORY_COUNT 100 -> 250
+
 # Changed files and line number
 
 no comment possible:
@@ -59,6 +69,14 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/MacroManager.cs              2252    2276    BASICSETUP
 
 /src/Game/Managers/MacroManager.cs              2281    2284    BASICSETUP
+
+/src/Game/Constants.cs                          87              CONSTANTS
+
+/src/Game/Constants.cs                          108             CONSTANTS
+
+/src/Game/Constants.cs                          122             CONSTANTS
+
+/src/Game/Constants.cs                          127             CONSTANTS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
