@@ -38,6 +38,9 @@ using System.Text;
 using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // VISUAL HELPERS
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // VISUAL HELPERS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
@@ -821,6 +824,11 @@ namespace ClassicUO.Network
             {
                 text = string.Empty;
             }
+
+            // ## BEGIN - END ## // VISUAL HELPERS
+            if (serial == World.Player.Serial && type == MessageType.Spell && !string.IsNullOrEmpty(text))
+                CombatCollection.SpellCastFromCliloc(text);
+            // ## BEGIN - END ## // VISUAL HELPERS
 
             if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF && name.StartsWith("SYSTEM"))
             {
