@@ -34,6 +34,22 @@ Dust765: 7 Link, 6 G..., 5 S...
 
 [Video Part 3 on YouTube](https://youtu.be/aqHiiOhx8Q8)
 
+# art / hue changes
+
+Stealth footsteps color
+
+Energy Bolt - art and color
+
+Gold - art and color
+
+Tree to stumps / tiles and color
+
+Blockers to stumps / tiles and color
+
+# Added files
+
+/src/Dust765
+
 # changed constants
 
 WAIT_FOR_TARGET_DELAY 5000 -> 4000
@@ -77,6 +93,42 @@ FILE                                            START   END     COMMIT
 /src/Game/Constants.cs                          122             CONSTANTS
 
 /src/Game/Constants.cs                          127             CONSTANTS
+
+/src/Game/GameObjects/Views/ItemView.cs         37      39      ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/ItemView.cs         91      97      ART / HUE CHANGES
+
+/src/Game/GameObjects/Item.cs                   36      39      ART / HUE CHANGES
+
+/src/Game/GameObjects/Item.cs                   126     161     ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/GameEffectView.cs   8       10      ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/GameEffectView.cs   110     124     ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/StaticView.cs       35      37      ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/StaticView.cs       95      108     ART / HUE CHANGES
+
+/src/Game/GameObjects/Views/StaticView.cs       135     148     ART / HUE CHANGES
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs     38      40      ART / HUE CHANGES
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs     675     680     ART / HUE CHANGES
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs     698     702     ART / HUE CHANGES
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs     759     763     ART / HUE CHANGES
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs     854     858     ART / HUE CHANGES
+
+/src/Game/GameObjects/Static.cs                 57      59      ART / HUE CHANGES
+
+/src/Game/GameObjects/Static.cs                 71      75      ART / HUE CHANGES
+
+/src/Game/GameObjects/Static.cs                 126     131     ART / HUE CHANGES
+
+/src/Game/Managers/MacroManager.cs              1746    1756    ART / HUE CHANGES
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
