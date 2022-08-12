@@ -32,7 +32,9 @@
 
 using ClassicUO.Configuration;
 // ## BEGIN - END ## // VISUAL HELPERS
+// ## BEGIN - END ## // MISC2
 using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MISC2
 // ## BEGIN - END ## // VISUAL HELPERS
 using ClassicUO.IO.Resources;
 using ClassicUO.Renderer;
@@ -109,12 +111,27 @@ namespace ClassicUO.Game.GameObjects
                 }
             }
             // ## BEGIN - END ## // VISUAL HELPERS
+            // ## BEGIN - END ## // MISC2
+            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.HueImpassableView)
+            {
+                if (this.TileData.IsImpassable)
+                {
+                    hueVec.X = ProfileManager.CurrentProfile.HueImpassableViewHue;
+                    hueVec.Y = 1;
+                }
+            }
+            // ## BEGIN - END ## // MISC2
 
             if (IsStretched)
             {
                 posY += Z << 2;
 
-                var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds);
+                // ## BEGIN - END ## // MISC2
+                //var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds);
+                // ## BEGIN - END ## // MISC2
+                //STRECHEDLAND
+                var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds, this.TileData.IsImpassable);
+                // ## BEGIN - END ## // MISC2
 
                 if (texture != null)
                 {
@@ -148,7 +165,12 @@ namespace ClassicUO.Game.GameObjects
             }
             else
             {
-                var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds);
+                // ## BEGIN - END ## // MISC2
+                //var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds);
+                // ## BEGIN - END ## // MISC2
+                //FLATLAND
+                var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds, this.TileData.IsImpassable);
+                // ## BEGIN - END ## // MISC2
 
                 if (texture != null)
                 {
