@@ -1272,6 +1272,12 @@ namespace ClassicUO.Game.Scenes
                     }
                 }
             }
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            if (e.keysym.sym != SDL.SDL_Keycode.SDLK_UNKNOWN)
+            {
+                NameOverHeadManager.RegisterKeyDown(e.keysym);
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD
         }
 
 
@@ -1411,6 +1417,9 @@ namespace ClassicUO.Game.Scenes
                     CombatCollection._HarmOnSwingON = false;
             }
             // ## BEGIN - END ## // MACROS
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            NameOverHeadManager.RegisterKeyUp(e.keysym);
+            // ## BEGIN - END ## // NAMEOVERHEAD
         }
 
         private bool CanExecuteMacro()
