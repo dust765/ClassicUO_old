@@ -31,6 +31,9 @@
 #endregion
 
 using System;
+// ## BEGIN - END ## // NAMEOVERHEAD
+using System.Collections.Generic;
+// ## BEGIN - END ## // NAMEOVERHEAD
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Resources;
@@ -43,6 +46,11 @@ namespace ClassicUO.Game.UI.Gumps
         public static Point? LastPosition;
 
         public override GumpType GumpType => GumpType.NameOverHeadHandler;
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        private readonly List<RadioButton> _overheadButtons = new();
+        private Control _alpha;
+        private readonly Checkbox _keepOpenCheckbox;
+        // ## BEGIN - END ## // NAMEOVERHEAD
 
 
         public NameOverHeadHandlerGump() : base(0, 0)
@@ -66,6 +74,8 @@ namespace ClassicUO.Game.UI.Gumps
 
             LayerOrder = UILayer.Over;
 
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            /*
             RadioButton all, mobiles, items, mobilesCorpses;
             AlphaBlendControl alpha;
 
@@ -178,6 +188,32 @@ namespace ClassicUO.Game.UI.Gumps
                     NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.MobilesCorpses;
                 }
             };
+            */
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            Add
+            (
+                _alpha = new AlphaBlendControl(0.7f)
+                {
+                    Hue = 34
+                }
+            );
+
+            Add
+            (
+                _keepOpenCheckbox = new Checkbox
+                (
+                    0x00D2, 0x00D3, "Keep open", 0xFF,
+                    0xFFFF
+                )
+                {
+                    IsChecked = NameOverHeadManager.IsPermaToggled
+                }
+            );
+
+            _keepOpenCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetOverheadToggled(_keepOpenCheckbox.IsChecked);
+
+            DrawChoiceButtons();
+            // ## BEGIN - END ## // NAMEOVERHEAD
         }
 
 
@@ -189,5 +225,71 @@ namespace ClassicUO.Game.UI.Gumps
 
             base.OnDragEnd(x, y);
         }
+
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        public void UpdateCheckboxes()
+        {
+            foreach (var button in _overheadButtons)
+            {
+                button.IsChecked = NameOverHeadManager.LastActiveNameOverheadOption == button.Text;
+            }
+
+            _keepOpenCheckbox.IsChecked = NameOverHeadManager.IsPermaToggled;
+        }
+        public void RedrawOverheadOptions()
+        {
+            foreach (var button in _overheadButtons)
+                Remove(button);
+
+            DrawChoiceButtons();
+        }
+
+        private void DrawChoiceButtons()
+        {
+            int biggestWidth = 100;
+            var options = NameOverHeadManager.GetAllOptions();
+
+            for (int i = 0; i < options.Count; i++)
+            {
+                biggestWidth = Math.Max(biggestWidth, AddOverheadOptionButton(options[i], i).Width);
+            }
+
+            _alpha.Width = biggestWidth;
+            _alpha.Height = Math.Max(30, options.Count * 20) + 22;
+
+            Width = _alpha.Width;
+            Height = _alpha.Height;
+        }
+
+        private RadioButton AddOverheadOptionButton(NameOverheadOption option, int index)
+        {
+            RadioButton button;
+
+            Add
+            (
+                button = new RadioButton
+                (
+                    0, 0x00D0, 0x00D1, option.Name,
+                    color: 0xFFFF
+                )
+                {
+                    Y = 20 * index + 22,
+                    IsChecked = NameOverHeadManager.LastActiveNameOverheadOption == option.Name,
+                }
+            );
+
+            button.ValueChanged += (sender, e) =>
+            {
+                if (button.IsChecked)
+                {
+                    NameOverHeadManager.SetActiveOption(option);
+                }
+            };
+
+            _overheadButtons.Add(button);
+
+            return button;
+        }
+        // ## BEGIN - END ## // NAMEOVERHEAD
     }
 }
