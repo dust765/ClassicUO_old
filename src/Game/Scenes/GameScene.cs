@@ -250,6 +250,17 @@ namespace ClassicUO.Game.Scenes
 
             }
             // ## BEGIN - END ## // AUTOLOOT
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            if (ProfileManager.CurrentProfile.UOClassicCombatBuffbar)
+            {
+                UIManager.Add(new UOClassicCombatBuffbar
+                {
+                    X = ProfileManager.CurrentProfile.UOClassicCombatBuffbarLocation.X,
+                    Y = ProfileManager.CurrentProfile.UOClassicCombatBuffbarLocation.Y
+                });
+
+            }
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
 
             CircleOfTransparency.Create(ProfileManager.CurrentProfile.CircleOfTransparencyRadius);
             Plugin.OnConnected();
@@ -361,6 +372,12 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // UI/GUMPS
             World.Player?.BandageTimer.OnMessage(text, hue, name, e.IsUnicode);
             // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            if (ProfileManager.CurrentProfile.UOClassicCombatBuffbar)
+            {
+                World.ClilocTriggers.OnMessage(text, hue, name, e.IsUnicode);
+            }
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
 
             if (!string.IsNullOrEmpty(text))
             {
