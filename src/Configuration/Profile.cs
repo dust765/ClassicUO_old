@@ -413,6 +413,16 @@ namespace ClassicUO.Configuration
         public bool TextureManagerOrangeArrows { get; set; } = true;
         public bool TextureManagerBlueArrows { get; set; } = true;
         // ## BEGIN - END ## // TEXTUREMANAGER
+        // ## BEGIN - END ## // LINES
+        public bool UOClassicCombatLines { get; set; } = false;
+        public Point UOClassicCombatLinesLocation { get; set; } = new Point(25, 25);
+        public bool UOClassicCombatLines_ToggleLastTarget { get; set; } = false;
+        public bool UOClassicCombatLines_ToggleHuntingMmode { get; set; } = false;
+        public bool UOClassicCombatLines_ToggleHMBlue { get; set; } = false;
+        public bool UOClassicCombatLines_ToggleHMRed { get; set; } = false;
+        public bool UOClassicCombatLines_ToggleHMOrange { get; set; } = false;
+        public bool UOClassicCombatLines_ToggleHMCriminal { get; set; } = false;
+        // ## BEGIN - END ## // LINES
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
