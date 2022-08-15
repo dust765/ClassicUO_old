@@ -232,6 +232,9 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // TEXTUREMANAGER
         private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _textureManagerHumansOnly, _textureManagerPurple, _textureManagerGreen, _textureManagerRed, _textureManagerOrange, _textureManagerBlue, _textureManagerHumansOnlyArrows, _textureManagerPurpleArrows, _textureManagerGreenArrows, _textureManagerRedArrows, _textureManagerOrangeArrows, _textureManagerBlueArrows;
         // ## BEGIN - END ## // TEXTUREMANAGER
+        // ## BEGIN - END ## // LINES
+        private Checkbox _uccEnableLines;
+        // ## BEGIN - END ## // LINES
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4115,6 +4118,10 @@ namespace ClassicUO.Game.UI.Gumps
             section.Add(AddLabel(null, "ToggleTransparentHouses (toggle TransparentHouses on / off)", startX, startY));
             section.Add(AddLabel(null, "ToggleInvisibleHouses (toggle InvisibleHouses on / off)", startX, startY));
             // ## BEGIN - END ## // MISC2
+            // ## BEGIN - END ## // LINES
+            section.Add(AddLabel(null, "UCCLinesToggleLT (toggle on / off UCC Lines LastTarget)", startX, startY));
+            section.Add(AddLabel(null, "UCCLinesToggleHM (toggle on / off UCC Lines Hunting Mode)", startX, startY));
+            // ## BEGIN - END ## // LINES
             // ## BEGIN - END ## // MACROS
             SettingsSection section2 = AddSettingsSection(box, "-----SIMPLE MACROS-----");
             section2.Y = section.Bounds.Bottom + 40;
@@ -4240,6 +4247,15 @@ namespace ClassicUO.Game.UI.Gumps
             section2.Add(_textureManagerBlueArrows = AddCheckBox(null, "Blue (innocent)", _currentProfile.TextureManagerBlueArrows, startX, startY));
             startY += _textureManagerBlueArrows.Height + 2;
             // ## BEGIN - END ## // TEXTUREMANAGER
+            // ## BEGIN - END ## // LINES
+            SettingsSection section3 = AddSettingsSection(box, "-----LINES (LINES UI)-----");
+            section3.Y = section2.Bounds.Bottom + 40;
+
+            startY = section2.Bounds.Bottom + 40;
+
+            section3.Add(_uccEnableLines = AddCheckBox(null, "Enable UCC - Lines", _currentProfile.UOClassicCombatLines, startX, startY));
+            startY += _uccEnableLines.Height + 2;
+            // ## BEGIN - END ## // LINES
 
             Add(rightArea, PAGE);
         }
@@ -5287,6 +5303,32 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.TextureManagerOrange = _textureManagerOrange.IsChecked;
             _currentProfile.TextureManagerBlue = _textureManagerBlue.IsChecked;
             // ## BEGIN - END ## // TEXTUREMANAGER
+            // ## BEGIN - END ## // LINES
+            if (_currentProfile.UOClassicCombatLines != _uccEnableLines.IsChecked)
+            {
+                UOClassicCombatLines UOClassicCombatLines = UIManager.GetGump<UOClassicCombatLines>();
+
+                if (_uccEnableLines.IsChecked)
+                {
+                    if (UOClassicCombatLines != null)
+                        UOClassicCombatLines.Dispose();
+
+                    UOClassicCombatLines = new UOClassicCombatLines
+                    {
+                        X = _currentProfile.UOClassicCombatLinesLocation.X,
+                        Y = _currentProfile.UOClassicCombatLinesLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatLines);
+                }
+                else
+                {
+                    if (UOClassicCombatLines != null)
+                        UOClassicCombatLines.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatLines = _uccEnableLines.IsChecked;
+            }
+            // ## BEGIN - END ## // LINES
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
