@@ -110,6 +110,12 @@ ignore list for circle of transparency (txt file created in your /Data/Client fo
 
 show death location on worldmap
 
+# nameoverhead
+
+hp line in nameoverheads
+
+more filters for nameoverheads
+
 # macros
 
 ObjectInfo (-info command)
@@ -433,6 +439,66 @@ FILE                                            START   END     COMMIT
 /src/Configuration/Profile.cs                   633     638     MACROS
 
 /src/Game/UI/Gumps/GumpType.cs                  60      62      MACROS
+
+/src/Configuration/Profile.cs                   207     211     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/OptionsGump.cs	            60      64      NAMEOVERHEAD
+
+/src/Game/UI/Gumps/OptionsGump.cs	            419     421     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/OptionsGump.cs	            503     505     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/OptionsGump.cs	            5394    5397    NAMEOVERHEAD
+
+/src/Game/GameObjects/Views/ItemView.cs         273     277     NAMEOVERHEAD
+
+/src/Game/GameObjects/Item.cs                   40      42      NAMEOVERHEAD
+
+/src/Game/GameObjects/Item.cs                   197     199     NAMEOVERHEAD
+
+/src/Game/Scenes/GameScene.cs           	    155     157     NAMEOVERHEAD
+
+/src/Game/Scenes/GameScene.cs           	    356     358     NAMEOVERHEAD
+
+/src/Game/Scenes/GameScene.cs           	    620     624     NAMEOVERHEAD
+
+/src/Game/Scenes/GameSceneInputHandler.cs       1241    1246    NAMEOVERHEAD
+
+/src/Game/Scenes/GameSceneInputHandler.cs       1386    1388    NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        56      127     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        157     197     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        640     691     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	34      36      NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	49      53      NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	77      216     NAMEOVERHEAD
+
+/src/Game/UI/Gumps/NameOverheadHandlerGump.cs	229     293     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       34      44      NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       52      96      NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       102     105     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       107     121     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       123     142     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       151     179     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       183     266     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       291     295     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       297     452     NAMEOVERHEAD
+
+/src/Game/Managers/NameOverHeadManager.cs       454     522     NAMEOVERHEAD
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
