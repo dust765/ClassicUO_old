@@ -91,6 +91,9 @@ namespace ClassicUO.Game.Scenes
         private long _alphaTimer;
         private bool _forceStopScene;
         private HealthLinesManager _healthLinesManager;
+        // ## BEGIN - END ## // TEXTUREMANAGER
+        private TextureManager _textureManager;
+        // ## BEGIN - END ## // TEXTUREMANAGER
 
         private Point _lastSelectedMultiPositionInHouseCustomization;
         private int _lightCount;
@@ -159,6 +162,9 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // NAMEOVERHEAD
             NameOverHeadManager.Load();
             // ## BEGIN - END ## // NAMEOVERHEAD
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            _textureManager = new TextureManager();
+            // ## BEGIN - END ## // TEXTUREMANAGER
 
             _animatedStaticsManager = new AnimatedStaticsManager();
             _animatedStaticsManager.Initialize();
@@ -1223,6 +1229,10 @@ namespace ClassicUO.Game.Scenes
 
         public void DrawOverheads(UltimaBatcher2D batcher)
         {
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            _textureManager.Draw(batcher);
+            // ## BEGIN - END ## // TEXTUREMANAGER
+
             _healthLinesManager.Draw(batcher);
 
             if (!UIManager.IsMouseOverWorld)
