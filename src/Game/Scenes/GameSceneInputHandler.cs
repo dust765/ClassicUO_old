@@ -34,6 +34,9 @@ using System;
 using System.Linq;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // MACROS
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MACROS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Gumps;
@@ -1362,6 +1365,18 @@ namespace ClassicUO.Game.Scenes
                     GameActions.ToggleWarMode();
                 }
             }
+            // ## BEGIN - END ## // MACROS
+            Macro macro2 = Macros.FindMacro(e.keysym.sym, Keyboard.Alt, Keyboard.Ctrl, Keyboard.Shift);
+
+            if (macro2 != null && e.keysym.sym != SDL.SDL_Keycode.SDLK_UNKNOWN)
+            {
+                if (macro2.Name == "HealOnHPChange")
+                    CombatCollection._HealOnHPChangeON = false;
+
+                if (macro2.Name == "HarmOnSwing")
+                    CombatCollection._HarmOnSwingON = false;
+            }
+            // ## BEGIN - END ## // MACROS
         }
     }
 }
