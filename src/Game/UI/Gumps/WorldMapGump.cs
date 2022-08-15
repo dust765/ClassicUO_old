@@ -65,6 +65,19 @@ namespace ClassicUO.Game.UI.Gumps
         private Point _center, _lastScroll, _mouseCenter, _scroll;
         private Point? _lastMousePosition = null;
 
+        // ## BEGIN - END ## // AUTOMATIONS
+        public int _tempX = 0;
+        public int _tempY = 0;
+        public int _tempTmapStartX = 0;
+        public int _tempTmapStartY = 0;
+        public int _tempTmapEndX = 0;
+        public int _tempTmapEndY = 0;
+        public int _tempTmapWidth = 0;
+        public int _tempTmapHeight = 0;
+        public int _tempTmapX = 0;
+        public int _tempTmapY = 0;
+        // ## BEGIN - END ## // AUTOMATIONS
+
         private bool _flipMap = true;
         private bool _freeView;
         private List<string> _hiddenMarkerFiles;
@@ -2502,6 +2515,94 @@ namespace ClassicUO.Game.UI.Gumps
                 }
             }
             // ## BEGIN - END ## // MISC2
+            // ## BEGIN - END ## // AUTOMATIONS
+            //TMAP
+            if (_tempTmapX != 0 && _tempTmapY != 0)
+            {
+                //DESTINATION
+                int sx = _tempTmapX - _center.X;
+                int sy = _tempTmapY - _center.Y;
+
+                Point trot = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                trot.X += gX + halfWidth;
+                trot.Y += gY + halfHeight;
+
+                const int DOT_SIZE = 4;
+                const int DOT_SIZE_HALF = DOT_SIZE >> 1;
+
+                Vector3 hueVec = ShaderHueTranslator.GetHueVector(0);
+
+                //DRAW DOT AT TMAP LOCATION
+                batcher.Draw(SolidColorTextureCache.GetTexture(Color.Orange), new Rectangle(trot.X - DOT_SIZE_HALF, trot.Y - DOT_SIZE_HALF, DOT_SIZE, DOT_SIZE), hueVec);
+
+
+                //PLAYER
+                int psx = World.Player.X - _center.X;
+                int psy = World.Player.Y - _center.Y;
+
+                Point prot = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                prot.X += gX + halfWidth;
+                prot.Y += gY + halfHeight;
+
+                Vector2 start = new Vector2(trot.X - DOT_SIZE_HALF, trot.Y - DOT_SIZE_HALF);
+                Vector2 end = new Vector2(prot.X, prot.Y);
+
+                //DRAW LINE FROM PLAYER TO TMAP LOCATION
+                batcher.DrawLine
+                (
+                   SolidColorTextureCache.GetTexture(Color.YellowGreen),
+                   start,
+                   end,
+                   hueVec,
+                   1
+                );
+            }
+
+            //COMMAND
+            if (_tempX != 0 && _tempY != 0)
+            {
+                //DESTINATION
+                int sx = _tempX - _center.X;
+                int sy = _tempY - _center.Y;
+
+                Point dprot = RotatePoint(sx, sy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                dprot.X += gX + halfWidth;
+                dprot.Y += gY + halfHeight;
+
+                const int DOT_SIZE = 4;
+                const int DOT_SIZE_HALF = DOT_SIZE >> 1;
+
+                Vector3 hueVec = ShaderHueTranslator.GetHueVector(0);
+
+                //DRAW DOT AT LOCATION
+                batcher.Draw(SolidColorTextureCache.GetTexture(Color.Orange), new Rectangle(dprot.X - DOT_SIZE_HALF, dprot.Y - DOT_SIZE_HALF, DOT_SIZE, DOT_SIZE), hueVec);
+
+                //PLAYER
+                int psx = World.Player.X - _center.X;
+                int psy = World.Player.Y - _center.Y;
+
+                Point prot = RotatePoint(psx, psy, Zoom, 1, _flipMap ? 45f : 0f);
+
+                prot.X += gX + halfWidth;
+                prot.Y += gY + halfHeight;
+
+                Vector2 start = new Vector2(dprot.X - DOT_SIZE_HALF, dprot.Y - DOT_SIZE_HALF);
+                Vector2 end = new Vector2(prot.X, prot.Y);
+
+                //DRAW LINE FROM PLAYER TO LOCATION
+                batcher.DrawLine
+                (
+                   SolidColorTextureCache.GetTexture(Color.YellowGreen),
+                   start,
+                   end,
+                   hueVec,
+                   1
+                );
+            }
+            // ## BEGIN - END ## // AUTOMATIONS
 
             DrawMobile
             (
