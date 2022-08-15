@@ -248,6 +248,11 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
         private InputField _uccDisarmStrikeCooldown, _uccDisarmAttemptCooldown, _uccDisarmedCooldown;
         // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+        // ## BEGIN - END ## // SELF
+        private Checkbox _uccEnableSelf, _uccColoredPouches, _uccBandiesPoison, _uccNoRefreshPotAfterHamstrung;
+        private InputField _uccColoredPouchesColor, _uccActionCooldown, _uccPoucheCooldown, _uccCurepotCooldown, _uccHealpotCooldown, _uccRefreshpotCooldown, _uccWaitForTarget, _uccEAppleCooldown, _uccBandiesHPTreshold, _uccCurepotHPTreshold, _uccHealpotHPTreshold, _uccRefreshpotStamTreshold, _uccAutoRearmAfterDisarmedCooldown, _uccNoRefreshPotAfterHamstrungCooldown, _uccStrengthPotCooldown, _uccDexPotCooldown, _uccRNGMin, _uccRNGMax;
+        private Checkbox _uccClilocTrigger, _uccMacroTrigger;
+        // ## BEGIN - END ## // SELF
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4562,6 +4567,369 @@ namespace ClassicUO.Game.UI.Gumps
             );
             _uccDisarmAttemptCooldown.SetText(_currentProfile.UOClassicCombatSelf_DisarmAttemptCooldown.ToString());
             // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            // ## BEGIN - END ## // SELF
+            SettingsSection section8 = AddSettingsSection(box, "-----SELF (AUTOMATIONS UI)-----");
+            section8.Y = section7.Bounds.Bottom + 40;
+
+            startY = section7.Bounds.Bottom + 40;
+
+            section8.Add(_uccEnableSelf = AddCheckBox(null, "Enable UCC - Self", _currentProfile.UOClassicCombatSelf, startX, startY));
+            startY += _uccEnableSelf.Height + 2;
+
+            SettingsSection section9 = AddSettingsSection(box, "-----SETTINGS (SELF)-----");
+            section9.Y = section8.Bounds.Bottom + 40;
+
+            startY = section8.Bounds.Bottom + 40;
+
+
+            section9.Add(_uccColoredPouches = AddCheckBox(null, "Are trapped pouches colored from server?", _currentProfile.UOClassicCombatSelf_ColoredPouches, startX, startY));
+            startY += _uccColoredPouches.Height + 2;
+
+            section9.Add(AddLabel(null, "Color (decimal not hex): ", startX, startY));
+
+            section9.Add
+            (
+                _uccColoredPouchesColor = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccColoredPouchesColor.SetText(_currentProfile.UOClassicCombatSelf_ColoredPouchesColor.ToString());
+
+            //COOLDOWN SETTINGS
+            section9.Add(AddLabel(null, "-----SETTINGS (COOLDOWNS)-----", startX, startY));
+
+            section9.Add(AddLabel(null, "ActionCooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccActionCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccActionCooldown.SetText(_currentProfile.UOClassicCombatSelf_ActionCooldown.ToString());
+
+            section9.Add(AddLabel(null, "Repeated Pouche Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccPoucheCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccPoucheCooldown.SetText(_currentProfile.UOClassicCombatSelf_PoucheCooldown.ToString());
+
+            section9.Add(AddLabel(null, "Repeated Curepot Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccCurepotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccCurepotCooldown.SetText(_currentProfile.UOClassicCombatSelf_CurepotCooldown.ToString());
+
+            section9.Add(AddLabel(null, "Repeated Healpot Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccHealpotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccHealpotCooldown.SetText(_currentProfile.UOClassicCombatSelf_HealpotCooldown.ToString());
+
+            section9.Add(AddLabel(null, "Repeated Refreshpot Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccRefreshpotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccRefreshpotCooldown.SetText(_currentProfile.UOClassicCombatSelf_RefreshpotCooldown.ToString());
+
+            section9.Add(AddLabel(null, "WaitForTarget (oldBandies) (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccWaitForTarget = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccWaitForTarget.SetText(_currentProfile.UOClassicCombatSelf_WaitForTarget.ToString());
+
+            section9.Add(AddLabel(null, "Enhanced Apple Cooldown (ms): ", startX, startY));
+
+            section9.Add
+            (
+                _uccEAppleCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccEAppleCooldown.SetText(_currentProfile.UOClassicCombatSelf_EAppleCooldown.ToString());
+
+            //TRESHOLD SETTINGS
+            SettingsSection section10 = AddSettingsSection(box, "-----SETTINGS (TRESHOLDS)-----");
+            section10.Y = section9.Bounds.Bottom + 40;
+
+            startY = section9.Bounds.Bottom + 40;
+
+            section10.Add(AddLabel(null, "Bandies treshold (diffhits >= ):", startX, startY));
+
+            section10.Add
+            (
+                _uccBandiesHPTreshold = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccBandiesHPTreshold.SetText(_currentProfile.UOClassicCombatSelf_BandiesHPTreshold.ToString());
+
+            section10.Add(_uccBandiesPoison = AddCheckBox(null, "Bandies when poisoned", _currentProfile.UOClassicCombatSelf_BandiesPoison, startX, startY));
+            startY += _uccBandiesPoison.Height + 2;
+
+            section10.Add(AddLabel(null, "Curepot HP treshold (diffhits >= ): ", startX, startY));
+
+            section10.Add
+            (
+                _uccCurepotHPTreshold = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccCurepotHPTreshold.SetText(_currentProfile.UOClassicCombatSelf_CurepotHPTreshold.ToString());
+
+            section10.Add(AddLabel(null, " HP treshold (diffhits >= ): ", startX, startY));
+
+            section10.Add
+            (
+                _uccHealpotHPTreshold = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccHealpotHPTreshold.SetText(_currentProfile.UOClassicCombatSelf_HealpotHPTreshold.ToString());
+
+            section10.Add(AddLabel(null, "Refreshpot Stam treshold (diffstam >= ): ", startX, startY));
+
+            section10.Add
+            (
+                _uccRefreshpotStamTreshold = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccRefreshpotStamTreshold.SetText(_currentProfile.UOClassicCombatSelf_RefreshpotStamTreshold.ToString());
+
+            //MISC SETTINGS AREA
+            SettingsSection section11 = AddSettingsSection(box, "-----SETTINGS (MISC)-----");
+            section11.Y = section10.Bounds.Bottom + 40;
+
+            startY = section10.Bounds.Bottom + 40;
+
+            section11.Add(AddLabel(null, "Auto rearm weps held before got disarmeded (ms)", startX, startY));
+
+            section11.Add
+            (
+                _uccAutoRearmAfterDisarmedCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccAutoRearmAfterDisarmedCooldown.SetText(_currentProfile.UOClassicCombatSelf_AutoRearmAfterDisarmedCooldown.ToString());
+
+            section11.Add(_uccClilocTrigger = AddCheckBox(null, "Use Cliloc Triggers (up time on cliloc and uoc hotkey)", _currentProfile.UOClassicCombatSelf_ClilocTriggers, startX, startY));
+            startY += _uccClilocTrigger.Height + 2;
+
+            section11.Add(_uccMacroTrigger = AddCheckBox(null, "Use Macro Triggers (change uoc hotkey to disarm / pot / rearm through ucc)", _currentProfile.UOClassicCombatSelf_MacroTriggers, startX, startY));
+            startY += _uccMacroTrigger.Height + 2;
+
+            section11.Add(AddLabel(null, "Strength Pot Cooldown (ms)", startX, startY));
+            section11.Add
+            (
+                _uccStrengthPotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    70,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    190000
+                )
+            );
+            _uccStrengthPotCooldown.SetText(_currentProfile.UOClassicCombatSelf_StrengthPotCooldown.ToString());
+
+            section11.Add(AddLabel(null, "Agility Pot Cooldown (ms)", startX, startY));
+            section11.Add
+            (
+                _uccDexPotCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    70,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    190000
+                )
+            );
+            _uccDexPotCooldown.SetText(_currentProfile.UOClassicCombatSelf_DexPotCooldown.ToString());
+
+            section11.Add(AddLabel(null, "Min RNG (ms)", startX, startY));
+
+            section11.Add
+            (
+                _uccRNGMin = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccRNGMin.SetText(_currentProfile.UOClassicCombatSelf_MinRNG.ToString());
+
+            section11.Add(AddLabel(null, "Max RNG (ms)", startX, startY));
+
+            section11.Add
+            (
+                _uccRNGMax = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccRNGMax.SetText(_currentProfile.UOClassicCombatSelf_MaxRNG.ToString());
+            // ## BEGIN - END ## // SELF
 
             Add(rightArea, PAGE);
         }
@@ -5716,6 +6084,63 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.UOClassicCombatSelf_DisarmAttemptCooldown = uint.Parse(_uccDisarmAttemptCooldown.Text);
             _currentProfile.UOClassicCombatSelf_DisarmedCooldown = uint.Parse(_uccDisarmedCooldown.Text);
             // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            // ## BEGIN - END ## // SELF
+            _currentProfile.UOClassicCombatSelf_ColoredPouches = _uccColoredPouches.IsChecked;
+            _currentProfile.UOClassicCombatSelf_ColoredPouchesColor = Convert.ToUInt16(_uccColoredPouchesColor.Text);
+            _currentProfile.UOClassicCombatSelf_ActionCooldown = uint.Parse(_uccActionCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_PoucheCooldown = uint.Parse(_uccPoucheCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_CurepotCooldown = uint.Parse(_uccCurepotCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_HealpotCooldown = uint.Parse(_uccHealpotCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_RefreshpotCooldown = uint.Parse(_uccRefreshpotCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_WaitForTarget = uint.Parse(_uccWaitForTarget.Text);
+            _currentProfile.UOClassicCombatSelf_EAppleCooldown = uint.Parse(_uccEAppleCooldown.Text);
+
+            _currentProfile.UOClassicCombatSelf_BandiesHPTreshold = uint.Parse(_uccBandiesHPTreshold.Text);
+            _currentProfile.UOClassicCombatSelf_BandiesPoison = _uccBandiesPoison.IsChecked;
+            _currentProfile.UOClassicCombatSelf_CurepotHPTreshold = uint.Parse(_uccCurepotHPTreshold.Text);
+            _currentProfile.UOClassicCombatSelf_HealpotHPTreshold = uint.Parse(_uccHealpotHPTreshold.Text);
+            _currentProfile.UOClassicCombatSelf_RefreshpotStamTreshold = uint.Parse(_uccRefreshpotStamTreshold.Text);
+
+            _currentProfile.UOClassicCombatSelf_AutoRearmAfterDisarmedCooldown = uint.Parse(_uccAutoRearmAfterDisarmedCooldown.Text);
+
+            _currentProfile.UOClassicCombatSelf_StrengthPotCooldown = uint.Parse(_uccStrengthPotCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_DexPotCooldown = uint.Parse(_uccDexPotCooldown.Text);
+
+            _currentProfile.UOClassicCombatSelf_MinRNG = int.Parse(_uccRNGMin.Text);
+            _currentProfile.UOClassicCombatSelf_MaxRNG = int.Parse(_uccRNGMax.Text);
+
+            _currentProfile.UOClassicCombatSelf_ClilocTriggers = _uccClilocTrigger.IsChecked;
+            _currentProfile.UOClassicCombatSelf_MacroTriggers = _uccMacroTrigger.IsChecked;
+
+            UOClassicCombatSelf UOClassicCombatSelfCurrent = UIManager.GetGump<UOClassicCombatSelf>();
+            if (UOClassicCombatSelfCurrent != null)
+                UOClassicCombatSelfCurrent.UpdateVars();
+
+            if (_currentProfile.UOClassicCombatSelf != _uccEnableSelf.IsChecked)
+            {
+                UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();
+
+                if (_uccEnableSelf.IsChecked)
+                {
+                    if (UOClassicCombatSelf != null)
+                        UOClassicCombatSelf.Dispose();
+
+                    UOClassicCombatSelf = new UOClassicCombatSelf
+                    {
+                        X = _currentProfile.UOClassicCombatSelfLocation.X,
+                        Y = _currentProfile.UOClassicCombatSelfLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatSelf);
+                }
+                else
+                {
+                    if (UOClassicCombatSelf != null)
+                        UOClassicCombatSelf.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatSelf = _uccEnableSelf.IsChecked;
+            }
+            // ## BEGIN - END ## // SELF
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
