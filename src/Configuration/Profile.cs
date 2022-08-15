@@ -204,7 +204,11 @@ namespace ClassicUO.Configuration
         public int DragSelectStartX { get; set; } = 100;
         public int DragSelectStartY { get; set; } = 100;
         public bool DragSelectAsAnchor { get; set; } = false;
-        public NameOverheadTypeAllowed NameOverheadTypeAllowed { get; set; } = NameOverheadTypeAllowed.All;
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        //public NameOverheadTypeAllowed NameOverheadTypeAllowed { get; set; } = NameOverheadTypeAllowed.All;
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        public string LastActiveNameOverheadOption { get; set; } = "All";
+        // ## BEGIN - END ## // NAMEOVERHEAD
         public bool NameOverheadToggled { get; set; } = false;
         public bool ShowTargetRangeIndicator { get; set; }
         public bool PartyInviteGump { get; set; }
@@ -379,6 +383,9 @@ namespace ClassicUO.Configuration
         public bool ShowJournal2System { get; set; } = true;
         public bool ShowJournal2GuildAlly { get; set; } = true;
         // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        public bool ShowHPLineInNOH { get; set; } = false;
+        // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
