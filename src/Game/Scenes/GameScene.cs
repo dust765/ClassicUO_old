@@ -152,6 +152,10 @@ namespace ClassicUO.Game.Scenes
 
             Macros.Load();
 
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            NameOverHeadManager.Load();
+            // ## BEGIN - END ## // NAMEOVERHEAD
+
             _animatedStaticsManager = new AnimatedStaticsManager();
             _animatedStaticsManager.Initialize();
             InfoBars = new InfoBarManager();
@@ -349,6 +353,9 @@ namespace ClassicUO.Game.Scenes
 
             Macros.Save();
             InfoBars.Save();
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            NameOverHeadManager.Save();
+            // ## BEGIN - END ## // NAMEOVERHEAD
             ProfileManager.UnLoadProfile();
 
             StaticFilters.CleanCaveTextures();
@@ -610,7 +617,11 @@ namespace ClassicUO.Game.Scenes
 
             GetViewPort();
 
-            var useObjectHandles = NameOverHeadManager.IsToggled || Keyboard.Ctrl && Keyboard.Shift;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            //var useObjectHandles = NameOverHeadManager.IsToggled || Keyboard.Ctrl && Keyboard.Shift;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            var useObjectHandles = NameOverHeadManager.IsShowing;
+            // ## BEGIN - END ## // NAMEOVERHEAD
             if (useObjectHandles != _useObjectHandles)
             {
                 _useObjectHandles = useObjectHandles;
