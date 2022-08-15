@@ -150,6 +150,20 @@ Mages Guild - Disables any actions when a spellcursor is up.
 
 # macros
 
+HighlightTileAtRange (toggle)
+
+ToggleTransparentHouses (toggle)
+
+ToggleInvisibleHouses (toggle)
+
+UCCLinesToggleLT (toggle)
+
+UCCLinesToggleHM (toggle)
+
+AutoMeditate (toggle)
+
+# macros
+
 ObjectInfo (-info command)
 
 OpenCorpses (open corpses in 2 tiles)
@@ -184,6 +198,24 @@ EquipManager (fast equip)
 
 SetMimic_PlayerSerial (set master or custom serial for EquipManager)
 
+# commands
+
+type command in chat
+
+-mimic (mimic casting of master)
+
+-marker X Y (add world marker)
+
+auto add marker for T-Maps
+
+-df (defender)
+
+-automed (auto meditate)
+
+-engage (auto pathfind and attack lasttarget)
+
+-autorange (auto show range indicator when weapon is equipped)
+
 # Added files
 
 /src/Dust765
@@ -193,6 +225,14 @@ SetMimic_PlayerSerial (set master or custom serial for EquipManager)
 /src/halo.png
 
 /src/arrow.png
+
+/src/Dust765/Macros
+
+/src/Dust765/Managers
+
+/src/Dust765/Autos
+
+/src/Dust765/Shared
 
 # changed constants
 
@@ -631,6 +671,36 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/MacroManager.cs              2946    2986    ADVMACROS
 
 /src/Game/GameObjects/PlayerMobile.cs           1390    1410    ADVMACROS
+
+/src/Game/GameObjects/Views/LandView.cs         99      105     AUTOMATIONS
+
+/src/Game/GameObjects/Views/MultiView.cs        132     138     AUTOMATIONS
+
+/src/Game/GameObjects/Views/StaticView.cs       111     117     AUTOMATIONS
+
+/src/Game/Managers/MacroManager.cs              2159    2165    AUTOMATIONS
+
+/src/Game/Managers/MacroManager.cs              2697    2699    AUTOMATIONS
+
+/src/Game/Scenes/GameScene.cs                   275     277     AUTOMATIONS
+
+/src/Game/Scenes/GameScene.cs                   435     443     AUTOMATIONS
+
+/src/Game/World.cs                              369     371     AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                46      48      AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                843     846     AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                2133    2135    AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                2358    2360    AUTOMATIONS
+
+/src/Network/PacketHandlers.cs	                3044    3046    AUTOMATIONS
+
+/src/Game/UI/Gumps/WorldMapGump.cs              68      79      AUTOMATIONS
+
+/src/Game/UI/Gumps/WorldMapGump.cs              2518    2605    AUTOMATIONS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
