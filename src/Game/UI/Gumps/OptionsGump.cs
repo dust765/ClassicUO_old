@@ -231,6 +231,9 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _bandageGump, _uccEnableLTBar;
         private InputField _bandageGumpOffsetX, _bandageGumpOffsetY;
         // ## BEGIN - END ## // UI/GUMPS
+        // ## BEGIN - END ## // TEXTUREMANAGER
+        private Checkbox _textureManagerEnabled, _textureManagerHalosEnabled, _textureManagerArrowsEnabled, _textureManagerHumansOnly, _textureManagerPurple, _textureManagerGreen, _textureManagerRed, _textureManagerOrange, _textureManagerBlue, _textureManagerHumansOnlyArrows, _textureManagerPurpleArrows, _textureManagerGreenArrows, _textureManagerRedArrows, _textureManagerOrangeArrows, _textureManagerBlueArrows;
+        // ## BEGIN - END ## // TEXTUREMANAGER
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4237,6 +4240,46 @@ namespace ClassicUO.Game.UI.Gumps
             startY += _bandageGumpOffsetY.Height + 2;
             section.AddRight(AddLabel(null, "Y", 0, 0), 2);
             // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            SettingsSection section2 = AddSettingsSection(box, "-----Texture Manager-----");
+            section2.Y = section.Bounds.Bottom + 40;
+
+            startY = section.Bounds.Bottom + 40;
+
+            section2.Add(_textureManagerEnabled = AddCheckBox(null, "Enable TextureManager", _currentProfile.TextureManagerEnabled, startX, startY));
+            startY += _textureManagerEnabled.Height + 2;
+            section2.Add(_textureManagerHalosEnabled = AddCheckBox(null, "Enable TextureManager Halos", _currentProfile.TextureManagerHalos, startX, startY));
+            startY += _textureManagerHalosEnabled.Height + 2;
+            //
+            section2.Add(_textureManagerHumansOnly = AddCheckBox(null, "Humans only", _currentProfile.TextureManagerHumansOnly, startX, startY));
+            startY += _textureManagerHumansOnly.Height + 2;
+            section2.Add(_textureManagerPurple = AddCheckBox(null, "Purple (last attack / last target)", _currentProfile.TextureManagerPurple, startX, startY));
+            startY += _textureManagerPurple.Height + 2;
+            section2.Add(_textureManagerGreen = AddCheckBox(null, "Green (allys / party)", _currentProfile.TextureManagerGreen, startX, startY));
+            startY += _textureManagerGreen.Height + 2;
+            section2.Add(_textureManagerRed = AddCheckBox(null, "Red (criminal / gray / murderer)", _currentProfile.TextureManagerRed, startX, startY));
+            startY += _textureManagerRed.Height + 2;
+            section2.Add(_textureManagerOrange = AddCheckBox(null, "Orange (enemy)", _currentProfile.TextureManagerOrange, startX, startY));
+            startY += _textureManagerOrange.Height + 2;
+            section2.Add(_textureManagerBlue = AddCheckBox(null, "Blue (innocent)", _currentProfile.TextureManagerBlue, startX, startY));
+            startY += _textureManagerBlue.Height + 2;
+            //
+            section2.Add(_textureManagerArrowsEnabled = AddCheckBox(null, "Enable TextureManager Arrows", _currentProfile.TextureManagerArrows, startX, startY));
+            startY += _textureManagerArrowsEnabled.Height + 2;
+            //
+            section2.Add(_textureManagerHumansOnlyArrows = AddCheckBox(null, "Humans only", _currentProfile.TextureManagerHumansOnlyArrows, startX, startY));
+            startY += _textureManagerHumansOnlyArrows.Height + 2;
+            section2.Add(_textureManagerPurpleArrows = AddCheckBox(null, "Purple (last attack / last target)", _currentProfile.TextureManagerPurpleArrows, startX, startY));
+            startY += _textureManagerPurpleArrows.Height + 2;
+            section2.Add(_textureManagerGreenArrows = AddCheckBox(null, "Green (allys / party)", _currentProfile.TextureManagerGreenArrows, startX, startY));
+            startY += _textureManagerGreenArrows.Height + 2;
+            section2.Add(_textureManagerRedArrows = AddCheckBox(null, "Red (criminal / gray / murderer)", _currentProfile.TextureManagerRedArrows, startX, startY));
+            startY += _textureManagerRedArrows.Height + 2;
+            section2.Add(_textureManagerOrangeArrows = AddCheckBox(null, "Orange (enemy)", _currentProfile.TextureManagerOrangeArrows, startX, startY));
+            startY += _textureManagerOrangeArrows.Height + 2;
+            section2.Add(_textureManagerBlueArrows = AddCheckBox(null, "Blue (innocent)", _currentProfile.TextureManagerBlueArrows, startX, startY));
+            startY += _textureManagerBlueArrows.Height + 2;
+            // ## BEGIN - END ## // TEXTUREMANAGER
 
             Add(rightArea, PAGE);
         }
@@ -5273,6 +5316,23 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.UOClassicCombatLTBar = _uccEnableLTBar.IsChecked;
             }
             // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // TEXTUREMANAGER
+            _currentProfile.TextureManagerEnabled = _textureManagerEnabled.IsChecked;
+            _currentProfile.TextureManagerArrows = _textureManagerArrowsEnabled.IsChecked;
+            _currentProfile.TextureManagerHumansOnlyArrows = _textureManagerHumansOnlyArrows.IsChecked;
+            _currentProfile.TextureManagerPurpleArrows = _textureManagerPurpleArrows.IsChecked;
+            _currentProfile.TextureManagerGreenArrows = _textureManagerGreenArrows.IsChecked;
+            _currentProfile.TextureManagerRedArrows = _textureManagerRedArrows.IsChecked;
+            _currentProfile.TextureManagerOrangeArrows = _textureManagerOrangeArrows.IsChecked;
+            _currentProfile.TextureManagerBlueArrows = _textureManagerBlueArrows.IsChecked;
+            _currentProfile.TextureManagerHalos = _textureManagerHalosEnabled.IsChecked;
+            _currentProfile.TextureManagerHumansOnly = _textureManagerHumansOnly.IsChecked;
+            _currentProfile.TextureManagerPurple = _textureManagerPurple.IsChecked;
+            _currentProfile.TextureManagerGreen = _textureManagerGreen.IsChecked;
+            _currentProfile.TextureManagerRed = _textureManagerRed.IsChecked;
+            _currentProfile.TextureManagerOrange = _textureManagerOrange.IsChecked;
+            _currentProfile.TextureManagerBlue = _textureManagerBlue.IsChecked;
+            // ## BEGIN - END ## // TEXTUREMANAGER
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
