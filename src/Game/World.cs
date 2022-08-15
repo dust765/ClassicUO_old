@@ -97,6 +97,9 @@ namespace ClassicUO.Game
         // ## BEGIN - END ## // MACROS
         public static AnimationTriggers AnimationTriggers { get; } = new AnimationTriggers();
         // ## BEGIN - END ## // MACROS
+        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+        public static ClilocTriggers ClilocTriggers { get; } = new ClilocTriggers();
+        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
 
 
         public static int MapIndex
