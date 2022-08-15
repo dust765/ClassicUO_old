@@ -35,6 +35,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
+// ## BEGIN - END ## // MACROS
+using ClassicUO.Dust765.External;
+// ## BEGIN - END ## // MACROS
 using ClassicUO.Game;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -368,6 +371,14 @@ namespace ClassicUO.Configuration
         public bool IgnoreCoTEnabled { get; set; } = false;
         public bool ShowDeathOnWorldmap { get; set; } = false;
         // ## BEGIN - END ## // MISC2
+        // ## BEGIN - END ## // MACROS
+        public int LastTargetRange { get; set; }
+        public bool Journal2DarkMode { get; set; }
+        public bool ShowJournal2Client { get; set; } = true;
+        public bool ShowJournal2Objects { get; set; } = true;
+        public bool ShowJournal2System { get; set; } = true;
+        public bool ShowJournal2GuildAlly { get; set; } = true;
+        // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
@@ -618,6 +629,13 @@ namespace ClassicUO.Configuration
                                     gump = new JournalGump();
 
                                     break;
+
+                                // ## BEGIN - END ## // MACROS
+                                case GumpType.Journal2:
+                                    gump = new JournalGump2();
+
+                                    break;
+                                // ## BEGIN - END ## // MACROS
 
                                 case GumpType.MacroButton:
                                     gump = new MacroButtonGump();
