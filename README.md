@@ -116,6 +116,12 @@ hp line in nameoverheads
 
 more filters for nameoverheads
 
+# UI gumps
+
+sticky last target healthbar (healthbar that always will be your last targets healthbar)
+
+bandage gump (bandage timer UI)
+
 # macros
 
 ObjectInfo (-info command)
@@ -499,6 +505,22 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/NameOverHeadManager.cs       297     452     NAMEOVERHEAD
 
 /src/Game/Managers/NameOverHeadManager.cs       454     522     NAMEOVERHEAD
+
+/src/Game/Scenes/GameScene.cs                   38      41      UI/GUMPS
+
+/src/Game/Scenes/GameScene.cs                   204     218     UI/GUMPS
+
+/src/Game/Scenes/GameScene.cs                   327     329     UI/GUMPS
+
+/src/Game/GameObjects/PlayerMobile.cs           38      40      UI/GUMPS
+
+/src/Game/GameObjects/PlayerMobile.cs           59      61      UI/GUMPS
+
+/src/Game/GameObjects/PlayerMobile.cs           67      69      UI/GUMPS
+
+/src/Network/PacketHandlers.cs	                4616    4618    UI/GUMPS
+
+/src/Game/UI/Gumps/OptionsGump.cs               39      41      UI/GUMPS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
