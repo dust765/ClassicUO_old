@@ -240,6 +240,12 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _uccLootDelay, _uccPurgeDelay, _uccQueueSpeed;
         private InputField _uccLootAboveID, _uccSL_Gray, _uccSL_Blue, _uccSL_Green, _uccSL_Red;
         // ## BEGIN - END ## // AUTOLOOT
+        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+        private Checkbox _uccEnableBuffbar, _uccLocked, _uccSwing, _uccDoD, _uccGotD;
+        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+        private InputField _uccDisarmStrikeCooldown, _uccDisarmAttemptCooldown, _uccDisarmedCooldown;
+        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4433,6 +4439,89 @@ namespace ClassicUO.Game.UI.Gumps
             );
             _uccSL_Red.SetText(_currentProfile.UOClassicCombatAL_SL_Red.ToString());
             // ## BEGIN - END ## // AUTOLOOT
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            SettingsSection section6 = AddSettingsSection(box, "-----BUFFBAR (COOLDOWN UI)-----");
+            section6.Y = section5.Bounds.Bottom + 40;
+
+            startY = section5.Bounds.Bottom + 40;
+
+            section6.Add(_uccEnableBuffbar = AddCheckBox(null, "Enable UCC - Buffbar", _currentProfile.UOClassicCombatBuffbar, startX, startY));
+            startY += _uccEnableBuffbar.Height + 2;
+
+            section6.Add(AddLabel(null, "-----DISABLE / ENABLE BUFFBAR ON CHANGES BELOW-----", startX, startY));
+
+            section6.Add(_uccSwing = AddCheckBox(null, "Show Swing Line", _currentProfile.UOClassicCombatBuffbar_SwingEnabled, startX, startY));
+            startY += _uccSwing.Height + 2;
+            section6.Add(_uccDoD = AddCheckBox(null, "Show Do Disarm Line", _currentProfile.UOClassicCombatBuffbar_DoDEnabled, startX, startY));
+            startY += _uccDoD.Height + 2;
+            section6.Add(_uccGotD = AddCheckBox(null, "Show Got Disarmed Line", _currentProfile.UOClassicCombatBuffbar_GotDEnabled, startX, startY));
+            startY += _uccGotD.Height + 2;
+            section6.Add(_uccLocked = AddCheckBox(null, "Lock in place", _currentProfile.UOClassicCombatBuffbar_Locked, startX, startY));
+            startY += _uccLocked.Height + 2;
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            SettingsSection section7 = AddSettingsSection(box, "-----SETTINGS (BUFFBAR AND SELF)-----");
+            section7.Y = section6.Bounds.Bottom + 40;
+
+            startY = section6.Bounds.Bottom + 40;
+
+            section7.Add(AddLabel(null, "General cooldown when you get disarmed (ms)", startX, startY));
+
+            section7.Add
+            (
+                _uccDisarmedCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _uccDisarmedCooldown.SetText(_currentProfile.UOClassicCombatSelf_DisarmedCooldown.ToString());
+
+            section7.Add(AddLabel(null, "Cooldown after successfull disarm (ms)", startX, startY));
+
+            section7.Add
+            (
+                _uccDisarmStrikeCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    90000
+                )
+            );
+            _uccDisarmStrikeCooldown.SetText(_currentProfile.UOClassicCombatSelf_DisarmStrikeCooldown.ToString());
+
+            section7.Add(AddLabel(null, "Cooldown after failed disarm (ms)", startX, startY));
+
+            section7.Add
+            (
+                _uccDisarmAttemptCooldown = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    50000
+                )
+            );
+            _uccDisarmAttemptCooldown.SetText(_currentProfile.UOClassicCombatSelf_DisarmAttemptCooldown.ToString());
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
 
             Add(rightArea, PAGE);
         }
@@ -5545,6 +5634,42 @@ namespace ClassicUO.Game.UI.Gumps
                 _currentProfile.UOClassicCombatAL = _uccEnableAL.IsChecked;
             }
             // ## BEGIN - END ## // AUTOLOOT
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            _currentProfile.UOClassicCombatBuffbar_SwingEnabled = _uccSwing.IsChecked;
+            _currentProfile.UOClassicCombatBuffbar_DoDEnabled = _uccDoD.IsChecked;
+            _currentProfile.UOClassicCombatBuffbar_GotDEnabled = _uccGotD.IsChecked;
+            _currentProfile.UOClassicCombatBuffbar_Locked = _uccLocked.IsChecked;
+
+            if (_currentProfile.UOClassicCombatBuffbar != _uccEnableBuffbar.IsChecked)
+            {
+                UOClassicCombatBuffbar UOClassicCombatBuffbar = UIManager.GetGump<UOClassicCombatBuffbar>();
+
+                if (_uccEnableBuffbar.IsChecked)
+                {
+                    if (UOClassicCombatBuffbar != null)
+                        UOClassicCombatBuffbar.Dispose();
+
+                    UOClassicCombatBuffbar = new UOClassicCombatBuffbar
+                    {
+                        X = _currentProfile.UOClassicCombatBuffbarLocation.X,
+                        Y = _currentProfile.UOClassicCombatBuffbarLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatBuffbar);
+                }
+                else
+                {
+                    if (UOClassicCombatBuffbar != null)
+                        UOClassicCombatBuffbar.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatBuffbar = _uccEnableBuffbar.IsChecked;
+            }
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            _currentProfile.UOClassicCombatSelf_DisarmStrikeCooldown = uint.Parse(_uccDisarmStrikeCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_DisarmAttemptCooldown = uint.Parse(_uccDisarmAttemptCooldown.Text);
+            _currentProfile.UOClassicCombatSelf_DisarmedCooldown = uint.Parse(_uccDisarmedCooldown.Text);
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
