@@ -2195,6 +2195,13 @@ namespace ClassicUO.Game.Managers
 
                     break;
                 // ## BEGIN - END ## // ADVMACROS
+                // ## BEGIN - END ## // AUTOMATIONS
+                case MacroType.AutoMeditate:
+
+                    CommandManager.Execute("automed");
+
+                    break;
+                // ## BEGIN - END ## // AUTOMATIONS
             }
 
 
@@ -2771,7 +2778,9 @@ namespace ClassicUO.Game.Managers
         UCCLinesToggleHM,
         // ## BEGIN - END ## // LINES
         CureGH, // ## BEGIN - END ## // MACROS
-        notimplemented18,
+        // ## BEGIN - END ## // AUTOMATIONS
+        AutoMeditate,
+        // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // ADVMACROS
         CustomInterrupt,
         SetMimic_PlayerSerial,
