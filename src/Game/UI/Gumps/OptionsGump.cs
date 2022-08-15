@@ -36,6 +36,9 @@ using System.IO;
 using System.Linq;
 using ClassicUO.Configuration;
 using ClassicUO.Data;
+// ## BEGIN - END ## // UI/GUMPS
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // UI/GUMPS
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -222,6 +225,10 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _showHPLineInNOH;
         private NameOverheadAssignControl _nameOverheadControl;
         // ## BEGIN - END ## // NAMEOVERHEAD
+        // ## BEGIN - END ## // UI/GUMPS
+        private Checkbox _bandageGump, _uccEnableLTBar;
+        private InputField _bandageGumpOffsetX, _bandageGumpOffsetY;
+        // ## BEGIN - END ## // UI/GUMPS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4139,6 +4146,58 @@ namespace ClassicUO.Game.UI.Gumps
             box.WantUpdateSize = true;
             rightArea.Add(box);
 
+            // ## BEGIN - END ## // UI/GUMPS
+            SettingsSection section = AddSettingsSection(box, "-----UI / Gumps-----");
+
+            section.Add(_uccEnableLTBar = AddCheckBox(null, "Enable UCC - LastTarget Bar", _currentProfile.UOClassicCombatLTBar, startX, startY));
+            startY += _uccEnableLTBar.Height + 2;
+            section.Add(AddLabel(null, "(Doubleklick to lock in place)", startX, startY));
+
+            section.Add(_bandageGump = AddCheckBox(null, "Show gump when using bandages", _currentProfile.BandageGump, startX, startY));
+            startY += _highlightContainersWhenMouseIsOver.Height + 2;
+
+            section.Add(AddLabel(null, "Bandage Timer Offset: ", startX, startY));
+
+            section.Add
+            (
+                _bandageGumpOffsetX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _bandageGumpOffsetX.SetText(_currentProfile.BandageGumpOffset.X.ToString());
+            startY += _bandageGumpOffsetX.Height + 2;
+            section.AddRight(AddLabel(null, "X", 0, 0), 2);
+
+            section.Add
+            (
+                _bandageGumpOffsetY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _bandageGumpOffsetY.SetText(_currentProfile.BandageGumpOffset.Y.ToString());
+
+            startY += _bandageGumpOffsetY.Height + 2;
+            section.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            // ## BEGIN - END ## // UI/GUMPS
+
             Add(rightArea, PAGE);
         }
         // ## BEGIN - END ## // BASICSETUP
@@ -5135,6 +5194,39 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // NAMEOVERHEAD
             _currentProfile.ShowHPLineInNOH = _showHPLineInNOH.IsChecked;
             // ## BEGIN - END ## // NAMEOVERHEAD
+            // ## BEGIN - END ## // UI/GUMPS
+            _currentProfile.BandageGump = _bandageGump.IsChecked;
+
+            int.TryParse(_bandageGumpOffsetX.Text, out int bandageGumpOffsetX);
+            int.TryParse(_bandageGumpOffsetY.Text, out int bandageGumpOffsetY);
+
+            _currentProfile.BandageGumpOffset = new Point(bandageGumpOffsetX, bandageGumpOffsetY);
+
+            if (_currentProfile.UOClassicCombatLTBar != _uccEnableLTBar.IsChecked)
+            {
+                UOClassicCombatLTBar UOClassicCombatLTBar = UIManager.GetGump<UOClassicCombatLTBar>();
+
+                if (_uccEnableLTBar.IsChecked)
+                {
+                    if (UOClassicCombatLTBar != null)
+                        UOClassicCombatLTBar.Dispose();
+
+                    UOClassicCombatLTBar = new UOClassicCombatLTBar
+                    {
+                        X = _currentProfile.UOClassicCombatLTBarLocation.X,
+                        Y = _currentProfile.UOClassicCombatLTBarLocation.Y
+                    };
+                    UIManager.Add(UOClassicCombatLTBar);
+                }
+                else
+                {
+                    if (UOClassicCombatLTBar != null)
+                        UOClassicCombatLTBar.Dispose();
+                }
+
+                _currentProfile.UOClassicCombatLTBar = _uccEnableLTBar.IsChecked;
+            }
+            // ## BEGIN - END ## // UI/GUMPS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
