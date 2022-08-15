@@ -110,9 +110,31 @@ ignore list for circle of transparency (txt file created in your /Data/Client fo
 
 show death location on worldmap
 
+# macros
+
+ObjectInfo (-info command)
+
+OpenCorpses (open corpses in 2 tiles)
+
+OpenJournal2 (open second journal)
+
+SetTargetClientSide (set target client side only)
+
+LastTargetRC (LastTarget with RangeCheck)
+
+HideX (removes a game object)
+
+HealOnHPChange (keep pressed, casts greater heal as soon as HP change)
+
+HarmOnSwing (keep pressed, casts harm as soon as a swinganimation is issued from server)
+
+CureGH (cure or gheal)
+
 # Added files
 
 /src/Dust765
+
+/src/Dust765/External
 
 # changed constants
 
@@ -385,6 +407,32 @@ FILE                                            START   END     COMMIT
 /src/Network/PacketHandlers.cs	                1604    1608    MISC2
 
 /src/Game/Scenes/GameSceneDrawingSorting.cs	    402     416     MISC2
+
+/src/Game/Managers/MacroManager.cs              42      45      MACROS
+
+/src/Game/Managers/MacroManager.cs              1791    1911    MACROS
+
+/src/Game/Managers/MacroManager.cs              2405+           MACROS
+
+/src/Game/GameObjects/PlayerMobile.cs           1367    1379    MACROS
+
+/src/Game/Scenes/GameSceneInputHandler.cs       37      39      MACROS
+
+/src/Game/Scenes/GameSceneInputHandler.cs       1368    1379    MACROS
+
+/src/Network/PacketHandlers.cs	                2246    2249    MACROS
+
+/src/Network/PacketHandlers.cs	                5472    5475    MACROS
+
+/src/Game/World.cs                              37      39      MACROS
+
+/src/Game/World.cs                              97      99      MACROS
+
+/src/Configuration/Profile.cs                   38      40      MACROS
+
+/src/Configuration/Profile.cs                   633     638     MACROS
+
+/src/Game/UI/Gumps/GumpType.cs                  60      62      MACROS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
