@@ -505,6 +505,24 @@ namespace ClassicUO.Configuration
         public int AutoRangeDisplayActiveRange { get; set; } = 10;
         public ushort AutoRangeDisplayHue { get; set; } = 0x0074;
         // ## BEGIN - END ## // AUTOMATIONS
+        // ## BEGIN - END ## // OUTLANDS
+        /*
+        public bool InfernoBridge { get; set; } = true;
+        public bool OverheadSummonTime { get; set; }
+        public bool OverheadPeaceTime { get; set; }
+        public bool MobileHamstrungTime { get; set; }
+        public uint MobileHamstrungTimeCooldown { get; set; } = 3000;
+        //UCC SELF
+        public uint UOClassicCombatSelf_HamstringStrikeCooldown { get; set; } = 30000;
+        public uint UOClassicCombatSelf_HamstringAttemptCooldown { get; set; } = 15000;
+        public uint UOClassicCombatSelf_HamstrungCooldown { get; set; } = 5000;
+        public bool UOClassicCombatSelf_NoRefreshPotAfterHamstrung { get; set; } = true;
+        public uint UOClassicCombatSelf_NoRefreshPotAfterHamstrungCooldown { get; set; } = 5000;
+        // BUFFBAR
+        public bool UOClassicCombatBuffbar_DoHEnabled { get; set; } = false;
+        public bool UOClassicCombatBuffbar_GotHEnabled { get; set; } = false;
+        */
+        // ## BEGIN - END ## // OUTLANDS
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
