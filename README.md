@@ -256,6 +256,14 @@ The order in which items are shown in grid-loot will now depend on item type.
 
 Motivation: some items are likely to be always looted (e.g. gold, gems) and when looting is performed automatically (e.g. by Razor macros) it makes items to move in a grid making it harder to browse their properties. Hence, items like gold should be at the end of the grid.
 
+# Multi Journal
+
+Replaces journal with multiple nameable and much better configurable journals
+
+note: edit journals.xml in your profile folder, set hue to 0 if you wish to reset color to default
+
+(use macro OpenJournal2 for old journal)
+
 # Added files
 
 /src/Dust765
@@ -803,6 +811,78 @@ FILE                                            START   END     COMMIT
 /src/Game/UI/Gumps/GridLootGump.cs	            314     316     GRIDLOOT
 
 /src/Game/UI/Gumps/GridLootGump.cs	            358     368     GRIDLOOT
+
+/src/Game/GameActions.cs                        144     148     MULTIJOURNAL
+
+/src/Game/Managers/JournalManager.cs            37      42      MULTIJOURNAL
+
+/src/Game/Managers/JournalManager.cs            58      65      MULTIJOURNAL
+
+/src/Game/Managers/JournalManager.cs            67      71      MULTIJOURNAL
+
+/src/Game/Managers/JournalManager.cs            159     255     MULTIJOURNAL
+
+/src/Game/Managers/JournalManager.cs            267     271     MULTIJOURNAL
+
+/src/Game/Managers/JournalManager.cs            271     319     MULTIJOURNAL
+
+/src/Game/Managers/MessageManager.cs            115     117     MULTIJOURNAL
+
+/src/Game/Managers/MessageManager.cs            121     123     MULTIJOURNAL
+
+/src/Game/Scenes/GameScene.cs           	    405     409     MULTIJOURNAL
+
+/src/Game/UI/Controls/ExpandableScroll.cs       273     278     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               38      40      MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               61      64      MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               66      70      MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               80      86      MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               89      136     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               154     275     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               280     312     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               372     379     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               450     455     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               470     474     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               493     497     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               647     651     MULTIJOURNAL
+
+/src/Game/UI/Gumps/JournalGump.cs               698     731     MULTIJOURNAL
+
+/src/Configuration/Profile.cs	                74      77      MULTIJOURNAL
+
+/src/Game/UI/Gumps/OptionsGump.cs	            161     167     MULTIJOURNAL
+
+/src/Game/UI/Gumps/OptionsGump.cs	            478     480     MULTIJOURNAL
+
+/src/Game/UI/Gumps/OptionsGump.cs	            2568    2592    MULTIJOURNAL
+
+/src/Game/UI/Gumps/OptionsGump.cs	            5618    5621    MULTIJOURNAL
+
+/src/Game/UI/Gumps/OptionsGump.cs	            5986    5989    MULTIJOURNAL
+
+/src/Game/GameActions.cs	                    144     148     MULTIJOURNAL
+
+/src/Network/PacketHandlers.cs	                2108    2110    MULTIJOURNAL
+
+/src/Resources/ResGumps.Designer.cs             1468    1477    MULTIJOURNAL
+
+/src/Resources/ResGumps.Designer.cs             2607    2733    MULTIJOURNAL
+
+/src/Resources/ResGumps.Designer.cs             2942    2951    MULTIJOURNAL
+
+/src/Resources/ResGumps.resx                    1570    1619    MULTIJOURNAL
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
