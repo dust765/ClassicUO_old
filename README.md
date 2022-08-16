@@ -250,6 +250,12 @@ proof of concepts
 
 guardlines: show guardlines on land tiles (disabled due to performance)
 
+# Gridloot
+
+The order in which items are shown in grid-loot will now depend on item type.
+
+Motivation: some items are likely to be always looted (e.g. gold, gems) and when looting is performed automatically (e.g. by Razor macros) it makes items to move in a grid making it harder to browse their properties. Hence, items like gold should be at the end of the grid.
+
 # Added files
 
 /src/Dust765
@@ -791,6 +797,12 @@ FILE                                            START   END     COMMIT
 /src/Game/Map/Chunk.cs                          119     122     POC - GUARDLINE
 
 /src/Game/Map/Chunk.cs                          493     515     POC - GUARDLINE
+
+/src/Game/UI/Gumps/GridLootGump.cs	            270     285     GRIDLOOT
+
+/src/Game/UI/Gumps/GridLootGump.cs	            314     316     GRIDLOOT
+
+/src/Game/UI/Gumps/GridLootGump.cs	            358     368     GRIDLOOT
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
