@@ -313,7 +313,11 @@ namespace ClassicUO.Dust765.External // ## BEGIN - END ## // MACROS
                 entry.Hue,
                 entry.IsUnicode,
                 entry.Time,
-                entry.TextType
+                // ## BEGIN - END ## // MULTIJOURNAL
+                //entry.TextType
+                // ## BEGIN - END ## // MULTIJOURNAL
+                (TextType) entry.TextType
+                // ## BEGIN - END ## // MULTIJOURNAL
             );
         }
 
