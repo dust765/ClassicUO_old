@@ -216,6 +216,20 @@ auto add marker for T-Maps
 
 -autorange (auto show range indicator when weapon is equipped)
 
+# outlands
+
+disabled features due to client enforcement (code updates NOT maintained)
+
+inferno bridge solver (color specific land tiles)
+
+overhead: Summon timer (also on healthbar)
+
+overhead: Peace timer (also on healthbar)
+
+underchar: Hamstrung timer (also on healthbar)
+
+buffbar: hamstrung
+
 # Added files
 
 /src/Dust765
@@ -701,6 +715,46 @@ FILE                                            START   END     COMMIT
 /src/Game/UI/Gumps/WorldMapGump.cs              68      79      AUTOMATIONS
 
 /src/Game/UI/Gumps/WorldMapGump.cs              2518    2605    AUTOMATIONS
+
+/src/Game/Map/Chunk.cs                          35      37      OUTLANDS
+
+/src/Game/Map/Chunk.cs                          138     141     OUTLANDS
+
+/src/Network/PacketHandlers.cs	                2361    2364    OUTLANDS
+
+/src/Network/PacketHandlers.cs	                3599    3610    OUTLANDS
+
+/src/Game/Managers/HealthLinesManager.cs        200     213     OUTLANDS
+
+/src/Game/Managers/HealthLinesManager.cs        262     274     OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             111     113     OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             128     131     OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             397     399     OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             436     438     OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             591     628     OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             741     752     OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             844     846     OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             1442    1457    OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             1616    1618    OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             1851    1866    OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             2024    2061    OUTLANDS
+
+/src/Game/UI/Gumps/HealthBarGump.cs             2175    2177    OUTLANDS
+
+/src/Game/GameObjects/Mobile.cs                 150     159     OUTLANDS
+
+/src/Game/GameObjects/Views/MobileView.cs       63      67      OUTLANDS
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
