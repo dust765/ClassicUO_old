@@ -1466,6 +1466,15 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string Filter {
+            get {
+                return ResourceManager.GetString("Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter type [TEST]:.
         /// </summary>
         public static string FilterType {
@@ -2594,6 +2603,132 @@ namespace ClassicUO.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alliance.
+        /// </summary>
+        public static string MessageType_Alliance {
+            get {
+                return ResourceManager.GetString("MessageType_Alliance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command.
+        /// </summary>
+        public static string MessageType_Command {
+            get {
+                return ResourceManager.GetString("MessageType_Command", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emote.
+        /// </summary>
+        public static string MessageType_Emote {
+            get {
+                return ResourceManager.GetString("MessageType_Emote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encoded.
+        /// </summary>
+        public static string MessageType_Encoded {
+            get {
+                return ResourceManager.GetString("MessageType_Encoded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Focus.
+        /// </summary>
+        public static string MessageType_Focus {
+            get {
+                return ResourceManager.GetString("MessageType_Focus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild.
+        /// </summary>
+        public static string MessageType_Guild {
+            get {
+                return ResourceManager.GetString("MessageType_Guild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Label.
+        /// </summary>
+        public static string MessageType_Label {
+            get {
+                return ResourceManager.GetString("MessageType_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Limit 3 spell.
+        /// </summary>
+        public static string MessageType_Limit3Spell {
+            get {
+                return ResourceManager.GetString("MessageType_Limit3Spell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Party.
+        /// </summary>
+        public static string MessageType_Party {
+            get {
+                return ResourceManager.GetString("MessageType_Party", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regular.
+        /// </summary>
+        public static string MessageType_Regular {
+            get {
+                return ResourceManager.GetString("MessageType_Regular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spell.
+        /// </summary>
+        public static string MessageType_Spell {
+            get {
+                return ResourceManager.GetString("MessageType_Spell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System.
+        /// </summary>
+        public static string MessageType_System {
+            get {
+                return ResourceManager.GetString("MessageType_System", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whisper.
+        /// </summary>
+        public static string MessageType_Whisper {
+            get {
+                return ResourceManager.GetString("MessageType_Whisper", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yell.
+        /// </summary>
+        public static string MessageType_Yell {
+            get {
+                return ResourceManager.GetString("MessageType_Yell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimize.
         /// </summary>
         public static string Minimize {
@@ -2797,6 +2932,15 @@ namespace ClassicUO.Resources {
         public static string ON {
             get {
                 return ResourceManager.GetString("ON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
             }
         }
         
