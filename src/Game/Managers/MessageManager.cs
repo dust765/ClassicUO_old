@@ -112,11 +112,15 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MessageType.Guild:
-                    if (currentProfile.IgnoreGuildMessages) return;
+                    // ## BEGIN - END ## // MULTIJOURNAL
+                    //if (currentProfile.IgnoreGuildMessages) return;
+                    // ## BEGIN - END ## // MULTIJOURNAL
                     break;
 
                 case MessageType.Alliance:
-                    if (currentProfile.IgnoreAllianceMessages) return;
+                    // ## BEGIN - END ## // MULTIJOURNAL
+                    //if (currentProfile.IgnoreAllianceMessages) return;
+                    // ## BEGIN - END ## // MULTIJOURNAL
                     break;
 
                 case MessageType.Spell:
