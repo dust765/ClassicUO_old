@@ -32,6 +32,10 @@
 
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+// ## BEGIN - END ## // POC - GUARDLINE
+//using ClassicUO.Dust765.Dust765;
+//using Microsoft.Xna.Framework;
+// ## BEGIN - END ## // POC - GUARDLINE
 // ## BEGIN - END ## // OUTLANDS
 //using ClassicUO.Dust765.Dust765;
 // ## BEGIN - END ## // OUTLANDS
@@ -62,6 +66,10 @@ namespace ClassicUO.Game.Map
 
         public int X;
         public int Y;
+
+        // ## BEGIN - END ## // POC - GUARDLINE
+        //private GuardRegion[] guard_Regions = GuardRegion.guardLinesRead();
+        // ## BEGIN - END ## // POC - GUARDLINE
 
 
         public static Chunk Create(int x, int y)
@@ -108,6 +116,10 @@ namespace ClassicUO.Game.Map
                         land.X = tileX;
                         land.Y = tileY;
                         land.Z = z;
+                        // ## BEGIN - END ## // POC - GUARDLINE
+                        //if (PointInRect(land.X, land.Y))
+                        //    land.Hue = 0x33;
+                        // ## BEGIN - END ## // POC - GUARDLINE
                         land.UpdateScreenPosition();
 
                         AddGameObject(land, x, y);
@@ -478,5 +490,28 @@ namespace ClassicUO.Game.Map
 
             return true;
         }
+        // ## BEGIN - END ## // POC - GUARDLINE
+        /*
+        public bool PointInRect(ushort x, ushort y)
+        {
+            int count = guard_Regions.Length;
+            for (int i = 0; i < count; i++)
+            {
+                GuardRegion gr = this.guard_Regions[i];
+
+                Rectangle rect = new Rectangle(gr.X, gr.Y, gr.Width, gr.Length);
+
+                Point tile = new Point(x, y);
+
+                if (rect.Contains(tile))
+                {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        */
+        // ## BEGIN - END ## // POC - GUARDLINE
     }
 }
