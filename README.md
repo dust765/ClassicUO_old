@@ -244,6 +244,12 @@ commands: see options for a full list
 
 macros: see options for a full list
 
+# POC
+
+proof of concepts
+
+guardlines: show guardlines on land tiles (disabled due to performance)
+
 # Added files
 
 /src/Dust765
@@ -777,6 +783,14 @@ FILE                                            START   END     COMMIT
 /src/Game/Managers/MacroManager.cs              2166    2202    LOBBY
 
 /src/Game/Managers/MacroManager.cs              2753    2760    LOBBY
+
+/src/Game/Map/Chunk.cs                          35      38      POC - GUARDLINE
+
+/src/Game/Map/Chunk.cs                          70      72      POC - GUARDLINE
+
+/src/Game/Map/Chunk.cs                          119     122     POC - GUARDLINE
+
+/src/Game/Map/Chunk.cs                          493     515     POC - GUARDLINE
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
