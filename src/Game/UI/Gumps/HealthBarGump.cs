@@ -108,6 +108,9 @@ namespace ClassicUO.Game.UI.Gumps
         protected string _name;
         protected bool _outOfRange;
         protected StbTextBox _textBox;
+        // ## BEGIN - END ## // OUTLANDS
+        //protected StbTextBox _timersTextBox;
+        // ## BEGIN - END ## // OUTLANDS
 
         protected abstract void BuildGump();
 
@@ -121,6 +124,12 @@ namespace ClassicUO.Game.UI.Gumps
             
             _textBox?.Dispose();
             _textBox = null;
+
+            // ## BEGIN - END ## // OUTLANDS
+            //_timersTextBox?.Dispose();
+            //_timersTextBox = null;
+            // ## BEGIN - END ## // OUTLANDS
+
             base.Dispose();
         }
 
@@ -385,6 +394,9 @@ namespace ClassicUO.Game.UI.Gumps
         private readonly LineCHB[] _flash = new LineCHB[4];
         private static readonly Texture2D HPB_COLOR_PARA = SolidColorTextureCache.GetTexture(Color.MediumPurple);
         // ## BEGIN - END ## // HEALTHBAR
+        // ## BEGIN - END ## // OUTLANDS
+        //private static readonly Texture2D HPB_COLOR_ORANGE = SolidColorTextureCache.GetTexture(Color.DarkOrange);
+        // ## BEGIN - END ## // OUTLANDS
 
         private LineCHB _hpLineRed, _manaLineRed, _stamLineRed, _outline;
 
@@ -420,6 +432,10 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             _textBox = null;
+
+            // ## BEGIN - END ## // OUTLANDS
+            //_timersTextBox = null;
+            // ## BEGIN - END ## // OUTLANDS
 
             BuildGump();
         }
@@ -572,6 +588,45 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 }
 
+                // ## BEGIN - END ## // OUTLANDS
+                /*
+                if (_timersTextBox != null && mobile != null)
+                {
+                    if (mobile.HamstrungTime >= 1 && ProfileManager.CurrentProfile.MobileHamstrungTime)
+                    {
+                        _timersTextBox.SetText("H:" + mobile.HamstrungTime.ToString());
+
+                        if (mobile.HamstrungTexture != null)
+                        {
+                            _timersTextBox.Hue = mobile.HamstrungTexture.Hue;
+                        }
+                    }
+                    else if (mobile.PeaceTime >= 1 && ProfileManager.CurrentProfile.OverheadPeaceTime)
+                    {
+                        _timersTextBox.SetText("P:" + mobile.PeaceTime.ToString());
+
+                        if (mobile.PeaceTexture != null)
+                        {
+                            _timersTextBox.Hue = mobile.PeaceTexture.Hue;
+                        }
+                    }
+                    else if (mobile.SummonTime >= 1 & ProfileManager.CurrentProfile.OverheadSummonTime)
+                    {
+                        _timersTextBox.SetText("S:" + mobile.SummonTime.ToString());
+
+                        if (mobile.SummonTexture != null)
+                        {
+                            _timersTextBox.Hue = mobile.SummonTexture.Hue;
+                        }
+                    }
+                    else
+                    {
+                        _timersTextBox.SetText("");
+                    }
+                }
+                */
+                // ## BEGIN - END ## // OUTLANDS
+
                 if (_outOfRange)
                 {
                     if (entity.HitsMax == 0)
@@ -683,6 +738,18 @@ namespace ClassicUO.Game.UI.Gumps
                                     _border[1].LineColor = _border[2].LineColor = _border[3].LineColor = HPB_COLOR_YELLOW;
                                 }
                             }
+                            // ## BEGIN - END ## // OUTLANDS
+                            /*
+                            else if (mobile.HamstrungTime > 0)
+                            {
+                                _border[0].LineColor = HPB_COLOR_ORANGE;
+                                if (_border.Length >= 3)
+                                {
+                                    _border[1].LineColor = _border[2].LineColor = _border[3].LineColor = HPB_COLOR_ORANGE;
+                                }
+                            }
+                            */
+                            // ## BEGIN - END ## // OUTLANDS
                             else //its last target
                             {
                                 _border[0].LineColor = HPB_COLOR_RED;
@@ -774,6 +841,9 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 }
 
+                // ## BEGIN - END ## // OUTLANDS
+                //CombatCollection.UpdateHamstrung(mobile);
+                // ## BEGIN - END ## // OUTLANDS
                 // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
                 CombatCollection.UpdateOverheads(mobile);
                 // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
@@ -1368,6 +1438,23 @@ namespace ClassicUO.Game.UI.Gumps
                             CanMove = true
                         }
                     );
+
+                    // ## BEGIN - END ## // OUTLANDS
+                    /*
+                    Add(_timersTextBox = new StbTextBox(1, 32, maxWidth: HPB_WIDTH, isunicode: true, style: FontStyle.Cropped | FontStyle.BlackBorder, hue: Notoriety.GetHue((entity as Mobile)?.NotorietyFlag ?? NotorietyFlag.Gray), align: TEXT_ALIGN_TYPE.TS_LEFT)
+                    {
+                        X = 0, //HPB_WIDTH - 30,//0,
+                        Y = 0,
+                        Width = HPB_WIDTH, //30, //HPB_WIDTH,
+                        Height = 15,
+                        IsEditable = false,
+                        AcceptMouseInput = false, //_canChangeName
+                        AcceptKeyboardInput = false, //_canChangeName
+                        WantUpdateSize = false,
+                        CanMove = true,
+                    });
+                    */
+                    // ## BEGIN - END ## // OUTLANDS
                 }
             }
 
@@ -1525,6 +1612,10 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             _textBox = null;
+
+            // ## BEGIN - END ## // OUTLANDS
+            //_timersTextBox = null;
+            // ## BEGIN - END ## // OUTLANDS
 
             BuildGump();
         }
@@ -1756,6 +1847,23 @@ namespace ClassicUO.Game.UI.Gumps
                             CanMove = true
                         }
                     );
+
+                    // ## BEGIN - END ## // OUTLANDS
+                    /*
+                    Add(_timersTextBox = new StbTextBox(1, 32, 120, isunicode: false, hue: textColor, style: FontStyle.Fixed)
+                    {
+                        X = 90, //16,   90=120-30
+                        Y = 14,
+                        Width = 30, //120,
+                        Height = 15,
+                        IsEditable = false,
+                        AcceptMouseInput = false, //_canChangeName,
+                        AcceptKeyboardInput = false, //_canChangeName,
+                        WantUpdateSize = false,
+                        CanMove = true,
+                    });
+                    */
+                    // ## BEGIN - END ## // OUTLANDS
                 }
             }
 
@@ -1913,6 +2021,45 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 }
 
+                // ## BEGIN - END ## // OUTLANDS
+                /*
+                if (_timersTextBox != null)
+                {
+                    if (mobile.HamstrungTime >= 1 && ProfileManager.CurrentProfile.MobileHamstrungTime)
+                    {
+                        _timersTextBox.SetText("H:" + mobile.HamstrungTime.ToString());
+
+                        if (mobile.HamstrungTexture != null)
+                        {
+                            _timersTextBox.Hue = mobile.HamstrungTexture.Hue;
+                        }
+                    }
+                    else if (mobile.PeaceTime >= 1 && ProfileManager.CurrentProfile.OverheadPeaceTime)
+                    {
+                        _timersTextBox.SetText("P:" + mobile.PeaceTime.ToString());
+
+                        if (mobile.PeaceTexture != null)
+                        {
+                            _timersTextBox.Hue = mobile.PeaceTexture.Hue;
+                        }
+                    }
+                    else if (mobile.SummonTime >= 1 & ProfileManager.CurrentProfile.OverheadSummonTime)
+                    {
+                        _timersTextBox.SetText("S:" + mobile.SummonTime.ToString());
+
+                        if (mobile.SummonTexture != null)
+                        {
+                            _timersTextBox.Hue = mobile.SummonTexture.Hue;
+                        }
+                    }
+                    else
+                    {
+                        _timersTextBox.SetText("");
+                    }
+                }
+                */
+                // ## BEGIN - END ## // OUTLANDS
+
                 if (_outOfRange)
                 {
                     if (entity.HitsMax == 0)
@@ -2025,6 +2172,9 @@ namespace ClassicUO.Game.UI.Gumps
                 // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
                 CombatCollection.UpdateOverheads(mobile);
                 // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+                // ## BEGIN - END ## // OUTLANDS
+                //CombatCollection.UpdateHamstrung(mobile);
+                // ## BEGIN - END ## // OUTLANDS
 
                 int hits = CalculatePercents(entity.HitsMax, entity.Hits, barW);
 
