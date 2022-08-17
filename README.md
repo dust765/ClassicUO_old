@@ -884,6 +884,8 @@ FILE                                            START   END     COMMIT
 
 /src/Resources/ResGumps.resx                    1570    1619    MULTIJOURNAL
 
+CombatCollection                                1996    2088    UNUSED
+
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
 
