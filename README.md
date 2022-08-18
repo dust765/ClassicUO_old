@@ -148,6 +148,8 @@ Thiefes Guild - Disables any actions when hidden.
 
 Mages Guild - Disables any actions when a spellcursor is up.
 
+Tavern - Diable auto disarm.
+
 # macros
 
 HighlightTileAtRange (toggle)
@@ -893,6 +895,8 @@ CombatCollection.cs                             1996    2088    UNUSED
 /src/Game/Managers/NameOverHeadManager.cs       365     369     NAMEOVERHEAD_FIXES
 
 /src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   50      54      NAMEOVERHEAD_FIXES
+
+/src/Configuration/Profile.cs	                533     535     CONSIDERBALANCED
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
