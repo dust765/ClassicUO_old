@@ -44,7 +44,11 @@ namespace ClassicUO.Game.UI.Controls
     internal class NameOverheadAssignControl : Control
     {
         private readonly HotkeyBox _hotkeyBox;
-        private readonly Dictionary<NameOverheadOptions, Checkbox> checkboxDict = new();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        //private readonly Dictionary<NameOverheadOptions, Checkbox> checkboxDict = new();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        private readonly Dictionary<NameOverheadOptions, Checkbox> checkboxDict = new Dictionary<NameOverheadOptions, Checkbox>();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
 
         private enum ButtonType
         {
