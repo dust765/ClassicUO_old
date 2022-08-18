@@ -530,6 +530,9 @@ namespace ClassicUO.Configuration
         public string LobbyIP { get; set; } = "127.0.0.1";
         public string LobbyPort { get; set; } = "2596";
         // ## BEGIN - END ## // LOBBY
+        // ## BEGIN - END ## // CONSIDERBALANCED
+        public bool UOClassicCombatSelf_ConsiderBalanced { get; set; } = true;
+        // ## BEGIN - END ## // CONSIDERBALANCED
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;

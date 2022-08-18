@@ -48,8 +48,8 @@ namespace ClassicUO.Dust765.Dust765
         //UI
         private Label _uiTimerAutoBandage, _uiTimerAutoPouche, _uiTimerAutoCurepot, _uiTimerAutoHealpot, _uiTimerAutoRefreshpot, _uiTimerAutoEApple, _uiTimerAutoRearmAfterDisarmed, _uiTimerStrengthpot, _uiTimerDexpot;
         private Label _uiTextAutoBandage, _uiTextAutoPouche, _uiTextAutoCurepot, _uiTextAutoHealpot, _uiTextAutoRefreshpot, _uiTextAutoEApple;
-        private Checkbox _uiCboxAutoBandage, _uiCboxAutoPouche, _uiCboxAutoCurepot, _uiCboxAutoHealpot, _uiCboxAutoRefreshpot, _uiCboxAutoEApple, _uiCboxRearmAfterPot, _uiCboxAutoRearmAfterDisarmed, _uiCboxConsiderHidden, _uiCboxConsiderSpells, _uiCboxIsDuelingOrTankMage;
-        private StaticPic _uiIconAutoBandage, _uiIconAutoPouche, _uiIconAutoCurepot, _uiIconAutoHealpot, _uiIconAutoRefreshpot, _uiIconAutoEApple, _uiIconStrengthpot, _uiIconDexpot, _uiIconAutoRearmAfterDisarmed, _uiIconConsiderHidden, _uiIconConsiderSpells;
+        private Checkbox _uiCboxAutoBandage, _uiCboxAutoPouche, _uiCboxAutoCurepot, _uiCboxAutoHealpot, _uiCboxAutoRefreshpot, _uiCboxAutoEApple, _uiCboxRearmAfterPot, _uiCboxAutoRearmAfterDisarmed, _uiCboxConsiderHidden, _uiCboxConsiderSpells, _uiCboxIsDuelingOrTankMage, _uiCboxConsiderBalanced;
+        private StaticPic _uiIconAutoBandage, _uiIconAutoPouche, _uiIconAutoCurepot, _uiIconAutoHealpot, _uiIconAutoRefreshpot, _uiIconAutoEApple, _uiIconStrengthpot, _uiIconDexpot, _uiIconAutoRearmAfterDisarmed, _uiIconConsiderHidden, _uiIconConsiderSpells, _uiIconConsiderBalanced;
         private Label _uiTextGotDisarmed; //, _uiTextGotHamstrung;
         private Label _uiTimerGotDisarmed; //, _uiTimerGotHamstrung;
         private Label _uiTextTimerDoDisarm; //, _uiTextTimerDoHamstring;
@@ -198,6 +198,7 @@ namespace ClassicUO.Dust765.Dust765
 
         private bool UCCS_ConsiderHidden = ProfileManager.CurrentProfile.UOClassicCombatSelf_ConsiderHidden;
         private bool UCCS_ConsiderSpells = ProfileManager.CurrentProfile.UOClassicCombatSelf_ConsiderSpells;
+        private bool UCCS_ConsiderBalanced = ProfileManager.CurrentProfile.UOClassicCombatSelf_ConsiderBalanced;
 
         private int UCCS_MinRNG = ProfileManager.CurrentProfile.UOClassicCombatSelf_MinRNG;
         private int UCCS_MaxRNG = ProfileManager.CurrentProfile.UOClassicCombatSelf_MaxRNG;
@@ -232,7 +233,7 @@ namespace ClassicUO.Dust765.Dust765
 
             //MAIN CONSTRUCT
             Width = 95;
-            Height = 330;
+            Height = 355;
 
             Add(_background = new AlphaBlendControl()
             {
@@ -644,25 +645,51 @@ namespace ClassicUO.Dust765.Dust765
             Add(_uiCboxConsiderSpells);
             //CONSIDER SPELLS
 
+            //CONSIDER BALANCED
+            Add
+            (
+                _uiIconConsiderBalanced = new StaticPic(0x0BC3, 0)//tavern
+                {
+                    X = -11,
+                    Y = 305,
+                    AcceptMouseInput = false
+                }
+            );
+            Add(_uiIconConsiderBalanced);
+
+            _uiCboxConsiderBalanced = new Checkbox(0x00D2, 0x00D3, "", FONT, HUE_FONT)
+            {
+                X = 31,
+                Y = 309,
+                IsChecked = ProfileManager.CurrentProfile.UOClassicCombatSelf_ConsiderBalanced
+            };
+            _uiCboxConsiderBalanced.ValueChanged += (sender, e) =>
+            {
+                ProfileManager.CurrentProfile.UOClassicCombatSelf_ConsiderBalanced = _uiCboxConsiderBalanced.IsChecked;
+                UpdateVars();
+            };
+            Add(_uiCboxConsiderBalanced);
+            //CONSIDER BALANCED
+
             //DISARMED / HAMSTRUNG
             _uiTextGotDisarmed = new Label("DARM", true, HUE_FONTS_GREEN, 0, 1, FontStyle.BlackBorder)
             {
                 X = 0,
-                Y = 305
+                Y = 330
             };
             Add(_uiTextGotDisarmed);
 
             _uiTimerGotDisarmed = new Label($"{_timerGotDisarmed}", true, HUE_FONTS_GREEN, 0, 1, FontStyle.BlackBorder)
             {
                 X = 48,
-                Y = 305
+                Y = 330
             };
             Add(_uiTimerGotDisarmed);
 
             _uiTextTimerDoDisarm = new Label("OFF", true, HUE_FONTS_RED, 0, 1, FontStyle.BlackBorder)
             {
                 X = 62,
-                Y = 305
+                Y = 330
             };
             Add(_uiTextTimerDoDisarm);
             //
@@ -819,6 +846,7 @@ namespace ClassicUO.Dust765.Dust765
 
             UCCS_ConsiderHidden = ProfileManager.CurrentProfile.UOClassicCombatSelf_ConsiderHidden;
             UCCS_ConsiderSpells = ProfileManager.CurrentProfile.UOClassicCombatSelf_ConsiderSpells;
+            UCCS_ConsiderBalanced = ProfileManager.CurrentProfile.UOClassicCombatSelf_ConsiderBalanced;
 
             UCCS_MinRNG = ProfileManager.CurrentProfile.UOClassicCombatSelf_MinRNG;
             UCCS_MaxRNG = ProfileManager.CurrentProfile.UOClassicCombatSelf_MaxRNG;
@@ -838,6 +866,7 @@ namespace ClassicUO.Dust765.Dust765
             _uiCboxAutoRearmAfterDisarmed.IsChecked = UCCS_AutoRearmAfterDisarmed;
             _uiCboxConsiderHidden.IsChecked = UCCS_ConsiderHidden;
             _uiCboxConsiderSpells.IsChecked = UCCS_ConsiderSpells;
+            _uiCboxConsiderBalanced.IsChecked = UCCS_ConsiderBalanced;
 
             //ON OFF STATUS
             if (UCCS_AutoBandage)
@@ -1907,6 +1936,9 @@ namespace ClassicUO.Dust765.Dust765
         //MAIN ACTION METHODS
         public bool DisarmNeeded()
         {
+            if (UCCS_ConsiderBalanced)
+                return false;
+
             _tempItemInLeftHand = null;
             _tempItemInRightHand = null;
 
