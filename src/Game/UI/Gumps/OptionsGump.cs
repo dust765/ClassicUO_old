@@ -3577,7 +3577,11 @@ namespace ClassicUO.Game.UI.Gumps
 
             addButton.MouseUp += (sender, e) =>
             {
-                EntryDialog dialog = new
+                // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+                //EntryDialog dialog = new
+                // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+                EntryDialog dialog = new EntryDialog
+                // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
                 (
                     250,
                     150,

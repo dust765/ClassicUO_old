@@ -884,7 +884,15 @@ FILE                                            START   END     COMMIT
 
 /src/Resources/ResGumps.resx                    1570    1619    MULTIJOURNAL
 
-CombatCollection                                1996    2088    UNUSED
+CombatCollection.cs                             1996    2088    UNUSED
+
+/src/Game/Managers/NameOverHeadManager.cs       141     145     NAMEOVERHEAD_FIXES
+
+/src/Game/Managers/NameOverHeadManager.cs       328     332     NAMEOVERHEAD_FIXES
+
+/src/Game/Managers/NameOverHeadManager.cs       365     369     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   50      54      NAMEOVERHEAD_FIXES
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
