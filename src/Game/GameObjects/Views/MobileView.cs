@@ -665,7 +665,7 @@ namespace ClassicUO.Game.GameObjects
             }
         }
 
-        private static bool GetTexture(ushort graphic, byte animGroup, byte animIndex, byte direction, out SpriteInfo spriteInfo, out bool isUOP)
+        private static bool GetTexture(ushort graphic, byte animGroup, ref byte animIndex, byte direction, out SpriteInfo spriteInfo, out bool isUOP)
         {
             spriteInfo = default;
 
@@ -1066,7 +1066,7 @@ namespace ClassicUO.Game.GameObjects
                     {
                         var animGroupMount = GetGroupForAnimation(this, mountGraphic);
 
-                        if (GetTexture(mountGraphic, animGroupMount, animIndex, dir, out spriteInfo, out isUop))
+                        if (GetTexture(graphic, animGroup, ref animIndex, dir, out spriteInfo, out isUop))
                         {
                             int x = position.X - (isFlipped ? spriteInfo.UV.Width - spriteInfo.Center.X : spriteInfo.Center.X);
                             int y = position.Y - (spriteInfo.UV.Height + spriteInfo.Center.Y);
@@ -1090,8 +1090,8 @@ namespace ClassicUO.Game.GameObjects
                     }
                 }
             }
-            
-            if (GetTexture(graphic, animGroup, animIndex, dir, out spriteInfo, out isUop))
+
+            if (GetTexture(graphic, animGroup, ref animIndex, dir, out spriteInfo, out isUop))
             {
                 int x = position.X - (isFlipped ? spriteInfo.UV.Width - spriteInfo.Center.X : spriteInfo.Center.X);
                 int y = position.Y - (spriteInfo.UV.Height + spriteInfo.Center.Y);
@@ -1130,7 +1130,7 @@ namespace ClassicUO.Game.GameObjects
                         animGroup = animGroupBackup;
                         animIndex = animIndexBackup;
 
-                        if (GetTexture(graphic, animGroup, animIndex, dir, out spriteInfo, out isUop))
+                        if (GetTexture(graphic, animGroup, ref animIndex, dir, out spriteInfo, out isUop))
                         {
                             int x = position.X - (isFlipped ? spriteInfo.UV.Width - spriteInfo.Center.X : spriteInfo.Center.X);
                             int y = position.Y - (spriteInfo.UV.Height + spriteInfo.Center.Y);
