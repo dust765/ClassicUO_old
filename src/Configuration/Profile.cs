@@ -342,6 +342,7 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // CURSOR
         public Point SpellOnCursorOffset { get; set; } = new Point(25, 30);
         public bool SpellOnCursor { get; set; }
+        public bool ColorGameCursor { get; set; }
         // ## BEGIN - END ## // CURSOR
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         public bool OverheadRange { get; set; }

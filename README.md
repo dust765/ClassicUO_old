@@ -72,6 +72,8 @@ flashing outline (many options)
 
 Show spell on cursor (and runout countdown)
 
+Color game cursor when targeting (hostile / friendly)
+
 # overhead / underchar
 
 Distance
@@ -442,9 +444,31 @@ FILE                                            START   END     COMMIT
 
 /src/Game/GameCursor.cs                         38      40      CURSOR
 
-/src/Game/GameCursor.cs                         87      91      CURSOR
+/src/Game/GameCursor.cs                         58      62      CURSOR
 
-/src/Game/GameCursor.cs                         360     373     CURSOR
+/src/Game/GameCursor.cs                         76      85      CURSOR
+
+/src/Game/GameCursor.cs                         91      95      CURSOR
+
+/src/Game/GameCursor.cs                         105     113     CURSOR
+
+/src/Game/GameCursor.cs                         119     123     CURSOR
+
+/src/Game/GameCursor.cs                         129     133     CURSOR
+
+/src/Game/GameCursor.cs                         227     254     CURSOR
+
+/src/Game/GameCursor.cs                         392     396     CURSOR
+
+/src/Game/GameCursor.cs                         401     405     CURSOR
+
+/src/Game/GameCursor.cs                         410     414     CURSOR
+
+/src/Game/GameCursor.cs                         427     440     CURSOR
+
+/src/Game/GameCursor.cs                         427     440     CURSOR
+
+/src/Game/GameCursor.cs                         545     549     CURSOR
 
 /src/Game/Managers/HealthLinesManager.cs        35      37      OVERHEAD / UNDERCHAR
 
