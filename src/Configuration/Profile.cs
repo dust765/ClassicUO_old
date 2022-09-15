@@ -342,6 +342,7 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // CURSOR
         public Point SpellOnCursorOffset { get; set; } = new Point(25, 30);
         public bool SpellOnCursor { get; set; }
+        public bool ColorGameCursor { get; set; }
         // ## BEGIN - END ## // CURSOR
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         public bool OverheadRange { get; set; }
@@ -374,7 +375,8 @@ namespace ClassicUO.Configuration
         public int TransparentHousesTransparency { get; set; }
         public bool InvisibleHousesEnabled { get; set; } = false;
         public int InvisibleHousesZ { get; set; }
-        public int DontRemoveHouseBelowZ { get; set; } = 5;
+        public int DontRemoveHouseBelowZ { get; set; } = 6;
+        public bool DrawMobilesWithSurfaceOverhead { get; set; } = false;
         public bool IgnoreCoTEnabled { get; set; } = false;
         public bool ShowDeathOnWorldmap { get; set; } = false;
         // ## BEGIN - END ## // MISC2
@@ -530,6 +532,9 @@ namespace ClassicUO.Configuration
         public string LobbyIP { get; set; } = "127.0.0.1";
         public string LobbyPort { get; set; } = "2596";
         // ## BEGIN - END ## // LOBBY
+        // ## BEGIN - END ## // CONSIDERBALANCED
+        public bool UOClassicCombatSelf_ConsiderBalanced { get; set; } = true;
+        // ## BEGIN - END ## // CONSIDERBALANCED
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;

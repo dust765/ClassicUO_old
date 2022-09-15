@@ -406,10 +406,13 @@ namespace ClassicUO.Game.Scenes
 
                 if (tile != null)
                 {
-                    if ((obj.Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ && (obj.Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
+                    if (obj is not Mobile)
                     {
-                        //DO NOT DRAW IT
-                        return false;
+                        if ((obj.Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ && (obj.Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
+                        {
+                            //DO NOT DRAW IT
+                            return false;
+                        }
                     }
                 }
             }
@@ -541,7 +544,15 @@ namespace ClassicUO.Game.Scenes
             {
                 return false;
             }
-            
+
+            // ## BEGIN - END ## // MISC2
+            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.DrawMobilesWithSurfaceOverhead)
+            {
+                Console.WriteLine("blubb");
+                return false;
+            }
+            // ## BEGIN - END ## // MISC2
+
             bool found = false;
             
             for (int y = -1; y <= 2; ++y)
