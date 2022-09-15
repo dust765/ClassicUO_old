@@ -208,7 +208,7 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // HEALTHBAR
         // ## BEGIN - END ## // CURSOR
         private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY;
-        private Checkbox _spellOnCursor;
+        private Checkbox _spellOnCursor, _colorGameCursor;
         // ## BEGIN - END ## // CURSOR
         // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         private Checkbox _overheadRange;
@@ -222,7 +222,7 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _SpecialSetLastTargetClilocText, _blockWoSArt, _blockEnergyFArt;
         // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // MISC2
-        private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap;
+        private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap, _drawMobilesWithSurfaceOverhead;
         private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ, _dontRemoveHouseBelowZ;
         // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // MACROS
@@ -3617,7 +3617,11 @@ namespace ClassicUO.Game.UI.Gumps
 
             addButton.MouseUp += (sender, e) =>
             {
-                EntryDialog dialog = new
+                // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+                //EntryDialog dialog = new
+                // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+                EntryDialog dialog = new EntryDialog
+                // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
                 (
                     250,
                     150,
@@ -4077,6 +4081,9 @@ namespace ClassicUO.Game.UI.Gumps
             _spellOnCursorOffsetY.SetText(_currentProfile.SpellOnCursorOffset.Y.ToString());
             section4.AddRight(AddLabel(null, "Y", 0, 0), 2);
             startY += _spellOnCursorOffsetY.Height + 2;
+
+            section4.Add(_colorGameCursor = AddCheckBox(null, "Color game cursor when targeting (hostile / friendly)", _currentProfile.ColorGameCursor, startX, startY));
+            startY += _colorGameCursor.Height + 2;
             // ## BEGIN - END ## // CURSOR
             // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
             SettingsSection section5 = AddSettingsSection(box, "-----OVERHEAD / UNDERFEET-----");
@@ -4230,6 +4237,9 @@ namespace ClassicUO.Game.UI.Gumps
             section8.Add(AddLabel(null, "Dont make Invisible or Transparent below (Z level)", startX, startY));
             section8.Add(_dontRemoveHouseBelowZ = AddHSlider(null, 1, 100, _currentProfile.DontRemoveHouseBelowZ, startX, startY, 200));
             startY += _dontRemoveHouseBelowZ.Height + 2;
+
+            section8.Add(_drawMobilesWithSurfaceOverhead = AddCheckBox(null, "Draw mobiles with surface overhead", _currentProfile.DrawMobilesWithSurfaceOverhead, startX, startY));
+            startY += _drawMobilesWithSurfaceOverhead.Height + 2;
 
             section8.Add(_ignoreCoT = AddCheckBox(null, "Enable ignorelist for circle of transparency:", _currentProfile.IgnoreCoTEnabled, startX, startY));
             startY += _ignoreCoT.Height + 2;
@@ -6349,6 +6359,7 @@ namespace ClassicUO.Game.UI.Gumps
             int.TryParse(_spellOnCursorOffsetX.Text, out int spellOnCursorOffsetX);
             int.TryParse(_spellOnCursorOffsetY.Text, out int spellOnCursorOffsetY);
             _currentProfile.SpellOnCursorOffset = new Point(spellOnCursorOffsetX, spellOnCursorOffsetY);
+            _currentProfile.ColorGameCursor = _colorGameCursor.IsChecked;
             // ## BEGIN - END ## // CURSOR
             // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
             _currentProfile.OverheadRange = _overheadRange.IsChecked;
@@ -6448,6 +6459,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.InvisibleHousesEnabled = _invisibleHouses.IsChecked;
             _currentProfile.InvisibleHousesZ = _invisibleHousesZ.Value;
             _currentProfile.DontRemoveHouseBelowZ = _dontRemoveHouseBelowZ.Value;
+            _currentProfile.DrawMobilesWithSurfaceOverhead = _drawMobilesWithSurfaceOverhead.IsChecked;
             _currentProfile.IgnoreCoTEnabled = _ignoreCoT.IsChecked;
             _currentProfile.ShowDeathOnWorldmap = _showDeathOnWorldmap.IsChecked;
             // ## BEGIN - END ## // MISC2

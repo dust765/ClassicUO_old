@@ -138,7 +138,11 @@ namespace ClassicUO.Game.Managers
         public static bool IsTemporarilyShowing { get; private set; }
         public static bool IsShowing => IsPermaToggled || IsTemporarilyShowing || Keyboard.Ctrl && Keyboard.Shift;
 
-        private static List<NameOverheadOption> Options { get; set; } = new();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        //private static List<NameOverheadOption> Options { get; set; } = new();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        private static List<NameOverheadOption> Options { get; set; } = new List<NameOverheadOption>();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
         // ## BEGIN - END ## // NAMEOVERHEAD
 
         public static bool IsAllowed(Entity serial)
@@ -321,7 +325,11 @@ namespace ClassicUO.Game.Managers
             }
 
             Options.Clear();
-            XmlDocument doc = new();
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            //XmlDocument doc = new();
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            XmlDocument doc = new XmlDocument();
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
 
             try
             {
@@ -354,7 +362,11 @@ namespace ClassicUO.Game.Managers
 
             string path = Path.Combine(ProfileManager.ProfilePath, "nameoverhead.xml");
 
-            using XmlTextWriter xml = new(path, Encoding.UTF8)
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            //using XmlTextWriter xml = new(path, Encoding.UTF8)
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            using XmlTextWriter xml = new XmlTextWriter(path, Encoding.UTF8)
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
             {
                 Formatting = Formatting.Indented,
                 IndentChar = '\t',
