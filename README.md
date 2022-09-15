@@ -72,6 +72,8 @@ flashing outline (many options)
 
 Show spell on cursor (and runout countdown)
 
+Color game cursor when targeting (hostile / friendly)
+
 # overhead / underchar
 
 Distance
@@ -105,6 +107,8 @@ wireframe view
 hue impassable tiles
 
 transparent / invisible house and items by Z level from player and min Z from ground
+
+draw mobiles with surface overhead
 
 ignore list for circle of transparency (txt file created in your /Data/Client folder)
 
@@ -147,6 +151,8 @@ Armorer Guild -  Auto rearm after being disarmed.
 Thiefes Guild - Disables any actions when hidden.
 
 Mages Guild - Disables any actions when a spellcursor is up.
+
+Tavern - Diable auto disarm.
 
 # macros
 
@@ -440,9 +446,29 @@ FILE                                            START   END     COMMIT
 
 /src/Game/GameCursor.cs                         38      40      CURSOR
 
-/src/Game/GameCursor.cs                         87      91      CURSOR
+/src/Game/GameCursor.cs                         58      62      CURSOR
 
-/src/Game/GameCursor.cs                         360     373     CURSOR
+/src/Game/GameCursor.cs                         76      85      CURSOR
+
+/src/Game/GameCursor.cs                         91      95      CURSOR
+
+/src/Game/GameCursor.cs                         105     113     CURSOR
+
+/src/Game/GameCursor.cs                         119     123     CURSOR
+
+/src/Game/GameCursor.cs                         129     133     CURSOR
+
+/src/Game/GameCursor.cs                         227     254     CURSOR
+
+/src/Game/GameCursor.cs                         392     396     CURSOR
+
+/src/Game/GameCursor.cs                         401     405     CURSOR
+
+/src/Game/GameCursor.cs                         410     414     CURSOR
+
+/src/Game/GameCursor.cs                         427     440     CURSOR
+
+/src/Game/GameCursor.cs                         545     549     CURSOR
 
 /src/Game/Managers/HealthLinesManager.cs        35      37      OVERHEAD / UNDERCHAR
 
@@ -555,6 +581,8 @@ FILE                                            START   END     COMMIT
 /src/Network/PacketHandlers.cs	                1604    1608    MISC2
 
 /src/Game/Scenes/GameSceneDrawingSorting.cs	    402     416     MISC2
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs	    545     550     MISC2
 
 /src/Game/Managers/MacroManager.cs              42      45      MACROS
 
@@ -884,7 +912,17 @@ FILE                                            START   END     COMMIT
 
 /src/Resources/ResGumps.resx                    1570    1619    MULTIJOURNAL
 
-CombatCollection                                1996    2088    UNUSED
+CombatCollection.cs                             1996    2088    UNUSED
+
+/src/Game/Managers/NameOverHeadManager.cs       141     145     NAMEOVERHEAD_FIXES
+
+/src/Game/Managers/NameOverHeadManager.cs       328     332     NAMEOVERHEAD_FIXES
+
+/src/Game/Managers/NameOverHeadManager.cs       365     369     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   50      54      NAMEOVERHEAD_FIXES
+
+/src/Configuration/Profile.cs	                533     535     CONSIDERBALANCED
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.

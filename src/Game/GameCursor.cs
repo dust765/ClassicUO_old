@@ -55,7 +55,11 @@ namespace ClassicUO.Game
 {
     internal sealed class GameCursor
     {
-        private static readonly ushort[,] _cursorData = new ushort[3, 16]
+        // ## BEGIN - END ## // CURSOR
+        //private static readonly ushort[,] _cursorData = new ushort[3, 16]
+        // ## BEGIN - END ## // CURSOR
+        private static readonly ushort[,] _cursorData = new ushort[5, 16]
+        // ## BEGIN - END ## // CURSOR
         {
             {
                 0x206A, 0x206B, 0x206C, 0x206D, 0x206E, 0x206F, 0x2070, 0x2071, 0x2072, 0x2073, 0x2074, 0x2075, 0x2076,
@@ -68,13 +72,27 @@ namespace ClassicUO.Game
             {
                 0x206A, 0x206B, 0x206C, 0x206D, 0x206E, 0x206F, 0x2070, 0x2071, 0x2072, 0x2073, 0x2074, 0x2075, 0x2076,
                 0x2077, 0x2078, 0x2079
+            },
+            // ## BEGIN - END ## // CURSOR
+            { // Cursor versions for FRIENDLY action context.
+                0x206A, 0x206B, 0x206C, 0x206D, 0x206E, 0x206F, 0x2070, 0x2071, 0x2072, 0x2073, 0x2074, 0x2075, 0x2076,
+                0x2077, 0x2078, 0x2079
+            },
+            { // Cursor versions for HOSTILE action context.
+                0x206A, 0x206B, 0x206C, 0x206D, 0x206E, 0x206F, 0x2070, 0x2071, 0x2072, 0x2073, 0x2074, 0x2075, 0x2076,
+                0x2077, 0x2078, 0x2079
             }
+            // ## BEGIN - END ## // CURSOR
         };
 
         private readonly Aura _aura = new Aura(30);
         private readonly CustomBuildObject[] _componentsList = new CustomBuildObject[10];
         private readonly int[,] _cursorOffset = new int[2, 16];
-        private readonly IntPtr[,] _cursors_ptr = new IntPtr[3, 16];
+        // ## BEGIN - END ## // CURSOR
+        //private readonly IntPtr[,] _cursors_ptr = new IntPtr[3, 16];
+        // ## BEGIN - END ## // CURSOR
+        private readonly IntPtr[,] _cursors_ptr = new IntPtr[5, 16];
+        // ## BEGIN - END ## // CURSOR
         private ushort _graphic = 0x2073;
         private bool _needGraphicUpdate = true;
         private readonly List<Multi> _temp = new List<Multi>();
@@ -88,19 +106,31 @@ namespace ClassicUO.Game
         private ushort _spellIconHue;
         private Vector3 _spellIconVector = new Vector3(0, 13, 0);
         public static RenderedText _spellTimeText { get; set; }
+        private readonly ushort HUE_PEACE_STANCE = 0x0033;
+        private readonly ushort HUE_HOSTILE = 0x0023;
+        private readonly ushort HUE_NEUTRAL = 0x03b2;
+        private readonly ushort HUE_FRIENDLY = 0x005A;
         // ## BEGIN - END ## // CURSOR
 
         public GameCursor()
         {
             _tooltip = new Tooltip();
 
-            for (int i = 0; i < 3; i++)
+            // ## BEGIN - END ## // CURSOR
+            //for (int i = 0; i < 3; i++)
+            // ## BEGIN - END ## // CURSOR
+            for (int i = 0; i < 5; i++)
+            // ## BEGIN - END ## // CURSOR
             {
                 for (int j = 0; j < 16; j++)
                 {
                     ushort id = _cursorData[i, j];
 
-                    IntPtr surface = ArtLoader.Instance.CreateCursorSurfacePtr(id, (ushort)(i == 2 ? 0x0033 : 0), out int hotX, out int hotY);
+                    // ## BEGIN - END ## // CURSOR
+                    //IntPtr surface = ArtLoader.Instance.CreateCursorSurfacePtr(id, (ushort) (i == 2 ? 0x0033 : 0), out int hotX, out int hotY);
+                    // ## BEGIN - END ## // CURSOR
+                    IntPtr surface = ArtLoader.Instance.CreateCursorSurfacePtr(id, (ushort) (i == 2 ? HUE_PEACE_STANCE : (i == 3 ? HUE_FRIENDLY : (i == 4 ? HUE_HOSTILE : 0))), out int hotX, out int hotY);
+                    // ## BEGIN - END ## // CURSOR
 
                     if (surface != IntPtr.Zero)
                     {
@@ -194,9 +224,34 @@ namespace ClassicUO.Game
                         id -= 0x206A;
                     }
 
+                    // ## BEGIN - END ## // CURSOR
+                    /*
                     int war = World.InGame && World.Player.InWarMode ? 1 : World.InGame && World.MapIndex != 0 ? 2 : 0;
 
                     ref IntPtr ptrCursor = ref _cursors_ptr[war, id];
+                    */
+                    // ## BEGIN - END ## // CURSOR
+                    int index = World.InGame && World.Player.InWarMode ? 1 : World.InGame && World.MapIndex != 0 ? 2 : 0;
+
+                    if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ColorGameCursor)
+                    {
+                        if (World.InGame && TargetManager.IsTargeting)
+                        {
+                            switch (TargetManager.TargetingType)
+                            {
+                                case TargetType.Beneficial:
+                                    index = 3;
+                                    break;
+
+                                case TargetType.Harmful:
+                                    index = 4;
+                                    break;
+                            }
+                        }
+                    }
+
+                    ref IntPtr ptrCursor = ref _cursors_ptr[index, id];
+                    // ## BEGIN - END ## // CURSOR
 
                     if (ptrCursor != IntPtr.Zero)
                     {
@@ -334,17 +389,29 @@ namespace ClassicUO.Game
                     switch (TargetManager.TargetingType)
                     {
                         case TargetType.Neutral:
-                            hue = 0x03b2;
+                            // ## BEGIN - END ## // CURSOR
+                            //hue = 0x03b2;
+                            // ## BEGIN - END ## // CURSOR
+                            hue = HUE_NEUTRAL;
+                            // ## BEGIN - END ## // CURSOR
 
                             break;
 
                         case TargetType.Harmful:
-                            hue = 0x0023;
+                            // ## BEGIN - END ## // CURSOR
+                            //hue = 0x0023;
+                            // ## BEGIN - END ## // CURSOR
+                            hue = HUE_HOSTILE;
+                            // ## BEGIN - END ## // CURSOR
 
                             break;
 
                         case TargetType.Beneficial:
-                            hue = 0x005A;
+                            // ## BEGIN - END ## // CURSOR
+                            //hue = 0x005A;
+                            // ## BEGIN - END ## // CURSOR
+                            hue = HUE_FRIENDLY;
+                            // ## BEGIN - END ## // CURSOR
 
                             break;
                     }
@@ -475,7 +542,11 @@ namespace ClassicUO.Game
 
                 if (World.InGame && World.MapIndex != 0 && !World.Player.InWarMode)
                 {
-                    hueVec = ShaderHueTranslator.GetHueVector(0x0033);
+                    // ## BEGIN - END ## // CURSOR
+                    //hueVec = ShaderHueTranslator.GetHueVector(0x0033);
+                    // ## BEGIN - END ## // CURSOR
+                    hueVec = ShaderHueTranslator.GetHueVector(HUE_PEACE_STANCE);
+                    // ## BEGIN - END ## // CURSOR
                 }
                 else
                 {
