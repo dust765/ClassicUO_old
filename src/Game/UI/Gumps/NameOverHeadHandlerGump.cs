@@ -47,7 +47,11 @@ namespace ClassicUO.Game.UI.Gumps
 
         public override GumpType GumpType => GumpType.NameOverHeadHandler;
         // ## BEGIN - END ## // NAMEOVERHEAD
-        private readonly List<RadioButton> _overheadButtons = new();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        //private readonly List<RadioButton> _overheadButtons = new();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        private readonly List<RadioButton> _overheadButtons = new List<RadioButton>();
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
         private Control _alpha;
         private readonly Checkbox _keepOpenCheckbox;
         // ## BEGIN - END ## // NAMEOVERHEAD
