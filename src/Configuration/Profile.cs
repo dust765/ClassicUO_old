@@ -375,7 +375,8 @@ namespace ClassicUO.Configuration
         public int TransparentHousesTransparency { get; set; }
         public bool InvisibleHousesEnabled { get; set; } = false;
         public int InvisibleHousesZ { get; set; }
-        public int DontRemoveHouseBelowZ { get; set; } = 5;
+        public int DontRemoveHouseBelowZ { get; set; } = 6;
+        public bool DrawMobilesWithSurfaceOverhead { get; set; } = false;
         public bool IgnoreCoTEnabled { get; set; } = false;
         public bool ShowDeathOnWorldmap { get; set; } = false;
         // ## BEGIN - END ## // MISC2

@@ -108,6 +108,8 @@ hue impassable tiles
 
 transparent / invisible house and items by Z level from player and min Z from ground
 
+draw mobiles with surface overhead
+
 ignore list for circle of transparency (txt file created in your /Data/Client folder)
 
 show death location on worldmap
@@ -466,8 +468,6 @@ FILE                                            START   END     COMMIT
 
 /src/Game/GameCursor.cs                         427     440     CURSOR
 
-/src/Game/GameCursor.cs                         427     440     CURSOR
-
 /src/Game/GameCursor.cs                         545     549     CURSOR
 
 /src/Game/Managers/HealthLinesManager.cs        35      37      OVERHEAD / UNDERCHAR
@@ -581,6 +581,8 @@ FILE                                            START   END     COMMIT
 /src/Network/PacketHandlers.cs	                1604    1608    MISC2
 
 /src/Game/Scenes/GameSceneDrawingSorting.cs	    402     416     MISC2
+
+/src/Game/Scenes/GameSceneDrawingSorting.cs	    545     550     MISC2
 
 /src/Game/Managers/MacroManager.cs              42      45      MACROS
 
