@@ -535,6 +535,9 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // CONSIDERBALANCED
         public bool UOClassicCombatSelf_ConsiderBalanced { get; set; } = true;
         // ## BEGIN - END ## // CONSIDERBALANCED
+        // ## BEGIN - END ## // STATUSGUMP
+        public bool UseRazorEnhStatusGump { get; set; } = false;
+        // ## BEGIN - END ## // STATUSGUMP
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;

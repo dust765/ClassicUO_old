@@ -278,6 +278,9 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // LOBBY
         private InputField _lobbyIP, _lobbyPort;
         // ## BEGIN - END ## // LOBBY
+        // ## BEGIN - END ## // STATUSGUMP
+        private Checkbox _useRazorEnhStatusGump;
+        // ## BEGIN - END ## // STATUSGUMP
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3891,9 +3894,9 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // ART / HUE CHANGES
             // ## BEGIN - END ## // VISUAL HELPERS
             SettingsSection section2 = AddSettingsSection(box, "-----VISUAL HELPERS-----");
-            section2.Y = section.Bounds.Bottom + 40;
+            section2.Y = section.Bounds.Bottom + 80;
 
-            startY = section.Bounds.Bottom + 40;
+            startY = section.Bounds.Bottom + 80;
 
             section2.Add(_highlightTileRange = AddCheckBox(null, "Highlight tiles on range", _currentProfile.HighlightTileAtRange, startX, startY));
             startY += _highlightTileRange.Height + 2;
@@ -4217,6 +4220,15 @@ namespace ClassicUO.Game.UI.Gumps
             startY += _showHPLineInNOH.Height + 2;
 
             // ## BEGIN - END ## // NAMEOVERHEAD
+            // ## BEGIN - END ## // STATUSGUMP
+            SettingsSection section10 = AddSettingsSection(box, "-----STATUSGUMP-----");
+            section10.Y = section9.Bounds.Bottom + 40;
+
+            startY = section9.Bounds.Bottom + 40;
+
+            section10.Add(_useRazorEnhStatusGump = AddCheckBox(null, "Use Razor Enhanced status gump:", _currentProfile.UseRazorEnhStatusGump, startX, startY));
+            startY += _useRazorEnhStatusGump.Height + 2;
+            // ## BEGIN - END ## // STATUSGUMP
 
             Add(rightArea, PAGE);
         }
@@ -6697,6 +6709,9 @@ namespace ClassicUO.Game.UI.Gumps
 
             World.Journal.Save();
             // ## BEGIN - END ## // MULTIJOURNAL
+            // ## BEGIN - END ## // STATUSGUMP
+            _currentProfile.UseRazorEnhStatusGump = _useRazorEnhStatusGump.IsChecked;
+            // ## BEGIN - END ## // STATUSGUMP
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
