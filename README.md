@@ -154,7 +154,7 @@ Mages Guild - Disables any actions when a spellcursor is up.
 
 Tavern - Diable auto disarm.
 
-# macros
+# features macros
 
 HighlightTileAtRange (toggle)
 
@@ -168,7 +168,9 @@ UCCLinesToggleHM (toggle)
 
 AutoMeditate (toggle)
 
-# macros
+ToggleECBuffGump / ToggleECDebuffGump / ToggleECStateGump / ToggleModernCooldownBar (toggle)
+
+# simple macros
 
 ObjectInfo (-info command)
 
