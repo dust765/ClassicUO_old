@@ -154,7 +154,7 @@ Mages Guild - Disables any actions when a spellcursor is up.
 
 Tavern - Diable auto disarm.
 
-# macros
+# features macros
 
 HighlightTileAtRange (toggle)
 
@@ -168,7 +168,9 @@ UCCLinesToggleHM (toggle)
 
 AutoMeditate (toggle)
 
-# macros
+ToggleECBuffGump / ToggleECDebuffGump / ToggleECStateGump / ToggleModernCooldownBar (toggle)
+
+# simple macros
 
 ObjectInfo (-info command)
 
@@ -220,7 +222,7 @@ auto add marker for T-Maps
 
 -engage (auto pathfind and attack lasttarget)
 
--autorange (auto show range indicator when weapon is equipped)
+-autorange (auto show range indicator when weapon is equipped) (edit autorange.txt in /Data/Client to adjust range for individual weapons)
 
 # outlands
 
@@ -256,19 +258,33 @@ proof of concepts
 
 guardlines: show guardlines on land tiles (disabled due to performance)
 
-# Gridloot
+# gridloot
 
 The order in which items are shown in grid-loot will now depend on item type.
 
 Motivation: some items are likely to be always looted (e.g. gold, gems) and when looting is performed automatically (e.g. by Razor macros) it makes items to move in a grid making it harder to browse their properties. Hence, items like gold should be at the end of the grid.
 
-# Multi Journal
+# multi journal
 
 Replaces journal with multiple nameable and much better configurable journals
 
 note: edit journals.xml in your profile folder, set hue to 0 if you wish to reset color to default
 
 (use macro OpenJournal2 for old journal)
+
+# status gump
+
+adds a version of the status gump with health / mana / stamina bar when expanded
+
+# modern cooldown bar
+
+adds a macro to open a BuffGump for each type (blue, green, red) similar to the EC client
+
+note: edit ecbuffs.txt / ecdebuffs.txt / ecstates.txt in /Data/Client to swap icons arround
+
+adds a modern version of the cooldown bar
+
+note: filter displayed buffs with modernbuffs.txt in /Data/Client, the EC txt are used to determine color
 
 # Added files
 
@@ -686,6 +702,8 @@ FILE                                            START   END     COMMIT
 
 /src/Game/UI/Gumps/OptionsGump.cs               39      41      UI/GUMPS
 
+/src/Game/Managers/MacroManager.cs              1176    1180    UI/GUMPS
+
 /src/Game/Scenes/GameScene.cs                   94      96      TEXTUREMANAGER
 
 /src/Game/Scenes/GameScene.cs                   165     167     TEXTUREMANAGER
@@ -693,6 +711,8 @@ FILE                                            START   END     COMMIT
 /src/Game/Scenes/GameScene.cs                   1232    1234    TEXTUREMANAGER
 
 /src/ClassicUO.csproj	                        64      82      TEXTUREMANAGER
+
+/src/Game/Managers/MacroManager.cs              1176    1180    LINES
 
 /src/Game/Managers/MacroManager.cs              1912    1929    LINES
 
@@ -705,6 +725,8 @@ FILE                                            START   END     COMMIT
 /src/Game/Scenes/GameScene.cs                   231     241     LINES
 
 /src/Game/Scenes/GameScene.cs                   1252    1254    LINES
+
+/src/Game/Managers/MacroManager.cs              1176    1180    AUTOLOOT
 
 /src/Game/GameObjects/Entity.cs                 75      77      AUTOLOOT
 
@@ -722,6 +744,8 @@ FILE                                            START   END     COMMIT
 
 /src/Game/UI/Gumps/GridLootGump.cs	            242     249     AUTOLOOT
 
+/src/Game/Managers/MacroManager.cs              1176    1180    BUFFBAR/UCCSETTINGS
+
 /src/Game/Scenes/GameScene.cs                   253     263     BUFFBAR/UCCSETTINGS
 
 /src/Game/Scenes/GameScene.cs                   375     380     BUFFBAR/UCCSETTINGS
@@ -733,6 +757,8 @@ FILE                                            START   END     COMMIT
 /src/Game/Scenes/GameScene.cs                   264     274     SELF
 
 /src/Game/Scenes/GameScene.cs                   387     392     SELF
+
+/src/Game/Managers/MacroManager.cs              1176    1180    SELF
 
 /src/Game/Managers/MacroManager.cs              1517    1529    SELF
 
@@ -923,6 +949,28 @@ CombatCollection.cs                             1996    2088    UNUSED
 /src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   50      54      NAMEOVERHEAD_FIXES
 
 /src/Configuration/Profile.cs	                533     535     CONSIDERBALANCED
+
+/src/Configuration/Profile.cs	                41      43      MODERNCOOLDOWNBAR
+
+/src/Configuration/Profile.cs	                763     783     MODERNCOOLDOWNBAR
+
+/src/Game/Managers/MacroManager.cs              1176    1180    MODERNCOOLDOWNBAR
+
+/src/Game/Managers/MacroManager.cs              2207    2263    MODERNCOOLDOWNBAR
+
+/src/Game/Managers/MacroManager.cs              2826    2831    MODERNCOOLDOWNBAR
+
+/src/Game/UI/Gumps/GumpType.cs                  63      68      MODERNCOOLDOWNBAR
+
+/src/Network/PacketHandlers.cs	                5447    5452    MODERNCOOLDOWNBAR
+
+/src/Network/PacketHandlers.cs	                5459    5464    MODERNCOOLDOWNBAR
+
+/src/Network/PacketHandlers.cs	                5523    5528    MODERNCOOLDOWNBAR
+
+/src/Client.cs	                                38      40      MODERNCOOLDOWNBAR
+
+/src/Client.cs	                                196     198     MODERNCOOLDOWNBAR
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.
