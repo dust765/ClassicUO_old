@@ -4300,6 +4300,12 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // AUTOMATIONS
             section.Add(AddLabel(null, "AutoMeditate (toggle on / off automed)", startX, startY));
             // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+            section.Add(AddLabel(null, "ToggleECBuffGump (toggle on / off EC alike buff gump)", startX, startY));
+            section.Add(AddLabel(null, "ToggleECDebuffGump (toggle on / off EC alike debuff gump)", startX, startY));
+            section.Add(AddLabel(null, "ToggleECStateGump (toggle on / off EC alike state gump)", startX, startY));
+            section.Add(AddLabel(null, "ToggleModernCooldownBar (toggle on / off modern cooldown bar)", startX, startY));
+            // ## BEGIN - END ## // MODERNCOOLDOWNBAR
             // ## BEGIN - END ## // MACROS
             SettingsSection section2 = AddSettingsSection(box, "-----SIMPLE MACROS-----");
             section2.Y = section.Bounds.Bottom + 40;

@@ -548,7 +548,6 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // MISC2
             if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.DrawMobilesWithSurfaceOverhead)
             {
-                Console.WriteLine("blubb");
                 return false;
             }
             // ## BEGIN - END ## // MISC2

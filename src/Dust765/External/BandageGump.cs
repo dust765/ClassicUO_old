@@ -83,7 +83,6 @@ namespace ClassicUO.Dust765.External
                 {
                     _useDex = 180;
                 }
-                Console.WriteLine(_useDex);
                 //FIX IS DEX IS TOO HIGH
 
                 Timer = Convert.ToUInt32(8 - Math.Floor((_useDex - 80) * 1.0) / 20) - 1;
