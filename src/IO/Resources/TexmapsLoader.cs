@@ -33,9 +33,6 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
-// ## BEGIN - END ## // MISC2
-using ClassicUO.Configuration;
-// ## BEGIN - END ## // MISC2
 using ClassicUO.Game;
 using ClassicUO.Renderer;
 using ClassicUO.Utility;
@@ -120,12 +117,7 @@ namespace ClassicUO.IO.Resources
 
         private SpriteInfo[] _spriteInfos;
 
-        // ## BEGIN - END ## // MISC2
-        //STRECHEDLAND
-        //public Texture2D GetLandTexture(uint g, out Rectangle bounds)
-        // ## BEGIN - END ## // MISC2
-        public Texture2D GetLandTexture(uint g, out Rectangle bounds, bool isImpassable)
-        // ## BEGIN - END ## // MISC2
+        public Texture2D GetLandTexture(uint g, out Rectangle bounds)
         {
             // avoid to mix land with statics
             //g += ushort.MaxValue;
@@ -136,23 +128,15 @@ namespace ClassicUO.IO.Resources
 
             if (spriteInfo.Texture == null)
             {
-                // ## BEGIN - END ## // MISC2
-                //AddSpriteToAtlas(atlas, g);
-                // ## BEGIN - END ## // MISC2
-                AddSpriteToAtlas(atlas, g, isImpassable);
-                // ## BEGIN - END ## // MISC2
+                AddSpriteToAtlas(atlas, g);
             }
 
             bounds = spriteInfo.UV;
 
             return spriteInfo.Texture;  //atlas.GetTexture(g, out bounds);
         }
-        // ## BEGIN - END ## // MISC2
-        //STRECHEDLAND
-        //private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index)
-        // ## BEGIN - END ## // MISC2
-        private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index, bool IsImpassable)
-        // ## BEGIN - END ## // MISC2
+
+        private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index)
         {
             ref UOFileIndex entry = ref GetValidRefEntry((int) (index));
 
@@ -174,35 +158,6 @@ namespace ClassicUO.IO.Resources
                 for (int j = 0; j < size; ++j)
                 {
                     data[pos + j] = HuesHelper.Color16To32(_file.ReadUShort()) | 0xFF_00_00_00;
-
-                    // ## BEGIN - END ## // MISC2
-                    if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WireFrameView)
-                    {
-                        if (pos <= 100)
-                        {
-                            if (IsImpassable)
-                            {
-                                data[pos + j] = 0xFF_00_00_00;
-                            }
-                            else
-                            {
-                                data[pos + j] = 0xAA_AA_AA_AA;
-                            }
-                        }
-
-                        if (j == 0 | j == 1 | j == 2)
-                        {
-                            if (IsImpassable)
-                            {
-                                data[pos + j] = 0xFF_00_00_00;
-                            }
-                            else
-                            {
-                                data[pos + j] = 0xAA_AA_AA_AA;
-                            }
-                        }
-                    }
-                    // ## BEGIN - END ## // MISC2
                 }
             }
 

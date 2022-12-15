@@ -67,7 +67,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         private GumpPic _picBase;
         private GumpPic _profilePic;
-        private readonly EquipmentSlot[] _slots = new EquipmentSlot[6];
+        private readonly EquipmentSlot[] _slots = new EquipmentSlot[12];
         private Label _titleLabel;
         private GumpPic _virtueMenuPic;
         private Button _warModeBtn;
@@ -312,7 +312,7 @@ namespace ClassicUO.Game.UI.Gumps
             Add(_virtueMenuPic = new GumpPic(80, 4, 0x0071, 0));
             _virtueMenuPic.MouseDoubleClick += VirtueMenu_MouseDoubleClickEvent;
 
-            // Equipment slots for hat/earrings/neck/ring/bracelet
+            // Equipment slots for hat/earrings/neck/ring/bracelet//--Added-- extra slots///
             Add
             (
                 _slots[0] = new EquipmentSlot
@@ -327,12 +327,84 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add
             (
+                _slots[6] = new EquipmentSlot
+                (
+                    0,
+                    165,
+                    75,
+                    Layer.Shirt,
+                    this
+                )
+            );
+
+            Add
+            (
                 _slots[1] = new EquipmentSlot
                 (
                     0,
                     2,
                     75 + 21,
                     Layer.Earrings,
+                    this
+                )
+            );
+
+            Add
+            (
+                _slots[7] = new EquipmentSlot
+                (
+                    0,
+                    165,
+                    75 + 21,
+                    Layer.Pants,
+                    this
+                )
+            );
+
+            Add
+            (
+                _slots[8] = new EquipmentSlot
+                (
+                    0,
+                    165,
+                    75 + 21 * 2,
+                    Layer.Skirt,
+                    this
+                )
+            );
+
+            Add
+            (
+                _slots[9] = new EquipmentSlot
+                (
+                    0,
+                    165,
+                    75 + 21 * 3,
+                    Layer.Shoes,
+                    this
+                )
+            );
+
+            Add
+            (
+                _slots[10] = new EquipmentSlot
+                (
+                    0,
+                    165,
+                    75 + 21 * 4,
+                    Layer.Arms,
+                    this
+                )
+            );
+
+            Add
+            (
+                _slots[11] = new EquipmentSlot
+                (
+                    0,
+                    165,
+                    75 + 21 * 5,
+                    Layer.Legs,
                     this
                 )
             );

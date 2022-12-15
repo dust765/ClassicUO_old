@@ -101,11 +101,7 @@ namespace ClassicUO.IO.Resources
 
         public Rectangle GetRealArtBounds(int index) => index + 0x4000 >= _spriteInfos.Length ? Rectangle.Empty : _spriteInfos[index + 0x4000].ArtBounds;
 
-        // ## BEGIN - END ## // MISC2
-        //private bool LoadData(Span<uint> data, int g, out short width, out short height, bool isTerrain)
-        // ## BEGIN - END ## // MISC2
-        private bool LoadData(Span<uint> data, int g, out short width, out short height, bool isTerrain, bool IsImpassable)
-        // ## BEGIN - END ## // MISC2
+        private bool LoadData(Span<uint> data, int g, out short width, out short height, bool isTerrain)
         {
             ref UOFileIndex entry = ref GetValidRefEntry(g);
 
@@ -145,23 +141,6 @@ namespace ClassicUO.IO.Resources
                     for (int j = start; j < end; ++j)
                     {
                         data[pos++] = HuesHelper.Color16To32(_file.ReadUShort()) | 0xFF_00_00_00;
-
-                        // ## BEGIN - END ## // MISC2
-                        if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WireFrameView)
-                        {
-                            if (j == end - 1)//| j == end - 3)// | j == end - 2 | j == end - 3)
-                            {
-                                if (IsImpassable)
-                                {
-                                    data[pos++] = 0xFF_00_00_00;
-                                }
-                                else
-                                {
-                                    data[pos++] = 0xAA_AA_AA_AA;
-                                }
-                            }
-                        }
-                        // ## BEGIN - END ## // MISC2
                     }
                 }
 
@@ -173,23 +152,6 @@ namespace ClassicUO.IO.Resources
                     for (int j = i; j < end; ++j)
                     {
                         data[pos++] = HuesHelper.Color16To32(_file.ReadUShort()) | 0xFF_00_00_00;
-
-                        // ## BEGIN - END ## // MISC2
-                        if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WireFrameView)
-                        {
-                            if (j == end - 1 | j == end - 3)// | j == end - 2 | j == end - 3)
-                            {
-                                if (IsImpassable)
-                                {
-                                    data[pos++] = 0xFF_00_00_00;
-                                }
-                                else
-                                {
-                                    data[pos++] = 0xAA_AA_AA_AA;
-                                }
-                            }
-                        }
-                        // ## BEGIN - END ## // MISC2
                     }
                 };
             }
@@ -249,12 +211,7 @@ namespace ClassicUO.IO.Resources
 
         [ThreadStatic] private static uint[] _data = null;
 
-        // ## BEGIN - END ## // MISC2
-        //FLATLAND
-        //public Texture2D GetLandTexture(uint g, out Rectangle bounds)
-        // ## BEGIN - END ## // MISC2
-        public Texture2D GetLandTexture(uint g, out Rectangle bounds, bool IsImpassable)
-        // ## BEGIN - END ## // MISC2
+        public Texture2D GetLandTexture(uint g, out Rectangle bounds)
         {
             g &= _graphicMask;
 
@@ -262,11 +219,7 @@ namespace ClassicUO.IO.Resources
 
             if (spriteInfo.Texture == null)
             {
-                // ## BEGIN - END ## // MISC2
-                //if (!LoadData(_data, (int) g, out var width, out var height, true))
-                // ## BEGIN - END ## // MISC2
-                if (!LoadData(_data, (int) g, out var width, out var height, true, IsImpassable))
-                // ## BEGIN - END ## // MISC2
+                if (!LoadData(_data, (int)g, out var width, out var height, true))
                 {
                     if (_data != null && width * height < _data.Length)
                     {
@@ -276,11 +229,7 @@ namespace ClassicUO.IO.Resources
 
                     _data = new uint[width * height];
 
-                    // ## BEGIN - END ## // MISC2
-                    //if (!LoadData(_data, (int) g, out width, out height, true))
-                    // ## BEGIN - END ## // MISC2
-                    if (!LoadData(_data, (int) g, out width, out height, true, IsImpassable))
-                    // ## BEGIN - END ## // MISC2
+                    if (!LoadData(_data, (int)g, out width, out height, true))
                     {
                         bounds = Rectangle.Empty;
                         return null;
@@ -302,11 +251,7 @@ namespace ClassicUO.IO.Resources
 
             if (spriteInfo.Texture == null)
             {
-                // ## BEGIN - END ## // MISC2
-                //if (!LoadData(_data, (int)g, out var width, out var height, false))
-                // ## BEGIN - END ## // MISC2
-                if (!LoadData(_data, (int) g, out var width, out var height, false, false))
-                // ## BEGIN - END ## // MISC2
+                if (!LoadData(_data, (int)g, out var width, out var height, false))
                 {
                     if (_data != null && width * height < _data.Length)
                     {
@@ -316,11 +261,7 @@ namespace ClassicUO.IO.Resources
 
                     _data = new uint[width * height];
 
-                    // ## BEGIN - END ## // MISC2
-                    //if (!LoadData(_data, (int)g, out width, out height, false))
-                    // ## BEGIN - END ## // MISC2
-                    if (!LoadData(_data, (int) g, out width, out height, false, false))
-                    // ## BEGIN - END ## // MISC2
+                    if (!LoadData(_data, (int)g, out width, out height, false))
                     {
                         bounds = Rectangle.Empty;
                         return null;
@@ -510,11 +451,7 @@ namespace ClassicUO.IO.Resources
             int pos1 = 0;
             int minX = width, minY = height, maxX = 0, maxY = 0;
 
-            // ## BEGIN - END ## // MISC
-            //if (StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
-            // ## BEGIN - END ## // MISC
-            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.BlackOutlineStatics || StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
-            // ## BEGIN - END ## // MISC
+            if (StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
             {
                 AddBlackBorder(pixels, width, height);
             }

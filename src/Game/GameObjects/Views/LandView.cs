@@ -31,11 +31,6 @@
 #endregion
 
 using ClassicUO.Configuration;
-// ## BEGIN - END ## // VISUAL HELPERS
-// ## BEGIN - END ## // MISC2
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // MISC2
-// ## BEGIN - END ## // VISUAL HELPERS
 using ClassicUO.IO.Resources;
 using ClassicUO.Renderer;
 using Microsoft.Xna.Framework;
@@ -82,62 +77,11 @@ namespace ClassicUO.Game.GameObjects
             }
             hueVec.Z = 1f;
 
-            // ## BEGIN - END ## // VISUAL HELPERS
-            if (ProfileManager.CurrentProfile.HighlightTileAtRange && Distance == ProfileManager.CurrentProfile.HighlightTileAtRangeRange)
-            {
-                hueVec.X = ProfileManager.CurrentProfile.HighlightTileRangeHue;
-                hueVec.Y = 1;
-            }
-            if (ProfileManager.CurrentProfile.HighlightTileAtRangeSpell)
-            {
-                if (GameCursor._spellTime >= 1 && Distance == ProfileManager.CurrentProfile.HighlightTileAtRangeRangeSpell)
-                {
-                    hueVec.X = ProfileManager.CurrentProfile.HighlightTileRangeHueSpell;
-                    hueVec.Y = 1;
-                }
-            }
-            // ## BEGIN - END ## // AUTOMATIONS
-            if (ProfileManager.CurrentProfile.AutoRangeDisplayActive && Distance == ProfileManager.CurrentProfile.AutoRangeDisplayActiveRange)
-            {
-                hueVec.X = ProfileManager.CurrentProfile.AutoRangeDisplayHue;
-                hueVec.Y = 1;
-            }
-            // ## BEGIN - END ## // AUTOMATIONS
-            if (ProfileManager.CurrentProfile.PreviewFields)
-            {
-                if (CombatCollection.LandFieldPreview(this))
-                {
-                    hueVec.X = 0x0040;
-                    hueVec.Y = 1;
-                }
-                if (SelectedObject.Object == this)
-                {
-                    hueVec.X = 0x0023;
-                    hueVec.Y = 1;
-                }
-            }
-            // ## BEGIN - END ## // VISUAL HELPERS
-            // ## BEGIN - END ## // MISC2
-            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.HueImpassableView)
-            {
-                if (this.TileData.IsImpassable)
-                {
-                    hueVec.X = ProfileManager.CurrentProfile.HueImpassableViewHue;
-                    hueVec.Y = 1;
-                }
-            }
-            // ## BEGIN - END ## // MISC2
-
             if (IsStretched)
             {
                 posY += Z << 2;
 
-                // ## BEGIN - END ## // MISC2
-                //var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds);
-                // ## BEGIN - END ## // MISC2
-                //STRECHEDLAND
-                var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds, this.TileData.IsImpassable);
-                // ## BEGIN - END ## // MISC2
+                var texture = TexmapsLoader.Instance.GetLandTexture(TileDataLoader.Instance.LandData[Graphic].TexID, out var bounds);
 
                 if (texture != null)
                 {
@@ -170,12 +114,7 @@ namespace ClassicUO.Game.GameObjects
             }
             else
             {
-                // ## BEGIN - END ## // MISC2
-                //var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds);
-                // ## BEGIN - END ## // MISC2
-                //FLATLAND
-                var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds, this.TileData.IsImpassable);
-                // ## BEGIN - END ## // MISC2
+                var texture = ArtLoader.Instance.GetLandTexture(Graphic, out var bounds);
 
                 if (texture != null)
                 {

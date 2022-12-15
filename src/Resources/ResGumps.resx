@@ -1567,54 +1567,10 @@ Client version: '{0}'</value>
   <data name="ShowMouseCoordinates" xml:space="preserve">
     <value>Show mouse coordinates</value>
   </data>
-  <!-- // ## BEGIN - END ## // MULTIJOURNAL -->
-   <data name="MessageType_System" xml:space="preserve">
-    <value>System</value>
+  <data name="EnabledTabGrid" xml:space="preserve">
+    <value>Enable Macro Tabbed Grid</value>
   </data>
-  <data name="MessageType_Emote" xml:space="preserve">
-    <value>Emote</value>
+  <data name="enableTabGridGump" xml:space="preserve">
+    <value>Enable Tabbed Grid</value>
   </data>
-  <data name="MessageType_Limit3Spell" xml:space="preserve">
-    <value>Limit 3 spell</value>
-  </data>
-  <data name="MessageType_Label" xml:space="preserve">
-    <value>Label</value>
-  </data>
-  <data name="MessageType_Focus" xml:space="preserve">
-    <value>Focus</value>
-  </data>
-  <data name="MessageType_Whisper" xml:space="preserve">
-    <value>Whisper</value>
-  </data>
-  <data name="MessageType_Yell" xml:space="preserve">
-    <value>Yell</value>
-  </data>
-  <data name="MessageType_Spell" xml:space="preserve">
-    <value>Spell</value>
-  </data>
-  <data name="MessageType_Guild" xml:space="preserve">
-    <value>Guild</value>
-  </data>
-  <data name="MessageType_Alliance" xml:space="preserve">
-    <value>Alliance</value>
-  </data>
-  <data name="MessageType_Command" xml:space="preserve">
-    <value>Command</value>
-  </data>
-  <data name="MessageType_Encoded" xml:space="preserve">
-    <value>Encoded</value>
-  </data>
-  <data name="MessageType_Party" xml:space="preserve">
-    <value>Party</value>
-  </data>
-  <data name="MessageType_Regular" xml:space="preserve">
-    <value>Regular</value>
-  </data>
-  <data name="Filter" xml:space="preserve">
-    <value>Filter</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <!-- // ## BEGIN - END ## // MULTIJOURNAL -->
 </root>

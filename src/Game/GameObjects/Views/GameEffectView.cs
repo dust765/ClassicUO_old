@@ -5,9 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
-// ## BEGIN - END ## // ART / HUE CHANGES
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // ART / HUE CHANGES
 using ClassicUO.Game.Scenes;
 using ClassicUO.IO.Resources;
 using ClassicUO.Renderer;
@@ -106,22 +103,6 @@ namespace ClassicUO.Game.GameObjects
 
             posX += (int)Offset.X;
             posY += (int)(Offset.Z + Offset.Y);
-
-            // ## BEGIN - END ## // ART / HUE CHANGES
-            if (Graphic == 0x379F) //energy bolt
-            {
-                if (ProfileManager.CurrentProfile.EnergyBoltArtType != 0)
-                    Graphic = CombatCollection.EnergyBoltArt(Graphic);
-
-                if (ProfileManager.CurrentProfile.ColorEnergyBolt || ProfileManager.CurrentProfile.EnergyBoltNeonType != 0)
-                    Hue = CombatCollection.EnergyBoltHue(Hue);
-            }
-            if (ProfileManager.CurrentProfile.EnergyBoltArtType != 0)
-            {
-                if (CombatCollection.IsChangedEnergyBoltArt(Graphic))
-                    Hue = CombatCollection.EnergyBoltHue(Hue);
-            }
-            // ## BEGIN - END ## // ART / HUE CHANGES
 
             ushort hue = Hue;
 

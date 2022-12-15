@@ -59,6 +59,35 @@ namespace ClassicUO.Game.Managers
                 }
             );
 
+           
+            //Principal bags Commands
+            Register
+            (
+                "PrincipalBag1",
+                s =>
+                {
+                    if (TargetManager.IsTargeting)
+                    {
+                        TargetManager.CancelTarget();
+                    }
+
+                    TargetManager.SetTargeting(CursorTarget.PrincipalBag1, 0, TargetType.Neutral);
+                }
+            );
+            Register
+            (
+                "PrincipalBag2",
+                s =>
+                {
+                    if (TargetManager.IsTargeting)
+                    {
+                        TargetManager.CancelTarget();
+                    }
+
+                    TargetManager.SetTargeting(CursorTarget.PrincipalBag2, 0, TargetType.Neutral);
+                }
+            );
+            /////
             Register
             (
                 "datetime",

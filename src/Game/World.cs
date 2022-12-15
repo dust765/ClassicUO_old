@@ -34,9 +34,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ClassicUO.IO.Audio;
 using ClassicUO.Game.Data;
-// ## BEGIN - END ## // MACROS
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // MACROS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Map;
@@ -94,12 +91,6 @@ namespace ClassicUO.Game
         public static WorldTextManager WorldTextManager { get; } = new WorldTextManager();
 
         public static JournalManager Journal { get; } = new JournalManager();
-        // ## BEGIN - END ## // MACROS
-        public static AnimationTriggers AnimationTriggers { get; } = new AnimationTriggers();
-        // ## BEGIN - END ## // MACROS
-        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-        public static ClilocTriggers ClilocTriggers { get; } = new ClilocTriggers();
-        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
 
 
         public static int MapIndex
@@ -366,9 +357,6 @@ namespace ClassicUO.Game
 
                     _toRemove.Clear();
                 }
-                // ## BEGIN - END ## // AUTOMATIONS
-                ModulesManager.OnWorldUpdate();
-                // ## BEGIN - END ## // AUTOMATIONS
 
                 _effectManager.Update();
                 WorldTextManager.Update();
@@ -770,6 +758,8 @@ namespace ClassicUO.Game
                 RemoveItem(item);
             }
 
+            UIManager.GetGump<BaseHealthBarGump>(Player.Serial)?.Dispose();
+
             ObjectToRemove = 0;
             LastObject = 0;
             Items.Clear();
@@ -780,7 +770,6 @@ namespace ClassicUO.Game
             Map = null;
             Light.Overall = Light.RealOverall = 0;
             Light.Personal = Light.RealPersonal = 0;
-            ClientFeatures.SetFlags(0);
             ClientLockedFeatures.SetFlags(0);
             Party?.Clear();
             TargetManager.LastAttack = 0;

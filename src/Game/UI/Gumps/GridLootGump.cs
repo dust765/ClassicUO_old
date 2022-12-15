@@ -32,9 +32,6 @@
 
 using System.Linq;
 using ClassicUO.Configuration;
-// ## BEGIN - END ## // AUTOLOOT
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // AUTOLOOT
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
@@ -94,25 +91,6 @@ namespace ClassicUO.Game.UI.Gumps
             _background = new AlphaBlendControl();
             //_background.Width = MAX_WIDTH;
             //_background.Height = MAX_HEIGHT;
-            // ## BEGIN - END ## // AUTOLOOT
-            if (ProfileManager.CurrentProfile.UOClassicCombatAL_EnableGridLootColoring)
-            {
-                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Gray) //grey
-                    _background.Hue = 0x0040; //green
-                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Red) //red
-                    _background.Hue = 0x0040; //green
-                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Green) //green
-                    _background.Hue = 0x0040; //green
-                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Blue) //blue
-                    _background.Hue = 0x0021; //red
-            }
-            //TRIGGER AL IF ENABLED
-            if (ProfileManager.CurrentProfile.UOClassicCombatAL)
-            {
-                UOClassicCombatAL UOClassicCombatAL = UIManager.GetGump<UOClassicCombatAL>();
-                UOClassicCombatAL?.OpenCorpseTrigger(_corpse.Serial);
-            }
-            // ## BEGIN - END ## // AUTOLOOT
             Add(_background);
 
             Width = _background.Width;
@@ -174,20 +152,6 @@ namespace ClassicUO.Game.UI.Gumps
                     Y = 0
                 }
             );
-
-            // ## BEGIN - END ## // AUTOLOOT
-            if (ProfileManager.CurrentProfile.UOClassicCombatAL_EnableGridLootColoring)
-            {
-                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Gray) //grey
-                    _corpseNameLabel.Hue = 0x0040; //green
-                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Red) //red
-                    _corpseNameLabel.Hue = 0x0040; //green
-                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Green) //green
-                    _corpseNameLabel.Hue = 0x0040; //green
-                if (_corpse.LootFlag != 0xFF && _corpse.LootFlag == ProfileManager.CurrentProfile.UOClassicCombatAL_SL_Blue) //blue
-                    _corpseNameLabel.Hue = 0x0021; //red
-            }
-            // ## BEGIN - END ## // AUTOLOOT
         }
 
         public override void OnButtonClick(int buttonID)
@@ -239,15 +203,6 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void UpdateContents()
         {
-            // ## BEGIN - END ## // AUTOLOOT
-            //TRIGGER AL IF ENABLED
-            if (ProfileManager.CurrentProfile.UOClassicCombatAL)
-            {
-                UOClassicCombatAL UOClassicCombatAL = UIManager.GetGump<UOClassicCombatAL>();
-                UOClassicCombatAL?.UpdateCorpseTrigger(_corpse.Serial);
-            }
-            // ## BEGIN - END ## // AUTOLOOT
-
             const int GRID_ITEM_SIZE = 50;
 
             int x = 20;
@@ -267,53 +222,37 @@ namespace ClassicUO.Game.UI.Gumps
             int line = 1;
             int row = 0;
 
-            // ## BEGIN - END ## // GRIDLOOT
-            //for (LinkedObject i = _corpse.Items; i != null; i = i.Next)
-            //{
-            //  Item it = (Item) i;
-            // ## BEGIN - END ## // GRIDLOOT
-            for (int displayGroup = 0; displayGroup < 2; displayGroup++)
+            for (LinkedObject i = _corpse.Items; i != null; i = i.Next)
             {
-                for (LinkedObject i = _corpse.Items; i != null; i = i.Next)
+                Item it = (Item) i;
+
+                if (it.IsLootable)
                 {
-                    Item it = (Item) i;
+                    GridLootItem gridItem = new GridLootItem(it, GRID_ITEM_SIZE);
 
-                    if (!ItemBelongsToGroup(it, displayGroup))
+                    if (x >= MAX_WIDTH - 20)
                     {
-                        continue;
-                    }
-            // ## BEGIN - END ## // GRIDLOOT
+                        x = 20;
+                        ++line;
 
-                    if (it.IsLootable)
-                    {
-                        GridLootItem gridItem = new GridLootItem(it, GRID_ITEM_SIZE);
+                        y += gridItem.Height + 20;
 
-                        if (x >= MAX_WIDTH - 20)
+                        if (y >= MAX_HEIGHT - 60)
                         {
-                            x = 20;
-                            ++line;
-
-                            y += gridItem.Height + 20;
-
-                            if (y >= MAX_HEIGHT - 60)
-                            {
-                                _pagesCount++;
-                                y = 20;
-                                //line = 1;
-                            }
+                            _pagesCount++;
+                            y = 20;
+                            //line = 1;
                         }
-
-                        gridItem.X = x;
-                        gridItem.Y = y + 20;
-                        Add(gridItem, _pagesCount);
-
-                        x += gridItem.Width + 20;
-                        ++row;
-                        ++count;
                     }
-            // ## BEGIN - END ## // GRIDLOOT
+
+                    gridItem.X = x;
+                    gridItem.Y = y + 20;
+                    Add(gridItem, _pagesCount);
+
+                    x += gridItem.Width + 20;
+                    ++row;
+                    ++count;
                 }
-            // ## BEGIN - END ## // GRIDLOOT
             }
 
             _background.Width = (GRID_ITEM_SIZE + 20) * row + 20;
@@ -355,17 +294,7 @@ namespace ClassicUO.Game.UI.Gumps
                 IsVisible = true;
             }
         }
-        // ## BEGIN - END ## // GRIDLOOT
-        private bool ItemBelongsToGroup(Item it, int group)
-        {
-            // Note: items must be assigned to groups in a mutually-exclusive manner, so that each item occurs only once in the grid
 
-            if (it.ItemData.IsStackable)
-                return group > 0;
-            else
-                return group == 0;
-        }
-        // ## BEGIN - END ## // GRIDLOOT
         public override void Dispose()
         {
             if (_corpse != null)

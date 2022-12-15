@@ -38,14 +38,6 @@ using System.Text;
 using ClassicUO.Configuration;
 using ClassicUO.Game;
 using ClassicUO.Game.Data;
-// ## BEGIN - END ## // VISUAL HELPERS
-// ## BEGIN - END ## // MISC
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // MISC
-// ## BEGIN - END ## // VISUAL HELPERS
-// ## BEGIN - END ## // AUTOMATIONS
-using ClassicUO.Dust765.Autos;
-// ## BEGIN - END ## // AUTOMATIONS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Scenes;
@@ -830,25 +822,6 @@ namespace ClassicUO.Network
                 text = string.Empty;
             }
 
-            // ## BEGIN - END ## // AUTOLOOT
-            Item item = World.Items.Get(serial);
-            if (item != null)
-            {
-                if (item.IsCorpse)
-                {
-                    CombatCollection.SetLootFlag(serial, hue);
-                }
-            }
-            // ## BEGIN - END ## // AUTOLOOT
-            // ## BEGIN - END ## // AUTOMATIONS
-            if (serial == ProfileManager.CurrentProfile.Mimic_PlayerSerial && type == MessageType.Spell && !string.IsNullOrEmpty(text))
-                AutoMimic.SyncByClilocString(serial, text);
-            // ## BEGIN - END ## // AUTOMATIONS
-            // ## BEGIN - END ## // VISUAL HELPERS
-            if (serial == World.Player.Serial && type == MessageType.Spell && !string.IsNullOrEmpty(text))
-                CombatCollection.SpellCastFromCliloc(text);
-            // ## BEGIN - END ## // VISUAL HELPERS
-
             if (serial == 0 && graphic == 0 && type == MessageType.Regular && font == 0xFFFF && hue == 0xFFFF && name.StartsWith("SYSTEM"))
             {
                 NetClient.Socket.Send_ACKTalk();
@@ -1617,12 +1590,6 @@ namespace ClassicUO.Network
                 }
 
                 GameActions.RequestWarMode(false);
-
-                // ## BEGIN - END ## // MISC2
-                World.Player.DeathX = World.Player.X;
-                World.Player.DeathY = World.Player.Y;
-                World.Player.DeathTick = Time.Ticks;
-                // ## BEGIN - END ## // MISC2
             }
         }
 
@@ -2104,10 +2071,6 @@ namespace ClassicUO.Network
                         UIManager.Add(gump);
                     }
                 }
-
-                // ## BEGIN - END ## // MULTIJOURNAL
-                World.Journal.Load();
-                // ## BEGIN - END ## // MULTIJOURNAL
             }
         }
 
@@ -2133,10 +2096,6 @@ namespace ClassicUO.Network
                         ushort y = p.ReadUInt16BE();
 
                         gump.AddPin(x, y);
-
-                        // ## BEGIN - END ## // AUTOMATIONS
-                        AutoWorldMapMarker.TmapPinXY(x, y);
-                        // ## BEGIN - END ## // AUTOMATIONS
 
                         break;
 
@@ -2267,11 +2226,6 @@ namespace ClassicUO.Network
                 forward,
                 true
             );
-
-            // ## BEGIN - END ## // MACROS
-            if (mobile == World.Player)
-                World.AnimationTriggers.OnOwnCharacterAnimation(action);
-            // ## BEGIN - END ## // MACROS
         }
 
         private static void GraphicEffect(ref StackDataReader p)
@@ -2358,14 +2312,6 @@ namespace ClassicUO.Network
                 false,
                 blendmode
             );
-
-            // ## BEGIN - END ## // AUTOMATIONS
-            Defender.gfxTrigger(source, target, graphic);
-            // ## BEGIN - END ## // AUTOMATIONS
-            // ## BEGIN - END ## // OUTLANDS
-            //if (graphic == 0x5683)
-            //    CombatCollection.SetHamstrungTime(source);
-            // ## BEGIN - END ## // OUTLANDS
         }
 
         private static void ClientViewRange(ref StackDataReader p)
@@ -3049,10 +2995,6 @@ namespace ClassicUO.Network
 
             MapGump gump = new MapGump(serial, gumpid, width, height);
 
-            // ## BEGIN - END ## // AUTOMATIONS
-            AutoWorldMapMarker.TmapMarker(startX, startY, endX, endY, width, height);
-            // ## BEGIN - END ## // AUTOMATIONS
-
             if (p[0] == 0xF5 || Client.Version >= Data.ClientVersion.CV_308Z)
             {
                 ushort facet = 0;
@@ -3595,23 +3537,6 @@ namespace ClassicUO.Network
                     entity.Name = string.IsNullOrEmpty(name) ? text : name;
                 }
             }
-
-            // ## BEGIN - END ## // MISC
-            if (text.StartsWith(ProfileManager.CurrentProfile.SpecialSetLastTargetClilocText.ToString()))
-                CombatCollection.SpecialSetLastTargetCliloc(serial);
-            // ## BEGIN - END ## // MISC
-            // ## BEGIN - END ## // OUTLANDS
-            /*
-            if (text.StartsWith("(summoned"))
-                CombatCollection.SetSummonTime(text, serial);
-
-            if (text.Equals("*looks calmed*"))
-                CombatCollection.GetPeaceTime(serial);
-
-            if (text.StartsWith("*pacified"))
-                CombatCollection.SetPeaceTime(text, serial);
-            */
-            // ## BEGIN - END ## // OUTLANDS
 
             MessageManager.HandleMessage
             (
@@ -4662,23 +4587,6 @@ namespace ClassicUO.Network
 
             string arguments = null;
 
-            // ## BEGIN - END ## // UI/GUMPS
-            World.Player?.BandageTimer.OnCliloc(cliloc);
-            // ## BEGIN - END ## // UI/GUMPS
-            // ## BEGIN - END ## // AUTOLOOT
-            Item item = World.Items.Get(serial);
-            if (item != null)
-            {
-                if (item.IsCorpse)
-                {
-                    CombatCollection.SetLootFlag(serial, hue);
-                }
-            }
-            // ## BEGIN - END ## // AUTOLOOT
-            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-            World.ClilocTriggers.OnCliloc(cliloc);
-            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-
             if (cliloc == 1008092 || cliloc == 1005445) // value for "You notify them you don't want to join the party" || "You have been added to the party"
             {
                 for (LinkedListNode<Gump> g = UIManager.Gumps.Last; g != null; g = g.Previous)
@@ -5444,24 +5352,12 @@ namespace ClassicUO.Network
             if (iconID < BuffTable.Table.Length)
             {
                 BuffGump gump = UIManager.GetGump<BuffGump>();
-                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-                ECBuffGump ecbuffs = UIManager.GetGump<ECBuffGump>();
-                ECDebuffGump ecdebuffs = UIManager.GetGump<ECDebuffGump>();
-                ECStateGump ecstates = UIManager.GetGump<ECStateGump>();
-                ModernCooldownBar cooldowns = UIManager.GetGump<ModernCooldownBar>();
-                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
                 ushort count = p.ReadUInt16BE();
 
                 if (count == 0)
                 {
                     World.Player.RemoveBuff(ic);
                     gump?.RequestUpdateContents();
-                    // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-                    ecbuffs?.RequestUpdateContents();
-                    ecdebuffs?.RequestUpdateContents();
-                    ecstates?.RequestUpdateContents();
-                    cooldowns?.RequestUpdateContents();
-                    // ## BEGIN - END ## // MODERNCOOLDOWNBAR
                 }
                 else
                 {
@@ -5520,12 +5416,6 @@ namespace ClassicUO.Network
                         if (!alreadyExists)
                         {
                             gump?.RequestUpdateContents();
-                            // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-                            ecbuffs?.RequestUpdateContents();
-                            ecdebuffs?.RequestUpdateContents();
-                            ecstates?.RequestUpdateContents();
-                            cooldowns?.RequestUpdateContents();
-                            // ## BEGIN - END ## // MODERNCOOLDOWNBAR
                         }
                     }
                 }
@@ -5552,11 +5442,6 @@ namespace ClassicUO.Network
             byte group = Mobile.GetObjectNewAnimation(mobile, type, action, mode);
 
             mobile.SetAnimation(group, repeatCount: 1, repeat: (type == 1 || type == 2) && mobile.Graphic == 0x0015, forward: true, fromServer: true);
-
-            // ## BEGIN - END ## // MACROS
-            if (mobile == World.Player && type == 0)
-                World.AnimationTriggers.OnOwnCharacterAnimationNew(action, type);
-            // ## BEGIN - END ## // MACROS
         }
 
         private static void KREncryptionResponse(ref StackDataReader p)
@@ -5669,26 +5554,6 @@ namespace ClassicUO.Network
             Flags flags = (Flags) p.ReadUInt8();
             ushort unk2 = p.ReadUInt16BE();
 
-            // ## BEGIN - END ## // MISC
-            if (graphic == 130 & ProfileManager.CurrentProfile.BlockWoSArtForceAoS)
-            {
-                graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockWoSArt);
-                hue = 945;
-            }
-            if (ProfileManager.CurrentProfile.BlockEnergyFArtForceAoS)
-            {
-                if (graphic >= 14662 && graphic <= 14692) //Regular EField //graphic >= 0x3946 && graphic <= 0x3964
-                {
-                    graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockEnergyFArt);
-                    hue = 293;
-                }
-                if (graphic == 10408 && hue == 0x0125) //Razor CE - WallStaticID - Filters/WallStaticFilter.cs / Razor Enhanced - WallStaticID - Filters.cs / (hue: 0x0125)
-                {
-                    graphic = Convert.ToUInt16(ProfileManager.CurrentProfile.BlockEnergyFArt);
-                    hue = 293;
-                }
-            }
-            // ## BEGIN - END ## // MISC
 
             if (serial != World.Player)
             {
@@ -6234,7 +6099,7 @@ namespace ClassicUO.Network
                 if (type == 2)
                 {
                     item.IsMulti = true;
-                    item.WantUpdateMulti = (graphic & 0x3FFF) != item.Graphic || item.X != x || item.Y != y || item.Z != z;
+                    item.WantUpdateMulti = (graphic & 0x3FFF) != item.Graphic || item.X != x || item.Y != y || item.Z != z || item.Hue != hue;
                     item.Graphic = (ushort) (graphic & 0x3FFF);
                 }
                 else
@@ -6426,6 +6291,12 @@ namespace ClassicUO.Network
 
                 World.Player.Walker.ResendPacketResync = false;
                 World.Player.CloseRangedGumps();
+                ///Reopening principal bags after close
+                uint PrincipalBag1 = ProfileManager.CurrentProfile.PrincipalBag1;
+                uint PrincipalBag2 = ProfileManager.CurrentProfile.PrincipalBag2;
+                GameActions.DoubleClick(PrincipalBag1);
+                GameActions.DoubleClick(PrincipalBag2);
+                ////
                 World.Player.SetInWorldTile(x, y, z);
                 World.Player.UpdateAbilities();
             }

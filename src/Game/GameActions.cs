@@ -51,9 +51,6 @@ namespace ClassicUO.Game
     {
         public static int LastSpellIndex { get; set; } = 1;
         public static int LastSkillIndex { get; set; } = 1;
-        // ## BEGIN - END ## // VISUAL HELPERS
-        public static int LastSpellIndexCursor { get; set; } = 0;
-        // ## BEGIN - END ## // VISUAL HELPERS
 
 
         public static void ToggleWarMode()
@@ -141,11 +138,7 @@ namespace ClassicUO.Game
 
         public static void OpenJournal()
         {
-            // ## BEGIN - END ## // MULTIJOURNAL
-            //JournalGump journalGump = UIManager.GetGump<JournalGump>();
-            // ## BEGIN - END ## // MULTIJOURNAL
-            JournalGump journalGump = UIManager.GetGump<JournalGump>(0);
-            // ## BEGIN - END ## // MULTIJOURNAL
+            JournalGump journalGump = UIManager.GetGump<JournalGump>();
 
             if (journalGump == null)
             {
@@ -657,11 +650,6 @@ namespace ClassicUO.Game
         {
             if (index >= 0)
             {
-                // ## BEGIN - END ## // VISUAL HELPERS
-                LastSpellIndexCursor = index;
-                GameCursor._spellTime = 0;
-                // ## BEGIN - END ## // VISUAL HELPERS
-
                 LastSpellIndex = index;
                 Socket.Send_CastSpellFromBook(index, bookSerial);
             }
@@ -671,11 +659,6 @@ namespace ClassicUO.Game
         {
             if (index >= 0)
             {
-                // ## BEGIN - END ## // VISUAL HELPERS
-                LastSpellIndexCursor = index;
-                GameCursor._spellTime = 0;
-                // ## BEGIN - END ## // VISUAL HELPERS
-
                 LastSpellIndex = index;
                 Socket.Send_CastSpell(index);
             }

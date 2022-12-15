@@ -35,9 +35,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
-// ## BEGIN - END ## // ART / HUE CHANGES
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // ART / HUE CHANGES
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.Map;
@@ -399,25 +396,6 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
-            // ## BEGIN - END ## // MISC2
-            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled)
-            {
-                GameObject tile = World.Map.GetTile(obj.X, obj.Y);
-
-                if (tile != null)
-                {
-                    if (obj is not Mobile)
-                    {
-                        if ((obj.Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ && (obj.Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
-                        {
-                            //DO NOT DRAW IT
-                            return false;
-                        }
-                    }
-                }
-            }
-            // ## BEGIN - END ## // MISC2
-
             return true;
         }
 
@@ -425,16 +403,6 @@ namespace ClassicUO.Game.Scenes
         {
             if (ProfileManager.CurrentProfile.UseCircleOfTransparency && obj.TransparentTest(maxZ))
             {
-                // ## BEGIN - END ## // MISC2
-                if (ProfileManager.CurrentProfile.IgnoreCoTEnabled)
-                {
-                    if (StaticFilters.IsIgnoreCoT(obj.Graphic) || ProfileManager.CurrentProfile.TreeType == 1 && obj.Graphic == CombatCollection.TREE_REPLACE_GRAPHIC || ProfileManager.CurrentProfile.TreeType == 2 & obj.Graphic == CombatCollection.TREE_REPLACE_GRAPHIC_TILE)
-                    {
-                        return false;
-                    }
-                }
-                // ## BEGIN - END ## // MISC2
-
                 int maxDist = ProfileManager.CurrentProfile.CircleOfTransparencyRadius + 0;
                 Vector2 pos = new Vector2(obj.RealScreenPosition.X, obj.RealScreenPosition.Y - 44);
                 Vector2.Distance(ref playerPos, ref pos, out float dist);
@@ -544,14 +512,7 @@ namespace ClassicUO.Game.Scenes
             {
                 return false;
             }
-
-            // ## BEGIN - END ## // MISC2
-            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.DrawMobilesWithSurfaceOverhead)
-            {
-                return false;
-            }
-            // ## BEGIN - END ## // MISC2
-
+            
             bool found = false;
             
             for (int y = -1; y <= 2; ++y)
@@ -708,13 +669,6 @@ namespace ClassicUO.Game.Scenes
                 {
                     ref var itemData = ref staticc.ItemData;
 
-                    // ## BEGIN - END ## // ART / HUE CHANGES
-                    if (obj is Static st)
-                    {
-                        st = CombatCollection.GSDSFilters(st);
-                    }
-                    // ## BEGIN - END ## // ART / HUE CHANGES
-
                     if (itemData.IsInternal)
                     {
                         continue;
@@ -731,11 +685,7 @@ namespace ClassicUO.Game.Scenes
                     }
 
                     //we avoid to hide impassable foliage or bushes, if present...
-                    // ## BEGIN - END ## // ART / HUE CHANGES
-                    //if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
-                    // ## BEGIN - END ## // ART / HUE CHANGES
-                    if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
-                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
                     {
                         continue;
                     }
@@ -792,11 +742,7 @@ namespace ClassicUO.Game.Scenes
 
                     if (!itemData.IsMultiMovable)
                     {
-                        // ## BEGIN - END ## // ART / HUE CHANGES
-                        //if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
-                        // ## BEGIN - END ## // ART / HUE CHANGES
-                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
-                        // ## BEGIN - END ## // ART / HUE CHANGES
+                        if (itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
                         {
                             continue;
                         }
@@ -887,11 +833,7 @@ namespace ClassicUO.Game.Scenes
                         continue;
                     }
 
-                    // ## BEGIN - END ## // ART / HUE CHANGES
-                    //if (!itemData.IsMultiMovable && itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
-                    // ## BEGIN - END ## // ART / HUE CHANGES
-                    if (!itemData.IsMultiMovable && itemData.IsFoliage && ProfileManager.CurrentProfile.TreeType != 0)
-                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    if (!itemData.IsMultiMovable && itemData.IsFoliage && ProfileManager.CurrentProfile.TreeToStumps)
                     {
                         continue;
                     }

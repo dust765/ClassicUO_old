@@ -3068,13 +3068,13 @@ namespace ClassicUO.IO.Resources
             }
 
             char* bufferCmd = stackalloc char[128];
-            char* bufferValue = stackalloc char[128];
+            char* bufferValue = stackalloc char[512];
 
             for (int cmdLenght = 0; i < length; ++i)
             {
                 char c = content[i + start];
 
-                bufferCmd[cmdLenght++] = char.IsLetter(c) ? char.ToLowerInvariant(c) : c;
+                bufferCmd[cmdLenght++] = /*char.IsLetter(c) ? char.ToLowerInvariant(c) :*/ c;
 
                 if (c == ' ' || c == '=' || c == '\\')
                 {
@@ -3092,7 +3092,7 @@ namespace ClassicUO.IO.Resources
 
                         if (c != '"')
                         {
-                            bufferValue[valueLength++] = char.IsLetter(c) ? char.ToLowerInvariant(c) : c;
+                            bufferValue[valueLength++] = /*char.IsLetter(c) ? char.ToLowerInvariant(c) :*/ c;
                         }
                         else
                         {

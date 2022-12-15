@@ -53,7 +53,7 @@ namespace ClassicUO.Game.UI.Controls
 
 
             Width = 210;
-            Height = 20;
+            Height = 25;
 
             ResizePic pic;
 
@@ -74,19 +74,20 @@ namespace ClassicUO.Game.UI.Controls
                 _label = new HoveredLabel
                 (
                     string.Empty,
-                    false,
+                    true,
                     1,
                     0x0021,
                     0x0021,
                     150,
                     1,
-                    FontStyle.Italic,
+                    FontStyle.None,
                     TEXT_ALIGN_TYPE.TS_CENTER
                 )
                 {
                     Y = 5
                 }
             );
+
 
             _label.MouseUp += LabelOnMouseUp;
 
@@ -114,6 +115,9 @@ namespace ClassicUO.Game.UI.Controls
         }
 
         public SDL.SDL_Keycode Key { get; private set; }
+        public MouseButtonType MouseButton { get; private set; }
+        public bool WheelScroll { get; private set; }
+        public bool WheelUp { get; private set; }
         public SDL.SDL_Keymod Mod { get; private set; }
 
         public bool IsActive
@@ -151,9 +155,10 @@ namespace ClassicUO.Game.UI.Controls
         {
             if (key == SDL.SDL_Keycode.SDLK_UNKNOWN && mod == SDL.SDL_Keymod.KMOD_NONE)
             {
+                ResetBinding();
+
                 Key = key;
                 Mod = mod;
-                _label.Text = string.Empty;
             }
             else
             {
@@ -161,11 +166,105 @@ namespace ClassicUO.Game.UI.Controls
 
                 if (!string.IsNullOrEmpty(newvalue) && key != SDL.SDL_Keycode.SDLK_UNKNOWN)
                 {
+                    ResetBinding();
+
                     Key = key;
                     Mod = mod;
                     _label.Text = newvalue;
                 }
             }
+        }
+
+        protected override void OnMouseDown(int x, int y, MouseButtonType button)
+        {
+            if (button == MouseButtonType.Middle || button == MouseButtonType.XButton1 || button == MouseButtonType.XButton2)
+            {
+                SDL.SDL_Keymod mod = SDL.SDL_Keymod.KMOD_NONE;
+
+                if (Keyboard.Alt)
+                {
+                    mod |= SDL.SDL_Keymod.KMOD_ALT;
+                }
+
+                if (Keyboard.Shift)
+                {
+                    mod |= SDL.SDL_Keymod.KMOD_SHIFT;
+                }
+
+                if (Keyboard.Ctrl)
+                {
+                    mod |= SDL.SDL_Keymod.KMOD_CTRL;
+                }
+
+                SetMouseButton(button, mod);
+            }
+        }
+
+        public void SetMouseButton(MouseButtonType button, SDL.SDL_Keymod mod)
+        {
+            string newvalue = KeysTranslator.GetMouseButton(button, mod);
+
+            if (!string.IsNullOrEmpty(newvalue) && button != MouseButtonType.None)
+            {
+                ResetBinding();
+
+                MouseButton = button;
+                Mod = mod;
+                _label.Text = newvalue;
+            }
+        }
+
+        protected override void OnMouseWheel(MouseEventType delta)
+        {
+            SDL.SDL_Keymod mod = SDL.SDL_Keymod.KMOD_NONE;
+
+            if (Keyboard.Alt)
+            {
+                mod |= SDL.SDL_Keymod.KMOD_ALT;
+            }
+
+            if (Keyboard.Shift)
+            {
+                mod |= SDL.SDL_Keymod.KMOD_SHIFT;
+            }
+
+            if (Keyboard.Ctrl)
+            {
+                mod |= SDL.SDL_Keymod.KMOD_CTRL;
+            }
+
+            if (delta == MouseEventType.WheelScrollUp)
+            {
+                SetMouseWheel(true, mod);
+            }
+            else if (delta == MouseEventType.WheelScrollDown)
+            {
+                SetMouseWheel(false, mod);
+            }
+        }
+
+        public void SetMouseWheel(bool wheelUp, SDL.SDL_Keymod mod)
+        {
+            string newvalue = KeysTranslator.GetMouseWheel(wheelUp, mod);
+
+            if (!string.IsNullOrEmpty(newvalue))
+            {
+                ResetBinding();
+
+                WheelScroll = true;
+                WheelUp = wheelUp;
+                Mod = mod;
+                _label.Text = newvalue;
+            }
+        }
+
+        private void ResetBinding()
+        {
+            Key = 0;
+            MouseButton = MouseButtonType.None;
+            WheelScroll = false;
+            Mod = 0;
+            _label.Text = string.Empty;
         }
 
         private void LabelOnMouseUp(object sender, MouseEventArgs e)

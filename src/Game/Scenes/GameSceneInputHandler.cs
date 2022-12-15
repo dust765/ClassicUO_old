@@ -34,9 +34,6 @@ using System;
 using System.Linq;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
-// ## BEGIN - END ## // MACROS
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // MACROS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Gumps;
@@ -307,6 +304,10 @@ namespace ClassicUO.Game.Scenes
             {
                 case MouseButtonType.Left: return OnLeftMouseDown();
                 case MouseButtonType.Right: return OnRightMouseDown();
+                case MouseButtonType.Middle:
+                case MouseButtonType.XButton1:
+                case MouseButtonType.XButton2:
+                    return OnExtraMouseDown(button);
             }
 
             return false;
@@ -905,6 +906,26 @@ namespace ClassicUO.Game.Scenes
             return false;
         }
 
+        private bool OnExtraMouseDown(MouseButtonType button)
+        {
+            if (CanExecuteMacro())
+            {
+                Macro macro = Macros.FindMacro(button, Keyboard.Alt, Keyboard.Ctrl, Keyboard.Shift);
+
+                if (macro != null && button != MouseButtonType.None)
+                {
+                    if (macro.Items is MacroObject mac)
+                    {
+                        ExecuteMacro(mac);
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
 
         internal override bool OnMouseWheel(bool up)
         {
@@ -921,6 +942,21 @@ namespace ClassicUO.Game.Scenes
                 if (Client.Game.GameCursor.ItemHold.IgnoreFixedPosition)
                 {
                     return true;
+                }
+            }
+
+            if (CanExecuteMacro())
+            {
+                Macro macro = Macros.FindMacro(up, Keyboard.Alt, Keyboard.Ctrl, Keyboard.Shift);
+
+                if (macro != null)
+                {
+                    if (macro.Items is MacroObject mac)
+                    {
+                        ExecuteMacro(mac);
+
+                        return true;
+                    }
                 }
             }
 
@@ -1139,15 +1175,13 @@ namespace ClassicUO.Game.Scenes
                 return;
             }
 
-            bool canExecuteMacro = UIManager.KeyboardFocusControl == UIManager.SystemChat.TextBoxControl && UIManager.SystemChat.Mode >= ChatMode.Default;
-
-            if (canExecuteMacro)
+            if (CanExecuteMacro())
             {
                 Macro macro = Macros.FindMacro(e.keysym.sym, Keyboard.Alt, Keyboard.Ctrl, Keyboard.Shift);
 
                 if (macro != null && e.keysym.sym != SDL.SDL_Keycode.SDLK_UNKNOWN)
                 {
-                    if (macro.Items != null && macro.Items is MacroObject mac)
+                    if (macro.Items is MacroObject mac)
                     {
                         if (mac.Code == MacroType.Walk)
                         {
@@ -1202,10 +1236,7 @@ namespace ClassicUO.Game.Scenes
                         }
                         else
                         {
-                            Macros.SetMacroToExecute(mac);
-                            Macros.WaitingBandageTarget = false;
-                            Macros.WaitForTargetTimer = 0;
-                            Macros.Update();
+                            ExecuteMacro(mac);
                         }
                     }
                 }
@@ -1238,12 +1269,6 @@ namespace ClassicUO.Game.Scenes
                     }
                 }
             }
-            // ## BEGIN - END ## // NAMEOVERHEAD
-            if (e.keysym.sym != SDL.SDL_Keycode.SDLK_UNKNOWN)
-            {
-                NameOverHeadManager.RegisterKeyDown(e.keysym);
-            }
-            // ## BEGIN - END ## // NAMEOVERHEAD
         }
 
 
@@ -1265,7 +1290,7 @@ namespace ClassicUO.Game.Scenes
 
                 if (macro != null && e.keysym.sym != SDL.SDL_Keycode.SDLK_UNKNOWN)
                 {
-                    if (macro.Items != null && macro.Items is MacroObject mac && mac.Code == MacroType.Walk)
+                    if (macro.Items is MacroObject mac && mac.Code == MacroType.Walk)
                     {
                         _flags[4] = false;
 
@@ -1371,21 +1396,19 @@ namespace ClassicUO.Game.Scenes
                     GameActions.ToggleWarMode();
                 }
             }
-            // ## BEGIN - END ## // MACROS
-            Macro macro2 = Macros.FindMacro(e.keysym.sym, Keyboard.Alt, Keyboard.Ctrl, Keyboard.Shift);
+        }
 
-            if (macro2 != null && e.keysym.sym != SDL.SDL_Keycode.SDLK_UNKNOWN)
-            {
-                if (macro2.Name == "HealOnHPChange")
-                    CombatCollection._HealOnHPChangeON = false;
+        private bool CanExecuteMacro()
+        {
+            return UIManager.KeyboardFocusControl == UIManager.SystemChat.TextBoxControl && UIManager.SystemChat.Mode >= ChatMode.Default;
+        }
 
-                if (macro2.Name == "HarmOnSwing")
-                    CombatCollection._HarmOnSwingON = false;
-            }
-            // ## BEGIN - END ## // MACROS
-            // ## BEGIN - END ## // NAMEOVERHEAD
-            NameOverHeadManager.RegisterKeyUp(e.keysym);
-            // ## BEGIN - END ## // NAMEOVERHEAD
+        private void ExecuteMacro(MacroObject macro)
+        {
+            Macros.SetMacroToExecute(macro);
+            Macros.WaitingBandageTarget = false;
+            Macros.WaitForTargetTimer = 0;
+            Macros.Update();
         }
     }
 }

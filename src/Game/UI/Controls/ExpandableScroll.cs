@@ -270,12 +270,7 @@ namespace ClassicUO.Game.UI.Controls
                 _gumplingTitleGumpIDDelta = false;
 
                 _gumplingTitle?.Dispose();
-                // ## BEGIN - END ## // MULTIJOURNAL
-                //Add(_gumplingTitle = new GumpPic(0, 0, (ushort) _gumplingTitleGumpID, 0));
-                // ## BEGIN - END ## // MULTIJOURNAL
-                if (_gumplingTitleGumpID > 0)
-                    Add(_gumplingTitle = new GumpPic(0, 0, (ushort) _gumplingTitleGumpID, 0));
-                // ## BEGIN - END ## // MULTIJOURNAL
+                Add(_gumplingTitle = new GumpPic(0, 0, (ushort) _gumplingTitleGumpID, 0));
             }
 
             //if (!IsVisible)

@@ -39,6 +39,7 @@ namespace ClassicUO.Game.UI.Gumps
         Buff,
         Container,
         CounterBar,
+        TabGridGump,
         HealthBar,
         InfoBar,
         Journal,
@@ -57,31 +58,6 @@ namespace ClassicUO.Game.UI.Gumps
 
         Debug,
         NetStats,
-        // ## BEGIN - END ## // MACROS
-        Journal2,
-        // ## BEGIN - END ## // MACROS
-        // ## BEGIN - END ## // UI/GUMPS
-        BandageGump,
-        UOClassicCombatLTBar,
-        // ## BEGIN - END ## // UI/GUMPS
-        // ## BEGIN - END ## // LINES
-        UOClassicCombatLines,
-        // ## BEGIN - END ## // LINES
-        // ## BEGIN - END ## // AUTOLOOT
-        UOClassicCombatAL,
-        // ## BEGIN - END ## // AUTOLOOT
-        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-        UOClassicCombatBuffbar,
-        // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-        // ## BEGIN - END ## // SELF
-        UOClassicCombatSelf,
-        // ## BEGIN - END ## // SELF
-        // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-        ECBuffGump,
-        ECDebuffGump,
-        ECStateGump,
-        ModernCooldownBar,
-        // ## BEGIN - END ## // MODERNCOOLDOWNBAR
 
         NameOverHeadHandler
     }

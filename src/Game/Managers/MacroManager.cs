@@ -39,17 +39,10 @@ using System.Xml;
 using ClassicUO.Configuration;
 using ClassicUO.Data;
 using ClassicUO.Game.Data;
-// ## BEGIN - END ## // MACROS
-using ClassicUO.Dust765.External;
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // MACROS
-// ## BEGIN - END ## // ADVMACROS
-using ClassicUO.Dust765.Macros;
-using ClassicUO.Dust765.Managers;
-// ## BEGIN - END ## // ADVMACROS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Scenes;
 using ClassicUO.Game.UI.Gumps;
+using ClassicUO.Input;
 using ClassicUO.Network;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
@@ -326,6 +319,40 @@ namespace ClassicUO.Game.Managers
             while (obj != null)
             {
                 if (obj.Key == key && obj.Alt == alt && obj.Ctrl == ctrl && obj.Shift == shift)
+                {
+                    break;
+                }
+
+                obj = (Macro) obj.Next;
+            }
+
+            return obj;
+        }
+
+        public Macro FindMacro(MouseButtonType button, bool alt, bool ctrl, bool shift)
+        {
+            Macro obj = (Macro) Items;
+
+            while (obj != null)
+            {
+                if (obj.MouseButton == button && obj.Alt == alt && obj.Ctrl == ctrl && obj.Shift == shift)
+                {
+                    break;
+                }
+
+                obj = (Macro) obj.Next;
+            }
+
+            return obj;
+        }
+
+        public Macro FindMacro(bool wheelUp, bool alt, bool ctrl, bool shift)
+        {
+            Macro obj = (Macro) Items;
+
+            while (obj != null)
+            {
+                if (obj.WheelScroll == true && obj.WheelUp == wheelUp && obj.Alt == alt && obj.Ctrl == ctrl && obj.Shift == shift)
                 {
                     break;
                 }
@@ -1173,21 +1200,7 @@ namespace ClassicUO.Game.Managers
 
                 case MacroType.CloseGump:
 
-                    // ## BEGIN - END ## // UI/GUMPS
-                    // ## BEGIN - END ## // LINES
-                    // ## BEGIN - END ## // AUTOLOOT
-                    // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-                    // ## BEGIN - END ## // SELF
-                    // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-                    //UIManager.Gumps.Where(s => !(s is TopBarGump) && !(s is BuffGump) && !(s is WorldViewportGump)).ToList().ForEach(s => s.Dispose());
-                    // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-                    UIManager.Gumps.Where(s => !(s is TopBarGump) && !(s is BuffGump) && !(s is WorldViewportGump) && !(s is UOClassicCombatLTBar) && !(s is BandageGump) && !(s is UOClassicCombatLines) && !(s is UOClassicCombatAL) && !(s is UOClassicCombatBuffbar) && !(s is UOClassicCombatSelf) && !(s is ECBuffGump) && !(s is ECDebuffGump) && !(s is ECStateGump) && !(s is ModernCooldownBar)).ToList().ForEach(s => s.Dispose());
-                    // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-                    // ## BEGIN - END ## // SELF
-                    // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-                    // ## BEGIN - END ## // AUTOLOOT
-                    // ## BEGIN - END ## // LINES
-                    // ## BEGIN - END ## // UI/GUMPS
+                    UIManager.Gumps.Where(s => !(s is TopBarGump) && !(s is BuffGump) && !(s is WorldViewportGump)).ToList().ForEach(s => s.Dispose());
 
                     break;
 
@@ -1532,20 +1545,6 @@ namespace ClassicUO.Game.Managers
 
                     ushort start = (ushort) (0x0F06 + scantype);
 
-                    // ## BEGIN - END ## // SELF
-                    UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();
-
-                    if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
-                    {
-                        UOClassicCombatSelf?.MacroTriggerPotMacro(start);
-                        break;
-                    }
-                    else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
-                    {
-                        UOClassicCombatSelf?.ClilocTriggerPotMacro(start);
-                    }
-                    // ## BEGIN - END ## // SELF
-
                     Item potion = World.Player.FindItemByGraphic(start);
 
                     if (potion != null)
@@ -1779,17 +1778,7 @@ namespace ClassicUO.Game.Managers
 
                 case MacroType.ToggleTreeStumps:
                     StaticFilters.CleanTreeTextures();
-                    // ## BEGIN - END ## // ART / HUE CHANGES
-                    //ProfileManager.CurrentProfile.TreeToStumps = !ProfileManager.CurrentProfile.TreeToStumps;
-                    // ## BEGIN - END ## // ART / HUE CHANGES
-                    if (ProfileManager.CurrentProfile.TreeType == 0)
-                    {
-                        ProfileManager.CurrentProfile.TreeType = ProfileManager.CurrentProfile.TreeType = 2;
-                    } else
-                    {
-                        ProfileManager.CurrentProfile.TreeType = ProfileManager.CurrentProfile.TreeType = 0;
-                    }
-                    // ## BEGIN - END ## // ART / HUE CHANGES
+                    ProfileManager.CurrentProfile.TreeToStumps = !ProfileManager.CurrentProfile.TreeToStumps;
 
                     break;
 
@@ -1803,474 +1792,6 @@ namespace ClassicUO.Game.Managers
                     ProfileManager.CurrentProfile.EnableCaveBorder = !ProfileManager.CurrentProfile.EnableCaveBorder;
 
                     break;
-
-                // ## BEGIN - END ## // VISUAL HELPERS
-                case MacroType.HighlightTileAtRange:
-                    ProfileManager.CurrentProfile.HighlightTileAtRange = !ProfileManager.CurrentProfile.HighlightTileAtRange;
-
-                    break;
-                // ## BEGIN - END ## // VISUAL HELPERS
-                // ## BEGIN - END ## // MISC2
-                case MacroType.ToggleTransparentHouses:
-                    ProfileManager.CurrentProfile.TransparentHousesEnabled = !ProfileManager.CurrentProfile.TransparentHousesEnabled;
-
-                    break;
-                case MacroType.ToggleInvisibleHouses:
-                    ProfileManager.CurrentProfile.InvisibleHousesEnabled = !ProfileManager.CurrentProfile.InvisibleHousesEnabled;
-
-                    break;
-                // ## BEGIN - END ## // MISC2
-                // ## BEGIN - END ## // MACROS
-                case MacroType.ObjectInfo:
-
-                    CommandManager.Execute("info");
-
-                    break;
-
-                case MacroType.OpenCorpses:
-                    World.Player.OpenCorpses(2);
-
-                    break;
-
-                case MacroType.OpenJournal2:
-                    JournalGump2 journal2 = UIManager.GetGump<JournalGump2>();
-
-                    if (journal2 != null)
-                    {
-                        if (macro.Code == MacroType.Close)
-                        {
-                            journal2.Dispose();
-                        }
-                        else if (macro.Code == MacroType.Minimize)
-                        {
-                            journal2.IsMinimized = true;
-                        }
-                        else if (macro.Code == MacroType.Maximize)
-                        {
-                            journal2.IsMinimized = false;
-                        }
-                    }
-                    else
-                    {
-                        if (journal2 == null)
-                        {
-                            UIManager.Add(new JournalGump2 { X = 64, Y = 64 });
-                        }
-                        else
-                        {
-                            journal2.SetInScreen();
-                            journal2.BringOnTop();
-
-                            if (journal2.IsMinimized)
-                            {
-                                journal2.IsMinimized = false;
-                            }
-                        }
-                    }
-
-                    break;
-
-                case MacroType.SetTargetClientSide:
-                    TargetManager.SetTargeting(CursorTarget.SetTargetClientSide, CursorType.Target, TargetType.Neutral);
-
-                    break;
-
-                case MacroType.LastTargetRC:
-
-                    if (TargetManager.IsTargeting)
-                    {
-                        var entity = World.Get(TargetManager.LastTargetInfo.Serial);
-
-                        if (entity != null)
-                        {
-                            if (entity.Distance <= ProfileManager.CurrentProfile.LastTargetRange && (entity.Z - World.Player.Z) <= ProfileManager.CurrentProfile.LastTargetRange)
-                                TargetManager.Target(World.Get(TargetManager.LastTargetInfo.Serial));
-                            else
-                                MessageManager.HandleMessage(World.Player, "LastTarget out of range", null, 0x3B2, MessageType.Regular, 3, TextType.CLIENT, true);
-                        }
-
-                        WaitForTargetTimer = 0;
-                    }
-                    else if (WaitForTargetTimer < Time.Ticks)
-                        WaitForTargetTimer = 0;
-                    else
-                        result = 1;
-
-                    break;
-
-                case MacroType.HideX:
-
-                    if (SelectedObject.Object is Land l)
-                        l.AllowedToDraw = false;
-
-                    if (SelectedObject.Object is Item i)
-                        i.AllowedToDraw = false;
-
-                    if (SelectedObject.Object is Entity e)
-                        e.AllowedToDraw = false;
-
-                    if (SelectedObject.Object is Mobile m)
-                        m.AllowedToDraw = false;
-
-                    break;
-
-                case MacroType.HealOnHPChange:
-                    if (!CombatCollection._HealOnHPChangeON)
-                    {
-                        CombatCollection._HealOnHPChangeHP = World.Player.Hits;
-                        CombatCollection._HealOnHPChangeON = true;
-                    }
-
-                    CombatCollection.HealOnHPChange();
-
-                    break;
-
-                case MacroType.HarmOnSwing:
-                    if (!CombatCollection._HarmOnSwingON)
-                        CombatCollection._HarmOnSwingON = true;
-
-                    CombatCollection.HarmOnSwing();
-
-                    break;
-
-                case MacroType.CureGH:
-                    if (World.Player.IsPoisoned)
-                        GameActions.CastSpell(11); //cure
-                    else
-                        GameActions.CastSpell(29); //greater heal
-
-                    break;
-                // ## BEGIN - END ## // MACROS
-                // ## BEGIN - END ## // LINES
-                case MacroType.UCCLinesToggleLT:
-                    //UOClassicCombatLines.ClilocTriggerAddListEntryAll(); //ALL
-                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Innocent);
-                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Ally);
-                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Criminal);
-                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Gray);
-                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Enemy);
-                    //UOClassicCombatLines.ClilocTriggerAddListEntryAllByNotoriety(NotorietyFlag.Murderer);
-                    UOClassicCombatLines.ClilocTriggerToggleLT();
-
-                    break;
-
-                case MacroType.UCCLinesToggleHM:
-                    UOClassicCombatLines.ClilocTriggerToggleHM();
-
-                    break;
-                // ## BEGIN - END ## // LINES
-                // ## BEGIN - END ## // ADVMACROS
-                case MacroType.GrabFriendlyBars:
-                    GrabBars.GrabFriendlyBars();
-
-                    break;
-
-                case MacroType.GrabEnemyBars:
-                    GrabBars.GrabEnemyBars();
-
-                    break;
-
-                case MacroType.GrabPartyAllyBars:
-                    GrabBars.GrabPartyAllyBars();
-
-                    break;
-
-                case MacroType.AutoPot:
-
-                    AutoPotion.UseAutoPotion();
-
-                    break;
-
-                case MacroType.DefendSelfKey: //Defend Self
-
-                    AutoDefender.DefendSelf();
-
-                    break;
-
-                case MacroType.DefendPartyKey: //Defend Party & Allies
-
-                    AutoDefender.DefendParty();
-
-                    break;
-
-                case MacroType.OpenCorpsesSafe:
-                    World.Player.OpenCorpsesSafe(2);
-
-                    break;
-                //##Equip Manager##//
-                case MacroType.EquipManager:
-
-                    switch (macro.SubCode)
-                    {
-                        case MacroSubType.EquipLeatherSuit:
-                            EquipManager.EquipLeather();
-
-                            break;
-                        case MacroSubType.EquipHally:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Hally);
-
-                            break;
-                        case MacroSubType.EquipBardiche:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Bardiche);
-
-                            break;
-                        case MacroSubType.EquipKatana:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Katana);
-
-                            break;
-                        case MacroSubType.EquipCutlass:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Cutlass);
-
-                            break;
-                        case MacroSubType.EquipVikingSword:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.VikingSword);
-
-                            break;
-                        case MacroSubType.EquipBroadSword:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.BroadSword);
-
-                            break;
-                        case MacroSubType.EquipLongSword:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.LongSword);
-
-                            break;
-                        case MacroSubType.EquipScimitar:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Scimitar);
-
-                            break;
-                        case MacroSubType.EquipBattleAxe:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.BattleAxe);
-
-                            break;
-                        case MacroSubType.EquipLargeBattleAxe:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.LargeBattleAxe);
-
-                            break;
-                        case MacroSubType.EquipDoubleAxe:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.DoubleAxe);
-
-                            break;
-                        case MacroSubType.EquipTwoHandedAxe:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.TwoHandedAxe);
-
-                            break;
-                        case MacroSubType.EquipExecutionerAxe:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.ExecutionerAxe);
-
-                            break;
-                        case MacroSubType.EquipAxe:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Axe);
-
-                            break;
-                        case MacroSubType.EquipXbow:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.HeavyXbow);
-
-                            break;
-                        case MacroSubType.EquipCrossBow:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.CrossBow);
-
-                            break;
-                        case MacroSubType.EquipBow:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Bow);
-
-                            break;
-                        case MacroSubType.EquipSpear:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Spear);
-
-                            break;
-                        case MacroSubType.EquipShortSpear:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.ShortSpear);
-
-                            break;
-                        case MacroSubType.EquipWarFork:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.WarFork);
-
-                            break;
-                        case MacroSubType.EquipKryss:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Kryss);
-
-                            break;
-                        case MacroSubType.EquipClub:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Club);
-
-                            break;
-                        case MacroSubType.EquipWarAxe:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.WarAxe);
-
-                            break;
-                        case MacroSubType.EquipHammerPick:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.HammerPick);
-
-                            break;
-                        case MacroSubType.EquipMaul:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Maul);
-
-                            break;
-                        case MacroSubType.EquipMace:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.Mace);
-
-                            break;
-                        case MacroSubType.EquipWarMace:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.WarMace);
-
-                            break;
-                        case MacroSubType.EquipQStaff:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.QuarterStaff);
-
-                            break;
-                        case MacroSubType.EquipGnarledStaff:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.GnarledStaff);
-
-                            break;
-                        case MacroSubType.EquipWarHammer:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.WarHammer);
-
-                            break;
-                        case MacroSubType.EquipChaosShield:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.ChaosShield);
-
-                            break;
-                        case MacroSubType.EquipOrderShield:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.OrderShield);
-
-                            break;
-                        case MacroSubType.EquipHeaterShield:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.HeaterShield);
-
-                            break;
-                        case MacroSubType.EquipBronzeShield:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.BronzeShield);
-
-                            break;
-                        case MacroSubType.EquipKiteShield:
-                            EquipManager.EquipWeapon(EquipManager.Weapons.KiteShield);
-
-                            break;
-                        case MacroSubType.EquipCustom:
-                            EquipManager.EquipCustom();
-
-                            break;
-                        case MacroSubType.SetCustomEquip:
-                            GameActions.Print("Target the [ITEM] for Custom Equip.", 101);
-                            TargetManager.SetTargeting(CursorTarget.SetCustomSerial, 0, TargetType.Neutral);
-
-                            break;
-                    }
-                    break;
-
-                case MacroType.CustomInterrupt:
-
-                    CustomInterrupt.Interrupt();
-
-                    break;
-
-                case MacroType.SetMimic_PlayerSerial:
-                    GameActions.Print("Target the mobile to set Mimic Player Serial.", 101);
-                    TargetManager.SetTargeting(CursorTarget.SetCustomSerial, 0, TargetType.Neutral);
-
-                    break;
-                // ## BEGIN - END ## // ADVMACROS
-                // ## BEGIN - END ## // AUTOMATIONS
-                case MacroType.AutoMeditate:
-
-                    CommandManager.Execute("automed");
-
-                    break;
-                // ## BEGIN - END ## // AUTOMATIONS
-                // ## BEGIN - END ## // LOBBY
-                case MacroType.LobbyConnect:
-
-                    CommandManager.Execute("lobby", "connect " + ProfileManager.CurrentProfile.LobbyIP.ToString());
-
-                    break;
-
-                case MacroType.LobbyDisconnect:
-
-                    CommandManager.Execute("lobby", "disconnect");
-
-                    break;
-
-                case MacroType.LobbyTarget:
-
-                    CommandManager.Execute("lobby", "target");
-
-                    break;
-
-                case MacroType.LobbyCastLightning:
-
-                    CommandManager.Execute("lobby", "cast Lightning");
-
-                    break;
-
-                case MacroType.LobbyCastEB:
-
-                    CommandManager.Execute("lobby", "cast EnergyBolt");
-
-                    break;
-
-                case MacroType.LobbyDrop:
-
-                    CommandManager.Execute("lobby", "drop");
-
-                    break;
-                // ## BEGIN - END ## // LOBBY
-                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-                case MacroType.ToggleECBuffGump:
-                    ECBuffGump ecbuffs = UIManager.GetGump<ECBuffGump>();
-
-                    if (ecbuffs != null)
-                    {
-                        ecbuffs.Dispose();
-                    }
-                    else
-                    {
-                        UIManager.Add(new ECBuffGump(100, 100));
-                    }
-
-                    break;
-
-                case MacroType.ToggleECDebuffGump:
-                    ECDebuffGump ecdebuffs = UIManager.GetGump<ECDebuffGump>();
-
-                    if (ecdebuffs != null)
-                    {
-                        ecdebuffs.Dispose();
-                    }
-                    else
-                    {
-                        UIManager.Add(new ECDebuffGump(100, 100));
-                    }
-
-                    break;
-
-                case MacroType.ToggleECStateGump:
-                    ECStateGump ecstates = UIManager.GetGump<ECStateGump>();
-
-                    if (ecstates != null)
-                    {
-                        ecstates.Dispose();
-                    }
-                    else
-                    {
-                        UIManager.Add(new ECStateGump(100, 100));
-                    }
-
-                    break;
-
-                case MacroType.ToggleModernCooldownBar:
-                    ModernCooldownBar cooldowns = UIManager.GetGump<ModernCooldownBar>();
-
-                    if (cooldowns != null)
-                    {
-                        cooldowns.Dispose();
-                    }
-                    else
-                    {
-                        UIManager.Add(new ModernCooldownBar(100, 100));
-                    }
-
-                    break;
-                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
             }
 
 
@@ -2323,6 +1844,23 @@ namespace ClassicUO.Game.Managers
             Shift = shift;
         }
 
+        public Macro(string name, MouseButtonType button, bool alt, bool ctrl, bool shift) : this(name)
+        {
+            MouseButton = button;
+            Alt = alt;
+            Ctrl = ctrl;
+            Shift = shift;
+        }
+
+        public Macro(string name, bool wheelUp, bool alt, bool ctrl, bool shift) : this(name)
+        {
+            WheelScroll = true;
+            WheelUp = wheelUp;
+            Alt = alt;
+            Ctrl = ctrl;
+            Shift = shift;
+        }
+
         public Macro(string name)
         {
             Name = name;
@@ -2331,6 +1869,9 @@ namespace ClassicUO.Game.Managers
         public string Name { get; }
 
         public SDL.SDL_Keycode Key { get; set; }
+        public MouseButtonType MouseButton { get; set; }
+        public bool WheelScroll { get; set; }
+        public bool WheelUp { get; set; }
         public bool Alt { get; set; }
         public bool Ctrl { get; set; }
         public bool Shift { get; set; }
@@ -2374,6 +1915,9 @@ namespace ClassicUO.Game.Managers
             writer.WriteStartElement("macro");
             writer.WriteAttributeString("name", Name);
             writer.WriteAttributeString("key", ((int) Key).ToString());
+            writer.WriteAttributeString("mousebutton", ((int) MouseButton).ToString());
+            writer.WriteAttributeString("wheelscroll", WheelScroll.ToString());
+            writer.WriteAttributeString("wheelup", WheelUp.ToString());
             writer.WriteAttributeString("alt", Alt.ToString());
             writer.WriteAttributeString("ctrl", Ctrl.ToString());
             writer.WriteAttributeString("shift", Shift.ToString());
@@ -2411,6 +1955,21 @@ namespace ClassicUO.Game.Managers
             Alt = bool.Parse(xml.GetAttribute("alt"));
             Ctrl = bool.Parse(xml.GetAttribute("ctrl"));
             Shift = bool.Parse(xml.GetAttribute("shift"));
+
+            if (xml.HasAttribute("mousebutton"))
+            {
+                MouseButton = (MouseButtonType) int.Parse(xml.GetAttribute("mousebutton"));
+            }
+
+            if (xml.HasAttribute("wheelscroll"))
+            {
+                WheelScroll = bool.Parse(xml.GetAttribute("wheelscroll"));
+            }
+
+            if (xml.HasAttribute("wheelup"))
+            {
+                WheelUp = bool.Parse(xml.GetAttribute("wheelup"));
+            }
 
             XmlElement actions = xml["actions"];
 
@@ -2505,7 +2064,7 @@ namespace ClassicUO.Game.Managers
             Macro macro = new Macro
             (
                 name,
-                0,
+                (SDL.SDL_Keycode) 0,
                 false,
                 false,
                 false
@@ -2523,7 +2082,7 @@ namespace ClassicUO.Game.Managers
             Macro macro = new Macro
               (
                   name,
-                  0,
+                  (SDL.SDL_Keycode) 0,
                   false,
                   false,
                   false
@@ -2598,14 +2157,6 @@ namespace ClassicUO.Game.Managers
                     count = 1 + MacroSubType.ZoomOut - MacroSubType.DefaultZoom;
 
                     break;
-
-                // ## BEGIN - END ## // ADVMACROS
-                case MacroType.EquipManager:
-                    offset = (int) MacroSubType.ZoomOut;
-                    count = MacroSubType.ZoomOut - MacroSubType.EmptySlot;
-
-                    break;
-                // ## BEGIN - END ## // ADVMACROS
 
                 case MacroType.UseObject:
                     offset = (int) MacroSubType.BestHealPotion;
@@ -2771,74 +2322,13 @@ namespace ClassicUO.Game.Managers
         UsePotion,
         CloseAllHealthBars,
         RazorMacro,
-        // ## BEGIN - END ## // BASICSETUP
-        ObjectInfo, // ## BEGIN - END ## // MACROS
-        // ## BEGIN - END ## // ADVMACROS
-        GrabFriendlyBars,
-        GrabEnemyBars,
-        GrabPartyAllyBars,
-        AutoPot,
-        // ## BEGIN - END ## // ADVMACROS
-        OpenCorpses, // ## BEGIN - END ## // MACROS
-        // ## BEGIN - END ## // ADVMACROS
-        DefendSelfKey,
-        DefendPartyKey,
-        // ## BEGIN - END ## // ADVMACROS
-        // ## BEGIN - END ## // VISUAL HELPERS
-        HighlightTileAtRange,
-        // ## BEGIN - END ## // VISUAL HELPERS
-        // ## BEGIN - END ## // MACROS
-        LastTargetRC,
-        HideX,
-        HealOnHPChange,
-        HarmOnSwing,
-        // ## BEGIN - END ## // MACROS
-        // ## BEGIN - END ## // ADVMACROS
-        EquipManager,
-        // ## BEGIN - END ## // ADVMACROS
-        SetTargetClientSide, // ## BEGIN - END ## // MACROS
-        // ## BEGIN - END ## // LINES
-        UCCLinesToggleLT,
-        UCCLinesToggleHM,
-        // ## BEGIN - END ## // LINES
-        CureGH, // ## BEGIN - END ## // MACROS
-        // ## BEGIN - END ## // AUTOMATIONS
-        AutoMeditate,
-        // ## BEGIN - END ## // AUTOMATIONS
-        // ## BEGIN - END ## // ADVMACROS
-        CustomInterrupt,
-        SetMimic_PlayerSerial,
-        OpenCorpsesSafe,
-        // ## BEGIN - END ## // ADVMACROS
-        OpenJournal2, // ## BEGIN - END ## // MACROS
-        // ## BEGIN - END ## // BASICSETUP
         ToggleDrawRoofs,
         ToggleTreeStumps,
         ToggleVegetation,
         ToggleCaveTiles,
-        // ## BEGIN - END ## // BASICSETUP
-        // ## BEGIN - END ## // MISC2
-        ToggleTransparentHouses,
-        ToggleInvisibleHouses,
-        // ## BEGIN - END ## // MISC2
-        // ## BEGIN - END ## // LOBBY
-        LobbyConnect,
-        LobbyDisconnect,
-        LobbyTarget,
-        LobbyCastLightning,
-        LobbyCastEB,
-        LobbyDrop,
-        // ## BEGIN - END ## // LOBBY
-        // ## BEGIN - END ## // BASICSETUP
         CloseInactiveHealthBars,
         CloseCorpses,
-        UseObject,
-        // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-        ToggleECBuffGump,
-        ToggleECDebuffGump,
-        ToggleECStateGump,
-        ToggleModernCooldownBar
-        // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+        UseObject
     }
 
     internal enum MacroSubType
@@ -3074,47 +2564,6 @@ namespace ClassicUO.Game.Managers
         DefaultZoom,
         ZoomIn,
         ZoomOut,
-        // ## BEGIN - END ## // ADVMACROS
-        EquipLeatherSuit,
-        EquipHally,
-        EquipBardiche,
-        EquipKatana,
-        EquipCutlass,
-        EquipVikingSword,
-        EquipBroadSword,
-        EquipLongSword,
-        EquipScimitar,
-        EquipBattleAxe,
-        EquipLargeBattleAxe,
-        EquipDoubleAxe,
-        EquipTwoHandedAxe,
-        EquipExecutionerAxe,
-        EquipAxe,
-        EquipXbow,
-        EquipCrossBow,
-        EquipBow,
-        EquipSpear,
-        EquipShortSpear,
-        EquipWarFork,
-        EquipKryss,
-        EquipClub,
-        EquipWarAxe,
-        EquipHammerPick,
-        EquipMaul,
-        EquipMace,
-        EquipWarMace,
-        EquipQStaff,
-        EquipGnarledStaff,
-        EquipWarHammer,
-        EquipChaosShield,
-        EquipOrderShield,
-        EquipHeaterShield,
-        EquipBronzeShield,
-        EquipKiteShield,
-        EquipCustom,
-        SetCustomEquip,
-        EmptySlot,
-        // ## BEGIN - END ## // ADVMACROS
 
         BestHealPotion,
         BestCurePotion,

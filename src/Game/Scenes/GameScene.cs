@@ -35,10 +35,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using ClassicUO.Configuration;
-// ## BEGIN - END ## // UI/GUMPS
-using ClassicUO.Dust765.External;
-using ClassicUO.Dust765.Dust765;
-// ## BEGIN - END ## // UI/GUMPS
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -91,12 +87,6 @@ namespace ClassicUO.Game.Scenes
         private long _alphaTimer;
         private bool _forceStopScene;
         private HealthLinesManager _healthLinesManager;
-        // ## BEGIN - END ## // TEXTUREMANAGER
-        private TextureManager _textureManager;
-        // ## BEGIN - END ## // TEXTUREMANAGER
-        // ## BEGIN - END ## // LINES
-        private UOClassicCombatLines _UOClassicCombatLines;
-        // ## BEGIN - END ## // LINES
 
         private Point _lastSelectedMultiPositionInHouseCustomization;
         private int _lightCount;
@@ -162,16 +152,6 @@ namespace ClassicUO.Game.Scenes
 
             Macros.Load();
 
-            // ## BEGIN - END ## // NAMEOVERHEAD
-            NameOverHeadManager.Load();
-            // ## BEGIN - END ## // NAMEOVERHEAD
-            // ## BEGIN - END ## // TEXTUREMANAGER
-            _textureManager = new TextureManager();
-            // ## BEGIN - END ## // TEXTUREMANAGER
-            // ## BEGIN - END ## // LINES
-            _UOClassicCombatLines = new UOClassicCombatLines();
-            // ## BEGIN - END ## // LINES
-
             _animatedStaticsManager = new AnimatedStaticsManager();
             _animatedStaticsManager.Initialize();
             InfoBars = new InfoBarManager();
@@ -213,68 +193,6 @@ namespace ClassicUO.Game.Scenes
 
                 Client.Game.SetWindowSize(w, h);
             }
-            // ## BEGIN - END ## // UI/GUMPS
-            if (ProfileManager.CurrentProfile.UOClassicCombatLTBar)
-            {
-                UIManager.Add(new UOClassicCombatLTBar
-                {
-                    X = ProfileManager.CurrentProfile.UOClassicCombatLTBarLocation.X,
-                    Y = ProfileManager.CurrentProfile.UOClassicCombatLTBarLocation.Y
-                });
-
-            }
-            if (ProfileManager.CurrentProfile.BandageGump)
-            {
-                UIManager.Add(new BandageGump());
-            }
-            // ## BEGIN - END ## // UI/GUMPS
-            // ## BEGIN - END ## // LINES
-            if (ProfileManager.CurrentProfile.UOClassicCombatLines)
-            {
-                UIManager.Add(new UOClassicCombatLines
-                {
-                    X = ProfileManager.CurrentProfile.UOClassicCombatLinesLocation.X,
-                    Y = ProfileManager.CurrentProfile.UOClassicCombatLinesLocation.Y
-                });
-
-            }
-            // ## BEGIN - END ## // LINES
-            // ## BEGIN - END ## // AUTOLOOT
-            if (ProfileManager.CurrentProfile.UOClassicCombatAL)
-            {
-                UIManager.Add(new UOClassicCombatAL
-                {
-                    X = ProfileManager.CurrentProfile.UOClassicCombatALLocation.X,
-                    Y = ProfileManager.CurrentProfile.UOClassicCombatALLocation.Y
-                });
-
-            }
-            // ## BEGIN - END ## // AUTOLOOT
-            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-            if (ProfileManager.CurrentProfile.UOClassicCombatBuffbar)
-            {
-                UIManager.Add(new UOClassicCombatBuffbar
-                {
-                    X = ProfileManager.CurrentProfile.UOClassicCombatBuffbarLocation.X,
-                    Y = ProfileManager.CurrentProfile.UOClassicCombatBuffbarLocation.Y
-                });
-
-            }
-            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-            // ## BEGIN - END ## // SELF
-            if (ProfileManager.CurrentProfile.UOClassicCombatSelf)
-            {
-                UIManager.Add(new UOClassicCombatSelf
-                {
-                    X = ProfileManager.CurrentProfile.UOClassicCombatSelfLocation.X,
-                    Y = ProfileManager.CurrentProfile.UOClassicCombatSelfLocation.Y
-                });
-
-            }
-            // ## BEGIN - END ## // SELF
-            // ## BEGIN - END ## // AUTOMATIONS
-            ModulesManager.Load();
-            // ## BEGIN - END ## // AUTOMATIONS
 
             CircleOfTransparency.Create(ProfileManager.CurrentProfile.CircleOfTransparencyRadius);
             Plugin.OnConnected();
@@ -329,14 +247,14 @@ namespace ClassicUO.Game.Scenes
                     break;
 
                 case MessageType.Label:
-
+                
                     if (e.Parent == null || !SerialHelper.IsValid(e.Parent.Serial))
                     {
                         name = string.Empty;
                     }
-                    else if (string.IsNullOrEmpty(e.Name))
+                    else if (string.IsNullOrEmpty(e.Name)) 
                     {
-                        name = ResGeneral.YouSee;
+                        name = ResGeneral.YouSee;                      
                     }
                     else
                     {
@@ -383,17 +301,6 @@ namespace ClassicUO.Game.Scenes
 
                     break;
             }
-            // ## BEGIN - END ## // UI/GUMPS
-            World.Player?.BandageTimer.OnMessage(text, hue, name, e.IsUnicode);
-            // ## BEGIN - END ## // UI/GUMPS
-            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
-            // ## BEGIN - END ## // SELF
-            if (ProfileManager.CurrentProfile.UOClassicCombatSelf || ProfileManager.CurrentProfile.UOClassicCombatBuffbar)
-            {
-                World.ClilocTriggers.OnMessage(text, hue, name, e.IsUnicode);
-            }
-            // ## BEGIN - END ## // SELF
-            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
 
             if (!string.IsNullOrEmpty(text))
             {
@@ -402,11 +309,7 @@ namespace ClassicUO.Game.Scenes
                     text,
                     hue,
                     name,
-                    // ## BEGIN - END ## // MULTIJOURNAL
-                    //e.TextType,
-                    // ## BEGIN - END ## // MULTIJOURNAL
-                    e.Type,
-                    // ## BEGIN - END ## // MULTIJOURNAL
+                    e.TextType,
                     e.IsUnicode
                 );
             }
@@ -436,15 +339,6 @@ namespace ClassicUO.Game.Scenes
             catch
             {
             }
-            // ## BEGIN - END ## // AUTOMATIONS
-            try
-            {
-                ModulesManager.Unload();
-            }
-            catch
-            {
-            }
-            // ## BEGIN - END ## // AUTOMATIONS
 
             TargetManager.Reset();
 
@@ -455,9 +349,6 @@ namespace ClassicUO.Game.Scenes
 
             Macros.Save();
             InfoBars.Save();
-            // ## BEGIN - END ## // NAMEOVERHEAD
-            NameOverHeadManager.Save();
-            // ## BEGIN - END ## // NAMEOVERHEAD
             ProfileManager.UnLoadProfile();
 
             StaticFilters.CleanCaveTextures();
@@ -719,11 +610,7 @@ namespace ClassicUO.Game.Scenes
 
             GetViewPort();
 
-            // ## BEGIN - END ## // NAMEOVERHEAD
-            //var useObjectHandles = NameOverHeadManager.IsToggled || Keyboard.Ctrl && Keyboard.Shift;
-            // ## BEGIN - END ## // NAMEOVERHEAD
-            var useObjectHandles = NameOverHeadManager.IsShowing;
-            // ## BEGIN - END ## // NAMEOVERHEAD
+            var useObjectHandles = NameOverHeadManager.IsToggled || Keyboard.Ctrl && Keyboard.Shift;
             if (useObjectHandles != _useObjectHandles)
             {
                 _useObjectHandles = useObjectHandles;
@@ -1303,13 +1190,6 @@ namespace ClassicUO.Game.Scenes
 
         public void DrawOverheads(UltimaBatcher2D batcher)
         {
-            // ## BEGIN - END ## // TEXTUREMANAGER
-            _textureManager.Draw(batcher);
-            // ## BEGIN - END ## // TEXTUREMANAGER
-            // ## BEGIN - END ## // LINES
-            _UOClassicCombatLines.Draw(batcher);
-            // ## BEGIN - END ## // LINES
-
             _healthLinesManager.Draw(batcher);
 
             if (!UIManager.IsMouseOverWorld)
