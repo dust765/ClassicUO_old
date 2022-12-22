@@ -13,7 +13,7 @@ env:
   CUO_ASSEMBLY_VERSION: '0.1.11.${{ github.run_number }}'
   CUO_OUTPUT_PATH: 'bin/dist'
   CUO_PROJECT_PATH: "src/ClassicUO.csproj"
-  CUO_ZIP_NAME: "ClassicUO-dev-preview-release.zip"
+  CUO_ZIP_NAME: "ClassicUO-dev-dust765_activdev.zip"
 
   DOTNET_NOLOGO: false
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -54,7 +54,7 @@ jobs:
         exclusions: 'ClassicUO.exe.config'
         
     - name: Create manifest
-      run: dotnet run --project tools/ManifestCreator/ManifestCreator.csproj "${{ env.CUO_OUTPUT_PATH }}" "dev-preview" "${{ env.CUO_ZIP_NAME }}"
+      run: dotnet run --project tools/ManifestCreator/ManifestCreator.csproj "${{ env.CUO_OUTPUT_PATH }}" "dev-dust765_activdev" "${{ env.CUO_ZIP_NAME }}"
     
     - name: Move output
       run: |
@@ -66,7 +66,7 @@ jobs:
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
         delete_release: true
-        tag_name: ClassicUO-dev-release
+        tag_name: ClassicUO-dev-dust765_activdev-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
@@ -74,19 +74,8 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "upload/${{ env.CUO_ZIP_NAME }}"
-        name: 'ClassicUO dev preview'
+        name: 'ClassicUO dev-dust765_activdev preview'
         body: 'This build may not be safe: use it at your own risk.'
         prerelease: true
-        tag: ClassicUO-dev-release
+        tag: ClassicUO-dev-dust765_activdev-release
         token: ${{ secrets.GITHUB_TOKEN }}
-        
-    - name: FTP Deploy
-      uses: SamKirkland/FTP-Deploy-Action@4.3.2
-      with:
-        server: ftp.classicuo.eu
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PSW }}
-        protocol: ftps
-        server-dir: /www.classicuo.eu/dev/deploy/
-        local-dir: upload/
-        
