@@ -3177,13 +3177,13 @@ namespace ClassicUO.Game.UI.Gumps
                 rightArea,
                 5,
                 startY,
-                200,
+                400,
                 TEXTBOX_HEIGHT,
                 "List of Tab Names using this format",
                 0,
                 true,
                 false,
-                30
+                60
             );
 
             _tablistBox.SetText(_currentProfile.TabList.ToString());
