@@ -106,7 +106,7 @@ namespace ClassicUO.Game.UI.Gumps
             CanMove = true;
             AcceptMouseInput = true;
             AcceptKeyboardInput = false;
-            CanCloseWithRightClick = true;
+            CanCloseWithRightClick = false;
             WantUpdateSize = true;
             //int ButtonWidth = 70;
             //int ButtonHeight = 20;
