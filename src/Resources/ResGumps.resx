@@ -1567,8 +1567,7 @@ Client version: '{0}'</value>
   <data name="ShowMouseCoordinates" xml:space="preserve">
     <value>Show mouse coordinates</value>
   </data>
-  <!-- // ## BEGIN - END ## // MULTIJOURNAL -->
-   <data name="MessageType_System" xml:space="preserve">
+  <data name="MessageType_System" xml:space="preserve">
     <value>System</value>
   </data>
   <data name="MessageType_Emote" xml:space="preserve">
@@ -1616,5 +1615,7 @@ Client version: '{0}'</value>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
-  <!-- // ## BEGIN - END ## // MULTIJOURNAL -->
+  <data name="enableTabGridGump" xml:space="preserve">
+    <value>Tabgrid</value>
+  </data>
 </root>

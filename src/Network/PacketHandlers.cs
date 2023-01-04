@@ -6427,7 +6427,7 @@ namespace ClassicUO.Network
                 }
 
                 World.Player.Walker.ResendPacketResync = false;
-                World.Player.CloseRangedGumps();
+                //World.Player.CloseRangedGumps();
                 World.Player.SetInWorldTile(x, y, z);
                 World.Player.UpdateAbilities();
             }

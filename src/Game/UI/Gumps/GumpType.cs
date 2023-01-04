@@ -57,6 +57,8 @@ namespace ClassicUO.Game.UI.Gumps
 
         Debug,
         NetStats,
+        //tabgrid
+        TabGridGump,
         // ## BEGIN - END ## // MACROS
         Journal2,
         // ## BEGIN - END ## // MACROS

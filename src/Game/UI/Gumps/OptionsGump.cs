@@ -90,6 +90,10 @@ namespace ClassicUO.Game.UI.Gumps
         //counters
         private Checkbox _enableCounters, _highlightOnUse, _highlightOnAmount, _enableAbbreviatedAmount;
         private Checkbox _enableDragSelect, _dragSelectHumanoidsOnly;
+        //TabGrid gump mod declarations
+        private Checkbox _enableTabGridGump;
+        private InputField _tablistBox, _rowsGrid, _tabsGrid;
+        //end Tabgrid gump mod declarations
 
         // sounds
         private Checkbox _enableSounds, _enableMusic, _footStepsSound, _combatMusic, _musicInBackground, _loginMusic;
@@ -3119,6 +3123,70 @@ namespace ClassicUO.Game.UI.Gumps
 
             _columns.SetText(_currentProfile.CounterBarColumns.ToString());
 
+            //Tabgrid scheme
+            startX = 5;
+            startY = 250;
+            _enableTabGridGump = AddCheckBox
+            (
+                rightArea,
+                ResGumps.enableTabGridGump,
+                _currentProfile.TabGridGumpEnabled,
+                startX,
+                startY
+            );
+
+            startY += text.Height + 2 + 15;
+
+            _rowsGrid = AddInputField
+            (
+                rightArea,
+                startX,
+                startY,
+                50,
+                30,
+                "Grid Rows",
+                50,
+                false,
+                true,
+                30
+            );
+
+            _rowsGrid.SetText(_currentProfile.GridRows.ToString());
+
+
+            startX += _rows.Width + 5 + 100;
+
+            _tabsGrid = AddInputField
+            (
+                rightArea,
+                startX,
+                startY,
+                50,
+                30,
+                "Number of Tabs",
+                50,
+                false,
+                true,
+                30
+            );
+            _tabsGrid.SetText(_currentProfile.GridTabs.ToString());
+
+            startY += text.Height + 2 + 15;
+            _tablistBox = AddInputField
+            (
+                rightArea,
+                5,
+                startY,
+                200,
+                TEXTBOX_HEIGHT,
+                "List of Tab Names using this format",
+                0,
+                true,
+                false,
+                30
+            );
+
+            _tablistBox.SetText(_currentProfile.TabList.ToString());
 
             Add(rightArea, PAGE);
         }
@@ -5681,6 +5749,12 @@ namespace ClassicUO.Game.UI.Gumps
                     _highlightOnAmount.IsChecked = false;
                     _highlightAmount.SetText("5");
                     _abbreviatedAmount.SetText("1000");
+                    //tabgridgump mod
+                    _enableTabGridGump.IsChecked = false;
+                    _rowsGrid.SetText("1");
+                    _tabsGrid.SetText("1");
+                    _tablistBox.SetText("tab1:tab 2:tab 3");
+                    //
 
                     break;
 
@@ -6116,6 +6190,36 @@ namespace ClassicUO.Game.UI.Gumps
                 else
                 {
                     counterGump.IsEnabled = counterGump.IsVisible = _currentProfile.CounterBarEnabled;
+                }
+            }
+
+            //tabgrid Apply
+            _currentProfile.GridRows = int.Parse(_rowsGrid.Text);
+            _currentProfile.GridTabs = int.Parse(_tabsGrid.Text);
+            _currentProfile.TabList = _tablistBox.Text;
+            _currentProfile.TabGridGumpEnabled = _enableTabGridGump.IsChecked;
+            bool tabgrid = _currentProfile.TabGridGumpEnabled != _customBars.IsChecked;
+            string str2 = _currentProfile.GridRows.ToString();
+            string str1 = _currentProfile.GridTabs.ToString();
+
+            TabGridGump tabgridGump = UIManager.GetGump<TabGridGump>();
+
+            if (_currentProfile.TabGridGumpEnabled)
+            {
+                if (tabgridGump == null)
+                {
+                    UIManager.Add(new TabGridGump());
+                }
+                else
+                {
+                    tabgridGump.SetInScreen();
+                }
+            }
+            else
+            {
+                if (tabgridGump != null)
+                {
+                    tabgridGump.Dispose();
                 }
             }
 

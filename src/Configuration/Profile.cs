@@ -239,6 +239,14 @@ namespace ClassicUO.Configuration
         public int CounterBarRows { get; set; } = 1;
         public int CounterBarColumns { get; set; } = 1;
 
+        //profile.cs tabgrid mod declarations
+        public bool TabGridGumpEnabled { get; set; }
+        public int GridTabs { get; set; } = 1;
+        public int GridRows { get; set; } = 1;
+        public string TabList { get; set; } = "tab1:tab2:tab3";
+        //end tabgrid mod declarations
+
+
         public bool ShowSkillsChangedMessage { get; set; } = true;
         public int ShowSkillsChangedDeltaValue { get; set; } = 1;
         public bool ShowStatsChangedMessage { get; set; } = true;
@@ -794,6 +802,11 @@ namespace ClassicUO.Configuration
                                     gump = new CounterBarGump();
 
                                     break;
+                                //tabgridgump mod call
+                                case GumpType.TabGridGump:
+                                    gump = new TabGridGump();
+                                    break;
+                                //end tabgridgump mod call
 
                                 case GumpType.HealthBar:
                                     if (CustomBarsToggled)
