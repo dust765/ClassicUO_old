@@ -147,6 +147,8 @@ namespace ClassicUO.Game.UI.Gumps
             _picBase?.Dispose();
             _hitBox?.Dispose();
 
+            var showPaperdollBooks = LocalSerial == World.Player && World.ClientFeatures.PaperdollBooks;
+            var showRacialAbilitiesBook = showPaperdollBooks && Client.Version >= ClientVersion.CV_7000;
 
             if (LocalSerial == World.Player)
             {
@@ -156,7 +158,7 @@ namespace ClassicUO.Game.UI.Gumps
                 //HELP BUTTON
                 Add
                 (
-                    new Button((int) Buttons.Help, 0x07ef, 0x07f0, 0x07f1)
+                    new Button((int)Buttons.Help, 0x07ef, 0x07f0, 0x07f1)
                     {
                         X = 185,
                         Y = 44 + 27 * 0,
@@ -167,7 +169,7 @@ namespace ClassicUO.Game.UI.Gumps
                 //OPTIONS BUTTON
                 Add
                 (
-                    new Button((int) Buttons.Options, 0x07d6, 0x07d7, 0x07d8)
+                    new Button((int)Buttons.Options, 0x07d6, 0x07d7, 0x07d8)
                     {
                         X = 185,
                         Y = 44 + 27 * 1,
@@ -178,7 +180,7 @@ namespace ClassicUO.Game.UI.Gumps
                 // LOG OUT BUTTON
                 Add
                 (
-                    new Button((int) Buttons.LogOut, 0x07d9, 0x07da, 0x07db)
+                    new Button((int)Buttons.LogOut, 0x07d9, 0x07da, 0x07db)
                     {
                         X = 185,
                         Y = 44 + 27 * 2,
@@ -216,7 +218,7 @@ namespace ClassicUO.Game.UI.Gumps
                 // SKILLS BUTTON
                 Add
                 (
-                    new Button((int) Buttons.Skills, 0x07df, 0x07e0, 0x07e1)
+                    new Button((int)Buttons.Skills, 0x07df, 0x07e0, 0x07e1)
                     {
                         X = 185,
                         Y = 44 + 27 * 4,
@@ -227,7 +229,7 @@ namespace ClassicUO.Game.UI.Gumps
                 // GUILD BUTTON
                 Add
                 (
-                    new Button((int) Buttons.Guild, 0x57b2, 0x57b4, 0x57b3)
+                    new Button((int)Buttons.Guild, 0x57b2, 0x57b4, 0x57b3)
                     {
                         X = 185,
                         Y = 44 + 27 * 5,
@@ -243,7 +245,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                 Add
                 (
-                    _warModeBtn = new Button((int) Buttons.PeaceWarToggle, btngumps[0], btngumps[1], btngumps[2])
+                    _warModeBtn = new Button((int)Buttons.PeaceWarToggle, btngumps[0], btngumps[1], btngumps[2])
                     {
                         X = 185,
                         Y = 44 + 27 * 6,
@@ -255,25 +257,9 @@ namespace ClassicUO.Game.UI.Gumps
                 int profileX = 25;
                 const int SCROLLS_STEP = 14;
 
-                if (World.ClientFeatures.PaperdollBooks)
+                if (showRacialAbilitiesBook)
                 {
-                    Add(_combatBook = new GumpPic(156, 200, 0x2B34, 0));
-                    _combatBook.MouseDoubleClick += (sender, e) => { GameActions.OpenAbilitiesBook(); };
-
-                    if (Client.Version >= ClientVersion.CV_7000)
-                    {
-                        Add(_racialAbilitiesBook = new GumpPic(23, 200, 0x2B28, 0));
-
-                        _racialAbilitiesBook.MouseDoubleClick += (sender, e) =>
-                        {
-                            if (UIManager.GetGump<RacialAbilitiesBookGump>() == null)
-                            {
-                                UIManager.Add(new RacialAbilitiesBookGump(100, 100));
-                            }
-                        };
-
-                        profileX += SCROLLS_STEP;
-                    }
+                    profileX += SCROLLS_STEP;
                 }
 
                 Add(_profilePic = new GumpPic(profileX, 196, 0x07D2, 0));
@@ -300,7 +286,7 @@ namespace ClassicUO.Game.UI.Gumps
             // STATUS BUTTON
             Add
             (
-                new Button((int) Buttons.Status, 0x07eb, 0x07ec, 0x07ed)
+                new Button((int)Buttons.Status, 0x07eb, 0x07ec, 0x07ed)
                 {
                     X = 185,
                     Y = 44 + 27 * 7,
@@ -393,6 +379,24 @@ namespace ClassicUO.Game.UI.Gumps
             //};
             Add(_paperDollInteractable);
 
+            if (showPaperdollBooks)
+            {
+                Add(_combatBook = new GumpPic(156, 200, 0x2B34, 0));
+                _combatBook.MouseDoubleClick += (sender, e) => { GameActions.OpenAbilitiesBook(); };
+
+                if (showRacialAbilitiesBook)
+                {
+                    Add(_racialAbilitiesBook = new GumpPic(23, 200, 0x2B28, 0));
+
+                    _racialAbilitiesBook.MouseDoubleClick += (sender, e) =>
+                    {
+                        if (UIManager.GetGump<RacialAbilitiesBookGump>() == null)
+                        {
+                            UIManager.Add(new RacialAbilitiesBookGump(100, 100));
+                        }
+                    };
+                }
+            }
             // Name and title
             _titleLabel = new Label("", false, 0x0386, 185, font: 1)
             {
@@ -634,9 +638,9 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 for (int i = 0; i < _slots.Length; i++)
                 {
-                    int idx = (int) _slots[i].Layer;
+                    int idx = (int)_slots[i].Layer;
 
-                    _slots[i].LocalSerial = mobile.FindItemByLayer((Layer) idx)?.Serial ?? 0;
+                    _slots[i].LocalSerial = mobile.FindItemByLayer((Layer)idx)?.Serial ?? 0;
                 }
             }
         }
@@ -650,7 +654,7 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
-            switch ((Buttons) buttonID)
+            switch ((Buttons)buttonID)
             {
                 case Buttons.Help:
                     GameActions.RequestHelp();

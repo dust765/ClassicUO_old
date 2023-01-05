@@ -85,6 +85,7 @@ namespace ClassicUO.Game.UI.Gumps
         private HSliderBar _delay_before_display_tooltip, _tooltip_zoom, _tooltip_background_opacity;
         private Combobox _dragSelectModifierKey;
         private Combobox _backpackStyle;
+        private Checkbox _hueContainerGumps;
 
 
         //counters
@@ -146,8 +147,7 @@ namespace ClassicUO.Game.UI.Gumps
         // combat & spells
         private ClickableColorBox _innocentColorPickerBox, _friendColorPickerBox, _crimialColorPickerBox, _canAttackColorPickerBox, _enemyColorPickerBox, _murdererColorPickerBox, _neutralColorPickerBox, _beneficColorPickerBox, _harmfulColorPickerBox;
         private HSliderBar _lightBar;
-        private Checkbox _buffBarTime, _castSpellsByOneClick, _queryBeforAttackCheckbox, _queryBeforeBeneficialCheckbox, _spellColoringCheckbox, _spellFormatCheckbox, _enableFastSpellsAssign;
-
+        private Checkbox _buffBarTime, _uiButtonsSingleClick, _queryBeforAttackCheckbox, _queryBeforeBeneficialCheckbox, _spellColoringCheckbox, _spellFormatCheckbox, _enableFastSpellsAssign;
         // macro
         private MacroControl _macroControl;
         private Checkbox _overrideAllFonts;
@@ -184,6 +184,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         // video
         private Checkbox _use_old_status_gump, _windowBorderless, _enableDeathScreen, _enableBlackWhiteEffect, _altLights, _enableLight, _enableShadows, _enableShadowsStatics, _auraMouse, _runMouseInSeparateThread, _useColoredLights, _darkNights, _partyAura, _hideChatGradient;
+        private Combobox _lightLevelType;
         private Checkbox _use_smooth_boat_movement;
         private HSliderBar _terrainShadowLevel;
 
@@ -1893,6 +1894,20 @@ namespace ClassicUO.Game.UI.Gumps
                     250
                 )
             );
+            section3.Add(AddLabel(null, ResGumps.LightLevelType, startX, startY));
+
+            section3.AddRight
+            (
+                _lightLevelType = AddCombobox
+                (
+                    null,
+                    new[] { ResGumps.LightLevelTypeAbsolute, ResGumps.LightLevelTypeMinimum },
+                    _currentProfile.LightLevelType,
+                    startX,
+                    startY,
+                    150
+                )
+            );
 
             section3.Add
             (
@@ -2802,16 +2817,16 @@ namespace ClassicUO.Game.UI.Gumps
 
             startY += _spellColoringCheckbox.Height + 2;
 
-            _castSpellsByOneClick = AddCheckBox
+            _uiButtonsSingleClick = AddCheckBox
             (
                 rightArea,
-                ResGumps.CastSpellsByOneClick,
+                ResGumps.UIButtonsSingleClick,
                 _currentProfile.CastSpellsByOneClick,
                 startX,
                 startY
             );
 
-            startY += _castSpellsByOneClick.Height + 2;
+            startY += _uiButtonsSingleClick.Height + 2;
 
             _buffBarTime = AddCheckBox
             (
@@ -3520,6 +3535,16 @@ namespace ClassicUO.Game.UI.Gumps
             );
 
             startY += _highlightContainersWhenMouseIsOver.Height + 2;
+            _hueContainerGumps = AddCheckBox
+            (
+                rightArea,
+                ResGumps.HueContainerGumps,
+                _currentProfile.HueContainerGumps,
+                startX,
+                startY
+            );
+
+            startY += _hueContainerGumps.Height + 2;
 
             _overrideContainerLocation = AddCheckBox
             (
@@ -5662,6 +5687,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _currentProfile.DefaultScale = 1f;
                     _lightBar.Value = 0;
                     _enableLight.IsChecked = false;
+                    _lightLevelType.SelectedIndex = 0;
                     _useColoredLights.IsChecked = false;
                     _darkNights.IsChecked = false;
                     _enableShadows.IsChecked = true;
@@ -5727,7 +5753,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _enemyColorPickerBox.Hue = 0x0031;
                     _queryBeforAttackCheckbox.IsChecked = true;
                     _queryBeforeBeneficialCheckbox.IsChecked = false;
-                    _castSpellsByOneClick.IsChecked = false;
+                    _uiButtonsSingleClick.IsChecked = false;                    
                     _buffBarTime.IsChecked = false;
                     _enableFastSpellsAssign.IsChecked = false;
                     _beneficColorPickerBox.Hue = 0x0059;
@@ -5773,6 +5799,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _overrideContainerLocation.IsChecked = false;
                     _overrideContainerLocationSetting.SelectedIndex = 0;
                     _backpackStyle.SelectedIndex = 0;
+                    _hueContainerGumps.IsChecked = true;
 
                     break;
 
@@ -6060,10 +6087,10 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.UseAlternativeLights = _altLights.IsChecked;
             _currentProfile.UseCustomLightLevel = _enableLight.IsChecked;
             _currentProfile.LightLevel = (byte) (_lightBar.MaxValue - _lightBar.Value);
-
+            _currentProfile.LightLevelType = _lightLevelType.SelectedIndex;
             if (_enableLight.IsChecked)
             {
-                World.Light.Overall = _currentProfile.LightLevel;
+                World.Light.Overall = _currentProfile.LightLevelType == 1 ? Math.Min(World.Light.RealOverall, _currentProfile.LightLevel) : _currentProfile.LightLevel;
                 World.Light.Personal = 0;
             }
             else
@@ -6111,7 +6138,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.MurdererHue = _murdererColorPickerBox.Hue;
             _currentProfile.EnabledCriminalActionQuery = _queryBeforAttackCheckbox.IsChecked;
             _currentProfile.EnabledBeneficialCriminalActionQuery = _queryBeforeBeneficialCheckbox.IsChecked;
-            _currentProfile.CastSpellsByOneClick = _castSpellsByOneClick.IsChecked;
+            _currentProfile.CastSpellsByOneClick = _uiButtonsSingleClick.IsChecked;
             _currentProfile.BuffBarTime = _buffBarTime.IsChecked;
             _currentProfile.FastSpellsAssign = _enableFastSpellsAssign.IsChecked;
 
@@ -6357,6 +6384,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.DoubleClickToLootInsideContainers = _containerDoubleClickToLoot.IsChecked;
             _currentProfile.RelativeDragAndDropItems = _relativeDragAnDropItems.IsChecked;
             _currentProfile.HighlightContainerWhenSelected = _highlightContainersWhenMouseIsOver.IsChecked;
+            _currentProfile.HueContainerGumps = _hueContainerGumps.IsChecked;
 
             if (_currentProfile.BackpackStyle != _backpackStyle.SelectedIndex)
             {
