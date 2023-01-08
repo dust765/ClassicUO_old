@@ -74,7 +74,7 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "upload/${{ env.CUO_ZIP_NAME }}"
-        name: 'ClassicUO dev-dust765_activdev preview'
+        name: '0.1.11.${{ github.run_number }} dev_dust765_activdev'
         body: 'This build may not be safe: use it at your own risk.'
         prerelease: true
         tag: ClassicUO-dev-dust765_activdev-release
