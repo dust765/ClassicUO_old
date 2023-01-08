@@ -13,7 +13,7 @@ env:
   CUO_ASSEMBLY_VERSION: '0.1.11.${{ github.run_number }}'
   CUO_OUTPUT_PATH: 'bin/dist'
   CUO_PROJECT_PATH: "src/ClassicUO.csproj"
-  CUO_ZIP_NAME: "ClassicUO-dev-dust765_activdev.zip"
+  CUO_ZIP_NAME: "ClassicUO-dev-dust765_activedev.zip"
 
   DOTNET_NOLOGO: false
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -22,7 +22,7 @@ env:
 
 jobs:
   build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} || github.event_name == 'workflow_dispatch' }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -66,7 +66,7 @@ jobs:
       uses: dev-drprasad/delete-tag-and-release@v0.2.0
       with:
         delete_release: true
-        tag_name: ClassicUO-dev-dust765_activdev-release
+        tag_name: ClassicUO-dev-dust765_activedev-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
@@ -74,7 +74,7 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "upload/${{ env.CUO_ZIP_NAME }}"
-        name: 'ClassicUO dev-dust765_activdev preview'
+        name: '0.1.11.${{ github.run_number }} dev_dust765_activdev'
         body: 'This build may not be safe: use it at your own risk.'
         prerelease: true
         tag: ClassicUO-dev-dust765_activdev-release
