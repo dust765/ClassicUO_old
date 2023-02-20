@@ -288,6 +288,14 @@ adds a modern version of the cooldown bar
 
 note: filter displayed buffs with modernbuffs.txt in /Data/Client, the EC txt are used to determine color
 
+# on casting gump
+
+shows a little gump on cursor when casting (can be hidden)
+
+main purpose being, to prevent rubberband on servers that dont send a freeze packet during casting
+
+(mod by Mark)
+
 # Added files
 
 /src/Dust765
@@ -973,6 +981,29 @@ CombatCollection.cs                             1996    2088    UNUSED
 /src/Client.cs	                                38      40      MODERNCOOLDOWNBAR
 
 /src/Client.cs	                                196     198     MODERNCOOLDOWNBAR
+
+/src/Network/PacketHandlers.cs                  276     278     ONCASTINGGUMP
+
+/src/Network/PacketHandlers.cs                  387     389     ONCASTINGGUMP
+
+/src/Network/PacketHandlers.cs                  4673    4678    ONCASTINGGUMP
+
+/src/Game/GameActions.cs                        57      59      ONCASTINGGUMP
+
+/src/Game/GameActions.cs                        666     672     ONCASTINGGUMP
+
+/src/Game/GameActions.cs                        687     693     ONCASTINGGUMP
+
+/src/Game/GameObjects/PlayerMobile.cs           62      64      ONCASTINGGUMP
+
+/src/Game/GameObjects/PlayerMobile.cs           73      75      ONCASTINGGUMP
+
+/src/Game/GameObjects/PlayerMobile.cs           1626    1628    ONCASTINGGUMP
+
+/src/Game/Scenes/GameScene.cs           	    278     286     ONCASTINGGUMP
+
+/src/Configuration/Profile.cs	                550     553     ONCASTINGGUMP
+
 
 # Introduction
 ClassicUO is an open source implementation of the Ultima Online Classic Client. This client is intended to emulate all standard client versions and is primarily tested against Ultima Online free shards.

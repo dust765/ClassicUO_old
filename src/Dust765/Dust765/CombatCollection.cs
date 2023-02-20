@@ -1342,6 +1342,13 @@ namespace ClassicUO.Dust765.Dust765
                     }
                 }
             }
+            // ## BEGIN - END ## // ONCASTINGGUMP
+            if (ProfileManager.CurrentProfile.OnCastingGump)
+            {
+                if (!GameActions.iscasting)
+                    World.Player.OnCasting.Start((uint) GameActions.LastSpellIndexCursor);
+            }
+            // ## BEGIN - END ## // ONCASTINGGUMP
         }
         // ## BEGIN - END ## // VISUAL HELPERS
         // ## BEGIN - END ## // CURSOR

@@ -54,7 +54,9 @@ namespace ClassicUO.Game
         // ## BEGIN - END ## // VISUAL HELPERS
         public static int LastSpellIndexCursor { get; set; } = 0;
         // ## BEGIN - END ## // VISUAL HELPERS
-
+        // ## BEGIN - END ## // ONCASTINGGUMP
+        public static bool iscasting { get; set; } = false;
+        // ## BEGIN - END ## // ONCASTINGGUMP
 
         public static void ToggleWarMode()
         {
@@ -661,6 +663,13 @@ namespace ClassicUO.Game
                 LastSpellIndexCursor = index;
                 GameCursor._spellTime = 0;
                 // ## BEGIN - END ## // VISUAL HELPERS
+                // ## BEGIN - END ## // ONCASTINGGUMP
+                if (ProfileManager.CurrentProfile.OnCastingGump)
+                {
+                    if (!iscasting)
+                        World.Player.OnCasting.Start((uint) index);
+                }
+                // ## BEGIN - END ## // ONCASTINGGUMP
 
                 LastSpellIndex = index;
                 Socket.Send_CastSpellFromBook(index, bookSerial);
@@ -675,6 +684,13 @@ namespace ClassicUO.Game
                 LastSpellIndexCursor = index;
                 GameCursor._spellTime = 0;
                 // ## BEGIN - END ## // VISUAL HELPERS
+                // ## BEGIN - END ## // ONCASTINGGUMP
+                if (ProfileManager.CurrentProfile.OnCastingGump)
+                {
+                    if (!iscasting)
+                        World.Player.OnCasting.Start((uint) index);
+                }
+                // ## BEGIN - END ## // ONCASTINGGUMP
 
                 LastSpellIndex = index;
                 Socket.Send_CastSpell(index);

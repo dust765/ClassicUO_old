@@ -273,6 +273,9 @@ namespace ClassicUO.Network
         private static void TargetCursor(ref StackDataReader p)
         {
             TargetManager.SetTargeting((CursorTarget) p.ReadUInt8(), p.ReadUInt32BE(), (TargetType) p.ReadUInt8());
+            // ## BEGIN - END ## // ONCASTINGGUMP
+            GameActions.iscasting = false;
+            // ## BEGIN - END ## // ONCASTINGGUMP
 
             if (World.Party.PartyHealTimer < Time.Ticks && World.Party.PartyHealTarget != 0)
             {
@@ -381,6 +384,9 @@ namespace ClassicUO.Network
 
                 if (damage > 0)
                 {
+                    // ## BEGIN - END ## // ONCASTINGGUMP
+                    GameActions.iscasting = false;
+                    // ## BEGIN - END ## // ONCASTINGGUMP
                     World.WorldTextManager.AddDamage(entity, damage);
                 }
             }
@@ -4664,6 +4670,12 @@ namespace ClassicUO.Network
 
             string arguments = null;
 
+            // ## BEGIN - END ## // ONCASTINGGUMP
+            if (ProfileManager.CurrentProfile.OnCastingGump)
+            {
+                World.Player?.OnCasting.OnCliloc(cliloc);
+            }
+            // ## BEGIN - END ## // ONCASTINGGUMP
             // ## BEGIN - END ## // UI/GUMPS
             World.Player?.BandageTimer.OnCliloc(cliloc);
             // ## BEGIN - END ## // UI/GUMPS

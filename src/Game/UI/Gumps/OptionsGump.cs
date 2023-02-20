@@ -283,6 +283,9 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // STATUSGUMP
         private Checkbox _useRazorEnhStatusGump;
         // ## BEGIN - END ## // STATUSGUMP
+        // ## BEGIN - END ## // ONCASTINGGUMP
+        private Checkbox _onCastingGump, _onCastingGump_hidden;
+        // ## BEGIN - END ## // ONCASTINGGUMP
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4811,6 +4814,12 @@ namespace ClassicUO.Game.UI.Gumps
             startY += _bandageGumpOffsetY.Height + 2;
             section.AddRight(AddLabel(null, "Y", 0, 0), 2);
             // ## BEGIN - END ## // UI/GUMPS
+            // ## BEGIN - END ## // ONCASTINGGUMP
+            section.Add(_onCastingGump = AddCheckBox(null, "OnCasting gump (anti-rubberbanding) on mouse", _currentProfile.OnCastingGump, startX, startY));
+            startY += _highlightContainersWhenMouseIsOver.Height + 2;
+            section.Add(_onCastingGump_hidden = AddCheckBox(null, "hide the gump", _currentProfile.OnCastingGump_hidden, startX, startY));
+            startY += _highlightContainersWhenMouseIsOver.Height + 2;
+            // ## BEGIN - END ## // ONCASTINGGUMP
             // ## BEGIN - END ## // TEXTUREMANAGER
             SettingsSection section2 = AddSettingsSection(box, "-----Texture Manager-----");
             section2.Y = section.Bounds.Bottom + 40;
@@ -6764,6 +6773,10 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // STATUSGUMP
             _currentProfile.UseRazorEnhStatusGump = _useRazorEnhStatusGump.IsChecked;
             // ## BEGIN - END ## // STATUSGUMP
+            // ## BEGIN - END ## // ONCASTINGGUMP
+            _currentProfile.OnCastingGump = _onCastingGump.IsChecked;
+            _currentProfile.OnCastingGump_hidden = _onCastingGump_hidden.IsChecked;
+            // ## BEGIN - END ## // ONCASTINGGUMP
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
