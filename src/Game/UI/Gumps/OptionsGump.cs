@@ -286,6 +286,10 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // ONCASTINGGUMP
         private Checkbox _onCastingGump, _onCastingGump_hidden;
         // ## BEGIN - END ## // ONCASTINGGUMP
+        // ## BEGIN - END ## // SHOWALLLAYERS
+        private Checkbox _showAllLayers, _showAllLayersPaperdoll;
+        private InputField _showAllLayersPaperdoll_X;
+        // ## BEGIN - END ## // SHOWALLLAYERS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4253,6 +4257,31 @@ namespace ClassicUO.Game.UI.Gumps
             section8.Add(_showDeathOnWorldmap = AddCheckBox(null, "Show death location on world map for 5min:", _currentProfile.ShowDeathOnWorldmap, startX, startY));
             startY += _showDeathOnWorldmap.Height + 2;
             // ## BEGIN - END ## // MISC2
+            // ## BEGIN - END ## // SHOWALLLAYERS
+            section8.Add(_showAllLayers = AddCheckBox(null, "Show all equipment layers on mobiles ON / OFF", _currentProfile.ShowAllLayers, startX, startY));
+            startY += _showAllLayers.Height + 2;
+            section8.Add(_showAllLayersPaperdoll = AddCheckBox(null, "Show all equipment layers on paperdoll ON / OFF", _currentProfile.ShowAllLayersPaperdoll, startX, startY));
+            startY += _showAllLayersPaperdoll.Height + 2;
+
+            section8.Add
+            (
+                _showAllLayersPaperdoll_X = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _showAllLayersPaperdoll_X.SetText(_currentProfile.ShowAllLayersPaperdoll_X.ToString());
+            section8.AddRight(AddLabel(null, "X ( reopen paperdoll after changes )", 0, 0), 2);
+            startY += _showAllLayersPaperdoll_X.Height + 2;
+            // ## BEGIN - END ## // SHOWALLLAYERS
             // ## BEGIN - END ## // NAMEOVERHEAD
             SettingsSection section9 = AddSettingsSection(box, "-----NAMEOVERHEAD-----");
             section9.Y = section8.Bounds.Bottom + 40;
@@ -6777,6 +6806,11 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.OnCastingGump = _onCastingGump.IsChecked;
             _currentProfile.OnCastingGump_hidden = _onCastingGump_hidden.IsChecked;
             // ## BEGIN - END ## // ONCASTINGGUMP
+            // ## BEGIN - END ## // SHOWALLLAYERS
+            _currentProfile.ShowAllLayers = _showAllLayers.IsChecked;
+            _currentProfile.ShowAllLayersPaperdoll = _showAllLayersPaperdoll.IsChecked;
+            _currentProfile.ShowAllLayersPaperdoll_X = int.Parse(_showAllLayersPaperdoll_X.Text);
+            // ## BEGIN - END ## // SHOWALLLAYERS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

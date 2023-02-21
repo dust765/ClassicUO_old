@@ -68,6 +68,9 @@ namespace ClassicUO.Game.UI.Gumps
         private GumpPic _picBase;
         private GumpPic _profilePic;
         private readonly EquipmentSlot[] _slots = new EquipmentSlot[6];
+        // ## BEGIN - END ## // SHOWALLLAYERS
+        private readonly EquipmentSlot[] _slots_right = new EquipmentSlot[6];
+        // ## BEGIN - END ## // SHOWALLLAYERS
         private Label _titleLabel;
         private GumpPic _virtueMenuPic;
         private Button _warModeBtn;
@@ -371,6 +374,85 @@ namespace ClassicUO.Game.UI.Gumps
                 )
             );
 
+            // ## BEGIN - END ## // SHOWALLLAYERS
+            if (ProfileManager.CurrentProfile.ShowAllLayersPaperdoll)
+            {
+                int _slots_right_x = ProfileManager.CurrentProfile.ShowAllLayersPaperdoll_X;
+                // Equipment slots for torso/arms/pants/shoes/cloak
+                Add
+                (
+                    _slots_right[0] = new EquipmentSlot
+                    (
+                        0,
+                        _slots_right_x,
+                        75,
+                        Layer.Torso,
+                        this
+                    )
+                );
+
+                Add
+                (
+                    _slots_right[1] = new EquipmentSlot
+                    (
+                        0,
+                        _slots_right_x,
+                        75 + 21,
+                        Layer.Arms,
+                        this
+                    )
+                );
+
+                Add
+                (
+                    _slots_right[2] = new EquipmentSlot
+                    (
+                        0,
+                        _slots_right_x,
+                        75 + 21 * 2,
+                        Layer.Pants,
+                        this
+                    )
+                );
+
+                Add
+                (
+                    _slots_right[3] = new EquipmentSlot
+                    (
+                        0,
+                        _slots_right_x,
+                        75 + 21 * 3,
+                        Layer.Shoes,
+                        this
+                    )
+                );
+
+                Add
+                (
+                    _slots_right[4] = new EquipmentSlot
+                    (
+                        0,
+                        _slots_right_x,
+                        75 + 21 * 4,
+                        Layer.Waist,
+                        this
+                    )
+                );
+
+                Add
+                (
+                    _slots_right[5] = new EquipmentSlot
+                    (
+                        0,
+                        _slots_right_x,
+                        75 + 21 * 5,
+                        Layer.Cloak,
+                        this
+                    )
+                );
+            }
+            // ## BEGIN - END ## // SHOWALLLAYERS
+
             // Paperdoll control!
             _paperDollInteractable = new PaperDollInteractable(8, 19, LocalSerial, this);
             Add(_paperDollInteractable);
@@ -635,10 +717,21 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 for (int i = 0; i < _slots.Length; i++)
                 {
-                    int idx = (int)_slots[i].Layer;
+                    int idx = (int) _slots[i].Layer;
 
-                    _slots[i].LocalSerial = mobile.FindItemByLayer((Layer)idx)?.Serial ?? 0;
+                    _slots[i].LocalSerial = mobile.FindItemByLayer((Layer) idx)?.Serial ?? 0;
                 }
+                // ## BEGIN - END ## // SHOWALLLAYERS
+                if (ProfileManager.CurrentProfile.ShowAllLayersPaperdoll)
+                {
+                    for (int i = 0; i < _slots_right.Length; i++)
+                    {
+                        int idx = (int) _slots_right[i].Layer;
+
+                        _slots_right[i].LocalSerial = mobile.FindItemByLayer((Layer) idx)?.Serial ?? 0;
+                    }
+                }
+                // ## BEGIN - END ## // SHOWALLLAYERS
             }
         }
 

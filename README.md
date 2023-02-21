@@ -296,6 +296,14 @@ main purpose being, to prevent rubberband on servers that dont send a freeze pac
 
 (mod by Mark)
 
+# show all layers
+
+shows all equipment layers on mobiles (covered items should show)
+
+(mod by Mark)
+
+show additional equipment slots on paperdoll (for torso/arms/pants/shoes/cloak)
+
 # Added files
 
 /src/Dust765
@@ -1003,6 +1011,16 @@ CombatCollection.cs                             1996    2088    UNUSED
 /src/Game/Scenes/GameScene.cs           	    278     286     ONCASTINGGUMP
 
 /src/Configuration/Profile.cs	                550     553     ONCASTINGGUMP
+
+/src/Configuration/Profile.cs	                554     558     SHOWALLLAYERS
+
+/src/Game/GameObjects/Views/MobileView.cs       1166    1171    SHOWALLLAYERS
+
+/src/Game/UI/Gumps/PaperdollGump.cs             71      73      SHOWALLLAYERS
+
+/src/Game/UI/Gumps/PaperdollGump.cs             377     454     SHOWALLLAYERS
+
+/src/Game/UI/Gumps/PaperdollGump.cs             724     734     SHOWALLLAYERS
 
 
 # Introduction
