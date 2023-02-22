@@ -462,6 +462,15 @@ namespace ClassicUO.Game.UI.Gumps
         }
 
 
+        // ## BEGIN - END ## // THIEFSUPREME
+        public virtual void ThiefUpdate()
+        {
+            Clear();
+            BuildGump();
+            IsMinimized = IsMinimized;
+            ItemsOnAdded();
+        }
+        // ## BEGIN - END ## // THIEFSUPREME
         protected override void UpdateContents()
         {
             Clear();
@@ -523,6 +532,13 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     continue;
                 }
+
+                // ## BEGIN - END ## // THIEFSUPREME
+                if (item.AllowedToDraw == false)
+                {
+                    continue;
+                }
+                // ## BEGIN - END ## // THIEFSUPREME
 
                 var layer = (Layer)item.ItemData.Layer;
 

@@ -290,6 +290,9 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _showAllLayers, _showAllLayersPaperdoll;
         private InputField _showAllLayersPaperdoll_X;
         // ## BEGIN - END ## // SHOWALLLAYERS
+        // ## BEGIN - END ## // THIEFSUPREME
+        private Checkbox _overrideContainerOpenRange;
+        // ## BEGIN - END ## // THIEFSUPREME
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4282,6 +4285,10 @@ namespace ClassicUO.Game.UI.Gumps
             section8.AddRight(AddLabel(null, "X ( reopen paperdoll after changes )", 0, 0), 2);
             startY += _showAllLayersPaperdoll_X.Height + 2;
             // ## BEGIN - END ## // SHOWALLLAYERS
+            // ## BEGIN - END ## // THIEFSUPREME
+            section8.Add(_overrideContainerOpenRange = AddCheckBox(null, "Override container open range", _currentProfile.OverrideContainerOpenRange, startX, startY));
+            startY += _overrideContainerOpenRange.Height + 2;
+            // ## BEGIN - END ## // THIEFSUPREME
             // ## BEGIN - END ## // NAMEOVERHEAD
             SettingsSection section9 = AddSettingsSection(box, "-----NAMEOVERHEAD-----");
             section9.Y = section8.Bounds.Bottom + 40;
@@ -6811,6 +6818,9 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.ShowAllLayersPaperdoll = _showAllLayersPaperdoll.IsChecked;
             _currentProfile.ShowAllLayersPaperdoll_X = int.Parse(_showAllLayersPaperdoll_X.Text);
             // ## BEGIN - END ## // SHOWALLLAYERS
+            // ## BEGIN - END ## // THIEFSUPREME
+            _currentProfile.OverrideContainerOpenRange = _overrideContainerOpenRange.IsChecked;
+            // ## BEGIN - END ## // THIEFSUPREME
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

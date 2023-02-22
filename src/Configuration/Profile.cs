@@ -556,6 +556,9 @@ namespace ClassicUO.Configuration
         public bool ShowAllLayersPaperdoll { get; set; }
         public int ShowAllLayersPaperdoll_X { get; set; } = 166;
         // ## BEGIN - END ## // SHOWALLLAYERS
+        // ## BEGIN - END ## // THIEFSUPREME
+        public bool OverrideContainerOpenRange { get; set; }
+        // ## BEGIN - END ## // THIEFSUPREME
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
