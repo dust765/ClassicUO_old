@@ -1567,6 +1567,9 @@ namespace ClassicUO.Game.Managers
 
                     ushort start = (ushort) (0x0F06 + scantype);
 
+                    // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                    World.VisualResponseManager.TriggerByPotMacro(start);
+                    // ## BEGIN - END ## // VISUALRESPONSEMANAGER
                     // ## BEGIN - END ## // SELF
                     UOClassicCombatSelf UOClassicCombatSelf = UIManager.GetGump<UOClassicCombatSelf>();
 

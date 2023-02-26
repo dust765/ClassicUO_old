@@ -559,6 +559,9 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // THIEFSUPREME
         public bool OverrideContainerOpenRange { get; set; }
         // ## BEGIN - END ## // THIEFSUPREME
+        // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+        public bool VisualResponseManager { get; set; } = false;
+        // ## BEGIN - END ## // VISUALRESPONSEMANAGER
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;

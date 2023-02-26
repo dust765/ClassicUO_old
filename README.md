@@ -310,6 +310,12 @@ override container open range (ie. backpacks dont close until paperdoll gets clo
 
 hide X macro has been update to hide items inside containers
 
+# visual response manager
+
+goal is to have a visual response on your character from various triggers.
+
+bandies, pots, clilocs,....
+
 # Added files
 
 /src/Dust765

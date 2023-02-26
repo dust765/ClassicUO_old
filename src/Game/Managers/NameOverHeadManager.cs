@@ -352,6 +352,11 @@ namespace ClassicUO.Game.Managers
                     var option = new NameOverheadOption(xml.GetAttribute("name"));
                     option.Load(xml);
                     Options.Add(option);
+
+                    if (option.Name == LastActiveNameOverheadOption)
+                    {
+                        SetActiveOption(option);
+                    }
                 }
             }
         }

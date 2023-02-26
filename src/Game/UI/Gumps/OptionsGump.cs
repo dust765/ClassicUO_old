@@ -293,6 +293,9 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // THIEFSUPREME
         private Checkbox _overrideContainerOpenRange;
         // ## BEGIN - END ## // THIEFSUPREME
+        // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+        private Checkbox _visualResponseManager;
+        // ## BEGIN - END ## // VISUALRESPONSEMANAGER
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -5523,6 +5526,11 @@ namespace ClassicUO.Game.UI.Gumps
             );
             _uccRNGMax.SetText(_currentProfile.UOClassicCombatSelf_MaxRNG.ToString());
             // ## BEGIN - END ## // SELF
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+            //MAKE SECTION 12
+            section11.Add(_visualResponseManager = AddCheckBox(null, "Visual response manager ON / OFF", _currentProfile.VisualResponseManager, startX, startY));
+            startY += _uccClilocTrigger.Height + 2;
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
 
             Add(rightArea, PAGE);
         }
@@ -6821,6 +6829,9 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // THIEFSUPREME
             _currentProfile.OverrideContainerOpenRange = _overrideContainerOpenRange.IsChecked;
             // ## BEGIN - END ## // THIEFSUPREME
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+            _currentProfile.VisualResponseManager = _visualResponseManager.IsChecked;
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

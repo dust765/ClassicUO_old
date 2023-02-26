@@ -1318,6 +1318,9 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // LINES
             _UOClassicCombatLines.Draw(batcher);
             // ## BEGIN - END ## // LINES
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+            World.VisualResponseManager.Draw(batcher);
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
 
             _healthLinesManager.Draw(batcher);
 
