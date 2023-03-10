@@ -233,7 +233,7 @@ namespace ClassicUO.Game.UI.Gumps
         private NameOverheadAssignControl _nameOverheadControl;
         // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // UI/GUMPS
-        private Checkbox _bandageGump, _uccEnableLTBar;
+        private Checkbox _bandageGump, _bandageUpDownToggle, _uccEnableLTBar;
         private InputField _bandageGumpOffsetX, _bandageGumpOffsetY;
         // ## BEGIN - END ## // UI/GUMPS
         // ## BEGIN - END ## // TEXTUREMANAGER
@@ -4852,6 +4852,9 @@ namespace ClassicUO.Game.UI.Gumps
 
             startY += _bandageGumpOffsetY.Height + 2;
             section.AddRight(AddLabel(null, "Y", 0, 0), 2);
+
+            section.Add(_bandageUpDownToggle = AddCheckBox(null, "count up or down", _currentProfile.BandageGumpUpDownToggle, startX, startY));
+            startY += _bandageGumpOffsetY.Height + 2;
             // ## BEGIN - END ## // UI/GUMPS
             // ## BEGIN - END ## // ONCASTINGGUMP
             section.Add(_onCastingGump = AddCheckBox(null, "OnCasting gump (anti-rubberbanding) on mouse", _currentProfile.OnCastingGump, startX, startY));
@@ -6572,6 +6575,8 @@ namespace ClassicUO.Game.UI.Gumps
 
                 _currentProfile.UOClassicCombatLTBar = _uccEnableLTBar.IsChecked;
             }
+
+            _currentProfile.BandageGumpUpDownToggle = _bandageUpDownToggle.IsChecked;
             // ## BEGIN - END ## // UI/GUMPS
             // ## BEGIN - END ## // TEXTUREMANAGER
             _currentProfile.TextureManagerEnabled = _textureManagerEnabled.IsChecked;

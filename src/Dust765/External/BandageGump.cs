@@ -14,7 +14,9 @@ namespace ClassicUO.Dust765.External
         public uint Timer { get; set; }
         private bool _useTime = false;
         private uint _startTime;
-        private float _updateTime;
+        private uint _initialTimer;
+        private static bool _upDownToggle { get => ProfileManager.CurrentProfile.BandageGumpUpDownToggle; }
+        //private float _updateTime;
         private AlphaBlendControl _background;
         private Label _text;
         private StaticPic _icon;
@@ -85,11 +87,11 @@ namespace ClassicUO.Dust765.External
                 }
                 //FIX IS DEX IS TOO HIGH
 
-                Timer = Convert.ToUInt32(8 - Math.Floor((_useDex - 80) * 1.0) / 20) - 1;
+                _initialTimer = Convert.ToUInt32(8 - Math.Floor((_useDex - 80) * 1.0) / 20) - 1;
             }
             else
             {
-                Timer = 8;
+                _initialTimer = 8;
             }
             // EDIT-END: MARK
         }
@@ -97,6 +99,8 @@ namespace ClassicUO.Dust765.External
         public void Stop()
         {
             _useTime = false;
+            IsVisible = false;
+            Timer = 0;
         }
 
         public void OnMessage(string text, uint hue, string name, bool isunicode = true)
@@ -235,25 +239,51 @@ namespace ClassicUO.Dust765.External
 
                 if (_useTime)
                 {
-                    IsVisible = true;
-                    //Timer = (Time.Ticks - _startTime) / 1000;
-                    // EDIT: MARK
-                    if ((Time.Ticks - _startTime) / 1000 > 0.750)
+                    if (_upDownToggle)
                     {
-                        _startTime = Time.Ticks;
-                        Timer = Timer - 1;
+                        //COUNT UP
+                        IsVisible = true;
+                        Timer = (Time.Ticks - _startTime) / 1000;
+                        if (Timer > 10) // fail-safe (this can never be reached)
+                        {
+                            Stop();
+                        }
                     }
-                    
-                    if (Timer > 20 || Timer <= 0) // fail-safe (this can never be reached)
+                    else if (!_upDownToggle)
                     {
-                        Stop();
-                        IsVisible = false;
-                    }                    
+                        //COUNT DOWN
+                        IsVisible = true;
+
+                        // EDIT: MARK
+                        uint _delta = (Time.Ticks - _startTime) / 1000;
+                        Timer = _initialTimer - _delta;
+
+                        /*
+                        if ((Time.Ticks - _startTime) / 1000 > 0.750)
+                        {
+                            _startTime = Time.Ticks;
+                            Timer = Timer - 1;
+                        }
+
+                        if (Timer > 20 || Timer <= 0) // fail-safe (this can never be reached)
+                        {
+                            Stop();
+                            IsVisible = false;
+                        }  
+                        */
+
+                        if (Timer > 10 || Timer <= 0 || _delta > 10) // fail-safe (this can never be reached)
+                        {
+                            Stop();
+                        }
+                        // EDIT-END: MARK
+                    }
                 }
 
                 if (IsVisible)
+                {
                     _text.Text = $"{Timer}";
-                // EDIT-END: MARK
+                }
             //}
         }
 
