@@ -732,7 +732,10 @@ namespace ClassicUO.Game.Scenes
             //var useObjectHandles = NameOverHeadManager.IsToggled || Keyboard.Ctrl && Keyboard.Shift;
             // ## BEGIN - END ## // NAMEOVERHEAD
             var useObjectHandles = NameOverHeadManager.IsShowing;
+
             // ## BEGIN - END ## // NAMEOVERHEAD
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            /*
             if (useObjectHandles != _useObjectHandles)
             {
                 _useObjectHandles = useObjectHandles;
@@ -745,6 +748,25 @@ namespace ClassicUO.Game.Scenes
                     NameOverHeadManager.Close();
                 }
             }
+            */
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            var useObjectHandlesPinned = NameOverHeadManager.IsPinnedToggled;
+            if (useObjectHandles != _useObjectHandles)
+            {
+                _useObjectHandles = useObjectHandles;
+                if (_useObjectHandles)
+                {
+                    NameOverHeadManager.Open();
+                }
+                else
+                {
+                    if (!useObjectHandlesPinned)
+                    {
+                        NameOverHeadManager.Close();
+                    }
+                }
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
 
             _rectanglePlayer.X = (int) (World.Player.RealScreenPosition.X - World.Player.FrameInfo.X + 22 + World.Player.Offset.X);
             _rectanglePlayer.Y = (int) (World.Player.RealScreenPosition.Y - World.Player.FrameInfo.Y + 22 + (World.Player.Offset.Y - World.Player.Offset.Z));

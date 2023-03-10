@@ -396,6 +396,8 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // NAMEOVERHEAD
         public bool ShowHPLineInNOH { get; set; } = false;
+        public bool NameOverheadPinnedToggled { get; set; } = false;
+        public bool NameOverheadBackgroundToggled { get; set; } = false;
         // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // UI/GUMPS
         public bool UOClassicCombatLTBar { get; set; } = false;
