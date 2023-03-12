@@ -54,6 +54,11 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
         private Control _alpha;
         private readonly Checkbox _keepOpenCheckbox;
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        private readonly Checkbox _keepPinnedCheckbox;
+        private readonly Checkbox _noBackgroundCheckbox;
+        private readonly Checkbox _healthLinesCheckbox;
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
         // ## BEGIN - END ## // NAMEOVERHEAD
 
 
@@ -61,7 +66,16 @@ namespace ClassicUO.Game.UI.Gumps
         {
             CanMove = true;
             AcceptMouseInput = true;
-            CanCloseWithRightClick = true;
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            if (NameOverHeadManager.IsPinnedToggled)
+            {
+                CanCloseWithRightClick = false;
+            }
+            else
+            {
+                CanCloseWithRightClick = true;
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
 
             if (LastPosition == null)
             {
@@ -216,6 +230,53 @@ namespace ClassicUO.Game.UI.Gumps
 
             _keepOpenCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetOverheadToggled(_keepOpenCheckbox.IsChecked);
 
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            Add
+            (
+                _keepPinnedCheckbox = new Checkbox
+                (
+                    0x00D2, 0x00D3, "Pin this UI", 0xFF,
+                    0xFFFF
+                )
+                {
+                    IsChecked = NameOverHeadManager.IsPinnedToggled,
+                    X = 100
+                }
+            );
+
+            _keepPinnedCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetPinnedToggled(_keepPinnedCheckbox.IsChecked);
+
+            Add
+            (
+                _noBackgroundCheckbox = new Checkbox
+                (
+                    0x00D2, 0x00D3, "bg on mouse", 0xFF,
+                    0xFFFF
+                )
+                {
+                    IsChecked = NameOverHeadManager.IsBackgroundToggled,
+                    Y = 20
+                }
+            );
+
+            _noBackgroundCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetBackgroundToggled(_noBackgroundCheckbox.IsChecked);
+
+            Add
+            (
+                _healthLinesCheckbox = new Checkbox
+                (
+                    0x00D2, 0x00D3, "HP", 0xFF,
+                    0xFFFF
+                )
+                {
+                    IsChecked = NameOverHeadManager.IsHealthLinesToggled,
+                    Y = 20, X = 100
+                }
+            );
+
+            _healthLinesCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetHealthLinesToggled(_healthLinesCheckbox.IsChecked);
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+
             DrawChoiceButtons();
             // ## BEGIN - END ## // NAMEOVERHEAD
         }
@@ -239,6 +300,11 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             _keepOpenCheckbox.IsChecked = NameOverHeadManager.IsPermaToggled;
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            _keepPinnedCheckbox.IsChecked = NameOverHeadManager.IsPinnedToggled;
+            _noBackgroundCheckbox.IsChecked = NameOverHeadManager.IsBackgroundToggled;
+            _healthLinesCheckbox.IsChecked = NameOverHeadManager.IsHealthLinesToggled;
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
         }
         public void RedrawOverheadOptions()
         {
@@ -259,7 +325,11 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             _alpha.Width = biggestWidth;
-            _alpha.Height = Math.Max(30, options.Count * 20) + 22;
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            //_alpha.Height = Math.Max(30, options.Count * 20) + 22;
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            _alpha.Height = Math.Max(30, options.Count * 20) + 42;
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
 
             Width = _alpha.Width;
             Height = _alpha.Height;
@@ -277,7 +347,11 @@ namespace ClassicUO.Game.UI.Gumps
                     color: 0xFFFF
                 )
                 {
-                    Y = 20 * index + 22,
+                    // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+                    //Y = 20 * index + 22,
+                    // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+                    Y = 20 * index + 42,
+                    // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
                     IsChecked = NameOverHeadManager.LastActiveNameOverheadOption == option.Name,
                 }
             );

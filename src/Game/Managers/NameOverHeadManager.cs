@@ -129,6 +129,23 @@ namespace ClassicUO.Game.Managers
         }
         */
         // ## BEGIN - END ## // NAMEOVERHEAD
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        public static bool IsHealthLinesToggled
+        {
+            get => ProfileManager.CurrentProfile.ShowHPLineInNOH;
+            private set => ProfileManager.CurrentProfile.ShowHPLineInNOH = value;
+        }
+        public static bool IsBackgroundToggled
+        {
+            get => ProfileManager.CurrentProfile.NameOverheadBackgroundToggled;
+            private set => ProfileManager.CurrentProfile.NameOverheadBackgroundToggled = value;
+        }
+        public static bool IsPinnedToggled
+        {
+            get => ProfileManager.CurrentProfile.NameOverheadPinnedToggled;
+            private set => ProfileManager.CurrentProfile.NameOverheadPinnedToggled = value;
+        }
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
         public static NameOverheadOptions ActiveOverheadOptions { get; set; }
         public static bool IsPermaToggled
         {
@@ -299,6 +316,36 @@ namespace ClassicUO.Game.Managers
             // ## BEGIN - END ## // NAMEOVERHEAD
         }
         // ## BEGIN - END ## // NAMEOVERHEAD
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        public static void SetHealthLinesToggled(bool toggled)
+        {
+            if (IsHealthLinesToggled == toggled)
+                return;
+
+            IsHealthLinesToggled = toggled;
+            _gump?.UpdateCheckboxes();
+        }
+        public static void SetBackgroundToggled(bool toggled)
+        {
+            if (IsBackgroundToggled == toggled)
+                return;
+
+            IsBackgroundToggled = toggled;
+            _gump?.UpdateCheckboxes();
+
+            //TODO
+            //close and reopan all handles
+        }
+        public static void SetPinnedToggled(bool toggled)
+        {
+            if (IsPinnedToggled == toggled)
+                return;
+
+            IsPinnedToggled = toggled;
+            _gump?.UpdateCheckboxes();
+            _gump.CanCloseWithRightClick = !toggled;
+        }
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
         public static void SetOverheadToggled(bool toggled)
         {
             if (IsPermaToggled == toggled)

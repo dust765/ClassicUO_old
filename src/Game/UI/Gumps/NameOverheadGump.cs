@@ -322,7 +322,10 @@ namespace ClassicUO.Game.UI.Gumps
                 _background = new AlphaBlendControl(.7f)
                 {
                     WantUpdateSize = false,
-                    Hue = entity is Mobile m ? Notoriety.GetHue(m.NotorietyFlag) : (ushort) 0x0481
+                    Hue = entity is Mobile m ? Notoriety.GetHue(m.NotorietyFlag) : (ushort) 0x0481,
+                    // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+                    IsVisible = !ProfileManager.CurrentProfile.NameOverheadBackgroundToggled
+                    // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
                 }
             );
         }
@@ -569,6 +572,12 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void OnMouseOver(int x, int y)
         {
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            if (ProfileManager.CurrentProfile.NameOverheadBackgroundToggled)
+            {
+                _background.IsVisible = true;
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
             if (_leftMouseIsDown)
             {
                 DoDrag();
@@ -615,6 +624,12 @@ namespace ClassicUO.Game.UI.Gumps
         protected override void OnMouseExit(int x, int y)
         {
             _positionLocked = false;
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            if (ProfileManager.CurrentProfile.NameOverheadBackgroundToggled)
+            {
+                _background.IsVisible = false;
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
             base.OnMouseExit(x, y);
         }
 
@@ -782,15 +797,32 @@ namespace ClassicUO.Game.UI.Gumps
             X = x;
             Y = y;
 
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            /*
             batcher.DrawRectangle
-            (
-                _borderColor,
-                x - 1,
-                y - 1,
-                Width + 1,
-                Height + 1,
-                hueVector
-            );
+                (
+                    _borderColor,
+                    x - 1,
+                    y - 1,
+                    Width + 1,
+                    Height + 1,
+                    hueVector
+                );
+            */
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+            if (_background.IsVisible)
+            {
+                batcher.DrawRectangle
+                (
+                    _borderColor,
+                    x - 1,
+                    y - 1,
+                    Width + 1,
+                    Height + 1,
+                    hueVector
+                );
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
 
             base.Draw(batcher, x, y);
 

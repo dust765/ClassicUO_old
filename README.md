@@ -978,6 +978,28 @@ CombatCollection.cs                             1996    2088    UNUSED
 
 /src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   50      54      NAMEOVERHEAD_FIXES
 
+/src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   57      61      NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   69      78      NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   233     278     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   303     307     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   328     332     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverHeadHandlerGump.cs   350     354     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        325     328     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        575     580     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        627     632     NAMEOVERHEAD_FIXES
+
+/src/Game/UI/Gumps/NameOverheadGump.cs	        800     825     NAMEOVERHEAD_FIXES
+
+/src/Game/Scenes/GameScene.cs           	    737     769     NAMEOVERHEAD_FIXES
+
 /src/Configuration/Profile.cs	                533     535     CONSIDERBALANCED
 
 /src/Configuration/Profile.cs	                41      43      MODERNCOOLDOWNBAR
