@@ -1631,5 +1631,8 @@ Client version: '{0}'</value>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="enableTabGridGump" xml:space="preserve">
+    <value>Enable Tabgrid</value>
+  </data>
   <!-- // ## BEGIN - END ## // MULTIJOURNAL -->
 </root>

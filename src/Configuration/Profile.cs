@@ -240,7 +240,12 @@ namespace ClassicUO.Configuration
         public int CounterBarCellSize { get; set; } = 40;
         public int CounterBarRows { get; set; } = 1;
         public int CounterBarColumns { get; set; } = 1;
-
+        // ## BEGIN - END ## tabgrid // PKRION
+        public bool TabGridGumpEnabled { get; set; }
+        public int GridTabs { get; set; } = 1;
+        public int GridRows { get; set; } = 1;
+        public string TabList { get; set; } = "tab1:tab2:tab3";
+        // ## BEGIN - END ## // PKRION
         public bool ShowSkillsChangedMessage { get; set; } = true;
         public int ShowSkillsChangedDeltaValue { get; set; } = 1;
         public bool ShowStatsChangedMessage { get; set; } = true;
@@ -806,6 +811,12 @@ namespace ClassicUO.Configuration
 
                                     break;
                                 // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+
+                                // ## BEGIN - END ## tabgrid // PKRION
+                                case GumpType.TabGridGump:
+                                    gump = new TabGridGump();
+                                    break;
+                                // ## BEGIN - END ## // PKRION
 
                                 case GumpType.Container:
                                     gump = new ContainerGump();
