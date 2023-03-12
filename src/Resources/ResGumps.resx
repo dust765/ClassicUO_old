@@ -1582,8 +1582,7 @@ Client version: '{0}'</value>
   <data name="HueContainerGumps" xml:space="preserve">
     <value>Recolor container gump by item hue</value>
   </data>
-  <!-- // ## BEGIN - END ## // MULTIJOURNAL -->
-   <data name="MessageType_System" xml:space="preserve">
+  <data name="MessageType_System" xml:space="preserve">
     <value>System</value>
   </data>
   <data name="MessageType_Emote" xml:space="preserve">
@@ -1631,5 +1630,7 @@ Client version: '{0}'</value>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
-  <!-- // ## BEGIN - END ## // MULTIJOURNAL -->
+  <data name="enableTabGridGump" xml:space="preserve">
+    <value>Enable Tabgrid</value>
+  </data>
 </root>
