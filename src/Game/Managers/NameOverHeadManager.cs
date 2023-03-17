@@ -251,11 +251,19 @@ namespace ClassicUO.Game.Managers
             if (item == null)
                 return false;
 
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion fix
+            if (SerialHelper.IsItem(serial) && ActiveOverheadOptions.HasFlag(NameOverheadOptions.AllItems))
+            {
+                return true;
+
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion fix
+
             if (item.IsCorpse)
             {
                 return HandleCorpseOverhead(item);
             }
-
+            
             if (item.ItemData.IsContainer && ActiveOverheadOptions.HasFlag(NameOverheadOptions.Containers))
                 return true;
 
