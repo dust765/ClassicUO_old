@@ -1164,7 +1164,7 @@ namespace ClassicUO.Game.GameObjects
             }
 
             // ## BEGIN - END ## // SHOWALLLAYERS
-            if (ProfileManager.CurrentProfile.ShowAllLayers)
+            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ShowAllLayers)
             {
                 return false;
             }

@@ -302,7 +302,7 @@ shows all equipment layers on mobiles (covered items should show)
 
 (mod by Mark)
 
-show additional equipment slots on paperdoll (for torso/arms/pants/shoes/cloak)
+show additional equipment slots on paperdoll (for torso/arms/pants/shoes/shirt/skirt)
 
 # thief supreme
 

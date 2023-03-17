@@ -132,12 +132,15 @@ namespace ClassicUO.Dust765.Dust765
         //MAIN UI CONSTRUCT
         private readonly AlphaBlendControl _background;
 
+        //HEADER ICON
+        private GumpPic _headerIcon;
+
         //LTNAME
         protected StbTextBox _textBoxLT;
 
         //LTSERIAL
         private uint LTSerial = 0;
-        private Entity LTEntity = null;
+        //private Entity LTEntity = null;
 
         //UCCLTBarS
         private UCCLTBar _hpLineRedLT, _manaLineRedLT, _stamLineRedLT, _outlineLT;
@@ -193,25 +196,6 @@ namespace ClassicUO.Dust765.Dust765
 
             Add(_background);
 
-            //NAME
-            Add
-            (
-                _textBoxLT = new StbTextBox
-                (
-                    1, 32, HPB_WIDTH, true, FontStyle.Cropped | FontStyle.BlackBorder, 0x40, TEXT_ALIGN_TYPE.TS_CENTER
-                )
-                {
-                    X = 0,
-                    Y = 3,
-                    Width = HPB_BAR_WIDTH,
-                    IsEditable = false,
-                    CanMove = true,
-                    
-                    AcceptKeyboardInput = false,
-                    AcceptMouseInput = false
-                }
-            );
-
             //UCCLTBarS
             Add(_borderLT[0] = new UCCLTBar(0, 0, HPB_WIDTH, HPB_BORDERSIZE, LINE_COLOR_BLACK.PackedValue));
             Add(_borderLT[1] = new UCCLTBar(0, HPB_HEIGHT_SINGLELINE - HPB_BORDERSIZE, HPB_WIDTH, HPB_BORDERSIZE, LINE_COLOR_BLACK.PackedValue));
@@ -226,6 +210,35 @@ namespace ClassicUO.Dust765.Dust765
             Add(_barsLT[0] = new UCCLTBar(HPB_BAR_SPACELEFT, 21, HPB_BAR_WIDTH, HPB_BAR_HEIGHT, LINE_COLOR_BLUE.PackedValue));
             //Add(_barsLT[1] = new UCCLTBar(HPB_BAR_SPACELEFT, 36, HPB_BAR_WIDTH, HPB_BAR_HEIGHT, LINE_COLOR_BLUE.PackedValue));
             //Add(_barsLT[2] = new UCCLTBar(HPB_BAR_SPACELEFT, 45, HPB_BAR_WIDTH, HPB_BAR_HEIGHT, LINE_COLOR_BLUE.PackedValue));
+
+            //HEADER ICON
+            Add
+            (
+                _headerIcon = new GumpPic(16, -16, 0x757D, 0) //ALTERNATIVE 0x756D
+                {
+                    AcceptMouseInput = false,
+                }
+            );
+            Add(_headerIcon);
+
+            //NAME
+            Add
+            (
+                _textBoxLT = new StbTextBox
+                (
+                    1, 32, HPB_WIDTH, true, FontStyle.Cropped | FontStyle.BlackBorder, 0x40, TEXT_ALIGN_TYPE.TS_CENTER
+                )
+                {
+                    X = 0,
+                    Y = 3,
+                    Width = HPB_BAR_WIDTH,
+                    IsEditable = false,
+                    CanMove = true,
+
+                    AcceptKeyboardInput = false,
+                    AcceptMouseInput = false
+                }
+            );
 
             //COPY PASTED
             LayerOrder = UILayer.Over;
@@ -243,7 +256,7 @@ namespace ClassicUO.Dust765.Dust765
             {
 
                 LTSerial = TargetManager.LastTargetInfo.Serial;
-                LTEntity = entity;
+                //LTEntity = entity;
 
                 _textBoxLT.Text = entity.Name;
                 _textBoxLT.Hue = Notoriety.GetHue((entity as Mobile)?.NotorietyFlag ?? NotorietyFlag.Gray);

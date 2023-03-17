@@ -375,7 +375,7 @@ namespace ClassicUO.Game.UI.Gumps
             );
 
             // ## BEGIN - END ## // SHOWALLLAYERS
-            if (ProfileManager.CurrentProfile.ShowAllLayersPaperdoll)
+            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ShowAllLayersPaperdoll)
             {
                 int _slots_right_x = ProfileManager.CurrentProfile.ShowAllLayersPaperdoll_X;
                 // Equipment slots for torso/arms/pants/shoes/cloak
@@ -434,7 +434,7 @@ namespace ClassicUO.Game.UI.Gumps
                         0,
                         _slots_right_x,
                         75 + 21 * 4,
-                        Layer.Waist,
+                        Layer.Shirt,
                         this
                     )
                 );
@@ -446,7 +446,7 @@ namespace ClassicUO.Game.UI.Gumps
                         0,
                         _slots_right_x,
                         75 + 21 * 5,
-                        Layer.Cloak,
+                        Layer.Skirt,
                         this
                     )
                 );
@@ -722,7 +722,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _slots[i].LocalSerial = mobile.FindItemByLayer((Layer) idx)?.Serial ?? 0;
                 }
                 // ## BEGIN - END ## // SHOWALLLAYERS
-                if (ProfileManager.CurrentProfile.ShowAllLayersPaperdoll)
+                if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ShowAllLayersPaperdoll)
                 {
                     for (int i = 0; i < _slots_right.Length; i++)
                     {
