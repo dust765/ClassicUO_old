@@ -29,7 +29,9 @@ jobs:
        os: [ ubuntu-latest ]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        ref: dev_dust765_activedev
       
     - name: Get submodules
       run: |
@@ -63,7 +65,7 @@ jobs:
         mv manifest.xml upload
               
     - name: Remove old Release
-      uses: dev-drprasad/delete-tag-and-release@v0.2.0
+      uses: dev-drprasad/delete-tag-and-release@v0.2.1
       with:
         delete_release: true
         tag_name: ClassicUO-dev-dust765_activedev-release
