@@ -45,6 +45,7 @@ using SDL2;
 using ClassicUO.Configuration;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.UI.Gumps;
+using ClassicUO.Utility;
 
 namespace ClassicUO.Game.Managers
 {
@@ -61,6 +62,7 @@ namespace ClassicUO.Game.Managers
     }
     */
     // ## BEGIN - END ## // NAMEOVERHEAD
+    /*
     internal enum NameOverheadOptions
     {
         None = 0,
@@ -95,6 +97,48 @@ namespace ClassicUO.Game.Managers
         MobilesAndCorpses = AllMobiles | MonsterCorpses | HumanoidCorpses,
         // ## BEGIN - END ## // NAMEOVERHEAD
     }
+    */
+
+    // ## BEGIN - END ## // NAMEOVERHEAD pkrion
+    internal enum NameOverheadOptions
+    {
+        None = 0,
+
+        // Items
+        Containers = 1 << 0,
+        Gold = 1 << 1,
+        Stackable = 1 << 2,
+        LockedDown = 1 << 3,
+        Properties = 1 << 4,
+        Nameslist = 1 << 5,
+
+        // Corpses
+        MonsterCorpses = 1 << 6,
+        HumanoidCorpses = 1 << 7,
+        OwnCorpses = 1 << 8,
+
+        // Mobiles (type)
+        Humanoid = 1 << 9,
+        Monster = 1 << 10,
+        OwnFollowers = 1 << 11,
+
+        // Mobiles (notoriety)
+        Innocent = 1 << 12,
+        Ally = 1 << 13,
+        Gray = 1 << 14,
+        Criminal = 1 << 15,
+        Enemy = 1 << 16,
+        Murderer = 1 << 17,
+        Invulnerable = 1 << 18,
+
+        AllItems = Containers | Gold | Stackable | LockedDown | Properties | Nameslist,
+        AllMobiles = Humanoid | Monster,
+        MobilesAndCorpses = AllMobiles | MonsterCorpses | HumanoidCorpses,
+        NameList = Nameslist,
+        PropsList = Properties,
+
+    }
+    // ## BEGIN - END ## // NAMEOVERHEAD pkrion
 
     internal static class NameOverHeadManager
     {
@@ -161,6 +205,11 @@ namespace ClassicUO.Game.Managers
         private static List<NameOverheadOption> Options { get; set; } = new List<NameOverheadOption>();
         // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
         // ## BEGIN - END ## // NAMEOVERHEAD
+        // ## BEGIN - END ## // NAMEOVERHEAD_FIXES
+        // ## BEGIN - END ## // NAMEOVERHEAD_pkrion
+        private static List<string> CompareNames { get; set; } = new List<string>();
+        private static List<string> PropertyList { get; set; } = new List<string>();
+        // ## BEGIN - END ## // NAMEOVERHEAD_pkrion
 
         public static bool IsAllowed(Entity serial)
         {
@@ -251,11 +300,19 @@ namespace ClassicUO.Game.Managers
             if (item == null)
                 return false;
 
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion fix
+            if (SerialHelper.IsItem(serial) && ActiveOverheadOptions.HasFlag(NameOverheadOptions.AllItems))
+            {
+                return true;
+
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion fix
+
             if (item.IsCorpse)
             {
                 return HandleCorpseOverhead(item);
             }
-
+            
             if (item.ItemData.IsContainer && ActiveOverheadOptions.HasFlag(NameOverheadOptions.Containers))
                 return true;
 
@@ -267,6 +324,97 @@ namespace ClassicUO.Game.Managers
 
             if (item.IsLocked && ActiveOverheadOptions.HasFlag(NameOverheadOptions.LockedDown))
                 return true;
+
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Properties))
+            {
+                bool hasStartColor = false;
+
+                string result = null;
+                string texto = string.Empty;
+
+                if (SerialHelper.IsValid(serial) && World.OPL.TryGetNameAndData(serial, out string name, out string data))
+                {
+                    ValueStringBuilder sbHTML = new ValueStringBuilder();
+                    {
+                        ValueStringBuilder sb = new ValueStringBuilder();
+                        {
+                            if (!string.IsNullOrEmpty(name))
+                            {
+                                if (SerialHelper.IsItem(serial))
+                                {
+                                    sbHTML.Append("<basefont color=\"yellow\">");
+                                    hasStartColor = true;
+                                }
+                                else
+                                {
+                                    Mobile mob = World.Mobiles.Get(serial);
+
+                                    if (mob != null)
+                                    {
+                                        sbHTML.Append(Notoriety.GetHTMLHue(mob.NotorietyFlag));
+                                        hasStartColor = true;
+                                    }
+                                }
+
+                                sb.Append(name);
+                                sbHTML.Append(name);
+
+                                if (hasStartColor)
+                                {
+                                    sbHTML.Append("<basefont color=\"#FFFFFFFF\">");
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(data))
+                            {
+                                sb.Append('\n');
+                                sb.Append(data);
+                                sbHTML.Append('\n');
+                                sbHTML.Append(data);
+                            }
+
+                            texto = sbHTML.ToString();
+                            result = sb.ToString();
+
+                            sb.Dispose();
+                            sbHTML.Dispose();
+                        }
+                    }
+                }
+                //string _textHTML;
+                //string texto = TargetManager.LastTargetInfo.ReadProperties(serial, out _textHTML);
+                if (texto != null)
+                {
+                    for (int x = 0; x < PropertyList.Count; x++)
+                    {
+
+                        if (texto.Contains(PropertyList[x]))
+                        {
+                            return true;
+                        }
+
+                    }
+
+
+                }
+            }
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Nameslist))
+            {
+                for (int x = 0; x < CompareNames.Count; x++)
+                {
+                    if (item.Name != null)
+                    {
+                        if (item.Name.Contains(CompareNames[x]))
+                        {
+                            return true;
+                        }
+                    }
+
+                }
+
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion
 
             return false;
         }
@@ -406,6 +554,75 @@ namespace ClassicUO.Game.Managers
                     }
                 }
             }
+
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion
+            //overhead name list added
+            path = Path.Combine(ProfileManager.ProfilePath, "OverheadNamesList.txt");
+
+            if (!File.Exists(path))
+            {
+
+                Log.Trace("No OverheadNamesList.txt. Creating a default file.");
+
+                CompareNames.Clear();
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    sw.WriteLine("Bag");
+                    sw.WriteLine("bag");
+                }
+
+            }
+            try
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        CompareNames.Add(line);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+
+                return;
+            }
+
+            //overhead properties list added
+            path = Path.Combine(ProfileManager.ProfilePath, "OverheadPropertiesList.txt");
+
+            if (!File.Exists(path))
+            {
+                Log.Trace("No OverheadPropertiesList.txt. Creating a default file.");
+                PropertyList.Clear();
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    sw.WriteLine("Artifact");
+                    sw.WriteLine("artifact");
+                }
+            }
+            try
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        PropertyList.Add(line);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+
+                return;
+            }
+
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion
+
         }
 
         public static void Save()
@@ -447,6 +664,10 @@ namespace ClassicUO.Game.Managers
                     new NameOverheadOption("Mobiles only", (int)NameOverheadOptions.AllMobiles),
                     new NameOverheadOption("Items only", (int)NameOverheadOptions.AllItems),
                     new NameOverheadOption("Mobiles & Corpses only", (int)NameOverheadOptions.MobilesAndCorpses),
+                    // ## BEGIN - END ## // NAMEOVERHEAD pkrion
+                    new NameOverheadOption("Names list", (int)NameOverheadOptions.NameList),
+                    new NameOverheadOption("Properties List", (int)NameOverheadOptions.PropsList),
+                    // ## BEGIN - END ## // NAMEOVERHEAD pkrion
                 }
             );
         }

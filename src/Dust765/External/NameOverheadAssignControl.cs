@@ -111,7 +111,13 @@ namespace ClassicUO.Game.UI.Controls
             y += 22;
             AddCheckbox("Stackable", NameOverheadOptions.Stackable, 0, y);
             AddCheckbox("Locked down", NameOverheadOptions.LockedDown, 150, y);
+            //y += 28;
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion
+            y += 22;
+            AddCheckbox("Propertys", NameOverheadOptions.Properties, 0, y);
+            AddCheckbox("Name List", NameOverheadOptions.Nameslist, 150, y);
             y += 28;
+            // ## BEGIN - END ## // NAMEOVERHEAD pkrion
 
             AddLabel("Corpses", 75, y);
             y += 28;
