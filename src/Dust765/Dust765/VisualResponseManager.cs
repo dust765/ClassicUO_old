@@ -31,7 +31,9 @@ using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
 using ClassicUO.Renderer;
+using ClassicUO.IO;
 using ClassicUO.IO.Resources;
+using ClassicUO.Utility;
 using ClassicUO.Utility.Collections;
 
 using Microsoft.Xna.Framework;
@@ -239,5 +241,128 @@ namespace ClassicUO.Dust765.Dust765
             502637, //You feel yourself resisting magical energy.
             502638  //You feel yourself resisting magical energy.
         };
+        //ON PLUGIN SEND
+        public void OnPluginSendLog(Span<byte> buffer, int length)
+        {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
+            //NETCLIENT LOGPACKET
+            Span<char> span = stackalloc char[256];
+            ValueStringBuilder output = new ValueStringBuilder(span);
+            {
+                int off = sizeof(ulong) + 2;
+
+                output.Append(' ', off);
+                output.Append(string.Format("Ticks: {0} | {1} |  ID: {2:X2}   Length: {3}\n", Time.Ticks, ("Assistant -> Server"), buffer[0], length));
+
+                output.Append(' ', off);
+                output.Append("0  1  2  3  4  5  6  7   8  9  A  B  C  D  E  F\n");
+
+                output.Append(' ', off);
+                output.Append("-- -- -- -- -- -- -- --  -- -- -- -- -- -- -- --\n");
+
+                ulong address = 0;
+
+                for (int i = 0; i < length; i += 16, address += 16)
+                {
+                    output.Append($"{address:X8}");
+
+                    for (int j = 0; j < 16; ++j)
+                    {
+                        if ((j % 8) == 0)
+                        {
+                            output.Append(" ");
+                        }
+
+                        if (i + j < length)
+                        {
+                            output.Append($" {buffer[i + j]:X2}");
+                        }
+                        else
+                        {
+                            output.Append("   ");
+                        }
+                    }
+
+                    output.Append("  ");
+
+                    for (int j = 0; j < 16 && i + j < length; ++j)
+                    {
+                        byte c = buffer[i + j];
+
+                        if (c >= 0x20 && c < 0x80)
+                        {
+                            output.Append((char) c);
+                        }
+                        else
+                        {
+                            output.Append('.');
+                        }
+                    }
+
+                    output.Append('\n');
+                }
+                output.Append('\n');
+                output.Append('\n');
+
+                Console.WriteLine(output.ToString());
+
+                output.Dispose();
+            }
+        }
+        public void OnPluginSend(byte[] data, int length)
+        {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
+            switch (data[0])
+            {
+                case 0x06:
+
+                    StackDataReader buffer = new StackDataReader(data.AsSpan(0, length));
+
+                    //skip first
+                    //byte type = buffer.ReadUInt8();
+                    int offset = 1;
+                    buffer.Seek(offset);
+
+                    //read serial
+                    uint serial = buffer.ReadUInt32BE();
+                    //Console.WriteLine("serial: " + serial.ToHex());
+
+                    if (SerialHelper.IsItem(serial))
+                    {
+                        Item item = World.Items.Get(serial);
+
+                        //failsafe
+                        if (item == null)
+                        {
+                            break;
+                        }
+
+                        //Console.WriteLine("item.Graphic" + item.Graphic);
+                        //Console.WriteLine("item.Name" + item.Name);
+
+                        //curepot = 0x0F07
+                        //healpot = 0x0F0C
+                        //refreshpot = 0xF0B
+                        //str = 0xF09
+                        //agi = 0xF08
+
+                        if (item.Graphic == 0x0F07 || item.Graphic == 0x0F0C || item.Graphic == 0xF0B || item.Graphic == 0xF09 || item.Graphic == 0xF08)
+                        {
+                            TriggerByPotMacro(item.Graphic);
+                        }
+                    }
+
+                    break;
+            }
+        }
+
     }
 }

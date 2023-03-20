@@ -653,6 +653,11 @@ namespace ClassicUO.Network
             if (NetClient.LoginSocket.IsDisposed && NetClient.Socket.IsConnected)
             {
                 NetClient.Socket.Send(data, length, true);
+
+                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                World.VisualResponseManager.OnPluginSendLog(data, length);
+                World.VisualResponseManager.OnPluginSend(data, length);
+                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
             }
             else if (NetClient.Socket.IsDisposed && NetClient.LoginSocket.IsConnected)
             {
