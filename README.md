@@ -26,6 +26,16 @@ Dust765: 7 Link, 6 G..., 5 S...
 
 [Video Part 3 on YouTube](https://youtu.be/aqHiiOhx8Q8)
 
+# changed constants
+
+WAIT_FOR_TARGET_DELAY 5000 -> 4000
+
+MAX_CIRCLE_OF_TRANSPARENCY_RADIUS 200 -> 1000
+
+DEATH_SCREEN_TIMER 1500 -> 750
+
+MAX_JOURNAL_HISTORY_COUNT 100 -> 250
+
 # Changed files and line number
 
 no comment possible:
@@ -55,6 +65,13 @@ FILE                                                                START   END 
 
 /src/ClassicUO.Client/Game/Managers/MacroManager.cs                 2377    2382    BASICSETUP
 
+/src/ClassicUO.Client/Game/Constants.cs                             87              CONSTANTS
+
+/src/ClassicUO.Client/Game/Constants.cs                             101             CONSTANTS
+
+/src/ClassicUO.Client/Game/Constants.cs                             115             CONSTANTS
+
+/src/ClassicUO.Client/Game/Constants.cs                             119             CONSTANTS
 
 # Original readme
 
