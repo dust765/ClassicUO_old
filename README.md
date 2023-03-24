@@ -70,6 +70,14 @@ Color game cursor when targeting (hostile / friendly)
 
 Distance
 
+# oldhealthlines
+
+old healthbars
+
+mana / stamina lines, for self and party, 
+
+bigger version and transparency
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -272,6 +280,16 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             754     756     OVERHEAD / UNDERCHAR
 
 /src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             2002    2004    OVERHEAD / UNDERCHAR
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        36      39      OLDHEALTHLINES
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        58      83      OLDHEALTHLINES
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        226     246     OLDHEALTHLINES
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        278     298     OLDHEALTHLINES
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        408     482     OLDHEALTHLINES
 
 # Original readme
 
