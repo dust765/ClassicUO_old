@@ -38,6 +38,24 @@ Tree to stumps / tiles and color
 
 Blockers to stumps / tiles and color
 
+# visual helpers
+
+Highlight tiles at range
+
+Highlight tiles at range if spell is up
+
+Preview field spells, wall of stone and area of effect spells
+
+Glowing weapons
+
+Color own aura by HP
+
+Highlight lasttarget (more colors and options)
+
+# features macros
+
+HighlightTileAtRange (toggle)
+
 # Added files
 
 /src/Dust765
@@ -124,6 +142,58 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/GameObjects/Static.cs                 126     131     ART / HUE CHANGES
 
 /src/ClassicUO.Client/Game/Managers/MacroManager.cs              1780    1790    ART / HUE CHANGES
+
+/src/ClassicUO.Client/Game/GameObjects/Views/LandView.cs         34      36      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/LandView.cs         84      111     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MultiView.cs        34      36      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MultiView.cs        118     145     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/StaticView.cs       36      38      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/StaticView.cs       97      124     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       36      38      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       89      96      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       115     130     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       199     213     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       440     446     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       796     802     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         37      39      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         80      84      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         348     353     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameActions.cs                        53      55      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameActions.cs                        655     658     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameActions.cs                        669     672     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/Managers/TargetManager.cs             34      36      VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/Managers/TargetManager.cs             163     166     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/Managers/TargetManager.cs             191     193     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/Managers/TargetManager.cs             235     238     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              1809    1814    VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2361    2363    VISUAL HELPERS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs                  37      39      VISUAL HELPERS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs                  927     930     VISUAL HELPERS
 
 # Original readme
 
