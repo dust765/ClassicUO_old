@@ -197,6 +197,9 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY;
         private Checkbox _spellOnCursor, _colorGameCursor;
         // ## BEGIN - END ## // CURSOR
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+        private Checkbox _overheadRange;
+        // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3688,6 +3691,14 @@ namespace ClassicUO.Game.UI.Gumps
             section4.Add(_colorGameCursor = AddCheckBox(null, "Color game cursor when targeting (hostile / friendly)", _currentProfile.ColorGameCursor, startX, startY));
             startY += _colorGameCursor.Height + 2;
             // ## BEGIN - END ## // CURSOR
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            SettingsSection section5 = AddSettingsSection(box, "-----OVERHEAD / UNDERFEET-----");
+            section5.Y = section4.Bounds.Bottom + 40;
+            startY = section4.Bounds.Bottom + 40;
+
+            section5.Add(_overheadRange = AddCheckBox(null, "Display range in overhead (needs HP overhead enabled)", _currentProfile.OverheadRange, startX, startY));
+            startY += _overheadRange.Height + 2;
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
 
             Add(rightArea, PAGE);
         }
@@ -4619,6 +4630,9 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.SpellOnCursorOffset = new Point(spellOnCursorOffsetX, spellOnCursorOffsetY);
             _currentProfile.ColorGameCursor = _colorGameCursor.IsChecked;
             // ## BEGIN - END ## // CURSOR
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+            _currentProfile.OverheadRange = _overheadRange.IsChecked;
+            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

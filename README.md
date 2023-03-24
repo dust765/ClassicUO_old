@@ -66,6 +66,10 @@ Show spell on cursor (and runout countdown)
 
 Color game cursor when targeting (hostile / friendly)
 
+# overhead / underchar
+
+Distance
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -256,6 +260,18 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/GameCursor.cs                         427     440     CURSOR
 
 /src/ClassicUO.Client/Game/GameCursor.cs                         545     549     CURSOR
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        35      37      OVERHEAD / UNDERCHAR
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        165     170     OVERHEAD / UNDERCHAR
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       60      62      OVERHEAD / UNDERCHAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             38      40      OVERHEAD / UNDERCHAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             754     756     OVERHEAD / UNDERCHAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             2002    2004    OVERHEAD / UNDERCHAR
 
 # Original readme
 
