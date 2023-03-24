@@ -450,12 +450,21 @@ namespace ClassicUO.Assets
             int pos1 = 0;
             int minX = width, minY = height, maxX = 0, maxY = 0;
 
+            // ## BEGIN - END ## // MISC
             /* Temporarily broken. This isn't the right way to do it anyway since it can't be toggled on/off.
             if (StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
             {
                 AddBlackBorder(pixels, width, height);
             }
             */
+            // ## BEGIN - END ## // MISC
+            /* Temporarily broken. ProfileManager is not accessible here.
+            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.BlackOutlineStatics || StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
+            {
+                AddBlackBorder(pixels, width, height);
+            }
+            */
+            // ## BEGIN - END ## // MISC
 
             for (int y = 0; y < height; ++y)
             {
