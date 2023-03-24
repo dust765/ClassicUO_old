@@ -31,6 +31,9 @@
 #endregion
 
 using ClassicUO.Configuration;
+// ## BEGIN - END ## // VISUAL HELPERS
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // VISUAL HELPERS
 using ClassicUO.Assets;
 using ClassicUO.Renderer;
 using Microsoft.Xna.Framework;
@@ -77,6 +80,35 @@ namespace ClassicUO.Game.GameObjects
                 hueVec.Y = IsStretched ? ShaderHueTranslator.SHADER_LAND : ShaderHueTranslator.SHADER_NONE;
             }
             hueVec.Z = 1f;
+
+            // ## BEGIN - END ## // VISUAL HELPERS
+            if (ProfileManager.CurrentProfile.HighlightTileAtRange && Distance == ProfileManager.CurrentProfile.HighlightTileAtRangeRange)
+            {
+                hueVec.X = ProfileManager.CurrentProfile.HighlightTileRangeHue;
+                hueVec.Y = 1;
+            }
+            if (ProfileManager.CurrentProfile.HighlightTileAtRangeSpell)
+            {
+                if (GameCursor._spellTime >= 1 && Distance == ProfileManager.CurrentProfile.HighlightTileAtRangeRangeSpell)
+                {
+                    hueVec.X = ProfileManager.CurrentProfile.HighlightTileRangeHueSpell;
+                    hueVec.Y = 1;
+                }
+            }
+            if (ProfileManager.CurrentProfile.PreviewFields)
+            {
+                if (CombatCollection.LandFieldPreview(this))
+                {
+                    hueVec.X = 0x0040;
+                    hueVec.Y = 1;
+                }
+                if (SelectedObject.Object == this)
+                {
+                    hueVec.X = 0x0023;
+                    hueVec.Y = 1;
+                }
+            }
+            // ## BEGIN - END ## // VISUAL HELPERS
 
             if (IsStretched)
             {
