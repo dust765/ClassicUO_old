@@ -31,6 +31,17 @@
 #endregion
 
 using System;
+// ## BEGIN - END ## // NAMEOVERHEAD
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
+using ClassicUO.Game.Data;
+using ClassicUO.Input;
+using ClassicUO.Utility.Logging;
+using SDL2;
+// ## BEGIN - END ## // NAMEOVERHEAD
 using ClassicUO.Configuration;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.UI.Gumps;
@@ -38,6 +49,8 @@ using ClassicUO.Game.UI.Gumps;
 namespace ClassicUO.Game.Managers
 {
     [Flags]
+    // ## BEGIN - END ## // NAMEOVERHEAD
+    /*
     internal enum NameOverheadTypeAllowed
     {
         All,
@@ -46,22 +59,106 @@ namespace ClassicUO.Game.Managers
         Corpses,
         MobilesCorpses = Mobiles | Corpses
     }
+    */
+    // ## BEGIN - END ## // NAMEOVERHEAD
+    internal enum NameOverheadOptions
+    {
+        None = 0,
+
+        // Items
+        Containers = 1 << 0,
+        Gold = 1 << 1,
+        Stackable = 1 << 2,
+        LockedDown = 1 << 3,
+
+        // Corpses
+        MonsterCorpses = 1 << 4,
+        HumanoidCorpses = 1 << 5,
+        OwnCorpses = 1 << 6,
+
+        // Mobiles (type)
+        Humanoid = 1 << 7,
+        Monster = 1 << 8,
+        OwnFollowers = 1 << 9,
+
+        // Mobiles (notoriety)
+        Innocent = 1 << 10,
+        Ally = 1 << 11,
+        Gray = 1 << 12,
+        Criminal = 1 << 13,
+        Enemy = 1 << 14,
+        Murderer = 1 << 15,
+        Invulnerable = 1 << 16,
+
+        AllItems = Containers | Gold | Stackable | LockedDown,
+        AllMobiles = Humanoid | Monster,
+        MobilesAndCorpses = AllMobiles | MonsterCorpses | HumanoidCorpses,
+        // ## BEGIN - END ## // NAMEOVERHEAD
+    }
 
     internal static class NameOverHeadManager
     {
         private static NameOverHeadHandlerGump _gump;
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        private static SDL.SDL_Keycode _lastKeySym = SDL.SDL_Keycode.SDLK_UNKNOWN;
+        private static SDL.SDL_Keymod _lastKeyMod = SDL.SDL_Keymod.KMOD_NONE;
+        // ## BEGIN - END ## // NAMEOVERHEAD
 
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        /*
         public static NameOverheadTypeAllowed TypeAllowed
         {
             get => ProfileManager.CurrentProfile.NameOverheadTypeAllowed;
             set => ProfileManager.CurrentProfile.NameOverheadTypeAllowed = value;
         }
+        */
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        public static string LastActiveNameOverheadOption
+        {
+            get => ProfileManager.CurrentProfile.LastActiveNameOverheadOption;
+            set => ProfileManager.CurrentProfile.LastActiveNameOverheadOption = value;
+        }
+        // ## BEGIN - END ## // NAMEOVERHEAD
 
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        /*
         public static bool IsToggled
         {
             get => ProfileManager.CurrentProfile.NameOverheadToggled;
             set => ProfileManager.CurrentProfile.NameOverheadToggled = value;
         }
+        */
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        public static bool IsHealthLinesToggled
+        {
+            get => ProfileManager.CurrentProfile.ShowHPLineInNOH;
+            private set => ProfileManager.CurrentProfile.ShowHPLineInNOH = value;
+        }
+        public static bool IsBackgroundToggled
+        {
+            get => ProfileManager.CurrentProfile.NameOverheadBackgroundToggled;
+            private set => ProfileManager.CurrentProfile.NameOverheadBackgroundToggled = value;
+        }
+        public static bool IsPinnedToggled
+        {
+            get => ProfileManager.CurrentProfile.NameOverheadPinnedToggled;
+            private set => ProfileManager.CurrentProfile.NameOverheadPinnedToggled = value;
+        }
+        public static NameOverheadOptions ActiveOverheadOptions { get; set; }
+        public static bool IsPermaToggled
+        {
+            get => ProfileManager.CurrentProfile.NameOverheadToggled;
+            private set => ProfileManager.CurrentProfile.NameOverheadToggled = value;
+        }
+        public static bool IsTemporarilyShowing { get; private set; }
+        public static bool IsShowing => IsPermaToggled || IsTemporarilyShowing || Keyboard.Ctrl && Keyboard.Shift;
+        // ## BEGIN - END ## // NAMEOVERHEAD
+
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        //private static List<NameOverheadOption> Options { get; set; } = new();
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        private static List<NameOverheadOption> Options { get; set; } = new List<NameOverheadOption>();
+        // ## BEGIN - END ## // NAMEOVERHEAD
 
         public static bool IsAllowed(Entity serial)
         {
@@ -70,6 +167,8 @@ namespace ClassicUO.Game.Managers
                 return false;
             }
 
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            /*
             if (TypeAllowed == NameOverheadTypeAllowed.All)
             {
                 return true;
@@ -89,9 +188,101 @@ namespace ClassicUO.Game.Managers
             {
                 return true;
             }
+            */
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            if (SerialHelper.IsItem(serial))
+                return HandleItemOverhead(serial);
+
+            if (SerialHelper.IsMobile(serial))
+                return HandleMobileOverhead(serial);
+            // ## BEGIN - END ## // NAMEOVERHEAD
 
             return false;
         }
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        private static bool HandleMobileOverhead(Entity serial)
+        {
+            var mobile = serial as Mobile;
+
+            if (mobile == null)
+                return false;
+
+            // Mobile types
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Humanoid) && mobile.IsHuman)
+                return true;
+
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Monster) && !mobile.IsHuman)
+                return true;
+
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.OwnFollowers) && mobile.IsRenamable && mobile.NotorietyFlag != NotorietyFlag.Invulnerable && mobile.NotorietyFlag != NotorietyFlag.Enemy)
+                return true;
+
+            // Mobile notorieties
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Innocent) && mobile.NotorietyFlag == NotorietyFlag.Innocent)
+                return true;
+
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Ally) && mobile.NotorietyFlag == NotorietyFlag.Ally)
+                return true;
+
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Gray) && mobile.NotorietyFlag == NotorietyFlag.Gray)
+                return true;
+
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Criminal) && mobile.NotorietyFlag == NotorietyFlag.Criminal)
+                return true;
+
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Enemy) && mobile.NotorietyFlag == NotorietyFlag.Enemy)
+                return true;
+
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Murderer) && mobile.NotorietyFlag == NotorietyFlag.Murderer)
+                return true;
+
+            if (ActiveOverheadOptions.HasFlag(NameOverheadOptions.Invulnerable) && mobile.NotorietyFlag == NotorietyFlag.Invulnerable)
+                return true;
+
+            return false;
+        }
+
+        private static bool HandleItemOverhead(Entity serial)
+        {
+            var item = serial as Item;
+
+            if (item == null)
+                return false;
+
+            if (item.IsCorpse)
+            {
+                return HandleCorpseOverhead(item);
+            }
+
+            if (item.ItemData.IsContainer && ActiveOverheadOptions.HasFlag(NameOverheadOptions.Containers))
+                return true;
+
+            if (item.IsCoin && ActiveOverheadOptions.HasFlag(NameOverheadOptions.Gold))
+                return true;
+
+            if (item.ItemData.IsStackable && ActiveOverheadOptions.HasFlag(NameOverheadOptions.Stackable))
+                return true;
+
+            if (item.IsLocked && ActiveOverheadOptions.HasFlag(NameOverheadOptions.LockedDown))
+                return true;
+
+            return false;
+        }
+
+        private static bool HandleCorpseOverhead(Item item)
+        {
+            var isHumanCorpse = item.IsHumanCorpse;
+
+            if (isHumanCorpse && ActiveOverheadOptions.HasFlag(NameOverheadOptions.HumanoidCorpses))
+                return true;
+
+            if (!isHumanCorpse && ActiveOverheadOptions.HasFlag(NameOverheadOptions.MonsterCorpses))
+                return true;
+
+            // TODO: Add support for IsOwnCorpse, which was coded by Dyru
+            return false;
+        }
+        // ## BEGIN - END ## // NAMEOVERHEAD
 
         public static void Open()
         {
@@ -116,7 +307,268 @@ namespace ClassicUO.Game.Managers
 
         public static void ToggleOverheads()
         {
-            IsToggled = !IsToggled;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            //IsToggled = !IsToggled;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            SetOverheadToggled(!IsPermaToggled);
+            // ## BEGIN - END ## // NAMEOVERHEAD
+        }
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        public static void SetHealthLinesToggled(bool toggled)
+        {
+            if (IsHealthLinesToggled == toggled)
+                return;
+
+            IsHealthLinesToggled = toggled;
+            _gump?.UpdateCheckboxes();
+        }
+        public static void SetBackgroundToggled(bool toggled)
+        {
+            if (IsBackgroundToggled == toggled)
+                return;
+
+            IsBackgroundToggled = toggled;
+            _gump?.UpdateCheckboxes();
+
+            //TODO
+            //close and reopan all handles
+        }
+        public static void SetPinnedToggled(bool toggled)
+        {
+            if (IsPinnedToggled == toggled)
+                return;
+
+            IsPinnedToggled = toggled;
+            _gump?.UpdateCheckboxes();
+            _gump.CanCloseWithRightClick = !toggled;
+        }
+        public static void SetOverheadToggled(bool toggled)
+        {
+            if (IsPermaToggled == toggled)
+                return;
+
+            IsPermaToggled = toggled;
+            _gump?.UpdateCheckboxes();
+        }
+        public static void Load()
+        {
+            string path = Path.Combine(ProfileManager.ProfilePath, "nameoverhead.xml");
+
+            if (!File.Exists(path))
+            {
+                Log.Trace("No nameoverhead.xml file. Creating a default file.");
+
+
+                Options.Clear();
+                CreateDefaultEntries();
+                Save();
+
+                return;
+            }
+
+            Options.Clear();
+            XmlDocument doc = new XmlDocument();
+
+            try
+            {
+                doc.Load(path);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex.ToString());
+
+                return;
+            }
+
+
+            XmlElement root = doc["nameoverhead"];
+
+            if (root != null)
+            {
+                foreach (XmlElement xml in root.GetElementsByTagName("nameoverheadoption"))
+                {
+                    var option = new NameOverheadOption(xml.GetAttribute("name"));
+                    option.Load(xml);
+                    Options.Add(option);
+
+                    if (option.Name == LastActiveNameOverheadOption)
+                    {
+                        SetActiveOption(option);
+                    }
+                }
+            }
+        }
+
+        public static void Save()
+        {
+            var list = Options;
+
+            string path = Path.Combine(ProfileManager.ProfilePath, "nameoverhead.xml");
+
+            using XmlTextWriter xml = new XmlTextWriter(path, Encoding.UTF8)
+            {
+                Formatting = Formatting.Indented,
+                IndentChar = '\t',
+                Indentation = 1
+            };
+
+            xml.WriteStartDocument(true);
+            xml.WriteStartElement("nameoverhead");
+
+            foreach (var option in list)
+            {
+                option.Save(xml);
+            }
+
+            xml.WriteEndElement();
+            xml.WriteEndDocument();
+        }
+
+        private static void CreateDefaultEntries()
+        {
+            Options.AddRange
+            (
+                new[]
+                {
+                    new NameOverheadOption("All", int.MaxValue),
+                    new NameOverheadOption("Mobiles only", (int)NameOverheadOptions.AllMobiles),
+                    new NameOverheadOption("Items only", (int)NameOverheadOptions.AllItems),
+                    new NameOverheadOption("Mobiles & Corpses only", (int)NameOverheadOptions.MobilesAndCorpses),
+                }
+            );
+        }
+
+        public static NameOverheadOption FindOption(string name)
+        {
+            return Options.Find(o => o.Name == name);
+        }
+
+        public static void AddOption(NameOverheadOption option)
+        {
+            Options.Add(option);
+            _gump?.RedrawOverheadOptions();
+        }
+
+        public static void RemoveOption(NameOverheadOption option)
+        {
+            Options.Remove(option);
+            _gump?.RedrawOverheadOptions();
+        }
+
+        public static NameOverheadOption FindOptionByHotkey(SDL.SDL_Keycode key, bool alt, bool ctrl, bool shift)
+        {
+            return Options.FirstOrDefault(o => o.Key == key && o.Alt == alt && o.Ctrl == ctrl && o.Shift == shift);
+        }
+
+        public static List<NameOverheadOption> GetAllOptions() => Options;
+
+        public static void RegisterKeyDown(SDL.SDL_Keysym key)
+        {
+            if (_lastKeySym == key.sym && _lastKeyMod == key.mod)
+                return;
+
+            _lastKeySym = key.sym;
+            _lastKeyMod = key.mod;
+
+            bool shift = (key.mod & SDL.SDL_Keymod.KMOD_SHIFT) != SDL.SDL_Keymod.KMOD_NONE;
+            bool alt = (key.mod & SDL.SDL_Keymod.KMOD_ALT) != SDL.SDL_Keymod.KMOD_NONE;
+            bool ctrl = (key.mod & SDL.SDL_Keymod.KMOD_CTRL) != SDL.SDL_Keymod.KMOD_NONE;
+
+            var option = FindOptionByHotkey(key.sym, alt, ctrl, shift);
+
+            if (option == null)
+                return;
+
+            SetActiveOption(option);
+
+            IsTemporarilyShowing = true;
+        }
+
+        public static void RegisterKeyUp(SDL.SDL_Keysym key)
+        {
+            if (key.sym != _lastKeySym)
+                return;
+
+            _lastKeySym = SDL.SDL_Keycode.SDLK_UNKNOWN;
+
+            IsTemporarilyShowing = false;
+        }
+
+        public static void SetActiveOption(NameOverheadOption option)
+        {
+            ActiveOverheadOptions = (NameOverheadOptions) option.NameOverheadOptionFlags;
+            LastActiveNameOverheadOption = option.Name;
+            _gump?.UpdateCheckboxes();
+        }
+        // ## BEGIN - END ## // NAMEOVERHEAD
+    }
+    // ## BEGIN - END ## // NAMEOVERHEAD
+    internal class NameOverheadOption
+    {
+        public NameOverheadOption(string name, SDL.SDL_Keycode key, bool alt, bool ctrl, bool shift, int optionflagscode) : this(name)
+        {
+            Key = key;
+            Alt = alt;
+            Ctrl = ctrl;
+            Shift = shift;
+            NameOverheadOptionFlags = optionflagscode;
+        }
+
+        public NameOverheadOption(string name)
+        {
+            Name = name;
+        }
+
+        public NameOverheadOption(string name, int optionflagcode)
+        {
+            Name = name;
+            NameOverheadOptionFlags = optionflagcode;
+        }
+
+        public string Name { get; }
+
+        public SDL.SDL_Keycode Key { get; set; }
+        public bool Alt { get; set; }
+        public bool Ctrl { get; set; }
+        public bool Shift { get; set; }
+        public int NameOverheadOptionFlags { get; set; }
+
+        public bool Equals(NameOverheadOption other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return Key == other.Key && Alt == other.Alt && Ctrl == other.Ctrl && Shift == other.Shift && Name == other.Name;
+        }
+
+        public void Save(XmlTextWriter writer)
+        {
+            writer.WriteStartElement("nameoverheadoption");
+            writer.WriteAttributeString("name", Name);
+            writer.WriteAttributeString("key", ((int) Key).ToString());
+            writer.WriteAttributeString("alt", Alt.ToString());
+            writer.WriteAttributeString("ctrl", Ctrl.ToString());
+            writer.WriteAttributeString("shift", Shift.ToString());
+            writer.WriteAttributeString("optionflagscode", NameOverheadOptionFlags.ToString());
+
+            writer.WriteEndElement();
+        }
+
+        public void Load(XmlElement xml)
+        {
+            if (xml == null)
+            {
+                return;
+            }
+
+            Key = (SDL.SDL_Keycode) int.Parse(xml.GetAttribute("key"));
+            Alt = bool.Parse(xml.GetAttribute("alt"));
+            Ctrl = bool.Parse(xml.GetAttribute("ctrl"));
+            Shift = bool.Parse(xml.GetAttribute("shift"));
+            NameOverheadOptionFlags = int.Parse(xml.GetAttribute("optionflagscode"));
         }
     }
+    // ## BEGIN - END ## // NAMEOVERHEAD
 }

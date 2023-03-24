@@ -106,6 +106,12 @@ ignore list for circle of transparency (txt file created in your /Data/Client fo
 
 show death location on worldmap
 
+# nameoverhead
+
+hp line in nameoverheads
+
+more filters for nameoverheads
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -464,6 +470,80 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Configuration/Profile.cs                   638     643     MACROS
 
 /src/ClassicUO.Client/Game/UI/Gumps/GumpType.cs                  60      62      MACROS
+
+/src/ClassicUO.Client/Configuration/Profile.cs                   209     213     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             59      63      NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             420     422     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             504     506     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             5451    5454    NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/GameObjects/Views/ItemView.cs         273     277     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/GameObjects/Item.cs                   40      42      NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/GameObjects/Item.cs                   197     199     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs           	     155     157     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs           	     356     358     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs           	     620     624     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs           	     625     657     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Scenes/GameSceneInputHandler.cs       1317    1322    NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Scenes/GameSceneInputHandler.cs       1469    1471    NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadGump.cs	         56      127     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadGump.cs	         157     197     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadGump.cs	         326     328     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadGump.cs	         575     580     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadGump.cs	         627     632     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadGump.cs	         658     709     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadGump.cs	         800     825     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       34      44      NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       52      96      NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       102     105     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       107     121     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       123     155     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       157     161     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       170     198     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       202     285     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       310     314     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       316     498     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       500     568     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadHandlerGump.cs	 34      36      NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadHandlerGump.cs	 49      56      NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverHeadHandlerGump.cs   63      74      NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadHandlerGump.cs	 91      276     NAMEOVERHEAD
+
+/src/ClassicUO.Client/Game/UI/Gumps/NameOverheadHandlerGump.cs	 289     356     NAMEOVERHEAD
 
 # Original readme
 
