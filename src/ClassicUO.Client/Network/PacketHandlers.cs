@@ -2341,6 +2341,11 @@ namespace ClassicUO.Network
                 forward,
                 true
             );
+
+            // ## BEGIN - END ## // MACROS
+            if (mobile == World.Player)
+                World.AnimationTriggers.OnOwnCharacterAnimation(action);
+            // ## BEGIN - END ## // MACROS
         }
 
         private static void GraphicEffect(ref StackDataReader p)
@@ -5572,6 +5577,11 @@ namespace ClassicUO.Network
             byte group = Mobile.GetObjectNewAnimation(mobile, type, action, mode);
 
             mobile.SetAnimation(group, repeatCount: 1, repeat: (type == 1 || type == 2) && mobile.Graphic == 0x0015, forward: true, fromServer: true);
+
+            // ## BEGIN - END ## // MACROS
+            if (mobile == World.Player && type == 0)
+                World.AnimationTriggers.OnOwnCharacterAnimationNew(action, type);
+            // ## BEGIN - END ## // MACROS
         }
 
         private static void KREncryptionResponse(ref StackDataReader p)

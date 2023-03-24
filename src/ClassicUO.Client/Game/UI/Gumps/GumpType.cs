@@ -57,6 +57,9 @@ namespace ClassicUO.Game.UI.Gumps
 
         Debug,
         NetStats,
+        // ## BEGIN - END ## // MACROS
+        Journal2,
+        // ## BEGIN - END ## // MACROS
 
         NameOverHeadHandler
     }
