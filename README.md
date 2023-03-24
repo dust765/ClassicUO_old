@@ -52,6 +52,14 @@ Color own aura by HP
 
 Highlight lasttarget (more colors and options)
 
+# healthbar
+
+highlight lasttarget healthbar
+
+color border by state
+
+flashing outline (many options)
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -194,6 +202,28 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Network/PacketHandlers.cs                  37      39      VISUAL HELPERS
 
 /src/ClassicUO.Client/Network/PacketHandlers.cs                  927     930     VISUAL HELPERS
+
+/src/ClassicUO.Client/Game/GameObjects/Mobile.cs                 145     148     HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             358     361     HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             489     492     HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             579     582     HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             593     596     HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             600     689     HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             751     780     HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1034    1039    HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1204    1209    HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1311    1316    HEALTHBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1358    1361    HEALTHBAR
 
 # Original readme
 
