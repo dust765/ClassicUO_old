@@ -88,13 +88,31 @@ Black Outline for statics (CURRENTLY BROKEN)
 
 Ignore stamina check
 
-Block Wall of Stone
+Block Wall of Stone rubberband
 
-Block Energy Field
+Block Energy Field rubberband
+
+# misc2
+
+wireframe view (CURRENTLY BROKEN)
+
+hue impassable tiles
+
+transparent / invisible house and items by Z level from player and min Z from ground
+
+draw mobiles with surface overhead
+
+ignore list for circle of transparency (txt file created in your /Data/Client folder)
+
+show death location on worldmap
 
 # features macros
 
 HighlightTileAtRange (toggle)
+
+ToggleTransparentHouses (toggle)
+
+ToggleInvisibleHouses (toggle)
 
 # Added files
 
@@ -332,6 +350,72 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/UI/Controls/Control.cs                36      38      MISC
 
 /src/ClassicUO.Client/Game/UI/Controls/Control.cs                81      83      MISC
+
+/src/ClassicUO.Client/Game/GameObjects/Views/LandView.cs         35      37      MISC2
+
+/src/ClassicUO.Client/Game/GameObjects/Views/LandView.cs         114     123     MISC2
+
+/src/ClassicUO.Client/Game/GameObjects/Views/LandView.cs         129     134     MISC2
+
+/src/ClassicUO.Client/Game/GameObjects/Views/LandView.cs         168     173     MISC2
+
+/src/ClassicUO.Client/Game/GameObjects/Views/ItemView.cs         218     240     MISC2
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MultiView.cs        155     167     MISC2
+
+/src/ClassicUO.Client/Game/GameObjects/Views/View.cs             36      39      MISC2
+
+/src/ClassicUO.Client/Game/GameObjects/Views/View.cs             268     276     MISC2
+
+/src/ClassicUO.Assets/TexmapsLoader.cs                           35      39      MISC2
+
+/src/ClassicUO.Assets/TexmapsLoader.cs                           126     131     MISC2
+
+/src/ClassicUO.Assets/TexmapsLoader.cs                           142     146     MISC2
+
+/src/ClassicUO.Assets/TexmapsLoader.cs                           153     158     MISC2
+
+/src/ClassicUO.Assets/TexmapsLoader.cs                           181     210     MISC2
+
+/src/ClassicUO.Assets/ArtLoader.cs                               103     107     MISC2
+
+/src/ClassicUO.Assets/ArtLoader.cs                               148     165     MISC2
+
+/src/ClassicUO.Assets/ArtLoader.cs                               178     195     MISC2
+
+/src/ClassicUO.Assets/ArtLoader.cs                               255     260     MISC2
+
+/src/ClassicUO.Assets/ArtLoader.cs                               268     272     MISC2
+
+/src/ClassicUO.Assets/ArtLoader.cs                               282     286     MISC2
+
+/src/ClassicUO.Assets/ArtLoader.cs                               308     312     MISC2
+
+/src/ClassicUO.Assets/ArtLoader.cs                               322     326     MISC2
+
+/src/ClassicUO.Client/Game/Data/StaticFilters.cs                 52      54      MISC2
+
+/src/ClassicUO.Client/Game/Data/StaticFilters.cs                 63      65      MISC2
+
+/src/ClassicUO.Client/Game/Data/StaticFilters.cs                 79      118     MISC2
+
+/src/ClassicUO.Client/Game/Data/StaticFilters.cs                 405     411     MISC2
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              1815    1824    MISC2
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2394    2397    MISC2
+
+/src/ClassicUO.Client/Game/UI/Gumps/WorldMapGump.cs              2451    2504    MISC2
+
+/src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           51      55      MISC2
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 1703    1707    MISC2
+
+/src/ClassicUO.Client/Game/Scenes/GameSceneDrawingSorting.cs	 402     419     MISC2
+
+/src/ClassicUO.Client/Game/Scenes/GameSceneDrawingSorting.cs	 428     436     MISC2
+
+/src/ClassicUO.Client/Game/Scenes/GameSceneDrawingSorting.cs	 548     553     MISC2
 
 # Original readme
 
