@@ -193,6 +193,10 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _highlightLastTargetHealthBarOutline, _highlightHealthBarByState, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
         private HSliderBar _flashingHealthbarTreshold;
         // ## BEGIN - END ## // HEALTHBAR
+        // ## BEGIN - END ## // CURSOR
+        private InputField _spellOnCursorOffsetX, _spellOnCursorOffsetY;
+        private Checkbox _spellOnCursor, _colorGameCursor;
+        // ## BEGIN - END ## // CURSOR
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -3632,6 +3636,58 @@ namespace ClassicUO.Game.UI.Gumps
             section3.AddRight(_flashingHealthbarTreshold = AddHSlider(null, 1, 50, _currentProfile.FlashingHealthbarTreshold, startX, startY, 200));
             startY += _flashingHealthbarTreshold.Height + 2;
             // ## BEGIN - END ## // HEALTHBAR
+            // ## BEGIN - END ## // CURSOR
+            SettingsSection section4 = AddSettingsSection(box, "-----CURSOR-----");
+            section4.Y = section3.Bounds.Bottom + 40;
+
+            startY = section3.Bounds.Bottom + 40;
+
+            section4.Add(_spellOnCursor = AddCheckBox(null, "Show spells on cursor", _currentProfile.SpellOnCursor, startX, startY));
+            startY += _spellOnCursor.Height + 2;
+
+            section4.Add(AddLabel(null, "Spellicon offset: ", startX, startY));
+
+            section4.Add
+            (
+                _spellOnCursorOffsetX = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _spellOnCursorOffsetX.SetText(_currentProfile.SpellOnCursorOffset.X.ToString());
+            section4.AddRight(AddLabel(null, "X", 0, 0), 2);
+            startY += _spellOnCursorOffsetX.Height + 2;
+
+            section4.Add
+            (
+                _spellOnCursorOffsetY = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _spellOnCursorOffsetY.SetText(_currentProfile.SpellOnCursorOffset.Y.ToString());
+            section4.AddRight(AddLabel(null, "Y", 0, 0), 2);
+            startY += _spellOnCursorOffsetY.Height + 2;
+
+            section4.Add(_colorGameCursor = AddCheckBox(null, "Color game cursor when targeting (hostile / friendly)", _currentProfile.ColorGameCursor, startX, startY));
+            startY += _colorGameCursor.Height + 2;
+            // ## BEGIN - END ## // CURSOR
 
             Add(rightArea, PAGE);
         }
@@ -4556,6 +4612,13 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.FlashingHealthbarTreshold = _flashingHealthbarTreshold.Value;
             _currentProfile.HighlightLastTargetHealthBarOutline = _highlightLastTargetHealthBarOutline.IsChecked;
             // ## BEGIN - END ## // HEALTHBAR
+            // ## BEGIN - END ## // CURSOR
+            _currentProfile.SpellOnCursor = _spellOnCursor.IsChecked;
+            int.TryParse(_spellOnCursorOffsetX.Text, out int spellOnCursorOffsetX);
+            int.TryParse(_spellOnCursorOffsetY.Text, out int spellOnCursorOffsetY);
+            _currentProfile.SpellOnCursorOffset = new Point(spellOnCursorOffsetX, spellOnCursorOffsetY);
+            _currentProfile.ColorGameCursor = _colorGameCursor.IsChecked;
+            // ## BEGIN - END ## // CURSOR
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
