@@ -114,9 +114,31 @@ ToggleTransparentHouses (toggle)
 
 ToggleInvisibleHouses (toggle)
 
+# macros
+
+ObjectInfo (-info command)
+
+OpenCorpses (open corpses in 2 tiles)
+
+OpenJournal2 (open second journal)
+
+SetTargetClientSide (set target client side only)
+
+LastTargetRC (LastTarget with RangeCheck)
+
+HideX (removes a game object)
+
+HealOnHPChange (keep pressed, casts greater heal as soon as HP change)
+
+HarmOnSwing (keep pressed, casts harm as soon as a swinganimation is issued from server)
+
+CureGH (cure or gheal)
+
 # Added files
 
 /src/Dust765
+
+/src/Dust765/External
 
 # changed constants
 
@@ -416,6 +438,32 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/Scenes/GameSceneDrawingSorting.cs	 428     436     MISC2
 
 /src/ClassicUO.Client/Game/Scenes/GameSceneDrawingSorting.cs	 548     553     MISC2
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              41      44      MACROS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              1829    1949    MACROS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2488+           MACROS
+
+/src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           1367    1379    MACROS
+
+/src/ClassicUO.Client/Game/Scenes/GameSceneInputHandler.cs       37      39      MACROS
+
+/src/ClassicUO.Client/Game/Scenes/GameSceneInputHandler.cs       1451    1462    MACROS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 2345    2348    MACROS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 5581    5584    MACROS
+
+/src/ClassicUO.Client/Game/World.cs                              37      39      MACROS
+
+/src/ClassicUO.Client/Game/World.cs                              98      100     MACROS
+
+/src/ClassicUO.Client/Configuration/Profile.cs                   38      40      MACROS
+
+/src/ClassicUO.Client/Configuration/Profile.cs                   638     643     MACROS
+
+/src/ClassicUO.Client/Game/UI/Gumps/GumpType.cs                  60      62      MACROS
 
 # Original readme
 
