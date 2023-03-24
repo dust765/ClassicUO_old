@@ -31,6 +31,9 @@
 #endregion
 
 using System;
+// ## BEGIN - END ## // NAMEOVERHEAD
+using System.Collections.Generic;
+// ## BEGIN - END ## // NAMEOVERHEAD
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Resources;
@@ -43,13 +46,32 @@ namespace ClassicUO.Game.UI.Gumps
         public static Point? LastPosition;
 
         public override GumpType GumpType => GumpType.NameOverHeadHandler;
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        private readonly List<RadioButton> _overheadButtons = new List<RadioButton>();
+        private Control _alpha;
+        private readonly Checkbox _keepOpenCheckbox;
+        private readonly Checkbox _keepPinnedCheckbox;
+        private readonly Checkbox _noBackgroundCheckbox;
+        private readonly Checkbox _healthLinesCheckbox;
+        // ## BEGIN - END ## // NAMEOVERHEAD
 
 
         public NameOverHeadHandlerGump() : base(0, 0)
         {
             CanMove = true;
             AcceptMouseInput = true;
-            CanCloseWithRightClick = true;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            //CanCloseWithRightClick = true;
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            if (NameOverHeadManager.IsPinnedToggled)
+            {
+                CanCloseWithRightClick = false;
+            }
+            else
+            {
+                CanCloseWithRightClick = true;
+            }
+            // ## BEGIN - END ## // NAMEOVERHEAD
 
             if (LastPosition == null)
             {
@@ -66,6 +88,8 @@ namespace ClassicUO.Game.UI.Gumps
 
             LayerOrder = UILayer.Over;
 
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            /*
             RadioButton all, mobiles, items, mobilesCorpses;
             AlphaBlendControl alpha;
 
@@ -178,6 +202,78 @@ namespace ClassicUO.Game.UI.Gumps
                     NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.MobilesCorpses;
                 }
             };
+            */
+            // ## BEGIN - END ## // NAMEOVERHEAD
+            Add
+            (
+                _alpha = new AlphaBlendControl(0.7f)
+                {
+                    Hue = 34
+                }
+            );
+
+            Add
+            (
+                _keepOpenCheckbox = new Checkbox
+                (
+                    0x00D2, 0x00D3, "Keep open", 0xFF,
+                    0xFFFF
+                )
+                {
+                    IsChecked = NameOverHeadManager.IsPermaToggled
+                }
+            );
+
+            _keepOpenCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetOverheadToggled(_keepOpenCheckbox.IsChecked);
+
+            Add
+            (
+                _keepPinnedCheckbox = new Checkbox
+                (
+                    0x00D2, 0x00D3, "Pin this UI", 0xFF,
+                    0xFFFF
+                )
+                {
+                    IsChecked = NameOverHeadManager.IsPinnedToggled,
+                    X = 100
+                }
+            );
+
+            _keepPinnedCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetPinnedToggled(_keepPinnedCheckbox.IsChecked);
+
+            Add
+            (
+                _noBackgroundCheckbox = new Checkbox
+                (
+                    0x00D2, 0x00D3, "bg on mouse", 0xFF,
+                    0xFFFF
+                )
+                {
+                    IsChecked = NameOverHeadManager.IsBackgroundToggled,
+                    Y = 20
+                }
+            );
+
+            _noBackgroundCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetBackgroundToggled(_noBackgroundCheckbox.IsChecked);
+
+            Add
+            (
+                _healthLinesCheckbox = new Checkbox
+                (
+                    0x00D2, 0x00D3, "HP", 0xFF,
+                    0xFFFF
+                )
+                {
+                    IsChecked = NameOverHeadManager.IsHealthLinesToggled,
+                    Y = 20,
+                    X = 100
+                }
+            );
+
+            _healthLinesCheckbox.ValueChanged += (sender, args) => NameOverHeadManager.SetHealthLinesToggled(_healthLinesCheckbox.IsChecked);
+
+            DrawChoiceButtons();
+            // ## BEGIN - END ## // NAMEOVERHEAD
         }
 
 
@@ -189,5 +285,74 @@ namespace ClassicUO.Game.UI.Gumps
 
             base.OnDragEnd(x, y);
         }
+
+        // ## BEGIN - END ## // NAMEOVERHEAD
+        public void UpdateCheckboxes()
+        {
+            foreach (var button in _overheadButtons)
+            {
+                button.IsChecked = NameOverHeadManager.LastActiveNameOverheadOption == button.Text;
+            }
+
+            _keepOpenCheckbox.IsChecked = NameOverHeadManager.IsPermaToggled;
+            _keepPinnedCheckbox.IsChecked = NameOverHeadManager.IsPinnedToggled;
+            _noBackgroundCheckbox.IsChecked = NameOverHeadManager.IsBackgroundToggled;
+            _healthLinesCheckbox.IsChecked = NameOverHeadManager.IsHealthLinesToggled;
+        }
+        public void RedrawOverheadOptions()
+        {
+            foreach (var button in _overheadButtons)
+                Remove(button);
+
+            DrawChoiceButtons();
+        }
+
+        private void DrawChoiceButtons()
+        {
+            int biggestWidth = 100;
+            var options = NameOverHeadManager.GetAllOptions();
+
+            for (int i = 0; i < options.Count; i++)
+            {
+                biggestWidth = Math.Max(biggestWidth, AddOverheadOptionButton(options[i], i).Width);
+            }
+
+            _alpha.Width = biggestWidth;
+            _alpha.Height = Math.Max(30, options.Count * 20) + 42;
+
+            Width = _alpha.Width;
+            Height = _alpha.Height;
+        }
+
+        private RadioButton AddOverheadOptionButton(NameOverheadOption option, int index)
+        {
+            RadioButton button;
+
+            Add
+            (
+                button = new RadioButton
+                (
+                    0, 0x00D0, 0x00D1, option.Name,
+                    color: 0xFFFF
+                )
+                {
+                    Y = 20 * index + 42,
+                    IsChecked = NameOverHeadManager.LastActiveNameOverheadOption == option.Name,
+                }
+            );
+
+            button.ValueChanged += (sender, e) =>
+            {
+                if (button.IsChecked)
+                {
+                    NameOverHeadManager.SetActiveOption(option);
+                }
+            };
+
+            _overheadButtons.Add(button);
+
+            return button;
+        }
+        // ## BEGIN - END ## // NAMEOVERHEAD
     }
 }
