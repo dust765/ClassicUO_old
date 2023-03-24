@@ -78,6 +78,20 @@ mana / stamina lines, for self and party,
 
 bigger version and transparency
 
+# misc
+
+Offscreen targeting
+
+Razor lasttarget sync (Razor lasttarget string - set this to the same lasttarget overhead string as set in Razor, so the ClassicUO lasttarget will be the same as in Razor.)
+
+Black Outline for statics (CURRENTLY BROKEN)
+
+Ignore stamina check
+
+Block Wall of Stone
+
+Block Energy Field
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -290,6 +304,34 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        278     298     OLDHEALTHLINES
 
 /src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        408     482     OLDHEALTHLINES
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 38      40      MISC
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 3648    3651    MISC
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 5681    5700    MISC
+
+/src/ClassicUO.Client/Game/GameObjects/Views/ItemView.cs         98      127     MISC
+
+/src/ClassicUO.Assets/ArtLoader.cs                               453     467     MISC
+
+/src/ClassicUO.Assets/TileDataLoader.cs                          357     359     MISC
+
+/src/ClassicUO.Assets/TileDataLoader.cs                          374     378     MISC
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             74      76      MISC
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             181     185     MISC
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             191     193     MISC
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             237     239     MISC
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             241     250     MISC
+
+/src/ClassicUO.Client/Game/UI/Controls/Control.cs                36      38      MISC
+
+/src/ClassicUO.Client/Game/UI/Controls/Control.cs                81      83      MISC
 
 # Original readme
 
