@@ -60,6 +60,12 @@ color border by state
 
 flashing outline (many options)
 
+# cursor
+
+Show spell on cursor (and runout countdown)
+
+Color game cursor when targeting (hostile / friendly)
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -224,6 +230,32 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1311    1316    HEALTHBAR
 
 /src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1358    1361    HEALTHBAR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         38      40      CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         58      62      CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         76      85      CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         91      95      CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         105     113     CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         119     123     CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         129     133     CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         227     254     CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         392     396     CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         401     405     CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         410     414     CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         427     440     CURSOR
+
+/src/ClassicUO.Client/Game/GameCursor.cs                         545     549     CURSOR
 
 # Original readme
 
