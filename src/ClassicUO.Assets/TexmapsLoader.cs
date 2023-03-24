@@ -32,6 +32,11 @@
 
 using ClassicUO.IO;
 using ClassicUO.Utility;
+// ## BEGIN - END ## // MISC2
+/* Temporarily broken. ProfileManager is not accessible here.
+using ClassicUO.Configuration;
+*/
+// ## BEGIN - END ## // MISC2
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -118,7 +123,12 @@ namespace ClassicUO.Assets
 
         private SpriteInfo[] _spriteInfos;
 
-        public Texture2D GetLandTexture(uint g, out Rectangle bounds)
+        // ## BEGIN - END ## // MISC2
+        //STRECHEDLAND
+        //public Texture2D GetLandTexture(uint g, out Rectangle bounds)
+        // ## BEGIN - END ## // MISC2
+        public Texture2D GetLandTexture(uint g, out Rectangle bounds, bool isImpassable)
+        // ## BEGIN - END ## // MISC2
         {
             // avoid to mix land with statics
             //g += ushort.MaxValue;
@@ -129,15 +139,23 @@ namespace ClassicUO.Assets
 
             if (spriteInfo.Texture == null)
             {
-                AddSpriteToAtlas(atlas, g);
+                // ## BEGIN - END ## // MISC2
+                //AddSpriteToAtlas(atlas, g);
+                // ## BEGIN - END ## // MISC2
+                AddSpriteToAtlas(atlas, g, isImpassable);
+                // ## BEGIN - END ## // MISC2
             }
 
             bounds = spriteInfo.UV;
 
             return spriteInfo.Texture;  //atlas.GetTexture(g, out bounds);
         }
-
-        private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index)
+        // ## BEGIN - END ## // MISC2
+        //STRECHEDLAND
+        //private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index)
+        // ## BEGIN - END ## // MISC2
+        private unsafe void AddSpriteToAtlas(TextureAtlas atlas, uint index, bool IsImpassable)
+        // ## BEGIN - END ## // MISC2
         {
             ref UOFileIndex entry = ref GetValidRefEntry((int) (index));
 
@@ -159,6 +177,37 @@ namespace ClassicUO.Assets
                 for (int j = 0; j < size; ++j)
                 {
                     data[pos + j] = HuesHelper.Color16To32(_file.ReadUShort()) | 0xFF_00_00_00;
+
+                    // ## BEGIN - END ## // MISC2
+                    /* Temporarily broken. ProfileManager is not accessible here.
+                    if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WireFrameView)
+                    {
+                        if (pos <= 100)
+                        {
+                            if (IsImpassable)
+                            {
+                                data[pos + j] = 0xFF_00_00_00;
+                            }
+                            else
+                            {
+                                data[pos + j] = 0xAA_AA_AA_AA;
+                            }
+                        }
+
+                        if (j == 0 | j == 1 | j == 2)
+                        {
+                            if (IsImpassable)
+                            {
+                                data[pos + j] = 0xFF_00_00_00;
+                            }
+                            else
+                            {
+                                data[pos + j] = 0xAA_AA_AA_AA;
+                            }
+                        }
+                    }
+                    */
+                    // ## BEGIN - END ## // MISC2
                 }
             }
 

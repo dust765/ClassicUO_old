@@ -399,6 +399,25 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
+            // ## BEGIN - END ## // MISC2
+            if (ProfileManager.CurrentProfile.InvisibleHousesEnabled)
+            {
+                GameObject tile = World.Map.GetTile(obj.X, obj.Y);
+
+                if (tile != null)
+                {
+                    if (obj is not Mobile)
+                    {
+                        if ((obj.Z - World.Player.Z) > ProfileManager.CurrentProfile.InvisibleHousesZ && (obj.Z - tile.Z) > ProfileManager.CurrentProfile.DontRemoveHouseBelowZ)
+                        {
+                            //DO NOT DRAW IT
+                            return false;
+                        }
+                    }
+                }
+            }
+            // ## BEGIN - END ## // MISC2
+
             return true;
         }
 
@@ -406,6 +425,16 @@ namespace ClassicUO.Game.Scenes
         {
             if (ProfileManager.CurrentProfile.UseCircleOfTransparency && obj.TransparentTest(maxZ))
             {
+                // ## BEGIN - END ## // MISC2
+                if (ProfileManager.CurrentProfile.IgnoreCoTEnabled)
+                {
+                    if (StaticFilters.IsIgnoreCoT(obj.Graphic) || ProfileManager.CurrentProfile.TreeType == 1 && obj.Graphic == CombatCollection.TREE_REPLACE_GRAPHIC || ProfileManager.CurrentProfile.TreeType == 2 & obj.Graphic == CombatCollection.TREE_REPLACE_GRAPHIC_TILE)
+                    {
+                        return false;
+                    }
+                }
+                // ## BEGIN - END ## // MISC2
+
                 int maxDist = ProfileManager.CurrentProfile.CircleOfTransparencyRadius + 0;
                 Vector2 pos = new Vector2(obj.RealScreenPosition.X, obj.RealScreenPosition.Y - 44);
                 Vector2.Distance(ref playerPos, ref pos, out float dist);
@@ -515,7 +544,14 @@ namespace ClassicUO.Game.Scenes
             {
                 return false;
             }
-            
+
+            // ## BEGIN - END ## // MISC2
+            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.DrawMobilesWithSurfaceOverhead)
+            {
+                return false;
+            }
+            // ## BEGIN - END ## // MISC2
+
             bool found = false;
             
             for (int y = -1; y <= 2; ++y)
