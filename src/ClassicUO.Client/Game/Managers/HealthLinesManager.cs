@@ -32,6 +32,9 @@
 
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // OVERHEAD / UNDERCHAR
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Assets;
 using ClassicUO.Renderer;
@@ -159,6 +162,12 @@ namespace ClassicUO.Game.Managers
                             {
                                 mobile.HitsTexture.Draw(batcher, p1.X, p1.Y);
                             }
+                            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
+                            CombatCollection.UpdateOverheads(mobile);
+
+                            if (ProfileManager.CurrentProfile.OverheadRange && mobile != World.Player)
+                                mobile.RangeTexture.Draw(batcher, p1.X - mobile.RangeTexture.Width, p1.Y);
+                            // ## BEGIN - END ## // OVERHEAD / UNDERCHAR
                         }
                     }
                 }
