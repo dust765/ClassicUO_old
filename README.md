@@ -126,6 +126,10 @@ texture manager (arrow or halo on mobiles)
 
 UI UCC LINES - Draws a line to HUMANS on your screen.
 
+Please specify the correct settings to make theese properly work!
+
+UI UCC AL - Is an autoloot feature / UI. Only works with GridLoot enabled. You can add items to the txt file created in your /Data/Client folder. Recommendation is to set high value items to the autolootlist.txt (items you potentialy would go gray for) and low value items to autolootlistlow. If you check SL (SafeLoot (available for both lists)), items will ONLY be auto looted if you have looting rights. Loot Above ID adds all items to the loot list higher than X, so you dont have to add hundreds of items to the list.
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -602,6 +606,22 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/Scenes/GameScene.cs                   231     241     LINES
 
 /src/ClassicUO.Client/Game/Scenes/GameScene.cs                   1272    1274    LINES
+
+/src/ClassicUO.Client/Game/GameObjects/Entity.cs                 75      77      AUTOLOOT
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 929     938     AUTOLOOT
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 4738    4747    AUTOLOOT
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   242     252     AUTOLOOT
+
+/src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             35      37      AUTOLOOT
+
+/src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             97      115     AUTOLOOT
+
+/src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             178     190     AUTOLOOT
+
+/src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             242     249     AUTOLOOT
 
 # Original readme
 
