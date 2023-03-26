@@ -1545,6 +1545,17 @@ namespace ClassicUO.Dust765.Dust765
             return p1;
         }
         // ## BEGIN - END ## // TEXTUREMANAGER
+        // ## BEGIN - END ## // AUTOLOOT
+        //NETWORK\PACKETHANDLERS.CS
+        public static void SetLootFlag(uint source, ushort hue)
+        {
+            Item item = World.Items.Get(source);
+            if (item != null)
+            {
+                item.LootFlag = hue;
+            }
+        }
+        // ## BEGIN - END ## // AUTOLOOT
 
     }
 }
