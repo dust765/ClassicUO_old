@@ -130,6 +130,8 @@ Please specify the correct settings to make theese properly work!
 
 UI UCC AL - Is an autoloot feature / UI. Only works with GridLoot enabled. You can add items to the txt file created in your /Data/Client folder. Recommendation is to set high value items to the autolootlist.txt (items you potentialy would go gray for) and low value items to autolootlistlow. If you check SL (SafeLoot (available for both lists)), items will ONLY be auto looted if you have looting rights. Loot Above ID adds all items to the loot list higher than X, so you dont have to add hundreds of items to the list.
 
+UI UCC BUFFBAR - Provides a visible timer for next swing and disarm. You can enable lines individually enable them and also lock the UI to prevent moving it. There is a txt in /Data/Client to modify the timers for weapons. It does NOT change calculation with SSI or the like.
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -622,6 +624,18 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             178     190     AUTOLOOT
 
 /src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             242     249     AUTOLOOT
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   253     263     BUFFBAR/UCCSETTINGS
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   375     380     BUFFBAR/UCCSETTINGS
+
+/src/ClassicUO.Client/Game/World.cs                              101     103     BUFFBAR/UCCSETTINGS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 4748    4750    BUFFBAR/UCCSETTINGS
+
+/src/ClassicUO.Client/Dust765/Dust765/AnimationTriggers.cs       43      46      BUFFBAR/UCCSETTINGS
+
+/src/ClassicUO.Client/Dust765/Dust765/AnimationTriggers.cs       55      58      BUFFBAR/UCCSETTINGS
 
 # Original readme
 
