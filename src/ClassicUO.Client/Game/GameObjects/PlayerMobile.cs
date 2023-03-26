@@ -34,6 +34,9 @@ using System.Collections.Generic;
 using System.Linq;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
+// ## BEGIN - END ## // UI/GUMPS
+using ClassicUO.Dust765.External;
+// ## BEGIN - END ## // UI/GUMPS
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Game.UI.Gumps;
@@ -53,10 +56,17 @@ namespace ClassicUO.Game.GameObjects
         public int DeathY = 0;
         public uint DeathTick = 0;
         // ## BEGIN - END ## // MISC2
+        // ## BEGIN - END ## // UI/GUMPS
+        public BandageGump BandageTimer;
+        // ## BEGIN - END ## // UI/GUMPS
 
         public PlayerMobile(uint serial) : base(serial)
         {
             Skills = new Skill[SkillsLoader.Instance.SkillsCount];
+
+            // ## BEGIN - END ## // UI/GUMPS
+            UIManager.Add(BandageTimer = new BandageGump());
+            // ## BEGIN - END ## // UI/GUMPS
 
             for (int i = 0; i < Skills.Length; i++)
             {
