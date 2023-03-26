@@ -132,6 +132,20 @@ UI UCC AL - Is an autoloot feature / UI. Only works with GridLoot enabled. You c
 
 UI UCC BUFFBAR - Provides a visible timer for next swing and disarm. You can enable lines individually enable them and also lock the UI to prevent moving it. There is a txt in /Data/Client to modify the timers for weapons. It does NOT change calculation with SSI or the like.
 
+UI UCC SELF - Is an Automation feature to bandaid yourself, use pouches, pots and enhanced apple (auto rearms a weapon after being disarmed).
+
+Checkboxes on the UI
+
+Rearm Pot - Auto rearm after pot. 
+
+Armorer Guild -  Auto rearm after being disarmed.
+
+Thiefes Guild - Disables any actions when hidden.
+
+Mages Guild - Disables any actions when a spellcursor is up.
+
+Tavern - Diable auto disarm.
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -636,6 +650,14 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Dust765/Dust765/AnimationTriggers.cs       43      46      BUFFBAR/UCCSETTINGS
 
 /src/ClassicUO.Client/Dust765/Dust765/AnimationTriggers.cs       55      58      BUFFBAR/UCCSETTINGS
+
+/src/ClassicUO.Client/Dust765/Dust765/ClilocTriggers.cs          75      *       BUFFBAR/UCCSETTINGS
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   264     274     SELF
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   387     392     SELF
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              1551    1563    SELF
 
 # Original readme
 
