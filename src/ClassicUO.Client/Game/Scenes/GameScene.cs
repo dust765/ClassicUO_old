@@ -35,6 +35,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using ClassicUO.Configuration;
+// ## BEGIN - END ## // UI/GUMPS
+using ClassicUO.Dust765.External;
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // UI/GUMPS
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -180,6 +184,21 @@ namespace ClassicUO.Game.Scenes
 
                 Client.Game.SetWindowSize(w, h);
             }
+            // ## BEGIN - END ## // UI/GUMPS
+            if (ProfileManager.CurrentProfile.UOClassicCombatLTBar)
+            {
+                UIManager.Add(new UOClassicCombatLTBar
+                {
+                    X = ProfileManager.CurrentProfile.UOClassicCombatLTBarLocation.X,
+                    Y = ProfileManager.CurrentProfile.UOClassicCombatLTBarLocation.Y
+                });
+
+            }
+            if (ProfileManager.CurrentProfile.BandageGump)
+            {
+                UIManager.Add(new BandageGump());
+            }
+            // ## BEGIN - END ## // UI/GUMPS
 
             CircleOfTransparency.Create(ProfileManager.CurrentProfile.CircleOfTransparencyRadius);
             Plugin.OnConnected();
@@ -234,14 +253,14 @@ namespace ClassicUO.Game.Scenes
                     break;
 
                 case MessageType.Label:
-                
+
                     if (e.Parent == null || !SerialHelper.IsValid(e.Parent.Serial))
                     {
                         name = string.Empty;
                     }
-                    else if (string.IsNullOrEmpty(e.Name)) 
+                    else if (string.IsNullOrEmpty(e.Name))
                     {
-                        name = ResGeneral.YouSee;                      
+                        name = ResGeneral.YouSee;
                     }
                     else
                     {
@@ -288,6 +307,9 @@ namespace ClassicUO.Game.Scenes
 
                     break;
             }
+            // ## BEGIN - END ## // UI/GUMPS
+            World.Player?.BandageTimer.OnMessage(text, hue, name, e.IsUnicode);
+            // ## BEGIN - END ## // UI/GUMPS
 
             if (!string.IsNullOrEmpty(text))
             {
