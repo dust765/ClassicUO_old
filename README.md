@@ -118,6 +118,10 @@ sticky last target healthbar (healthbar that always will be your last targets he
 
 bandage gump (bandage timer UI)
 
+# texturemanager
+
+texture manager (arrow or halo on mobiles)
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -151,6 +155,10 @@ CureGH (cure or gheal)
 /src/Dust765
 
 /src/Dust765/External
+
+/src/halo.png
+
+/src/arrow.png
 
 # changed constants
 
@@ -566,6 +574,14 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Network/PacketHandlers.cs	                 4725    4727    UI/GUMPS
 
 /src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs               38      40      UI/GUMPS
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   94      96      TEXTUREMANAGER
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   165     167     TEXTUREMANAGER
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   1252    1254    TEXTUREMANAGER
+
+/src/ClassicUO.Client/ClassicUO.csproj	                         23      41      TEXTUREMANAGER
 
 # Original readme
 
