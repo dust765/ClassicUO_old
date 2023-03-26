@@ -4745,6 +4745,9 @@ namespace ClassicUO.Network
                 }
             }
             // ## BEGIN - END ## // AUTOLOOT
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
+            World.ClilocTriggers.OnCliloc(cliloc);
+            // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
 
             if (cliloc == 1008092 || cliloc == 1005445) // value for "You notify them you don't want to join the party" || "You have been added to the party"
             {
