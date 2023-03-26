@@ -122,6 +122,10 @@ bandage gump (bandage timer UI)
 
 texture manager (arrow or halo on mobiles)
 
+# UCC UI
+
+UI UCC LINES - Draws a line to HUMANS on your screen.
+
 # features macros
 
 HighlightTileAtRange (toggle)
@@ -129,6 +133,10 @@ HighlightTileAtRange (toggle)
 ToggleTransparentHouses (toggle)
 
 ToggleInvisibleHouses (toggle)
+
+UCCLinesToggleLT (toggle)
+
+UCCLinesToggleHM (toggle)
 
 # macros
 
@@ -582,6 +590,18 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/Scenes/GameScene.cs                   1252    1254    TEXTUREMANAGER
 
 /src/ClassicUO.Client/ClassicUO.csproj	                         23      41      TEXTUREMANAGER
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              1950    1967    LINES
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2525    2528    LINES
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   97      99      LINES
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   171     173     LINES
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   231     241     LINES
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   1272    1274    LINES
 
 # Original readme
 
