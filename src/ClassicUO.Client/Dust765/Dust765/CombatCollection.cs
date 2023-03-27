@@ -1556,6 +1556,221 @@ namespace ClassicUO.Dust765.Dust765
             }
         }
         // ## BEGIN - END ## // AUTOLOOT
+        // ## BEGIN - END ## // OUTLANDS
+        /*
+        //GAME/MAP/CHUNK.CS
+        public static bool InfernoBridgeSolver(ushort x, ushort y)
+        {
+            if (ProfileManager.CurrentProfile.InfernoBridge)
+            {
+                //INFERNO BRIDGE 1
+                if (x == 5957 && y == 2016)
+                    return true;
+                if (x == 5956 && y == 2016)
+                    return true;
+                if (x == 5955 && y == 2017)
+                    return true;
+                if (x == 5954 && y == 2017)
+                    return true;
+                if (x == 5953 && y == 2016)
+                    return true;
+                if (x == 5952 && y == 2015)
+                    return true;
+                if (x == 5951 && y == 2016)
+                    return true;
+                if (x == 5950 && y == 2017)
+                    return true;
+                if (x == 5949 && y == 2017)
+                    return true;
+                if (x == 5948 && y == 2016)
+                    return true;
+                if (x == 5947 && y == 2016)
+                    return true;
+                //INFERNO BRIDGE 2
+                if (x == 5929 && y == 2016)
+                    return true;
+                if (x == 5928 && y == 2016)
+                    return true;
+                if (x == 5927 && y == 2015)
+                    return true;
+                if (x == 5926 && y == 2015)
+                    return true;
+                if (x == 5925 && y == 2016)
+                    return true;
+                if (x == 5924 && y == 2017)
+                    return true;
+                if (x == 5923 && y == 2016)
+                    return true;
+                if (x == 5922 && y == 2015)
+                    return true;
+                if (x == 5921 && y == 2015)
+                    return true;
+                if (x == 5920 && y == 2016)
+                    return true;
+            }
+            return false;
+        }
+
+        //
+        public static void SetSummonTime(string text, uint serial)
+        {
+            String minutes = null;
+            String seconds = null;
+            String[] arraystring = null;
+            String str = text.Replace("(summoned ", "").Replace(")", "");
+
+            if (str.Contains(" "))
+            {
+                arraystring = str.Split(' ');
+
+                minutes = arraystring[0].Replace("m", "");
+                seconds = arraystring[1].Replace("s", "");
+            }
+            else
+            {
+                if (str.Contains("m"))
+                {
+                    minutes = str.Replace("m", "");
+                }
+                else
+                {
+                    seconds = str.Replace("s", "");
+                }
+            }
+
+            int intm = 0;
+            Int32.TryParse(minutes, out intm);
+            int ints = 0;
+            Int32.TryParse(seconds, out ints);
+            int time = (intm * 60) + ints;
+
+            Mobile targetmobile = World.Mobiles.Get(serial);
+
+            targetmobile.SummonTimeTick = Time.Ticks;
+            targetmobile.SummonTime = time;
+
+        }
+        public static void GetPeaceTime(uint serial)
+        {
+            Mobile targetmobile = World.Mobiles.Get(serial);
+
+            if (targetmobile.PeaceTimeTick == 0)
+                Socket.Send(new PClickRequest(targetmobile));
+
+            targetmobile.PeaceTimeTick = Time.Ticks;
+        }
+        public static void SetPeaceTime(string text, uint serial)
+        {
+            if (text.Equals("*pacified*"))
+                return;
+
+            String minutes = null;
+            String seconds = null;
+            String[] arraystring = null;
+            String str = text.Replace("*pacified ", "").Replace("*", "");
+
+            if (str.Contains(" "))
+            {
+                arraystring = str.Split(' ');
+
+                minutes = arraystring[0].Replace("m", "");
+                seconds = arraystring[1].Replace("s", "");
+            }
+            else
+            {
+                if (str.Contains("m"))
+                {
+                    minutes = str.Replace("m", "");
+                }
+                else
+                {
+                    seconds = str.Replace("s", "");
+                }
+            }
+
+            int intm = 0;
+            Int32.TryParse(minutes, out intm);
+            int ints = 0;
+            Int32.TryParse(seconds, out ints);
+            int time = (intm * 60) + ints;
+
+            Mobile targetmobile = World.Mobiles.Get(serial);
+
+            targetmobile.PeaceTimeTick = Time.Ticks;
+            targetmobile.PeaceTime = time;
+
+        }
+        public static void SetHamstrungTime(uint source)
+        {
+            Mobile targetmobile = World.Mobiles.Get(source);
+            if (targetmobile != null && targetmobile != World.Player)
+            {
+                targetmobile.HamstrungTimeTick = Time.Ticks;
+                targetmobile.HamstrungTime = ProfileManager.CurrentProfile.MobileHamstrungTimeCooldown;
+            }
+        }
+        public static void UpdateSummonTime(Mobile mobile)
+        {
+            if (Time.Ticks >= (mobile.SummonTimeTick + 1000))
+            {
+                mobile.SummonTime = mobile.SummonTime - 1;
+                mobile.SummonTimeTick = Time.Ticks;
+            }
+
+            ushort color = 0x0044;
+
+            if (mobile.SummonTime < 20)
+                color = 0x0021;
+            else if (mobile.SummonTime < 40)
+                color = 0x0030;
+            else if (mobile.SummonTime < 60)
+                color = 0x0035;
+
+            mobile.SummonTexture?.Destroy();
+            mobile.SummonTexture = RenderedText.Create($"[{mobile.SummonTime}s]", color, 3, false);
+        }
+        public static void UpdatePeaceTime(Mobile mobile)
+        {
+            if (Time.Ticks >= (mobile.PeaceTimeTick + 1000))
+            {
+                if (mobile.PeaceTime > 0)
+                    mobile.PeaceTime = mobile.PeaceTime - 1;
+
+                mobile.PeaceTimeTick = Time.Ticks;
+            }
+
+            ushort color = 0x0044;
+
+            if (mobile.PeaceTime < 10)
+                color = 0x0021;
+            else if (mobile.PeaceTime < 20)
+                color = 0x0030;
+            else if (mobile.PeaceTime < 30)
+                color = 0x0035;
+
+            mobile.PeaceTexture?.Destroy();
+            mobile.PeaceTexture = RenderedText.Create($"[{mobile.PeaceTime}s]", color, 3, false);
+        }
+        public static void UpdateHamstrung(Mobile mobile)
+        {
+            if (mobile == null)
+                return;
+
+            if (Time.Ticks >= (mobile.HamstrungTimeTick + 100))
+            {
+                if (mobile.HamstrungTime >= 100)
+                    mobile.HamstrungTime = mobile.HamstrungTime - 100;
+                else if (mobile.HamstrungTime > 0 && mobile.HamstrungTime < 100)
+                    mobile.HamstrungTime = 0;
+
+                mobile.HamstrungTimeTick = Time.Ticks;
+            }
+
+            mobile.HamstrungTexture?.Destroy();
+            mobile.HamstrungTexture = RenderedText.Create($"[{mobile.HamstrungTime / 100}]", 0x0021, 3, false);
+        }
+        */
+        // ## BEGIN - END ## // OUTLANDS
 
     }
 }

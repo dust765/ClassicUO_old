@@ -2456,6 +2456,10 @@ namespace ClassicUO.Network
             // ## BEGIN - END ## // AUTOMATIONS
             Defender.gfxTrigger(source, target, graphic);
             // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // OUTLANDS
+            //if (graphic == 0x5683)
+            //    CombatCollection.SetHamstrungTime(source);
+            // ## BEGIN - END ## // OUTLANDS
         }
 
         private static void ClientViewRange(ref StackDataReader p)
@@ -3689,6 +3693,18 @@ namespace ClassicUO.Network
             if (text.StartsWith(ProfileManager.CurrentProfile.SpecialSetLastTargetClilocText.ToString()))
                 CombatCollection.SpecialSetLastTargetCliloc(serial);
             // ## BEGIN - END ## // MISC
+            // ## BEGIN - END ## // OUTLANDS
+            /*
+            if (text.StartsWith("(summoned"))
+                CombatCollection.SetSummonTime(text, serial);
+
+            if (text.Equals("*looks calmed*"))
+                CombatCollection.GetPeaceTime(serial);
+
+            if (text.StartsWith("*pacified"))
+                CombatCollection.SetPeaceTime(text, serial);
+            */
+            // ## BEGIN - END ## // OUTLANDS
 
             MessageManager.HandleMessage
             (
