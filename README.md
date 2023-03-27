@@ -178,6 +178,22 @@ HarmOnSwing (keep pressed, casts harm as soon as a swinganimation is issued from
 
 CureGH (cure or gheal)
 
+# advanced macros
+
+OpenCorpsesSafe (open corpses in 2 tiles safe to loot)
+
+GrabFriendlyBars, GrabEnemyBars, GrabPartyAllyBars (grab all bars with hotkey)
+
+AutoPot (one pot button)
+
+DefendSelfKey, DefendPartyKey (clever defend self or party)
+
+CustomInterrupt (interrupt current spellcast)
+
+EquipManager (fast equip)
+
+SetMimic_PlayerSerial (set master or custom serial for EquipManager)
+
 # Added files
 
 /src/Dust765
@@ -187,6 +203,8 @@ CureGH (cure or gheal)
 /src/halo.png
 
 /src/arrow.png
+
+/src/Dust765/Macros
 
 # changed constants
 
@@ -658,6 +676,22 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/Scenes/GameScene.cs                   387     392     SELF
 
 /src/ClassicUO.Client/Game/Managers/MacroManager.cs              1551    1563    SELF
+
+/src/ClassicUO.Client/Game/Managers/TargetManager.cs             59      61      ADVMACROS
+
+/src/ClassicUO.Client/Game/Managers/TargetManager.cs             428     450     ADVMACROS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              45      48      ADVMACROS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2043    2253    ADVMACROS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2620    2626    ADVMACROS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2801    *       ADVMACROS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              3099    3139    ADVMACROS
+
+/src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           1390    1410    ADVMACROS
 
 # Original readme
 
