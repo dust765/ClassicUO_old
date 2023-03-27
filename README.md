@@ -214,6 +214,20 @@ auto add marker for T-Maps
 
 -autorange (auto show range indicator when weapon is equipped)
 
+# outlands
+
+disabled features due to client enforcement (code updates NOT maintained)
+
+inferno bridge solver (color specific land tiles)
+
+overhead: Summon timer (also on healthbar)
+
+overhead: Peace timer (also on healthbar)
+
+underchar: Hamstrung timer (also on healthbar)
+
+buffbar: hamstrung
+
 # Added files
 
 /src/Dust765
@@ -748,6 +762,46 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/UI/Gumps/WorldMapGump.cs              68      79      AUTOMATIONS
 
 /src/ClassicUO.Client/Game/UI/Gumps/WorldMapGump.cs              2518    2605    AUTOMATIONS
+
+/src/ClassicUO.Client/Game/Map/Chunk.cs                          35      37      OUTLANDS
+
+/src/ClassicUO.Client/Game/Map/Chunk.cs                          138     141     OUTLANDS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 2459    2462    OUTLANDS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 3696    3707    OUTLANDS
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        200     213     OUTLANDS
+
+/src/ClassicUO.Client/Game/Managers/HealthLinesManager.cs        262     274     OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             110     112     OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             127     130     OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             396     398     OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             435     437     OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             590     627     OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             740     751     OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             843     845     OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1441    1456    OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1615    1617    OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             1850    1865    OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             2023    2060    OUTLANDS
+
+/src/ClassicUO.Client/Game/UI/Gumps/HealthBarGump.cs             2174    2176    OUTLANDS
+
+/src/ClassicUO.Client/Game/GameObjects/Mobile.cs                 149     158     OUTLANDS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       63      67      OUTLANDS
 
 # Original readme
 
