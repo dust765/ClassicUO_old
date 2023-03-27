@@ -242,6 +242,12 @@ commands: see options for a full list
 
 macros: see options for a full list
 
+# POC
+
+proof of concept
+
+guardlines: show guardlines on land tiles (disabled due to performance)
+
 # Added files
 
 /src/Dust765
@@ -824,6 +830,14 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/Managers/MacroManager.cs              2261    2303    LOBBY
 
 /src/ClassicUO.Client/Game/Managers/MacroManager.cs              2899    2906    LOBBY
+
+/src/ClassicUO.Client/Game/Map/Chunk.cs                          35      38      POC - GUARDLINE
+
+/src/ClassicUO.Client/Game/Map/Chunk.cs                          70      72      POC - GUARDLINE
+
+/src/ClassicUO.Client/Game/Map/Chunk.cs                          118     121     POC - GUARDLINE
+
+/src/ClassicUO.Client/Game/Map/Chunk.cs                          492     730     POC - GUARDLINE
 
 # Original readme
 
