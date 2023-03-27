@@ -539,6 +539,9 @@ namespace ClassicUO.Configuration
         public string LobbyIP { get; set; } = "127.0.0.1";
         public string LobbyPort { get; set; } = "2596";
         // ## BEGIN - END ## // LOBBY
+        // ## BEGIN - END ## // STATUSGUMP
+        public bool UseRazorEnhStatusGump { get; set; } = false;
+        // ## BEGIN - END ## // STATUSGUMP
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
