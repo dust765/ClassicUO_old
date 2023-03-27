@@ -367,6 +367,9 @@ namespace ClassicUO.Game
 
                     _toRemove.Clear();
                 }
+                // ## BEGIN - END ## // AUTOMATIONS
+                ModulesManager.OnWorldUpdate();
+                // ## BEGIN - END ## // AUTOMATIONS
 
                 _effectManager.Update();
                 WorldTextManager.Update();
