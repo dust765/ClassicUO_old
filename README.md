@@ -228,6 +228,20 @@ underchar: Hamstrung timer (also on healthbar)
 
 buffbar: hamstrung
 
+# lobby
+
+connect multiple Dust765 clients to a lobby server to issue commands
+
+[Dust765's LobbyServer] (https://github.com/dust765/LobbyServer)
+
+features: send your lasttarget to be everyones, drop everyones spell on lasttarget, make everyone cast a spell, everyone attack lasttarget
+
+autostealthposition: command: -autohid ((needs connected lobby) broadcast your position when hidden, everyone will see your position
+
+commands: see options for a full list
+
+macros: see options for a full list
+
 # Added files
 
 /src/Dust765
@@ -245,6 +259,8 @@ buffbar: hamstrung
 /src/Dust765/Autos
 
 /src/Dust765/Shared
+
+/src/Dust765/Lobby
 
 # changed constants
 
@@ -804,6 +820,10 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       63      67      OUTLANDS
 
 /src/ClassicUO.Client/Game/UI/Gumps/Login/LoginGump.cs	         418     428     LOGIN
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2261    2303    LOBBY
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2899    2906    LOBBY
 
 # Original readme
 

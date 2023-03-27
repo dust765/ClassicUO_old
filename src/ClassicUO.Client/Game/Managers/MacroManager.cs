@@ -2258,6 +2258,49 @@ namespace ClassicUO.Game.Managers
 
                     break;
                 // ## BEGIN - END ## // AUTOMATIONS
+                // ## BEGIN - END ## // LOBBY
+                case MacroType.LobbyConnect:
+
+                    string[] lobbyconnect = new string[] { "lobby", "connect", ProfileManager.CurrentProfile.LobbyIP.ToString() };
+                    CommandManager.Execute("lobby", lobbyconnect);
+
+                    break;
+
+                case MacroType.LobbyDisconnect:
+
+                    string[] lobbydisconnect = new string[] { "lobby", "disconnect" };
+                    CommandManager.Execute("lobby", lobbydisconnect);
+
+                    break;
+
+                case MacroType.LobbyTarget:
+
+                    string[] lobbytarget = new string[] { "lobby", "target" };
+                    CommandManager.Execute("lobby", lobbytarget);
+
+                    break;
+
+                case MacroType.LobbyCastLightning:
+
+                    string[] lobbycastlightning = new string[] { "lobby", "cast", "Lightning" };
+                    CommandManager.Execute("lobby", lobbycastlightning);
+
+                    break;
+
+                case MacroType.LobbyCastEB:
+
+                    string[] lobbycastenergybolt = new string[] { "lobby", "cast", "EnergyBolt" };
+                    CommandManager.Execute("lobby", lobbycastenergybolt);
+
+                    break;
+
+                case MacroType.LobbyDrop:
+
+                    string[] lobbydrop = new string[] { "lobby", "drop" };
+                    CommandManager.Execute("lobby", lobbydrop);
+
+                    break;
+                // ## BEGIN - END ## // LOBBY
             }
 
 
@@ -2853,12 +2896,14 @@ namespace ClassicUO.Game.Managers
         ToggleTransparentHouses,
         ToggleInvisibleHouses,
         // ## BEGIN - END ## // MISC2
-        notimplemented25,
-        notimplemented26,
-        notimplemented27,
-        notimplemented28,
-        notimplemented29,
-        notimplemented30,
+        // ## BEGIN - END ## // LOBBY
+        LobbyConnect,
+        LobbyDisconnect,
+        LobbyTarget,
+        LobbyCastLightning,
+        LobbyCastEB,
+        LobbyDrop,
+        // ## BEGIN - END ## // LOBBY
         // ## BEGIN - END ## // BASICSETUP
         CloseInactiveHealthBars,
         CloseCorpses,
