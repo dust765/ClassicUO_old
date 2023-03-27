@@ -248,6 +248,12 @@ proof of concept
 
 guardlines: show guardlines on land tiles (disabled due to performance)
 
+# Gridloot
+
+The order in which items are shown in grid-loot will now depend on item type.
+
+Motivation: some items are likely to be always looted (e.g. gold, gems) and when looting is performed automatically (e.g. by Razor macros) it makes items to move in a grid making it harder to browse their properties. Hence, items like gold should be at the end of the grid.
+
 # Added files
 
 /src/Dust765
@@ -838,6 +844,12 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/Map/Chunk.cs                          118     121     POC - GUARDLINE
 
 /src/ClassicUO.Client/Game/Map/Chunk.cs                          492     730     POC - GUARDLINE
+
+/src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             270     285     GRIDLOOT
+
+/src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             314     316     GRIDLOOT
+
+/src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             358     368     GRIDLOOT
 
 # Original readme
 
