@@ -939,6 +939,8 @@ FILE                                                                START   END 
 
 /src/ClassicUO.Client/Dust765/External/JournalGump2.cs           316     320     MULTIJOURNAL
 
+/src/ClassicUO.Client/Dust765/Dust765/CombatCollection.cs        1774    1866    UNUSED
+
 # Original readme
 
 <a href="https://discord.gg/VdyCpjQ">
