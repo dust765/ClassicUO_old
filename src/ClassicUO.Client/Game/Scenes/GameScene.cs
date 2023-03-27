@@ -402,7 +402,11 @@ namespace ClassicUO.Game.Scenes
                     text,
                     hue,
                     name,
-                    e.TextType,
+                    // ## BEGIN - END ## // MULTIJOURNAL
+                    //e.TextType,
+                    // ## BEGIN - END ## // MULTIJOURNAL
+                    e.Type,
+                    // ## BEGIN - END ## // MULTIJOURNAL
                     e.IsUnicode
                 );
             }

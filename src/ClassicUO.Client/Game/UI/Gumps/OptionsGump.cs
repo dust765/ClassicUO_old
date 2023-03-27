@@ -158,8 +158,13 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _scaleSpeechDelay, _saveJournalCheckBox;
         private Checkbox _showHouseContent;
         private Checkbox _showInfoBar;
-        private Checkbox _ignoreAllianceMessages;
-        private Checkbox _ignoreGuildMessages;
+        // ## BEGIN - END ## // MULTIJOURNAL
+        //private Checkbox _ignoreAllianceMessages;
+        //private Checkbox _ignoreGuildMessages;
+        // ## BEGIN - END ## // MULTIJOURNAL
+        private DataBox _journalBox;
+        private List<JournalBuilderControl> _journalBuilderControls;
+        // ## BEGIN - END ## // MULTIJOURNAL
 
         // general
         private HSliderBar _sliderFPS, _circleOfTranspRadius;
@@ -471,6 +476,9 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // NAMEOVERHEAD
             Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Name Overhead Options") { ButtonParameter = 13 });
             // ## BEGIN - END ## // NAMEOVERHEAD
+            // ## BEGIN - END ## // MULTIJOURNAL
+            Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Multi Journal") { ButtonParameter = 14 });
+            // ## BEGIN - END ## // MULTIJOURNAL
             Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Dust") { ButtonParameter = 16 });
             Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "765") { ButtonParameter = 17 });
             Add(new NiceButton(10, 10 + 30 * i++, 140, 25, ButtonAction.SwitchPage, "Mods") { ButtonParameter = 18 });
@@ -555,6 +563,9 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // NAMEOVERHEAD
             BuildNameOverhead();
             // ## BEGIN - END ## // NAMEOVERHEAD
+            // ## BEGIN - END ## // MULTIJOURNAL
+            BuildMultiJournal();
+            // ## BEGIN - END ## // MULTIJOURNAL
             BuildDust();
             Build765();
             BuildMods();
@@ -2584,6 +2595,8 @@ namespace ClassicUO.Game.UI.Gumps
 
             startY += _hideChatGradient.Height + 2;
 
+            // ## BEGIN - END ## // MULTIJOURNAL
+            /*
             _ignoreGuildMessages = AddCheckBox
             (
                 rightArea,
@@ -2603,6 +2616,8 @@ namespace ClassicUO.Game.UI.Gumps
                 startX,
                 startY
             );
+            */
+            // ## BEGIN - END ## // MULTIJOURNAL
 
             startY += 35;
 
@@ -3758,6 +3773,66 @@ namespace ClassicUO.Game.UI.Gumps
             Add(rightArea, PAGE);
         }
         // ## BEGIN - END ## // NAMEOVERHEAD
+        // ## BEGIN - END ## // MULTIJOURNAL
+        private void BuildMultiJournal()
+        {
+            const int PAGE = 14;
+
+            ScrollArea rightArea = new ScrollArea(190, 20, WIDTH - 210, 420, true);
+
+            int startX = 5;
+            int startY = 5;
+
+            DataBox box = new DataBox(startX, startY, rightArea.Width - 15, 1);
+            box.WantUpdateSize = true;
+            rightArea.Add(box);
+
+            NiceButton nb = new NiceButton
+                (startX, startY, 105, 20, ButtonAction.Activate, ResGumps.AddItem, 0, TEXT_ALIGN_TYPE.TS_LEFT)
+            {
+                ButtonParameter = -1,
+                IsSelectable = false,
+                IsSelected = false
+            };
+
+            nb.MouseUp += (sender, e) =>
+            {
+                uint serial = (uint) _journalBox.GetControls<JournalBuilderControl>().Count() + 1;
+                JournalBuilderControl jbc = new JournalBuilderControl(new JournalItem(ResGumps.Journal, 0, Enumerable.Repeat(true, Enum.GetValues(typeof(MessageType)).Length).ToArray(), serial));
+                jbc.X = 5;
+                jbc.Y = _journalBox.Children.Count * jbc.Height;
+                _journalBuilderControls.Add(jbc);
+                _journalBox.Add(jbc);
+                _journalBox.WantUpdateSize = true;
+                UIManager.Add(new JournalGump(serial, jbc.LabelText, jbc.Hue, jbc.Filter) { X = 64, Y = 64 });
+            };
+
+            rightArea.Add(nb);
+
+            startY += nb.Height + 2;
+
+            _journalBox = new DataBox(startX, startY, 10, 10)
+            {
+                WantUpdateSize = true
+            };
+
+            List<JournalItem> _journalItems = World.Journal.GetJournals();
+            _journalBuilderControls = new List<JournalBuilderControl>();
+
+            for (int i = 0; i < _journalItems.Count; i++)
+            {
+                JournalBuilderControl jbc = new JournalBuilderControl(_journalItems[i]);
+                jbc.X = 5;
+                jbc.Y = i * jbc.Height;
+                _journalBuilderControls.Add(jbc);
+                _journalBox.Add(jbc);
+            }
+
+            rightArea.Add(_journalBox);
+
+            Add(rightArea, PAGE);
+        }
+        // ## BEGIN - END ## // MULTIJOURNAL
         private void BuildDust()
         {
             const int PAGE = 16;
@@ -5590,8 +5665,10 @@ namespace ClassicUO.Game.UI.Gumps
                     _chatShiftEnterCheckbox.IsChecked = true;
                     _saveJournalCheckBox.IsChecked = false;
                     _hideChatGradient.IsChecked = false;
-                    _ignoreGuildMessages.IsChecked = false;
-                    _ignoreAllianceMessages.IsChecked = false;
+                    // ## BEGIN - END ## // MULTIJOURNAL
+                    //_ignoreGuildMessages.IsChecked = false;
+                    //_ignoreAllianceMessages.IsChecked = false;
+                    // ## BEGIN - END ## // MULTIJOURNAL
 
                     break;
 
@@ -5959,8 +6036,10 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.PartyAura = _partyAura.IsChecked;
             _currentProfile.PartyAuraHue = _partyAuraColorPickerBox.Hue;
             _currentProfile.HideChatGradient = _hideChatGradient.IsChecked;
-            _currentProfile.IgnoreGuildMessages = _ignoreGuildMessages.IsChecked;
-            _currentProfile.IgnoreAllianceMessages = _ignoreAllianceMessages.IsChecked;
+            // ## BEGIN - END ## // MULTIJOURNAL
+            //_currentProfile.IgnoreGuildMessages = _ignoreGuildMessages.IsChecked;
+            //_currentProfile.IgnoreAllianceMessages = _ignoreAllianceMessages.IsChecked;
+            // ## BEGIN - END ## // MULTIJOURNAL
 
             // fonts
             _currentProfile.ForceUnicodeJournal = _forceUnicodeJournal.IsChecked;
@@ -6643,6 +6722,27 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.LobbyIP = _lobbyIP.Text;
             _currentProfile.LobbyPort = _lobbyPort.Text;
             // ## BEGIN - END ## // LOBBY
+            // ## BEGIN - END ## // MULTIJOURNAL
+            World.Journal.Empty();
+
+            for (int i = 0; i < _journalBuilderControls.Count; i++)
+            {
+                JournalBuilderControl jbc = _journalBuilderControls[i];
+                if (!jbc.IsDisposed)
+                {
+                    World.Journal.AddJournal(new JournalItem(jbc.LabelText, jbc.Hue, jbc.Filter, jbc.LocalSerial));
+                    JournalGump journal = UIManager.GetGump<JournalGump>(jbc.LocalSerial);
+                    if (journal != null)
+                    {
+                        journal.Title = jbc.LabelText;
+                        journal.Hue = jbc.Hue;
+                        journal.Filter = jbc.Filter;
+                    }
+                }
+            }
+
+            World.Journal.Save();
+            // ## BEGIN - END ## // MULTIJOURNAL
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

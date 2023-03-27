@@ -2203,6 +2203,10 @@ namespace ClassicUO.Network
                         UIManager.Add(gump);
                     }
                 }
+
+                // ## BEGIN - END ## // MULTIJOURNAL
+                World.Journal.Load();
+                // ## BEGIN - END ## // MULTIJOURNAL
             }
         }
 
