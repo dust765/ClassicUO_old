@@ -262,6 +262,10 @@ note: edit journals.xml in your profile folder, set hue to 0 if you wish to rese
 
 (use macro OpenJournal2 for old journal)
 
+# status gump
+
+adds a version of the status gump with health / mana / stamina bar when expanded
+
 # Added files
 
 /src/Dust765
@@ -940,6 +944,12 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Dust765/External/JournalGump2.cs           316     320     MULTIJOURNAL
 
 /src/ClassicUO.Client/Dust765/Dust765/CombatCollection.cs        1774    1866    UNUSED
+
+/src/ClassicUO.Client/Game/UI/Gumps/StatusGump.cs	             139     166     STATUSGUMP
+
+/src/ClassicUO.Client/Game/UI/Gumps/StatusGump.cs	             185     212     STATUSGUMP
+
+/src/ClassicUO.Client/Game/UI/Gumps/StatusGump.cs	             2134    3217    STATUSGUMP
 
 # Original readme
 
