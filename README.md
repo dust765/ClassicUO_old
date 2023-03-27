@@ -803,6 +803,8 @@ FILE                                                                START   END 
 
 /src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       63      67      OUTLANDS
 
+/src/ClassicUO.Client/Game/UI/Gumps/Login/LoginGump.cs	         418     428     LOGIN
+
 # Original readme
 
 <a href="https://discord.gg/VdyCpjQ">
