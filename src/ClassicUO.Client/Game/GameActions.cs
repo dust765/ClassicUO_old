@@ -140,7 +140,11 @@ namespace ClassicUO.Game
 
         public static void OpenJournal()
         {
-            JournalGump journalGump = UIManager.GetGump<JournalGump>();
+            // ## BEGIN - END ## // MULTIJOURNAL
+            //JournalGump journalGump = UIManager.GetGump<JournalGump>();
+            // ## BEGIN - END ## // MULTIJOURNAL
+            JournalGump journalGump = UIManager.GetGump<JournalGump>(0);
+            // ## BEGIN - END ## // MULTIJOURNAL
 
             if (journalGump == null)
             {

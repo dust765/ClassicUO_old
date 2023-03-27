@@ -254,6 +254,14 @@ The order in which items are shown in grid-loot will now depend on item type.
 
 Motivation: some items are likely to be always looted (e.g. gold, gems) and when looting is performed automatically (e.g. by Razor macros) it makes items to move in a grid making it harder to browse their properties. Hence, items like gold should be at the end of the grid.
 
+# Multi Journal
+
+Replaces journal with multiple nameable and much better configurable journals
+
+note: edit journals.xml in your profile folder, set hue to 0 if you wish to reset color to default
+
+(use macro OpenJournal2 for old journal)
+
 # Added files
 
 /src/Dust765
@@ -850,6 +858,86 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             314     316     GRIDLOOT
 
 /src/ClassicUO.Client/Game/UI/Gumps/GridLootGump.cs	             358     368     GRIDLOOT
+
+/src/ClassicUO.Client/Game/GameActions.cs                        144     148     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Managers/JournalManager.cs            37      42      MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Managers/JournalManager.cs            58      65      MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Managers/JournalManager.cs            67      71      MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Managers/JournalManager.cs            159     255     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Managers/JournalManager.cs            267     271     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Managers/JournalManager.cs            271     319     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Managers/MessageManager.cs            115     117     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Managers/MessageManager.cs            121     123     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs           	     405     409     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Controls/ExpandableScroll.cs       273     278     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               38      40      MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               61      64      MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               66      70      MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               80      86      MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               89      136     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               154     275     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               280     312     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               372     379     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               450     455     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               470     474     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               493     497     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               647     651     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/JournalGump.cs               698     731     MULTIJOURNAL
+
+/src/ClassicUO.Client/Configuration/Profile.cs	                 74      77      MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             161     167     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             479     481     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             566     568     MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             2598    2620    MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             3776    3835    MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             5668    5671    MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             6039    6042    MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/UI/Gumps/OptionsGump.cs	             6725    6745    MULTIJOURNAL
+
+/src/ClassicUO.Client/Game/GameActions.cs	                     143     147     MULTIJOURNAL
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 2207    2209    MULTIJOURNAL
+
+/src/ClassicUO.Client/Resources/ResGumps.Designer.cs             1468    1477    MULTIJOURNAL
+
+/src/ClassicUO.Client/Resources/ResGumps.Designer.cs             2641    2765    MULTIJOURNAL
+
+/src/ClassicUO.Client/Resources/ResGumps.Designer.cs             2974    2982    MULTIJOURNAL
+
+/src/ClassicUO.Client/Resources/ResGumps.resx                    1585    1634    MULTIJOURNAL
+
+/src/ClassicUO.Client/Dust765/External/JournalGump2.cs           316     320     MULTIJOURNAL
 
 # Original readme
 
