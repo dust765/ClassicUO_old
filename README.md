@@ -158,6 +158,8 @@ UCCLinesToggleLT (toggle)
 
 UCCLinesToggleHM (toggle)
 
+AutoMeditate (toggle)
+
 # macros
 
 ObjectInfo (-info command)
@@ -194,6 +196,24 @@ EquipManager (fast equip)
 
 SetMimic_PlayerSerial (set master or custom serial for EquipManager)
 
+# commands
+
+type command in chat
+
+-mimic (mimic casting of master)
+
+-marker X Y (add world marker)
+
+auto add marker for T-Maps
+
+-df (defender)
+
+-automed (auto meditate)
+
+-engage (auto pathfind and attack lasttarget)
+
+-autorange (auto show range indicator when weapon is equipped)
+
 # Added files
 
 /src/Dust765
@@ -205,6 +225,12 @@ SetMimic_PlayerSerial (set master or custom serial for EquipManager)
 /src/arrow.png
 
 /src/Dust765/Macros
+
+/src/Dust765/Managers
+
+/src/Dust765/Autos
+
+/src/Dust765/Shared
 
 # changed constants
 
@@ -692,6 +718,36 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/Managers/MacroManager.cs              3099    3139    ADVMACROS
 
 /src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           1390    1410    ADVMACROS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/LandView.cs         100     106     AUTOMATIONS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MultiView.cs        132     138     AUTOMATIONS
+
+/src/ClassicUO.Client/Game/GameObjects/Views/StaticView.cs       111     117     AUTOMATIONS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2254    2260    AUTOMATIONS
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2837    2839    AUTOMATIONS
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   275     277     AUTOMATIONS
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs                   435     443     AUTOMATIONS
+
+/src/ClassicUO.Client/Game/World.cs                              370     372     AUTOMATIONS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 42      44      AUTOMATIONS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 942     945     AUTOMATIONS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 2232    2234    AUTOMATIONS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 2456    2458    AUTOMATIONS
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 3138    3140    AUTOMATIONS
+
+/src/ClassicUO.Client/Game/UI/Gumps/WorldMapGump.cs              68      79      AUTOMATIONS
+
+/src/ClassicUO.Client/Game/UI/Gumps/WorldMapGump.cs              2518    2605    AUTOMATIONS
 
 # Original readme
 
