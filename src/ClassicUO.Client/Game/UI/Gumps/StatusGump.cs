@@ -136,6 +136,8 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (!CUOEnviroment.IsOutlands)
             {
+                // ## BEGIN - END ## // STATUSGUMP
+                /*
                 if (ProfileManager.CurrentProfile.UseOldStatusGump)
                 {
                     gump = UIManager.GetGump<StatusGumpOld>();
@@ -144,6 +146,24 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     gump = UIManager.GetGump<StatusGumpModern>();
                 }
+                */
+                // ## BEGIN - END ## // STATUSGUMP
+                if (ProfileManager.CurrentProfile.UseRazorEnhStatusGump)
+                {
+                    gump = UIManager.GetGump<StatusGumpRazor>();
+                }
+                else
+                {
+                    if (ProfileManager.CurrentProfile.UseOldStatusGump)
+                    {
+                        gump = UIManager.GetGump<StatusGumpOld>();
+                    }
+                    else
+                    {
+                        gump = UIManager.GetGump<StatusGumpModern>();
+                    }
+                }
+                // ## BEGIN - END ## // STATUSGUMP
             }
             else
             {
@@ -162,6 +182,8 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (!CUOEnviroment.IsOutlands)
             {
+                // ## BEGIN - END ## // STATUSGUMP
+                /*
                 if (Client.Version < ClientVersion.CV_308Z || ProfileManager.CurrentProfile.UseOldStatusGump)
                 {
                     gump = new StatusGumpOld();
@@ -170,6 +192,24 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     gump = new StatusGumpModern();
                 }
+                */
+                // ## BEGIN - END ## // STATUSGUMP
+                if (ProfileManager.CurrentProfile.UseRazorEnhStatusGump)
+                {
+                    gump = new StatusGumpRazor();
+                }
+                else
+                {
+                    if (Client.Version < ClientVersion.CV_308Z || ProfileManager.CurrentProfile.UseOldStatusGump)
+                    {
+                        gump = new StatusGumpOld();
+                    }
+                    else
+                    {
+                        gump = new StatusGumpModern();
+                    }
+                }
+                // ## BEGIN - END ## // STATUSGUMP
             }
             else
             {
@@ -2091,4 +2131,1088 @@ namespace ClassicUO.Game.UI.Gumps
             Stam
         }
     }
+    // ## BEGIN - END ## // STATUSGUMP
+    internal class StatusGumpRazor : StatusGumpBase
+    {
+        private readonly GumpPicWithWidth[] _fillBars = new GumpPicWithWidth[3];
+
+        // ## BEGIN - END ## // STATUSGUMP - BELOW IS A COPY OF StatusGumpModern
+        public StatusGumpRazor()
+        {
+            Point p = Point.Zero;
+            int xOffset = 0;
+            _labels = new Label[(int) MobileStats.NumStats];
+
+            Add(new GumpPic(0, 0, 0x2A6C, 0));
+
+            if (Client.Version >= ClientVersion.CV_308Z)
+            {
+                p.X = 389;
+                p.Y = 152;
+
+
+                AddStatTextLabel
+                (
+                    !string.IsNullOrEmpty(World.Player.Name) ? World.Player.Name : string.Empty,
+                    MobileStats.Name,
+                    GumpsLoader.Instance.UseUOPGumps ? 90 : 58,
+                    50,
+                    320,
+                    0x0386,
+                    TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+
+                if (Client.Version >= ClientVersion.CV_5020)
+                {
+                    Add
+                    (
+                        new Button((int) ButtonType.BuffIcon, 0x7538, 0x7539, 0x7539)
+                        {
+                            X = 40,
+                            Y = 50,
+                            ButtonAction = ButtonAction.Activate
+                        }
+                    );
+                }
+
+                // ## BEGIN - END ## // STATUSGUMP
+                ushort gumpIdHp = 0x0806;
+                const int SliderStart = 34;
+                Add(new GumpPic(SliderStart, 12, 0x0805, 0)); // Health bar
+                Add(new GumpPic(SliderStart, 25, 0x0805, 0)); // Mana bar
+                Add(new GumpPic(SliderStart, 38, 0x0805, 0)); // Stamina bar
+                _fillBars[(int) FillStats.Hits] = new GumpPicWithWidth
+                (
+                    SliderStart,
+                    12,
+                    gumpIdHp,
+                    0,
+                    0
+                );
+
+                _fillBars[(int) FillStats.Mana] = new GumpPicWithWidth
+                (
+                    SliderStart,
+                    25,
+                    0x0806,
+                    0,
+                    0
+                );
+
+                _fillBars[(int) FillStats.Stam] = new GumpPicWithWidth
+                (
+                    SliderStart,
+                    38,
+                    0x0806,
+                    0,
+                    0
+                );
+
+                Add(_fillBars[(int) FillStats.Hits]);
+                Add(_fillBars[(int) FillStats.Mana]);
+                Add(_fillBars[(int) FillStats.Stam]);
+
+                UpdateStatusFillBar(FillStats.Hits, World.Player.Hits, World.Player.HitsMax);
+                UpdateStatusFillBar(FillStats.Mana, World.Player.Mana, World.Player.ManaMax);
+                UpdateStatusFillBar(FillStats.Stam, World.Player.Stamina, World.Player.StaminaMax);
+                // ## BEGIN - END ## // STATUSGUMP
+
+                Lock status = World.Player.StrLock;
+                xOffset = GumpsLoader.Instance.UseUOPGumps ? 28 : 40;
+                ushort gumpID = GetStatLockGraphic(status);
+
+                Add(_lockers[0] = new GumpPic(xOffset, 76, gumpID, 0));
+
+                _lockers[0].MouseUp += (sender, e) =>
+                {
+                    World.Player.StrLock = (Lock) (((byte) World.Player.StrLock + 1) % 3);
+                    GameActions.ChangeStatLock(0, World.Player.StrLock);
+                    ushort gumpid = GetStatLockGraphic(World.Player.StrLock);
+
+                    _lockers[0].Graphic = gumpid;
+                };
+
+                //AddChildren(_lockers[0] = new Button((int)ButtonType.LockerStr, gumpID, gumpID)
+                //{
+                //    X = xOffset,
+                //    Y = 76,
+                //    ButtonAction = ButtonAction.Activate,
+                //});
+                status = World.Player.DexLock;
+                xOffset = GumpsLoader.Instance.UseUOPGumps ? 28 : 40;
+                gumpID = GetStatLockGraphic(status);
+
+                Add(_lockers[1] = new GumpPic(xOffset, 102, gumpID, 0));
+
+                _lockers[1].MouseUp += (sender, e) =>
+                {
+                    World.Player.DexLock = (Lock) (((byte) World.Player.DexLock + 1) % 3);
+                    GameActions.ChangeStatLock(1, World.Player.DexLock);
+                    ushort gumpid = GetStatLockGraphic(World.Player.DexLock);
+
+                    _lockers[1].Graphic = gumpid;
+                };
+
+                //AddChildren(_lockers[1] = new Button((int)ButtonType.LockerDex, gumpID, gumpID)
+                //{
+                //    X = xOffset,
+                //    Y = 102,
+                //    ButtonAction = ButtonAction.Activate
+                //});
+                status = World.Player.IntLock;
+                xOffset = GumpsLoader.Instance.UseUOPGumps ? 28 : 40;
+                gumpID = GetStatLockGraphic(status);
+
+                Add(_lockers[2] = new GumpPic(xOffset, 132, gumpID, 0));
+
+                _lockers[2].MouseUp += (sender, e) =>
+                {
+                    World.Player.IntLock = (Lock) (((byte) World.Player.IntLock + 1) % 3);
+                    GameActions.ChangeStatLock(2, World.Player.IntLock);
+                    ushort gumpid = GetStatLockGraphic(World.Player.IntLock);
+
+                    _lockers[2].Graphic = gumpid;
+                };
+                //AddChildren(_lockers[2] = new Button((int)ButtonType.LockerInt, gumpID, gumpID)
+                //{
+                //    X = xOffset,
+                //    Y = 132,
+                //    ButtonAction = ButtonAction.Activate
+                //});
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    xOffset = 80;
+                    AddStatTextLabel(World.Player.HitChanceIncrease.ToString(), MobileStats.HitChanceInc, xOffset, 161);
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            58,
+                            154,
+                            59,
+                            24,
+                            ClilocLoader.Instance.GetString(1075616, ResGumps.HitChanceIncrease),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+                }
+                else
+                {
+                    xOffset = 88;
+                }
+
+
+                AddStatTextLabel(World.Player.Strength.ToString(), MobileStats.Strength, xOffset, 77);
+                AddStatTextLabel(World.Player.Dexterity.ToString(), MobileStats.Dexterity, xOffset, 105);
+                AddStatTextLabel(World.Player.Intelligence.ToString(), MobileStats.Intelligence, xOffset, 133);
+
+
+                Add
+                (
+                    new HitBox
+                    (
+                        58,
+                        70,
+                        59,
+                        24,
+                        ClilocLoader.Instance.GetString(1061146, ResGumps.Strength),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        58,
+                        98,
+                        59,
+                        24,
+                        ClilocLoader.Instance.GetString(1061147, ResGumps.Dexterity),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        58,
+                        126,
+                        59,
+                        24,
+                        ClilocLoader.Instance.GetString(1061148, ResGumps.Intelligence),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                int textWidth = 40;
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    xOffset = 150;
+
+                    AddStatTextLabel($"{World.Player.DefenseChanceIncrease}/{World.Player.MaxDefenseChanceIncrease}", MobileStats.DefenseChanceInc, xOffset, 161);
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            124,
+                            154,
+                            59,
+                            24,
+                            ClilocLoader.Instance.GetString(1075620, ResGumps.DefenseChanceIncrease),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+                }
+                else
+                {
+                    xOffset = 146;
+                }
+
+
+                xOffset -= 5;
+
+                AddStatTextLabel
+                (
+                    World.Player.Hits.ToString(),
+                    MobileStats.HealthCurrent,
+                    xOffset,
+                    70,
+                    textWidth,
+                    alignment: TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+                AddStatTextLabel
+                (
+                    World.Player.HitsMax.ToString(),
+                    MobileStats.HealthMax,
+                    xOffset,
+                    83,
+                    textWidth,
+                    alignment: TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+                AddStatTextLabel
+                (
+                    World.Player.Stamina.ToString(),
+                    MobileStats.StaminaCurrent,
+                    xOffset,
+                    98,
+                    textWidth,
+                    alignment: TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+                AddStatTextLabel
+                (
+                    World.Player.StaminaMax.ToString(),
+                    MobileStats.StaminaMax,
+                    xOffset,
+                    111,
+                    textWidth,
+                    alignment: TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+                AddStatTextLabel
+                (
+                    World.Player.Mana.ToString(),
+                    MobileStats.ManaCurrent,
+                    xOffset,
+                    126,
+                    textWidth,
+                    alignment: TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+                AddStatTextLabel
+                (
+                    World.Player.ManaMax.ToString(),
+                    MobileStats.ManaMax,
+                    xOffset,
+                    139,
+                    textWidth,
+                    alignment: TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+                xOffset += 5;
+
+                Add
+                (
+                    new Line
+                    (
+                        xOffset,
+                        138,
+                        Math.Abs(xOffset - 185),
+                        1,
+                        0xFF383838
+                    )
+                );
+
+                Add
+                (
+                    new Line
+                    (
+                        xOffset,
+                        110,
+                        Math.Abs(xOffset - 185),
+                        1,
+                        0xFF383838
+                    )
+                );
+
+                Add
+                (
+                    new Line
+                    (
+                        xOffset,
+                        82,
+                        Math.Abs(xOffset - 185),
+                        1,
+                        0xFF383838
+                    )
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        124,
+                        70,
+                        59,
+                        24,
+                        ClilocLoader.Instance.GetString(1061149, ResGumps.HitPoints),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        124,
+                        98,
+                        59,
+                        24,
+                        ClilocLoader.Instance.GetString(1061150, ResGumps.Stamina),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        124,
+                        126,
+                        59,
+                        24,
+                        ClilocLoader.Instance.GetString(1061151, ResGeneral.Mana),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    xOffset = 240;
+
+                    AddStatTextLabel(World.Player.LowerManaCost.ToString(), MobileStats.LowerManaCost, xOffset, 162);
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            205,
+                            154,
+                            65,
+                            24,
+                            ClilocLoader.Instance.GetString(1075621, ResGumps.LowerManaCost),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+                }
+                else
+                {
+                    xOffset = 220;
+                }
+
+                AddStatTextLabel(World.Player.StatsCap.ToString(), MobileStats.StatCap, xOffset, 77);
+                AddStatTextLabel(World.Player.Luck.ToString(), MobileStats.Luck, xOffset, 105);
+
+                xOffset -= 10;
+
+                AddStatTextLabel
+                (
+                    World.Player.Weight.ToString(),
+                    MobileStats.WeightCurrent,
+                    xOffset,
+                    126,
+                    textWidth,
+                    alignment: TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+                int lineX = GumpsLoader.Instance.UseUOPGumps ? 236 : 216;
+
+                Add
+                (
+                    new Line
+                    (
+                        lineX,
+                        138,
+                        Math.Abs(lineX - (GumpsLoader.Instance.UseUOPGumps ? 270 : 250)),
+                        1,
+                        0xFF383838
+                    )
+                );
+
+                AddStatTextLabel
+                (
+                    World.Player.WeightMax.ToString(),
+                    MobileStats.WeightMax,
+                    xOffset,
+                    139,
+                    textWidth,
+                    alignment: TEXT_ALIGN_TYPE.TS_CENTER
+                );
+
+                xOffset = GumpsLoader.Instance.UseUOPGumps ? 205 : 188;
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        70,
+                        65,
+                        24,
+                        ClilocLoader.Instance.GetString(1061152, ResGumps.MaximumStats),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        98,
+                        65,
+                        24,
+                        ClilocLoader.Instance.GetString(1061153, ResGumps.Luck),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        126,
+                        65,
+                        24,
+                        ClilocLoader.Instance.GetString(1061154, ResGeneral.Weight),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    xOffset = 320;
+
+                    AddStatTextLabel(World.Player.DamageIncrease.ToString(), MobileStats.DamageChanceInc, xOffset, 105);
+
+                    AddStatTextLabel(World.Player.SwingSpeedIncrease.ToString(), MobileStats.SwingSpeedInc, xOffset, 161);
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            285,
+                            98,
+                            69,
+                            24,
+                            ClilocLoader.Instance.GetString(1075619, ResGumps.WeaponDamageIncrease),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            285,
+                            154,
+                            69,
+                            24,
+                            ClilocLoader.Instance.GetString(1075629, ResGumps.SwingSpeedIncrease),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+                }
+                else
+                {
+                    xOffset = 280;
+
+                    AddStatTextLabel(World.Player.Gold.ToString(), MobileStats.Gold, xOffset, 105);
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            260,
+                            98,
+                            69,
+                            24,
+                            ClilocLoader.Instance.GetString(1061156, ResGumps.Gold),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+                }
+
+                AddStatTextLabel($"{World.Player.DamageMin}-{World.Player.DamageMax}", MobileStats.Damage, xOffset, 77);
+
+                AddStatTextLabel($"{World.Player.Followers}-{World.Player.FollowersMax}", MobileStats.Followers, xOffset, 133);
+
+                xOffset = GumpsLoader.Instance.UseUOPGumps ? 285 : 260;
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        70,
+                        69,
+                        24,
+                        ClilocLoader.Instance.GetString(1061155, ResGumps.Damage),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        126,
+                        69,
+                        24,
+                        ClilocLoader.Instance.GetString(1061157, ResGumps.Followers),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    xOffset = 400;
+
+                    AddStatTextLabel(World.Player.LowerReagentCost.ToString(), MobileStats.LowerReagentCost, xOffset, 77);
+
+                    AddStatTextLabel(World.Player.SpellDamageIncrease.ToString(), MobileStats.SpellDamageInc, xOffset, 105);
+
+                    AddStatTextLabel(World.Player.FasterCasting.ToString(), MobileStats.FasterCasting, xOffset, 133);
+
+                    AddStatTextLabel(World.Player.FasterCastRecovery.ToString(), MobileStats.FasterCastRecovery, xOffset, 161);
+
+                    xOffset = 365;
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            xOffset,
+                            70,
+                            55,
+                            24,
+                            ClilocLoader.Instance.GetString(1075625, ResGumps.LowerReagentCost),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            xOffset,
+                            98,
+                            55,
+                            24,
+                            ClilocLoader.Instance.GetString(1075628, ResGumps.SpellDamageIncrease),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            xOffset,
+                            126,
+                            55,
+                            24,
+                            ClilocLoader.Instance.GetString(1075617, ResGumps.FasterCasting),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            xOffset,
+                            154,
+                            55,
+                            24,
+                            ClilocLoader.Instance.GetString(1075618, ResGumps.FasterCastRecovery),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+
+                    xOffset = 480;
+
+                    AddStatTextLabel(World.Player.Gold.ToString(), MobileStats.Gold, xOffset, 161);
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            445,
+                            154,
+                            55,
+                            24,
+                            ClilocLoader.Instance.GetString(1061156, ResGumps.Gold),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+
+                    xOffset = 475;
+
+                    AddStatTextLabel($"{World.Player.PhysicalResistance}/{World.Player.MaxPhysicResistence}", MobileStats.AR, xOffset, 74);
+
+                    AddStatTextLabel($"{World.Player.FireResistance}/{World.Player.MaxFireResistence}", MobileStats.RF, xOffset, 92);
+
+                    AddStatTextLabel($"{World.Player.ColdResistance}/{World.Player.MaxColdResistence}", MobileStats.RC, xOffset, 106);
+
+                    AddStatTextLabel($"{World.Player.PoisonResistance}/{World.Player.MaxPoisonResistence}", MobileStats.RP, xOffset, 120);
+
+                    AddStatTextLabel($"{World.Player.EnergyResistance}/{World.Player.MaxEnergyResistence}", MobileStats.RE, xOffset, 134);
+                }
+                else
+                {
+                    xOffset = 354;
+
+                    AddStatTextLabel(World.Player.PhysicalResistance.ToString(), MobileStats.AR, xOffset, 76);
+                    AddStatTextLabel(World.Player.FireResistance.ToString(), MobileStats.RF, xOffset, 92);
+                    AddStatTextLabel(World.Player.ColdResistance.ToString(), MobileStats.RC, xOffset, 106);
+                    AddStatTextLabel(World.Player.PoisonResistance.ToString(), MobileStats.RP, xOffset, 120);
+                    AddStatTextLabel(World.Player.EnergyResistance.ToString(), MobileStats.RE, xOffset, 134);
+                }
+
+
+                xOffset = GumpsLoader.Instance.UseUOPGumps ? 445 : 334;
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        76,
+                        40,
+                        14,
+                        ClilocLoader.Instance.GetString(1061158, ResGumps.PhysicalResistance),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        92,
+                        40,
+                        14,
+                        ClilocLoader.Instance.GetString(1061159, ResGumps.FireResistance),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        106,
+                        40,
+                        14,
+                        ClilocLoader.Instance.GetString(1061160, ResGumps.ColdResistance),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        120,
+                        40,
+                        14,
+                        ClilocLoader.Instance.GetString(1061161, ResGumps.PoisonResistance),
+                        0
+                    )
+                    { CanMove = true }
+                );
+
+                Add
+                (
+                    new HitBox
+                    (
+                        xOffset,
+                        134,
+                        40,
+                        14,
+                        ClilocLoader.Instance.GetString(1061162, ResGumps.EnergyResistance),
+                        0
+                    )
+                    { CanMove = true }
+                );
+            }
+            else
+            {
+                if (Client.Version == ClientVersion.CV_308D)
+                {
+                    AddStatTextLabel(World.Player.StatsCap.ToString(), MobileStats.StatCap, 171, 124);
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            171,
+                            124,
+                            34,
+                            12,
+                            ClilocLoader.Instance.GetString(1061152, ResGumps.MaxStats),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+                }
+                else if (Client.Version == ClientVersion.CV_308J)
+                {
+                    AddStatTextLabel(World.Player.StatsCap.ToString(), MobileStats.StatCap, 180, 131);
+
+                    AddStatTextLabel($"{World.Player.Followers}/{World.Player.FollowersMax}", MobileStats.Followers, 180, 144);
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            180,
+                            131,
+                            34,
+                            12,
+                            ClilocLoader.Instance.GetString(1061152, ResGumps.MaxStats),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+
+                    Add
+                    (
+                        new HitBox
+                        (
+                            171,
+                            144,
+                            34,
+                            12,
+                            ClilocLoader.Instance.GetString(1061157, ResGumps.Followers),
+                            0
+                        )
+                        { CanMove = true }
+                    );
+                }
+            }
+
+            if (GumpsLoader.Instance.UseUOPGumps)
+            {
+                p.X = 540;
+                p.Y = 180;
+            }
+
+
+            Add
+            (
+                new HitBox
+                (
+                    p.X,
+                    p.Y,
+                    16,
+                    16,
+                    ResGumps.Minimize,
+                    0
+                )
+                { CanMove = true }
+            );
+
+            _point = p;
+        }
+
+
+        private void AddStatTextLabel
+        (
+            string text,
+            MobileStats stat,
+            int x,
+            int y,
+            int maxWidth = 0,
+            ushort hue = 0x0386,
+            TEXT_ALIGN_TYPE alignment = TEXT_ALIGN_TYPE.TS_LEFT
+        )
+        {
+            Label label = new Label
+            (
+                text,
+                false,
+                hue,
+                maxWidth,
+                align: alignment,
+                font: 1
+            )
+            {
+                X = x,
+                Y = y
+            };
+
+            _labels[(int) stat] = label;
+            Add(label);
+        }
+
+        public override void Update()
+        {
+            if (IsDisposed)
+            {
+                return;
+            }
+
+            if (_refreshTime < Time.Ticks)
+            {
+                _refreshTime = (long) Time.Ticks + 250;
+
+                // ## BEGIN - END ## // STATUSGUMP
+                UpdateStatusFillBar(FillStats.Hits, World.Player.Hits, World.Player.HitsMax);
+                UpdateStatusFillBar(FillStats.Mana, World.Player.Mana, World.Player.ManaMax);
+                UpdateStatusFillBar(FillStats.Stam, World.Player.Stamina, World.Player.StaminaMax);
+                // ## BEGIN - END ## // STATUSGUMP
+
+                _labels[(int) MobileStats.Name].Text = !string.IsNullOrEmpty(World.Player.Name) ? World.Player.Name : string.Empty;
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    _labels[(int) MobileStats.HitChanceInc].Text = World.Player.HitChanceIncrease.ToString();
+                }
+
+                _labels[(int) MobileStats.Strength].Text = World.Player.Strength.ToString();
+
+                _labels[(int) MobileStats.Dexterity].Text = World.Player.Dexterity.ToString();
+
+                _labels[(int) MobileStats.Intelligence].Text = World.Player.Intelligence.ToString();
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    _labels[(int) MobileStats.DefenseChanceInc].Text = $"{World.Player.DefenseChanceIncrease}/{World.Player.MaxDefenseChanceIncrease}";
+                }
+
+                _labels[(int) MobileStats.HealthCurrent].Text = World.Player.Hits.ToString();
+
+                _labels[(int) MobileStats.HealthMax].Text = World.Player.HitsMax.ToString();
+
+                _labels[(int) MobileStats.StaminaCurrent].Text = World.Player.Stamina.ToString();
+
+                _labels[(int) MobileStats.StaminaMax].Text = World.Player.StaminaMax.ToString();
+
+                _labels[(int) MobileStats.ManaCurrent].Text = World.Player.Mana.ToString();
+
+                _labels[(int) MobileStats.ManaMax].Text = World.Player.ManaMax.ToString();
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    _labels[(int) MobileStats.LowerManaCost].Text = World.Player.LowerManaCost.ToString();
+                }
+
+                _labels[(int) MobileStats.StatCap].Text = World.Player.StatsCap.ToString();
+
+                _labels[(int) MobileStats.Luck].Text = World.Player.Luck.ToString();
+
+                _labels[(int) MobileStats.WeightCurrent].Text = World.Player.Weight.ToString();
+
+                _labels[(int) MobileStats.WeightMax].Text = World.Player.WeightMax.ToString();
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    _labels[(int) MobileStats.DamageChanceInc].Text = World.Player.DamageIncrease.ToString();
+
+                    _labels[(int) MobileStats.SwingSpeedInc].Text = World.Player.SwingSpeedIncrease.ToString();
+                }
+
+                _labels[(int) MobileStats.Gold].Text = World.Player.Gold.ToString();
+
+                _labels[(int) MobileStats.Damage].Text = $"{World.Player.DamageMin}-{World.Player.DamageMax}";
+
+                _labels[(int) MobileStats.Followers].Text = $"{World.Player.Followers}/{World.Player.FollowersMax}";
+
+                if (GumpsLoader.Instance.UseUOPGumps)
+                {
+                    _labels[(int) MobileStats.LowerReagentCost].Text = World.Player.LowerReagentCost.ToString();
+
+                    _labels[(int) MobileStats.SpellDamageInc].Text = World.Player.SpellDamageIncrease.ToString();
+
+                    _labels[(int) MobileStats.FasterCasting].Text = World.Player.FasterCasting.ToString();
+
+                    _labels[(int) MobileStats.FasterCastRecovery].Text = World.Player.FasterCastRecovery.ToString();
+
+                    _labels[(int) MobileStats.AR].Text = $"{World.Player.PhysicalResistance}/{World.Player.MaxPhysicResistence}";
+
+                    _labels[(int) MobileStats.RF].Text = $"{World.Player.FireResistance}/{World.Player.MaxFireResistence}";
+
+                    _labels[(int) MobileStats.RC].Text = $"{World.Player.ColdResistance}/{World.Player.MaxColdResistence}";
+
+                    _labels[(int) MobileStats.RP].Text = $"{World.Player.PoisonResistance}/{World.Player.MaxPoisonResistence}";
+
+                    _labels[(int) MobileStats.RE].Text = $"{World.Player.EnergyResistance}/{World.Player.MaxEnergyResistence}";
+                }
+                else
+                {
+                    _labels[(int) MobileStats.AR].Text = World.Player.PhysicalResistance.ToString();
+
+                    _labels[(int) MobileStats.RF].Text = World.Player.FireResistance.ToString();
+
+                    _labels[(int) MobileStats.RC].Text = World.Player.ColdResistance.ToString();
+
+                    _labels[(int) MobileStats.RP].Text = World.Player.PoisonResistance.ToString();
+
+                    _labels[(int) MobileStats.RE].Text = World.Player.EnergyResistance.ToString();
+                }
+            }
+
+            base.Update();
+        }
+
+        protected void UpdateStatusFillBar(FillStats id, int current, int max)
+        {
+            ushort gumpId = 0x0806;
+
+            if (id == FillStats.Hits)
+            {
+                if (World.Player.IsPoisoned)
+                {
+                    gumpId = 0x0808;
+                }
+                else if (World.Player.IsYellowHits)
+                {
+                    gumpId = 0x0809;
+                }
+            }
+
+            if (max > 0)
+            {
+                _fillBars[(int) id].Graphic = gumpId;
+
+                _fillBars[(int) id].Percent = CalculatePercents(max, current, 109);
+            }
+        }
+
+        protected static int CalculatePercents(int max, int current, int maxValue)
+        {
+            if (max > 0)
+            {
+                max = current * 100 / max;
+
+                if (max > 100)
+                {
+                    max = 100;
+                }
+
+                if (max > 1)
+                {
+                    max = maxValue * max / 100;
+                }
+            }
+
+            return max;
+        }
+
+        protected enum FillStats
+        {
+            Hits,
+            Mana,
+            Stam
+        }
+
+        private enum MobileStats
+        {
+            Name,
+            Strength,
+            Dexterity,
+            Intelligence,
+            HealthCurrent,
+            HealthMax,
+            StaminaCurrent,
+            StaminaMax,
+            ManaCurrent,
+            ManaMax,
+            WeightMax,
+            Followers,
+            WeightCurrent,
+            LowerReagentCost,
+            SpellDamageInc,
+            FasterCasting,
+            FasterCastRecovery,
+            StatCap,
+            HitChanceInc,
+            DefenseChanceInc,
+            LowerManaCost,
+            DamageChanceInc,
+            SwingSpeedInc,
+            Luck,
+            Gold,
+            AR,
+            RF,
+            RC,
+            RP,
+            RE,
+            Damage,
+            Sex,
+            NumStats
+        }
+    }
+    // ## BEGIN - END ## // STATUSGUMP
 }
