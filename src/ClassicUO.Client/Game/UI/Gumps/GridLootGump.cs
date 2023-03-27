@@ -280,29 +280,29 @@ namespace ClassicUO.Game.UI.Gumps
 
                     GridLootItem gridItem = new GridLootItem(it, GRID_ITEM_SIZE);
 
-                    if (x >= MAX_WIDTH - 20)
-                    {
-                        x = 20;
-                        ++line;
-
-                        y += gridItem.Height + 20;
-
-                        if (y >= MAX_HEIGHT - 60)
+                        if (x >= MAX_WIDTH - 20)
                         {
-                            _pagesCount++;
-                            y = 20;
-                            //line = 1;
+                            x = 20;
+                            ++line;
+
+                            y += gridItem.Height + 20;
+
+                            if (y >= MAX_HEIGHT - 60)
+                            {
+                                _pagesCount++;
+                                y = 20;
+                                //line = 1;
+                            }
                         }
+
+                        gridItem.X = x;
+                        gridItem.Y = y + 20;
+                        Add(gridItem, _pagesCount);
+
+                        x += gridItem.Width + 20;
+                        ++row;
+                        ++count;
                     }
-
-                    gridItem.X = x;
-                    gridItem.Y = y + 20;
-                    Add(gridItem, _pagesCount);
-
-                    x += gridItem.Width + 20;
-                    ++row;
-                    ++count;
-                }
             }
 
             _background.Width = (GRID_ITEM_SIZE + 20) * row + 20;
