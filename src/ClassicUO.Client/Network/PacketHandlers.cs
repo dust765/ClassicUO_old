@@ -5555,12 +5555,24 @@ namespace ClassicUO.Network
             if (iconID < BuffTable.Table.Length)
             {
                 BuffGump gump = UIManager.GetGump<BuffGump>();
+                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+                ECBuffGump ecbuffs = UIManager.GetGump<ECBuffGump>();
+                ECDebuffGump ecdebuffs = UIManager.GetGump<ECDebuffGump>();
+                ECStateGump ecstates = UIManager.GetGump<ECStateGump>();
+                ModernCooldownBar cooldowns = UIManager.GetGump<ModernCooldownBar>();
+                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
                 ushort count = p.ReadUInt16BE();
 
                 if (count == 0)
                 {
                     World.Player.RemoveBuff(ic);
                     gump?.RequestUpdateContents();
+                    // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+                    ecbuffs?.RequestUpdateContents();
+                    ecdebuffs?.RequestUpdateContents();
+                    ecstates?.RequestUpdateContents();
+                    cooldowns?.RequestUpdateContents();
+                    // ## BEGIN - END ## // MODERNCOOLDOWNBAR
                 }
                 else
                 {
@@ -5619,6 +5631,12 @@ namespace ClassicUO.Network
                         if (!alreadyExists)
                         {
                             gump?.RequestUpdateContents();
+                            // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+                            ecbuffs?.RequestUpdateContents();
+                            ecdebuffs?.RequestUpdateContents();
+                            ecstates?.RequestUpdateContents();
+                            cooldowns?.RequestUpdateContents();
+                            // ## BEGIN - END ## // MODERNCOOLDOWNBAR
                         }
                     }
                 }
