@@ -300,6 +300,12 @@ override container open range (ie. backpacks dont close until paperdoll gets clo
 
 hide X macro has been update to hide items inside containers
 
+# visual response manager
+
+offers visual responses on your character from various triggers.
+
+bandies, pots, clilocs,....
+
 # Added files
 
 /src/Dust765
@@ -1047,6 +1053,17 @@ FILE                                                                START   END 
 
 /src/ClassicUO.Client/Game/UI/Gumps/ContainerGump.cs             536     541     MISC3 THIEFSUPREME
 
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              1590    1592    VISUALRESPONSEMANAGER
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              1610 ~  1716    VISUALRESPONSEMANAGER
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs           	     1341    1343    VISUALRESPONSEMANAGER
+
+/src/ClassicUO.Client/Game/World.cs                              104     106     VISUALRESPONSEMANAGER
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs                  4782    4787    VISUALRESPONSEMANAGER
+
+/src/ClassicUO.Client/Network/Plugin.cs                          672     675     VISUALRESPONSEMANAGER
 
 # Original readme
 
