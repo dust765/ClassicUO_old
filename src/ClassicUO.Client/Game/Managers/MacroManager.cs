@@ -1571,12 +1571,12 @@ namespace ClassicUO.Game.Managers
                     ushort start = (ushort) (0x0F06 + scantype);
 
                     // ## BEGIN - END ## // SELF
-                    if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
+                    if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
                     {
                         UOClassicCombatSelf?.MacroTriggerPotMacro(start);
                         break;
                     }
-                    else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
+                    else if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
                     {
                         UOClassicCombatSelf?.ClilocTriggerPotMacro(start);
                     }
@@ -1587,6 +1587,9 @@ namespace ClassicUO.Game.Managers
                     if (potion != null)
                     {
                         GameActions.DoubleClick(potion);
+                        // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                        World.VisualResponseManager.DrawArt(start);
+                        // ## BEGIN - END ## // VISUALRESPONSEMANAGER
                     }
 
                     break;
@@ -1604,13 +1607,16 @@ namespace ClassicUO.Game.Managers
                             if (obj != null)
                             {
                                 GameActions.DoubleClick(obj);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                                World.VisualResponseManager.DrawArt(0x0F0C);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
                                 // ## BEGIN - END ## // SELF
-                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
+                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
                                 {
                                     UOClassicCombatSelf?.MacroTriggerPotMacro(0x0F0C);
                                     break;
                                 }
-                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
+                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
                                 {
                                     UOClassicCombatSelf?.ClilocTriggerPotMacro(0x0F0C);
                                 }
@@ -1627,13 +1633,16 @@ namespace ClassicUO.Game.Managers
                             if (obj != null)
                             {
                                 GameActions.DoubleClick(obj);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                                World.VisualResponseManager.DrawArt(0x0F07);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
                                 // ## BEGIN - END ## // SELF
-                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
+                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
                                 {
                                     UOClassicCombatSelf?.MacroTriggerPotMacro(0x0F07);
                                     break;
                                 }
-                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
+                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
                                 {
                                     UOClassicCombatSelf?.ClilocTriggerPotMacro(0x0F07);
                                 }
@@ -1650,13 +1659,16 @@ namespace ClassicUO.Game.Managers
                             if (obj != null)
                             {
                                 GameActions.DoubleClick(obj);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                                World.VisualResponseManager.DrawArt(0xF0B);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
                                 // ## BEGIN - END ## // SELF
-                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
+                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
                                 {
                                     UOClassicCombatSelf?.MacroTriggerPotMacro(0xF0B);
                                     break;
                                 }
-                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
+                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
                                 {
                                     UOClassicCombatSelf?.ClilocTriggerPotMacro(0xF0B);
                                 }
@@ -1673,13 +1685,16 @@ namespace ClassicUO.Game.Managers
                             if (obj != null)
                             {
                                 GameActions.DoubleClick(obj);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                                World.VisualResponseManager.DrawArt(0xF09);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
                                 // ## BEGIN - END ## // SELF
-                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
+                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
                                 {
                                     UOClassicCombatSelf?.MacroTriggerPotMacro(0xF09);
                                     break;
                                 }
-                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
+                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
                                 {
                                     UOClassicCombatSelf?.ClilocTriggerPotMacro(0xF09);
                                 }
@@ -1696,13 +1711,16 @@ namespace ClassicUO.Game.Managers
                             if (obj != null)
                             {
                                 GameActions.DoubleClick(obj);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                                World.VisualResponseManager.DrawArt(0xF08);
+                                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
                                 // ## BEGIN - END ## // SELF
-                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
+                                if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_MacroTriggers)
                                 {
                                     UOClassicCombatSelf?.MacroTriggerPotMacro(0xF08);
                                     break;
                                 }
-                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
+                                else if (ProfileManager.CurrentProfile.UOClassicCombatSelf && ProfileManager.CurrentProfile.UOClassicCombatSelf_ClilocTriggers)
                                 {
                                     UOClassicCombatSelf?.ClilocTriggerPotMacro(0xF08);
                                 }
