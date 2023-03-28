@@ -292,6 +292,9 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // MISC3 THIEFSUPREME
         private Checkbox _overrideContainerOpenRange;
         // ## BEGIN - END ## // MISC3 THIEFSUPREME
+        // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+        private Checkbox _visualResponseManager;
+        // ## BEGIN - END ## // VISUALRESPONSEMANAGER
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4859,6 +4862,10 @@ namespace ClassicUO.Game.UI.Gumps
             section.Add(_onCastingGump_hidden = AddCheckBox(null, "hide the gump", _currentProfile.OnCastingGump_hidden, startX, startY));
             startY += _highlightContainersWhenMouseIsOver.Height + 2;
             // ## BEGIN - END ## // ONCASTINGGUMP
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+            section.Add(_visualResponseManager = AddCheckBox(null, "Visual response manager ON / OFF", _currentProfile.VisualResponseManager, startX, startY));
+            startY += _visualResponseManager.Height + 2;
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
             // ## BEGIN - END ## // TEXTUREMANAGER
             SettingsSection section2 = AddSettingsSection(box, "-----Texture Manager-----");
             section2.Y = section.Bounds.Bottom + 40;
@@ -6826,6 +6833,9 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // MISC3 THIEFSUPREME
             _currentProfile.OverrideContainerOpenRange = _overrideContainerOpenRange.IsChecked;
             // ## BEGIN - END ## // MISC3 THIEFSUPREME
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+            _currentProfile.VisualResponseManager = _visualResponseManager.IsChecked;
+            // ## BEGIN - END ## // VISUALRESPONSEMANAGER
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);

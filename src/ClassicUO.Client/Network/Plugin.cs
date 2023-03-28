@@ -668,6 +668,11 @@ namespace ClassicUO.Network
             if (NetClient.Socket.IsConnected)
             {
                 NetClient.Socket.Send(data.AsSpan(0, length), true);
+
+                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+                //World.VisualResponseManager.OnPluginSendLog(data, length);
+                World.VisualResponseManager.OnPluginSend(data, length);
+                // ## BEGIN - END ## // VISUALRESPONSEMANAGER
             }
 
             return true;
