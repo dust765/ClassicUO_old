@@ -275,6 +275,15 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // AUTOMATIONS
             ModulesManager.Load();
             // ## BEGIN - END ## // AUTOMATIONS
+            // ## BEGIN - END ## // ONCASTINGGUMP
+            if (ProfileManager.CurrentProfile.OnCastingGump)
+            {
+                if (World.Player.OnCasting == null)
+                {
+                    UIManager.Add(World.Player.OnCasting = new OnCastingGump());
+                }
+            }
+            // ## BEGIN - END ## // ONCASTINGGUMP
 
             CircleOfTransparency.Create(ProfileManager.CurrentProfile.CircleOfTransparencyRadius);
             Plugin.OnConnected();
