@@ -548,6 +548,10 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // MODERNCOOLDOWNBAR
         public bool ModernCooldwonBar_locked { get; set; } = false;
         // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+        // ## BEGIN - END ## // ONCASTINGGUMP
+        public bool OnCastingGump { get; set; }
+        public bool OnCastingGump_hidden { get; set; } = false;
+        // ## BEGIN - END ## // ONCASTINGGUMP
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;

@@ -278,6 +278,14 @@ adds a modern version of the cooldown bar
 
 note: filter displayed buffs with modernbuffs.txt in /Data/Client, the EC txt are used to determine color
 
+# on casting gump
+
+shows a little gump on cursor when casting (can be hidden)
+
+main purpose being, to prevent rubberband on servers that dont send a freeze packet during casting
+
+(mod by Mark)
+
 # Added files
 
 /src/Dust765
@@ -986,6 +994,26 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Client.cs	                                 36      38      MODERNCOOLDOWNBAR
 
 /src/ClassicUO.Client/Client.cs	                                 193     195     MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs                  376     379     ONCASTINGGUMP
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs                  487     490     ONCASTINGGUMP
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs                  4782    4787    ONCASTINGGUMP
+
+/src/ClassicUO.Client/Game/GameActions.cs                        56      58      ONCASTINGGUMP
+
+/src/ClassicUO.Client/Game/GameActions.cs                        666     672     ONCASTINGGUMP
+
+/src/ClassicUO.Client/Game/GameActions.cs                        687     693     ONCASTINGGUMP
+
+/src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           62      64      ONCASTINGGUMP
+
+/src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           73      75      ONCASTINGGUMP
+
+/src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           1626    1628    ONCASTINGGUMP
+
+/src/ClassicUO.Client/Game/Scenes/GameScene.cs           	     278     286     ONCASTINGGUMP
 
 # Original readme
 
