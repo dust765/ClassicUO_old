@@ -294,6 +294,12 @@ shows all equipment layers on mobiles (covered items should show)
 
 show additional equipment slots on paperdoll (for torso/arms/pants/shirt/skirt)
 
+# thief supreme
+
+override container open range (ie. backpacks dont close until paperdoll gets closed)
+
+hide X macro has been update to hide items inside containers
+
 # Added files
 
 /src/Dust765
@@ -1030,6 +1036,17 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/UI/Gumps/PaperdollGump.cs             377     454     MISC3 SHOWALLLAYERS
 
 /src/ClassicUO.Client/Game/UI/Gumps/PaperdollGump.cs             724     734     MISC3 SHOWALLLAYERS
+
+/src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           1550    1557    MISC3 THIEFSUPREME
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2000    2012    MISC3 THIEFSUPREME
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2019    2022    MISC3 THIEFSUPREME
+
+/src/ClassicUO.Client/Game/UI/Gumps/ContainerGump.cs             465     473     MISC3 THIEFSUPREME
+
+/src/ClassicUO.Client/Game/UI/Gumps/ContainerGump.cs             536     541     MISC3 THIEFSUPREME
+
 
 # Original readme
 
