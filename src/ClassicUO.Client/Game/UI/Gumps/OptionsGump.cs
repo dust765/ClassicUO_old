@@ -289,6 +289,9 @@ namespace ClassicUO.Game.UI.Gumps
         private Checkbox _showAllLayers, _showAllLayersPaperdoll;
         private InputField _showAllLayersPaperdoll_X;
         // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
+        // ## BEGIN - END ## // MISC3 THIEFSUPREME
+        private Checkbox _overrideContainerOpenRange;
+        // ## BEGIN - END ## // MISC3 THIEFSUPREME
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4301,6 +4304,10 @@ namespace ClassicUO.Game.UI.Gumps
             section11.AddRight(AddLabel(null, "X ( reopen paperdoll after changes )", 0, 0), 2);
             startY += _showAllLayersPaperdoll_X.Height + 2;
             // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
+            // ## BEGIN - END ## // MISC3 THIEFSUPREME
+            section11.Add(_overrideContainerOpenRange = AddCheckBox(null, "Override container open range", _currentProfile.OverrideContainerOpenRange, startX, startY));
+            startY += _overrideContainerOpenRange.Height + 2;
+            // ## BEGIN - END ## // MISC3 THIEFSUPREME
 
             Add(rightArea, PAGE);
         }
@@ -6816,6 +6823,9 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.ShowAllLayersPaperdoll = _showAllLayersPaperdoll.IsChecked;
             _currentProfile.ShowAllLayersPaperdoll_X = int.Parse(_showAllLayersPaperdoll_X.Text);
             // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
+            // ## BEGIN - END ## // MISC3 THIEFSUPREME
+            _currentProfile.OverrideContainerOpenRange = _overrideContainerOpenRange.IsChecked;
+            // ## BEGIN - END ## // MISC3 THIEFSUPREME
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
