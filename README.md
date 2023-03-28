@@ -160,7 +160,9 @@ UCCLinesToggleHM (toggle)
 
 AutoMeditate (toggle)
 
-# macros
+ToggleECBuffGump / ToggleECDebuffGump / ToggleECStateGump / ToggleModernCooldownBar (toggle)
+
+# simple macros
 
 ObjectInfo (-info command)
 
@@ -212,7 +214,7 @@ auto add marker for T-Maps
 
 -engage (auto pathfind and attack lasttarget)
 
--autorange (auto show range indicator when weapon is equipped)
+-autorange (auto show range indicator when weapon is equipped) (edit autorange.txt in /Data/Client to adjust range for individual weapons)
 
 # outlands
 
@@ -248,13 +250,13 @@ proof of concept
 
 guardlines: show guardlines on land tiles (disabled due to performance)
 
-# Gridloot
+# gridloot
 
 The order in which items are shown in grid-loot will now depend on item type.
 
 Motivation: some items are likely to be always looted (e.g. gold, gems) and when looting is performed automatically (e.g. by Razor macros) it makes items to move in a grid making it harder to browse their properties. Hence, items like gold should be at the end of the grid.
 
-# Multi Journal
+# multi journal
 
 Replaces journal with multiple nameable and much better configurable journals
 
@@ -265,6 +267,16 @@ note: edit journals.xml in your profile folder, set hue to 0 if you wish to rese
 # status gump
 
 adds a version of the status gump with health / mana / stamina bar when expanded
+
+# modern cooldown bar
+
+adds a macro to open a BuffGump for each type (blue, green, red) similar to the EC client
+
+note: edit ecbuffs.txt / ecdebuffs.txt / ecstates.txt in /Data/Client to swap icons arround
+
+adds a modern version of the cooldown bar
+
+note: filter displayed buffs with modernbuffs.txt in /Data/Client, the EC txt are used to determine color
 
 # Added files
 
@@ -950,6 +962,30 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/UI/Gumps/StatusGump.cs	             185     212     STATUSGUMP
 
 /src/ClassicUO.Client/Game/UI/Gumps/StatusGump.cs	             2134    3217    STATUSGUMP
+
+/src/ClassicUO.Client/Configuration/Profile.cs	                 41      43      MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Configuration/Profile.cs	                 548     550     MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Configuration/Profile.cs	                 770     790     MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              1214    1228    UI/GUMPS / LINES / AUTOLOOT / BUFFBAR/UCCSETTINGS / SELF / MODERNCOOLDOWNBAR 
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2318    2374    MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Game/Managers/MacroManager.cs              2983    2988    MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Game/UI/Gumps/GumpType.cs                  63      68      UI/GUMPS / LINES / AUTOLOOT / BUFFBAR/UCCSETTINGS / SELF / MODERNCOOLDOWNBAR 
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 5556    5561    MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 5568    5573    MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Network/PacketHandlers.cs	                 5632    5637    MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Client.cs	                                 36      38      MODERNCOOLDOWNBAR
+
+/src/ClassicUO.Client/Client.cs	                                 193     195     MODERNCOOLDOWNBAR
 
 # Original readme
 
