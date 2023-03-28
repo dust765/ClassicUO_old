@@ -286,6 +286,14 @@ main purpose being, to prevent rubberband on servers that dont send a freeze pac
 
 (mod by Mark)
 
+# show all layers
+
+shows all equipment layers on mobiles (covered items should show)
+
+(mod by Mark)
+
+show additional equipment slots on paperdoll (for torso/arms/pants/shirt/skirt)
+
 # Added files
 
 /src/Dust765
@@ -1014,6 +1022,14 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Game/GameObjects/PlayerMobile.cs           1626    1628    ONCASTINGGUMP
 
 /src/ClassicUO.Client/Game/Scenes/GameScene.cs           	     278     286     ONCASTINGGUMP
+
+/src/ClassicUO.Client/Game/GameObjects/Views/MobileView.cs       1166    1171    MISC3 SHOWALLLAYERS
+
+/src/ClassicUO.Client/Game/UI/Gumps/PaperdollGump.cs             71      73      MISC3 SHOWALLLAYERS
+
+/src/ClassicUO.Client/Game/UI/Gumps/PaperdollGump.cs             377     454     MISC3 SHOWALLLAYERS
+
+/src/ClassicUO.Client/Game/UI/Gumps/PaperdollGump.cs             724     734     MISC3 SHOWALLLAYERS
 
 # Original readme
 

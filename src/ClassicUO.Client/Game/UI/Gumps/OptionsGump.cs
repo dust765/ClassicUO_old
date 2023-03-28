@@ -285,6 +285,10 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // ONCASTINGGUMP
         private Checkbox _onCastingGump, _onCastingGump_hidden;
         // ## BEGIN - END ## // ONCASTINGGUMP
+        // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
+        private Checkbox _showAllLayers, _showAllLayersPaperdoll;
+        private InputField _showAllLayersPaperdoll_X;
+        // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -4267,6 +4271,36 @@ namespace ClassicUO.Game.UI.Gumps
             section10.Add(_useRazorEnhStatusGump = AddCheckBox(null, "Use Razor Enhanced status gump:", _currentProfile.UseRazorEnhStatusGump, startX, startY));
             startY += _useRazorEnhStatusGump.Height + 2;
             // ## BEGIN - END ## // STATUSGUMP
+            // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
+            SettingsSection section11 = AddSettingsSection(box, "-----MISC3-----");
+            section11.Y = section10.Bounds.Bottom + 40;
+
+            startY = section10.Bounds.Bottom + 40;
+
+            section11.Add(_showAllLayers = AddCheckBox(null, "Show all equipment layers on mobiles ON / OFF", _currentProfile.ShowAllLayers, startX, startY));
+            startY += _showAllLayers.Height + 2;
+            section11.Add(_showAllLayersPaperdoll = AddCheckBox(null, "Show all equipment layers on paperdoll ON / OFF", _currentProfile.ShowAllLayersPaperdoll, startX, startY));
+            startY += _showAllLayersPaperdoll.Height + 2;
+
+            section11.Add
+            (
+                _showAllLayersPaperdoll_X = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    80,
+                    false,
+                    true,
+                    5000
+                )
+            );
+            _showAllLayersPaperdoll_X.SetText(_currentProfile.ShowAllLayersPaperdoll_X.ToString());
+            section11.AddRight(AddLabel(null, "X ( reopen paperdoll after changes )", 0, 0), 2);
+            startY += _showAllLayersPaperdoll_X.Height + 2;
+            // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
 
             Add(rightArea, PAGE);
         }
@@ -6777,6 +6811,11 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.OnCastingGump = _onCastingGump.IsChecked;
             _currentProfile.OnCastingGump_hidden = _onCastingGump_hidden.IsChecked;
             // ## BEGIN - END ## // ONCASTINGGUMP
+            // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
+            _currentProfile.ShowAllLayers = _showAllLayers.IsChecked;
+            _currentProfile.ShowAllLayersPaperdoll = _showAllLayersPaperdoll.IsChecked;
+            _currentProfile.ShowAllLayersPaperdoll_X = int.Parse(_showAllLayersPaperdoll_X.Text);
+            // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
