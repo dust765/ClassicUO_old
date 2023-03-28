@@ -38,6 +38,9 @@ using System.Xml;
 // ## BEGIN - END ## // MACROS
 using ClassicUO.Dust765.External;
 // ## BEGIN - END ## // MACROS
+// ## BEGIN - END ## // MODERNCOOLDOWNBAR
+using ClassicUO.Dust765.Dust765;
+// ## BEGIN - END ## // MODERNCOOLDOWNBAR
 using ClassicUO.Game;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -542,6 +545,9 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // STATUSGUMP
         public bool UseRazorEnhStatusGump { get; set; } = false;
         // ## BEGIN - END ## // STATUSGUMP
+        // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+        public bool ModernCooldwonBar_locked { get; set; } = false;
+        // ## BEGIN - END ## // MODERNCOOLDOWNBAR
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
@@ -760,6 +766,28 @@ namespace ClassicUO.Configuration
                                     gump = new BuffGump();
 
                                     break;
+
+                                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+                                case GumpType.ECBuffGump:
+                                    gump = new ECBuffGump();
+
+                                    break;
+
+                                case GumpType.ECDebuffGump:
+                                    gump = new ECDebuffGump();
+
+                                    break;
+
+                                case GumpType.ECStateGump:
+                                    gump = new ECStateGump();
+
+                                    break;
+
+                                case GumpType.ModernCooldownBar:
+                                    gump = new ModernCooldownBar();
+
+                                    break;
+                                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
 
                                 case GumpType.Container:
                                     gump = new ContainerGump();
