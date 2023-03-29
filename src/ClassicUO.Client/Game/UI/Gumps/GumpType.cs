@@ -57,6 +57,9 @@ namespace ClassicUO.Game.UI.Gumps
 
         Debug,
         NetStats,
+        // ## BEGIN - END ## // TABGRID // PKRION
+        TabGridGump,
+        // ## BEGIN - END ## // TABGRID // PKRION
         // ## BEGIN - END ## // MACROS
         Journal2,
         // ## BEGIN - END ## // MACROS
