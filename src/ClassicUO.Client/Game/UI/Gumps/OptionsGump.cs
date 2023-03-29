@@ -295,6 +295,10 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // VISUALRESPONSEMANAGER
         private Checkbox _visualResponseManager;
         // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+        // ## BEGIN - END ## // TABGRID // PKRION
+        private Checkbox _enableTabGridGump;
+        private InputField _tablistBox, _rowsGrid, _tabsGrid;
+        // ## BEGIN - END ## // TABGRID // PKRION
         // ## BEGIN - END ## // BASICSETUP
 
         private Profile _currentProfile = ProfileManager.CurrentProfile;
@@ -5533,6 +5537,70 @@ namespace ClassicUO.Game.UI.Gumps
             );
             _uccRNGMax.SetText(_currentProfile.UOClassicCombatSelf_MaxRNG.ToString());
             // ## BEGIN - END ## // SELF
+            // ## BEGIN - END ## // TABGRID // PKRION
+            //TABGRID SETTINGS AREA
+            SettingsSection section12 = AddSettingsSection(box, "-----TABGRID-----");
+            section12.Y = section11.Bounds.Bottom + 40;
+
+            startY = section11.Bounds.Bottom + 40;
+
+            section12.Add(_enableTabGridGump = AddCheckBox(rightArea, ResGumps.enableTabGridGump , _currentProfile.TabGridGumpEnabled, startX, startY));
+            startY += _enableTabGridGump.Height + 2;
+
+            section12.Add(AddLabel(null, "Grid Rows", startX, startY));
+            section12.AddRight
+            (
+                _rowsGrid = AddInputField
+                (
+                    null,
+                    startX, startY,
+                    50,
+                    30,//TEXTBOX_HEIGHT,
+                    null,
+                    50,
+                    false,
+                    true,
+                    30
+                )
+            );
+            _rowsGrid.SetText(_currentProfile.GridRows.ToString());
+
+            section12.Add(AddLabel(null, "Number of Tabs", startX, startY));
+            section12.AddRight
+            (
+                _tabsGrid = AddInputField
+                (
+                    rightArea,
+                    startX, startY,
+                    50,
+                    30,//TEXTBOX_HEIGHT,
+                    null,
+                    50,
+                    false,
+                    true,
+                    30
+                )
+            );
+            _tabsGrid.SetText(_currentProfile.GridTabs.ToString());
+            
+            section12.Add(AddLabel(null, "List of Tab Names using this format", startX, startY));
+            section12.Add
+            (
+                _tablistBox = AddInputField
+                (
+                    rightArea,
+                    startX, startY,
+                    400,
+                    TEXTBOX_HEIGHT,
+                    null,
+                    0,
+                    true,
+                    false,
+                    60
+                )
+            );
+            _tablistBox.SetText(_currentProfile.TabList.ToString());
+            // ## BEGIN - END ## // TABGRID // PKRION
 
             Add(rightArea, PAGE);
         }
@@ -6836,6 +6904,33 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // VISUALRESPONSEMANAGER
             _currentProfile.VisualResponseManager = _visualResponseManager.IsChecked;
             // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+            // ## BEGIN - END ## // TABGRID // PKRION
+            _currentProfile.GridRows = int.Parse(_rowsGrid.Text);
+            _currentProfile.GridTabs = int.Parse(_tabsGrid.Text);
+            _currentProfile.TabList = _tablistBox.Text;
+            _currentProfile.TabGridGumpEnabled = _enableTabGridGump.IsChecked;
+
+            TabGridGump tabgridGump = UIManager.GetGump<TabGridGump>();
+
+            if (_currentProfile.TabGridGumpEnabled)
+            {
+                if (tabgridGump == null)
+                {
+                    UIManager.Add(new TabGridGump());
+                }
+                else
+                {
+                    tabgridGump.SetInScreen();
+                }
+            }
+            else
+            {
+                if (tabgridGump != null)
+                {
+                    tabgridGump.Dispose();
+                }
+            }
+            // ## BEGIN - END ## // TABGRID // PKRION
             // ## BEGIN - END ## // BASICSETUP
 
             _currentProfile?.Save(ProfileManager.ProfilePath);
