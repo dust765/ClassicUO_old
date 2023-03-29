@@ -112,6 +112,8 @@ hp line in nameoverheads
 
 more filters for nameoverheads
 
+imrpoved filters with txt file in profile folder (mod by pkrion)
+
 # UI gumps
 
 sticky last target healthbar (healthbar that always will be your last targets healthbar)
@@ -1078,6 +1080,22 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Resources/ResGumps.Designer.cs             1378    1387    TABGRID
 
 /src/ClassicUO.Client/Resources/ResGumps.resx                    1635    1639    TABGRID
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       48      50      NAMEOVERHEAD IMPROVEMENTS
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       67      69      NAMEOVERHEAD IMPROVEMENTS
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       104     174     NAMEOVERHEAD IMPROVEMENTS
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       212     215     NAMEOVERHEAD IMPROVEMENTS
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       306     312     NAMEOVERHEAD IMPROVEMENTS
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       331     420     NAMEOVERHEAD IMPROVEMENTS
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       554     620     NAMEOVERHEAD IMPROVEMENTS
+
+/src/ClassicUO.Client/Game/Managers/NameOverHeadManager.cs       659     663     NAMEOVERHEAD IMPROVEMENTS
 
 # Original readme
 
