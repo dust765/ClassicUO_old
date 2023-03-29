@@ -11,8 +11,8 @@ on:
 
 env:
   CUO_ASSEMBLY_VERSION: '0.1.11.${{ github.run_number }}'
-  CUO_OUTPUT_PATH: 'bin/dist'
-  CUO_PROJECT_PATH: "src/ClassicUO.csproj"
+  CUO_OUTPUT_PATH: '../../bin/dist'
+  CUO_PROJECT_PATH: "src/ClassicUO.Client/ClassicUO.Client.csproj"
   CUO_ZIP_NAME: "ClassicUO-dev-dust765.zip"
 
   DOTNET_NOLOGO: false
@@ -31,7 +31,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        ref: dev_dust765_activedev
+        ref: dev_dust765
       
     - name: Get submodules
       run: |
