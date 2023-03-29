@@ -588,6 +588,12 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // VISUALRESPONSEMANAGER
         public bool VisualResponseManager { get; set; } = false;
         // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+        // ## BEGIN - END ## // TABGRID // PKRION
+        public bool TabGridGumpEnabled { get; set; } = false;
+        public int GridTabs { get; set; } = 1;
+        public int GridRows { get; set; } = 1;
+        public string TabList { get; set; } = "tab1:tab2:tab3";
+        // ## BEGIN - END ## // TABGRID // PKRION
         // ## BEGIN - END ## // BASICSETUP
 
         public bool ShowJournalClient { get; set; } = true;
@@ -829,6 +835,11 @@ namespace ClassicUO.Configuration
 
                                     break;
                                 // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+                                // ## BEGIN - END ## // TABGRID // PKRION
+                                case GumpType.TabGridGump:
+                                    gump = new TabGridGump();
+                                    break;
+                                // ## BEGIN - END ## // TABGRID // PKRION
 
                                 case GumpType.Container:
                                     gump = new ContainerGump();
