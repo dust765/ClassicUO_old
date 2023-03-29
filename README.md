@@ -306,6 +306,12 @@ offers visual responses on your character from various triggers.
 
 bandies, pots, clilocs,....
 
+# tabgrid
+
+open a grid for your macros
+
+(mod by pkrion)
+
 # Added files
 
 /src/Dust765
@@ -1064,6 +1070,14 @@ FILE                                                                START   END 
 /src/ClassicUO.Client/Network/PacketHandlers.cs                  4782    4787    VISUALRESPONSEMANAGER
 
 /src/ClassicUO.Client/Network/Plugin.cs                          672     675     VISUALRESPONSEMANAGER
+
+/src/ClassicUO.Client/Configuration/Profile.cs	                 812     816     TABGRID
+
+/src/ClassicUO.Client/Game/UI/Gumps/GumpType.cs                  60      62      TABGRID
+
+/src/ClassicUO.Client/Resources/ResGumps.Designer.cs             1378    1387    TABGRID
+
+/src/ClassicUO.Client/Resources/ResGumps.resx                    1635    1639    TABGRID
 
 # Original readme
 

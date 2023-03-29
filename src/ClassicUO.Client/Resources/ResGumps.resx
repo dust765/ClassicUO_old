@@ -1632,4 +1632,9 @@ Client version: '{0}'</value>
     <value>Open</value>
   </data>
   <!-- // ## BEGIN - END ## // MULTIJOURNAL -->
+  <!-- // ## BEGIN - END ## // TABGRID // PKRION -->
+  <data name="enableTabGridGump" xml:space="preserve">
+    <value>Enable Tabgrid</value>
+  </data>
+  <!-- // ## BEGIN - END ## // TABGRID // PKRION -->
 </root>

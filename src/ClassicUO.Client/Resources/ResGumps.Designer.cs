@@ -1374,7 +1374,17 @@ namespace ClassicUO.Resources {
                 return ResourceManager.GetString("EnablePathfinding", resourceCulture);
             }
         }
-        
+
+        // ## BEGIN - END ## // TABGRID // PKRION
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Tabgrid.
+        /// </summary>
+        public static string enableTabGridGump {
+            get {
+                return ResourceManager.GetString("enableTabGridGump", resourceCulture);
+            }
+        }
+        // ## BEGIN - END ## // TABGRID // PKRION
         /// <summary>
         ///   Looks up a localized string similar to Enemy Color.
         /// </summary>
