@@ -1219,13 +1219,16 @@ namespace ClassicUO.Game.Managers
                     // ## BEGIN - END ## // MODERNCOOLDOWNBAR
                     //UIManager.Gumps.Where(s => !(s is TopBarGump) && !(s is BuffGump) && !(s is WorldViewportGump)).ToList().ForEach(s => s.Dispose());
                     // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-                    UIManager.Gumps.Where(s => !(s is TopBarGump) && !(s is BuffGump) && !(s is WorldViewportGump) && !(s is UOClassicCombatLTBar) && !(s is BandageGump) && !(s is UOClassicCombatLines) && !(s is UOClassicCombatAL) && !(s is UOClassicCombatBuffbar) && !(s is UOClassicCombatSelf) && !(s is ECBuffGump) && !(s is ECDebuffGump) && !(s is ECStateGump) && !(s is ModernCooldownBar)).ToList().ForEach(s => s.Dispose());
+                    //UIManager.Gumps.Where(s => !(s is TopBarGump) && !(s is BuffGump) && !(s is WorldViewportGump) && !(s is UOClassicCombatLTBar) && !(s is BandageGump) && !(s is UOClassicCombatLines) && !(s is UOClassicCombatAL) && !(s is UOClassicCombatBuffbar) && !(s is UOClassicCombatSelf) && !(s is ECBuffGump) && !(s is ECDebuffGump) && !(s is ECStateGump) && !(s is ModernCooldownBar)).ToList().ForEach(s => s.Dispose());
                     // ## BEGIN - END ## // MODERNCOOLDOWNBAR
                     // ## BEGIN - END ## // SELF
                     // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
                     // ## BEGIN - END ## // AUTOLOOT
                     // ## BEGIN - END ## // LINES
                     // ## BEGIN - END ## // UI/GUMPS
+                    // ## BEGIN - END ## // TAZUO
+                    UIManager.Gumps.Where(s => !(s is TopBarGump) && !(s is BuffGump) && !(s is ImprovedBuffGump) && !(s is WorldViewportGump) && !(s is UOClassicCombatLTBar) && !(s is BandageGump) && !(s is UOClassicCombatLines) && !(s is UOClassicCombatAL) && !(s is UOClassicCombatBuffbar) && !(s is UOClassicCombatSelf) && !(s is ECBuffGump) && !(s is ECDebuffGump) && !(s is ECStateGump) && !(s is ModernCooldownBar)).ToList().ForEach(s => s.Dispose());
+                    // ## BEGIN - END ## // TAZUO
 
                     break;
 
@@ -1464,17 +1467,36 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.ToggleBuffIconGump:
-                    BuffGump buff = UIManager.GetGump<BuffGump>();
-
-                    if (buff != null)
+                    // ## BEGIN - END ## // TAZUO
+                    if (ProfileManager.CurrentProfile.UseImprovedBuffBar)
                     {
-                        buff.Dispose();
+                        ImprovedBuffGump buff = UIManager.GetGump<ImprovedBuffGump>();
+                        if (buff != null)
+                        {
+                            buff.Dispose();
+                        }
+                        else
+                        {
+                            UIManager.Add(new ImprovedBuffGump());
+                        }
                     }
                     else
                     {
-                        UIManager.Add(new BuffGump(100, 100));
-                    }
+                        // ## BEGIN - END ## // TAZUO
+                        BuffGump buff = UIManager.GetGump<BuffGump>();
 
+                        if (buff != null)
+                        {
+                            buff.Dispose();
+                        }
+                        else
+                        {
+                            UIManager.Add(new BuffGump(100, 100));
+                        }
+
+                    // ## BEGIN - END ## // TAZUO
+                    }
+                    // ## BEGIN - END ## // TAZUO
                     break;
 
                 case MacroType.InvokeVirtue:
@@ -1946,7 +1968,11 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.OpenJournal2:
-                    JournalGump2 journal2 = UIManager.GetGump<JournalGump2>();
+                    // ## BEGIN - END ## // TAZUO
+                    //JournalGump2 journal2 = UIManager.GetGump<JournalGump2>();
+                    // ## BEGIN - END ## // TAZUO
+                    ResizableJournal journal2 = UIManager.GetGump<ResizableJournal>();
+                    // ## BEGIN - END ## // TAZUO
 
                     if (journal2 != null)
                     {
@@ -2403,7 +2429,7 @@ namespace ClassicUO.Game.Managers
                     }
 
                     break;
-                // ## BEGIN - END ## // MODERNCOOLDOWNBAR
+                    // ## BEGIN - END ## // MODERNCOOLDOWNBAR
             }
 
 

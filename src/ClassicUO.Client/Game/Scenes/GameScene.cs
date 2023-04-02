@@ -338,14 +338,14 @@ namespace ClassicUO.Game.Scenes
                     break;
 
                 case MessageType.Label:
-
+                
                     if (e.Parent == null || !SerialHelper.IsValid(e.Parent.Serial))
                     {
                         name = string.Empty;
                     }
-                    else if (string.IsNullOrEmpty(e.Name))
+                    else if (string.IsNullOrEmpty(e.Name)) 
                     {
-                        name = ResGeneral.YouSee;
+                        name = ResGeneral.YouSee;                      
                     }
                     else
                     {
@@ -411,12 +411,20 @@ namespace ClassicUO.Game.Scenes
                     text,
                     hue,
                     name,
+                    // ## BEGIN - END ## // TAZUO
+                    /*
                     // ## BEGIN - END ## // MULTIJOURNAL
                     //e.TextType,
                     // ## BEGIN - END ## // MULTIJOURNAL
                     e.Type,
                     // ## BEGIN - END ## // MULTIJOURNAL
                     e.IsUnicode
+                    */
+                    // ## BEGIN - END ## // TAZUO
+                    e.TextType,
+                    e.IsUnicode,
+                    e.Type
+                    // ## BEGIN - END ## // TAZUO
                 );
             }
         }
@@ -910,6 +918,8 @@ namespace ClassicUO.Game.Scenes
                 }
             }
 
+            // ## BEGIN - END ## // TAZUO
+            /*
             if (_followingMode && SerialHelper.IsMobile(_followingTarget) && !Pathfinder.AutoWalking)
             {
                 Mobile follow = World.Mobiles.Get(_followingTarget);
@@ -927,6 +937,26 @@ namespace ClassicUO.Game.Scenes
                         Pathfinder.WalkTo(follow.X, follow.Y, follow.Z, 1);
                     }
                 }
+            */
+            // ## BEGIN - END ## // TAZUO
+            if (currentProfile.FollowingMode && SerialHelper.IsMobile(currentProfile.FollowingTarget) && !Pathfinder.AutoWalking)
+            {
+                Mobile follow = World.Mobiles.Get(currentProfile.FollowingTarget);
+
+                if (follow != null)
+                {
+                    int distance = follow.Distance;
+
+                    if (distance > World.ClientViewRange)
+                    {
+                        StopFollowing();
+                    }
+                    else if (distance > currentProfile.AutoFollowDistance)
+                    {
+                        Pathfinder.WalkTo(follow.X, follow.Y, follow.Z, currentProfile.AutoFollowDistance);
+                    }
+                }
+                // ## BEGIN - END ## // TAZUO
                 else
                 {
                     StopFollowing();
@@ -1426,10 +1456,19 @@ namespace ClassicUO.Game.Scenes
 
         private void StopFollowing()
         {
+            // ## BEGIN - END ## // TAZUO
+            /*
             if (_followingMode)
             {
                 _followingMode = false;
                 _followingTarget = 0;
+            */
+            // ## BEGIN - END ## // TAZUO
+            if (ProfileManager.CurrentProfile.FollowingMode)
+            {
+                ProfileManager.CurrentProfile.FollowingMode = false;
+                ProfileManager.CurrentProfile.FollowingTarget = 0;
+                // ## BEGIN - END ## // TAZUO
                 Pathfinder.StopAutoWalk();
 
                 MessageManager.HandleMessage

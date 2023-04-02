@@ -129,7 +129,7 @@ namespace ClassicUO.Game.GameObjects
         public short LowerReagentCost;
         public ushort Luck;
         public short ManaIncrease;
-        public short ManaRegeneration;      
+        public short ManaRegeneration;
         public short MaxColdResistence;
         public short MaxDefenseChanceIncrease;
         public short MaxEnergyResistence;
@@ -269,10 +269,26 @@ namespace ClassicUO.Game.GameObjects
             return item;
         }
 
+        // ## BEGIN - END ## // TAZUO
+        /*
         public void AddBuff(BuffIconType type, ushort graphic, uint time, string text)
         {
             _buffIcons[type] = new BuffIcon(type, graphic, time, text);
         }
+        */
+        // ## BEGIN - END ## // TAZUO
+        public void AddBuff(BuffIconType type, ushort graphic, uint time, string text, string title = "")
+        {
+            _buffIcons[type] = new BuffIcon(type, graphic, time, text, title);
+
+            if (ProfileManager.CurrentProfile.UseImprovedBuffBar)
+            {
+                ImprovedBuffGump gump = UIManager.GetGump<ImprovedBuffGump>();
+                if (gump != null)
+                    gump.AddBuff(new BuffIcon(type, graphic, time, text, title));
+            }
+        }
+        // ## BEGIN - END ## // TAZUO
 
 
         public bool IsBuffIconExists(BuffIconType graphic)
@@ -283,6 +299,14 @@ namespace ClassicUO.Game.GameObjects
         public void RemoveBuff(BuffIconType graphic)
         {
             _buffIcons.Remove(graphic);
+            // ## BEGIN - END ## // TAZUO
+            if (ProfileManager.CurrentProfile.UseImprovedBuffBar)
+            {
+                ImprovedBuffGump gump = UIManager.GetGump<ImprovedBuffGump>();
+                if (gump != null)
+                    gump.RemoveBuff(graphic);
+            }
+            // ## BEGIN - END ## // TAZUO
         }
 
         public void UpdateAbilities()
@@ -1471,6 +1495,11 @@ namespace ClassicUO.Game.GameObjects
                 }
 
                 UIManager.GetGump<ContainerGump>(bank.Serial)?.Dispose();
+                // ## BEGIN - END ## // TAZUO
+                #region GridContainer
+                UIManager.GetGump<GridContainer>(bank.Serial)?.Dispose();
+                #endregion
+                // ## BEGIN - END ## // TAZUO
 
                 bank.Opened = false;
             }
@@ -1558,6 +1587,45 @@ namespace ClassicUO.Game.GameObjects
                         }
 
                         break;
+                    // ## BEGIN - END ## // TAZUO
+                    #region GridContainer
+                    case GridContainer _:
+                        distance = int.MaxValue;
+
+                        ent = World.Get(gump.LocalSerial);
+
+                        if (ent != null)
+                        {
+                            if (SerialHelper.IsItem(ent.Serial))
+                            {
+                                Entity top = World.Get(((Item)ent).RootContainer);
+
+                                if (top != null)
+                                {
+                                    distance = top.Distance;
+                                }
+                            }
+                            else
+                            {
+                                distance = ent.Distance;
+                            }
+                        }
+
+                        if (distance > Constants.MAX_CONTAINER_OPENED_ON_GROUND_RANGE)
+                        {
+                            // ## BEGIN - END ## // MISC3 THIEFSUPREME
+                            //gump.Dispose();
+                            // ## BEGIN - END ## // MISC3 THIEFSUPREME
+                            if (!ProfileManager.CurrentProfile.OverrideContainerOpenRange)
+                            {
+                                gump.Dispose();
+                            }
+                            // ## BEGIN - END ## // MISC3 THIEFSUPREME
+                        }
+
+                        break;
+                    #endregion
+                    // ## BEGIN - END ## // TAZUO
                 }
             }
         }

@@ -12,6 +12,36 @@ This project is to address a problem constructed within the toxicity of this com
 
 ![dust765_logo](https://user-images.githubusercontent.com/77043734/209156140-14558d04-eaf9-42f0-9939-ddec9cf6c1ac.png)
 
+# Featuring TazUO
+
+check the great Github of [TazUO](https://github.com/bittiez/ClassicUO)
+
+Join TazUO's discord for ideas/support/updates -> https://discord.gg/SqwtB5g95H
+
+This version of CUO adds [grid containers](../../wiki/TazUO.Grid-Containers) to the regular CUO client
+
+    Searchable
+
+    Resizable
+
+    Scrollable
+
+    Can lock items in specific place
+
+    Quick preview for containers inside *if the client has already cached that bag*
+
+    Item scaling!
+
+[Cool down bars](../../wiki/TazUO.Cooldown-bars)
+
+[Follow mode improvements](../../wiki/TazUO.Follow-mode)
+
+[Improved journal](../../wiki/TazUO.Journal)
+
+[Nameplate healthbars](../../wiki/TazUO.Nameplate-Healthbars)
+
+And others in our [wiki](../../wiki)
+
 # contact and team info
 
 Discord: dust765#2787

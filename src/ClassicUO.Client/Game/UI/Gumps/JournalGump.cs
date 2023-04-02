@@ -396,7 +396,11 @@ namespace ClassicUO.Game.UI.Gumps
                 entry.Hue,
                 entry.IsUnicode,
                 entry.Time,
-                entry.TextType
+                // ## BEGIN - END ## // TAZUO
+                //entry.TextType
+                // ## BEGIN - END ## // TAZUO
+                entry.MessageType
+                // ## BEGIN - END ## // TAZUO
             );
         }
 
@@ -648,7 +652,7 @@ namespace ClassicUO.Game.UI.Gumps
                 //TextType text_type
                 // ## BEGIN - END ## // MULTIJOURNAL
                 MessageType text_type
-                // ## BEGIN - END ## // MULTIJOURNAL
+            // ## BEGIN - END ## // MULTIJOURNAL
             )
             {
                 bool maxScroll = _scrollBar.Value == _scrollBar.MaxValue;
@@ -703,22 +707,18 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     return false;
                 }
-
                 if (type == TextType.SYSTEM && !ProfileManager.CurrentProfile.ShowJournalSystem)
                 {
                     return false;
                 }
-
                 if (type == TextType.OBJECT && !ProfileManager.CurrentProfile.ShowJournalObjects)
                 {
                     return false;
                 }
-
                 if (type == TextType.GUILD_ALLY && !ProfileManager.CurrentProfile.ShowJournalGuildAlly)
                 {
                     return false;
                 }
-
                 return true;
             }
             */

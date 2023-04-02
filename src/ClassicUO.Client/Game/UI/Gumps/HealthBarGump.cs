@@ -234,6 +234,29 @@ namespace ClassicUO.Game.UI.Gumps
             base.OnDragEnd(x, y);
         }
 
+        // ## BEGIN - END ## // TAZUO
+        protected override void OnMouseUp(int x, int y, MouseButtonType button)
+        {
+            base.OnMouseUp(x, y, button);
+
+            if (button == MouseButtonType.Left && Keyboard.Alt)
+            {
+                MessageManager.HandleMessage
+                (
+                    World.Player,
+                    ResGeneral.NowFollowing,
+                    string.Empty,
+                    0,
+                    MessageType.Regular,
+                    3,
+                    TextType.CLIENT
+                );
+                ProfileManager.CurrentProfile.FollowingMode = true;
+                ProfileManager.CurrentProfile.FollowingTarget = LocalSerial;
+            }
+        }
+        // ## BEGIN - END ## // TAZUO
+
         protected override void OnMouseDown(int x, int y, MouseButtonType button)
         {
             if (button != MouseButtonType.Left)
@@ -308,8 +331,13 @@ namespace ClassicUO.Game.UI.Gumps
                 }
                 else
                 {
-                    UIManager.Add(StatusGumpBase.AddStatusGump(ScreenCoordinateX, ScreenCoordinateY));
-                    Dispose();
+                    // ## BEGIN - END ## // TAZUO
+                    //UIManager.Add(StatusGumpBase.AddStatusGump(ScreenCoordinateX, ScreenCoordinateY));
+                    //Dispose();
+                    // ## BEGIN - END ## // TAZUO
+                    if (StatusGumpBase.GetStatusGump() == null)
+                        UIManager.Add(StatusGumpBase.AddStatusGump(ScreenCoordinateX, ScreenCoordinateY));
+                    // ## BEGIN - END ## // TAZUO
                 }
             }
 
@@ -839,7 +867,7 @@ namespace ClassicUO.Game.UI.Gumps
                         _normalHits = true;
                     }
                 }
-
+                
                 // ## BEGIN - END ## // OUTLANDS
                 //CombatCollection.UpdateHamstrung(mobile);
                 // ## BEGIN - END ## // OUTLANDS
@@ -2059,7 +2087,7 @@ namespace ClassicUO.Game.UI.Gumps
                 */
                 // ## BEGIN - END ## // OUTLANDS
 
-                if (_outOfRange)
+            if (_outOfRange)
                 {
                     if (entity.HitsMax == 0)
                     {

@@ -153,6 +153,9 @@ namespace ClassicUO
             GumpsLoader.Instance.CreateAtlas(GraphicsDevice);
             LightsLoader.Instance.CreateAtlas(GraphicsDevice);
             AnimationsLoader.Instance.CreateAtlas(GraphicsDevice);
+            // ## BEGIN - END ## // TAZUO
+            PNGLoader.GraphicsDevice = GraphicsDevice;
+            // ## BEGIN - END ## // TAZUO
 
             LightColors.LoadLights();
 

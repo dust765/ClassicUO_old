@@ -41,13 +41,19 @@ namespace ClassicUO.Game.UI.Controls
 {
     internal class ClickableColorBox : ColorBox
     {
+        // ## BEGIN - END ## // TAZUO
+        private readonly bool useModernSelector;
+        // ## BEGIN - END ## // TAZUO
         public ClickableColorBox
         (
             int x,
             int y,
             int w,
             int h,
-            ushort hue
+            ushort hue,
+            // ## BEGIN - END ## // TAZUO
+            bool useModernSelector = false
+            // ## BEGIN - END ## // TAZUO
         ) : base(w, h, hue)
         {
             X = x;
@@ -59,6 +65,9 @@ namespace ClassicUO.Game.UI.Controls
 
             Width = background.Width;
             Height = background.Height;
+            // ## BEGIN - END ## // TAZUO
+            this.useModernSelector = useModernSelector;
+            // ## BEGIN - END ## // TAZUO
         }
 
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
@@ -92,16 +101,27 @@ namespace ClassicUO.Game.UI.Controls
             {
                 UIManager.GetGump<ColorPickerGump>()?.Dispose();
 
-                ColorPickerGump pickerGump = new ColorPickerGump
-                (
-                    0,
-                    0,
-                    100,
-                    100,
-                    s => Hue = s
-                );
+                // ## BEGIN - END ## // TAZUO
+                if (useModernSelector)
+                {
+                    UIManager.Add(new ModernColorPicker(s => Hue = s) { X = 100, Y = 100 });
+                }
+                else
+                {
+                // ## BEGIN - END ## // TAZUO
+                    ColorPickerGump pickerGump = new ColorPickerGump
+                    (
+                        0,
+                        0,
+                        100,
+                        100,
+                        s => Hue = s
+                    );
 
-                UIManager.Add(pickerGump);
+                    UIManager.Add(pickerGump);
+                // ## BEGIN - END ## // TAZUO
+                }
+                // ## BEGIN - END ## // TAZUO
             }
         }
     }

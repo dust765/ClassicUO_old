@@ -114,10 +114,17 @@ namespace ClassicUO.Assets
                 SpeechesLoader.Instance.Load(),
                 LightsLoader.Instance.Load(),
                 SoundsLoader.Instance.Load(),
-                MultiMapLoader.Instance.Load()
+                MultiMapLoader.Instance.Load(),
+                // ## BEGIN - END ## // TAZUO
+                PNGLoader.Load()
+                // ## BEGIN - END ## // TAZUO
             };
 
-            if (!Task.WhenAll(tasks).Wait(TimeSpan.FromSeconds(10)))
+            // ## BEGIN - END ## // TAZUO
+            //if (!Task.WhenAll(tasks).Wait(TimeSpan.FromSeconds(10)))
+            // ## BEGIN - END ## // TAZUO
+            if (!Task.WhenAll(tasks).Wait(TimeSpan.FromSeconds(15)))
+            // ## BEGIN - END ## // TAZUO
             {
                 Log.Panic("Loading files timeout.");
             }

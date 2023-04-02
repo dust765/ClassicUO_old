@@ -293,11 +293,32 @@ namespace ClassicUO.Game.UI.Gumps
 
     internal class BorderControl : Control
     {
-        private readonly int _borderSize;
+        // ## BEGIN - END ## // TAZUO
+        //private readonly int _borderSize;
+        //const ushort H_BORDER = 0x0A8C;
+        //const ushort V_BORDER = 0x0A8D;
+        // ## BEGIN - END ## // TAZUO
+        private int _borderSize;
+        private ushort h_border = 0x0A8C;
+        private ushort v_border = 0x0A8D;
+        // ## BEGIN - END ## // TAZUO
 
-        const ushort H_BORDER = 0x0A8C;
-        const ushort V_BORDER = 0x0A8D;
+        // ## BEGIN - END ## // TAZUO
 
+        private ushort h_bottom_border = 0x0A8C;
+        private ushort v_right_border = 0x0A8D;
+        private ushort t_left = 0xffff, t_right = 0xffff, b_left = 0xffff, b_right = 0xffff;
+
+        public int BorderSize { get { return _borderSize; } set { _borderSize = value; } }
+        public ushort H_Border { get { return h_border; } set { h_border = value; } }
+        public ushort V_Border { get { return v_border; } set { v_border = value; } }
+        public ushort V_Right_Border { get { return v_right_border; } set { v_right_border = value; } }
+        public ushort H_Bottom_Border { get { return h_bottom_border; } set { h_bottom_border = value; } }
+        public ushort T_Left { get { return t_left; } set { t_left = value; } }
+        public ushort T_Right { get { return t_right; } set { t_right = value; } }
+        public ushort B_Left { get { return b_left; } set { b_left = value; } }
+        public ushort B_Right { get { return b_right; } set { b_right = value; } }
+        // ## BEGIN - END ## // TAZUO
         public BorderControl(int x, int y, int w, int h, int borderSize)
         {
             X = x;
@@ -311,7 +332,18 @@ namespace ClassicUO.Game.UI.Gumps
 
         public ushort Hue { get; set; }
 
-     
+        // ## BEGIN - END ## // TAZUO
+        public void DefaultGraphics()
+        {
+            h_border = 0x0A8C;
+            v_border = 0x0A8D;
+            h_bottom_border = 0x0A8C;
+            v_right_border = 0x0A8D;
+            t_left = 0xffff; t_right = 0xffff; b_left = 0xffff; b_right = 0xffff;
+            _borderSize = 4;
+        }
+        // ## BEGIN - END ## // TAZUO
+
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
         {
             Vector3 hueVector = ShaderHueTranslator.GetHueVector(0);
@@ -322,6 +354,8 @@ namespace ClassicUO.Game.UI.Gumps
                 hueVector.Y = 1;
             }
 
+            // ## BEGIN - END ## // TAZUO
+            /*
             var texture = GumpsLoader.Instance.GetGumpTexture(H_BORDER, out var bounds);
 
             // sopra
@@ -385,6 +419,147 @@ namespace ClassicUO.Game.UI.Gumps
                 bounds,
                 hueVector
             );
+            */
+            // ## BEGIN - END ## // TAZUO
+
+            hueVector.Z = Alpha;
+
+            var texture = GumpsLoader.Instance.GetGumpTexture(h_border, out var bounds);
+            Rectangle pos = new Rectangle
+            (
+                x,
+                y,
+                Width,
+                _borderSize
+            );
+            if (t_left != 0xffff)
+            {
+                pos.X += _borderSize;
+                pos.Width -= _borderSize;
+            }
+            if (t_right != 0xffff)
+                pos.Width -= _borderSize;
+            // sopra
+            batcher.DrawTiled
+            (
+                texture,
+                pos,
+                bounds,
+                hueVector
+            );
+
+            texture = GumpsLoader.Instance.GetGumpTexture(h_bottom_border, out bounds);
+            pos = new Rectangle
+            (
+                x,
+                y + Height - _borderSize,
+                Width,
+                _borderSize
+            );
+            if (b_left != 0xffff)
+            {
+                pos.X += _borderSize;
+                pos.Width -= _borderSize;
+            }
+            if (b_right != 0xffff)
+                pos.Width -= _borderSize;
+            // sotto
+            batcher.DrawTiled
+            (
+                texture,
+                pos,
+                bounds,
+                hueVector
+            );
+
+            texture = GumpsLoader.Instance.GetGumpTexture(v_border, out bounds);
+            pos = new Rectangle
+            (
+                x,
+                y,
+                _borderSize,
+                Height
+            );
+            if (t_left != 0xffff)
+            {
+                pos.Y += _borderSize;
+                pos.Height -= _borderSize;
+            }
+            if (b_left != 0xffff)
+                pos.Height -= _borderSize;
+            //sx
+            batcher.DrawTiled
+            (
+                texture,
+                pos,
+                bounds,
+                hueVector
+            );
+            texture = GumpsLoader.Instance.GetGumpTexture(v_right_border, out bounds);
+            pos = new Rectangle
+            (
+                x + Width - _borderSize,
+                y,
+                _borderSize,
+                Height
+            );
+            if (t_right != 0xffff)
+            {
+                pos.Y += _borderSize;
+                pos.Height -= _borderSize;
+            }
+            if (b_right != 0xffff)
+                pos.Height -= _borderSize;
+            //dx
+            batcher.DrawTiled
+            (
+                texture,
+                pos,
+                bounds,
+                hueVector
+            );
+
+            if (t_left != 0xffff)
+            {
+                texture = GumpsLoader.Instance.GetGumpTexture(t_left, out bounds);
+                batcher.Draw(
+                    texture,
+                    new Rectangle(x, y, bounds.Width, bounds.Height),
+                    bounds,
+                    hueVector
+                    );
+            }
+            if (t_right != 0xffff)
+            {
+                texture = GumpsLoader.Instance.GetGumpTexture(t_right, out bounds);
+                batcher.Draw(
+                    texture,
+                    new Rectangle(x + Width - _borderSize, y, bounds.Width, bounds.Height),
+                    bounds,
+                    hueVector
+                    );
+            }
+            if (b_left != 0xffff)
+            {
+                texture = GumpsLoader.Instance.GetGumpTexture(b_left, out bounds);
+                batcher.Draw(
+                    texture,
+                    new Rectangle(x, y + Height - _borderSize, bounds.Width, bounds.Height),
+                    bounds,
+                    hueVector
+                    );
+            }
+            if (b_right != 0xffff)
+            {
+                texture = GumpsLoader.Instance.GetGumpTexture(b_right, out bounds);
+                batcher.Draw(
+                    texture,
+                    new Rectangle(x + Width - _borderSize, y + Height - _borderSize, bounds.Width, bounds.Height),
+                    bounds,
+                    hueVector
+                    );
+            }
+            // ## BEGIN - END ## // TAZUO
 
             return base.Draw(batcher, x, y);
         }

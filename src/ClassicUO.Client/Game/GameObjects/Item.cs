@@ -258,6 +258,11 @@ namespace ClassicUO.Game.GameObjects
             if (Opened)
             {
                 UIManager.GetGump<ContainerGump>(Serial)?.Dispose();
+                // ## BEGIN - END ## // TAZUO
+                #region GridContainer
+                UIManager.GetGump<GridContainer>(Serial)?.Dispose();
+                #endregion
+                // ## BEGIN - END ## // TAZUO
                 UIManager.GetGump<SpellbookGump>(Serial)?.Dispose();
                 UIManager.GetGump<MapGump>(Serial)?.Dispose();
 

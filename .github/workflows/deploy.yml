@@ -3,7 +3,7 @@ name: Deploy
 on:
   workflow_dispatch:
   workflow_run:
-    branches: [dev_dust765]
+    branches: [dev_dust765_x_tazuo]
     workflows: [Build-Test]
     types:
       - completed
@@ -13,7 +13,7 @@ env:
   CUO_ASSEMBLY_VERSION: '0.1.11.${{ github.run_number }}'
   CUO_OUTPUT_PATH: '../../bin/dist'
   CUO_PROJECT_PATH: "src/ClassicUO.Client/ClassicUO.Client.csproj"
-  CUO_ZIP_NAME: "ClassicUO-dev-dust765.zip"
+  CUO_ZIP_NAME: "ClassicUO-dev-dust765-x-tazuo.zip"
 
   DOTNET_NOLOGO: false
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -31,7 +31,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
       with:
-        ref: dev_dust765
+        ref: dev_dust765_x_tazuo
       
     - name: Get submodules
       run: |
@@ -56,7 +56,7 @@ jobs:
         exclusions: 'ClassicUO.exe.config'
         
     - name: Create manifest
-      run: dotnet run --project tools/ManifestCreator/ManifestCreator.csproj "${{ env.CUO_OUTPUT_PATH }}" "dev-dust765" "${{ env.CUO_ZIP_NAME }}"
+      run: dotnet run --project tools/ManifestCreator/ManifestCreator.csproj "${{ env.CUO_OUTPUT_PATH }}" "dev-dust765-x-tazuo" "${{ env.CUO_ZIP_NAME }}"
     
     - name: Move output
       run: |
@@ -68,7 +68,7 @@ jobs:
       uses: dev-drprasad/delete-tag-and-release@v0.2.1
       with:
         delete_release: true
-        tag_name: ClassicUO-dev-dust765-release
+        tag_name: ClassicUO-dev-dust765-x-tazuo-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
@@ -76,8 +76,8 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "upload/${{ env.CUO_ZIP_NAME }}"
-        name: '0.1.11.${{ github.run_number }} dev_dust765'
+        name: '0.1.11.${{ github.run_number }} dev_dust765_x_tazuo'
         body: 'This build may not be safe: use it at your own risk.'
         prerelease: true
-        tag: ClassicUO-dev-dust765-release
+        tag: ClassicUO-dev-dust765-x-tazuo-release
         token: ${{ secrets.GITHUB_TOKEN }}

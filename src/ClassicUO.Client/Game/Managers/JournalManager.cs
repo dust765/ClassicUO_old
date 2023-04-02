@@ -67,8 +67,11 @@ namespace ClassicUO.Game.Managers
         // ## BEGIN - END ## // MULTIJOURNAL
         //public void Add(string text, ushort hue, string name, TextType type, bool isunicode = true)
         // ## BEGIN - END ## // MULTIJOURNAL
-        public void Add(string text, ushort hue, string name, MessageType type, bool isunicode = true)
+        //public void Add(string text, ushort hue, string name, MessageType type, bool isunicode = true)
         // ## BEGIN - END ## // MULTIJOURNAL
+        // ## BEGIN - END ## // TAZUO
+        public void Add(string text, ushort hue, string name, TextType type, bool isunicode = true, MessageType messageType = MessageType.Regular)
+        // ## BEGIN - END ## // TAZUO
         {
             JournalEntry entry = Entries.Count >= Constants.MAX_JOURNAL_HISTORY_COUNT ? Entries.RemoveFromFront() : new JournalEntry();
 
@@ -89,6 +92,9 @@ namespace ClassicUO.Game.Managers
             entry.IsUnicode = isunicode;
             entry.Time = timeNow;
             entry.TextType = type;
+            // ## BEGIN - END ## // TAZUO
+            entry.MessageType = messageType;
+            // ## BEGIN - END ## // TAZUO
 
             if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ForceUnicodeJournal)
             {
@@ -267,9 +273,15 @@ namespace ClassicUO.Game.Managers
         // ## BEGIN - END ## // MULTIJOURNAL
         //public TextType TextType;
         // ## BEGIN - END ## // MULTIJOURNAL
-        public MessageType TextType;
+        // ## BEGIN - END ## // TAZUO
+        //public MessageType TextType;
+        public TextType TextType;
+        // ## BEGIN - END ## // TAZUO
         // ## BEGIN - END ## // MULTIJOURNAL
         public DateTime Time;
+        // ## BEGIN - END ## // TAZUO
+        public MessageType MessageType;
+        // ## BEGIN - END ## // TAZUO
     }
     // ## BEGIN - END ## // MULTIJOURNAL
     internal class JournalItem

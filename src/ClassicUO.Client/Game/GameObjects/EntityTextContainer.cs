@@ -31,6 +31,10 @@
 #endregion
 
 using ClassicUO.Assets;
+// ## BEGIN - END ## // TAZUO
+using ClassicUO.Game.Data;
+using ClassicUO.Game.Managers;
+// ## BEGIN - END ## // TAZUO
 using ClassicUO.Renderer;
 using ClassicUO.Utility.Collections;
 using Microsoft.Xna.Framework;
@@ -106,7 +110,27 @@ namespace ClassicUO.Game.GameObjects
         {
             TextObject text_obj = TextObject.Create();
 
-            text_obj.RenderedText = RenderedText.Create(damage.ToString(), (ushort) (ReferenceEquals(Parent, World.Player) ? 0x0034 : 0x0021), 3, false);
+            // ## BEGIN - END ## // TAZUO
+            //text_obj.RenderedText = RenderedText.Create(damage.ToString(), (ushort) (ReferenceEquals(Parent, World.Player) ? 0x0034 : 0x0021), 3, false);
+            // ## BEGIN - END ## // TAZUO
+            ushort hue = 0x0021;
+
+            if (ReferenceEquals(Parent, World.Player))
+                hue = 0x0034;
+            else if (Parent is Mobile)
+            {
+                Mobile _parent = (Mobile)Parent;
+                if (_parent.IsRenamable && _parent.NotorietyFlag != NotorietyFlag.Invulnerable && _parent.NotorietyFlag != NotorietyFlag.Enemy)
+                    hue = 0x0033;
+                else if (_parent.NotorietyFlag == NotorietyFlag.Ally)
+                    hue = 0x0030;
+
+                if (_parent.Serial == TargetManager.LastAttack)
+                    hue = 0x1F;
+            }
+
+            text_obj.RenderedText = RenderedText.Create(damage.ToString(), hue, 3, false);
+            // ## BEGIN - END ## // TAZUO
 
             text_obj.Time = Time.Ticks + 1500;
 

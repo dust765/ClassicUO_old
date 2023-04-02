@@ -44,7 +44,10 @@ namespace ClassicUO.Game.UI.Gumps
     {
         NONE,
         SPELL,
-        HEALTHBAR
+        HEALTHBAR,
+        // ## BEGIN - END ## // TAZUO
+        DISABLED
+        // ## BEGIN - END ## // TAZUO
     }
 
     internal abstract class AnchorableGump : Gump
@@ -58,8 +61,11 @@ namespace ClassicUO.Game.UI.Gumps
         protected AnchorableGump(uint local, uint server) : base(local, server)
         {
         }
-
-        public ANCHOR_TYPE AnchorType { get; protected set; }
+        // ## BEGIN - END ## // TAZUO
+        //public ANCHOR_TYPE AnchorType { get; protected set; }
+        // ## BEGIN - END ## // TAZUO
+        public ANCHOR_TYPE AnchorType { get; set; }
+        // ## BEGIN - END ## // TAZUO
         public virtual int GroupMatrixWidth { get; protected set; }
         public virtual int GroupMatrixHeight { get; protected set; }
         public int WidthMultiplier { get; protected set; } = 1;
@@ -96,7 +102,11 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void OnMouseOver(int x, int y)
         {
-            if (!IsDisposed && UIManager.IsDragging && UIManager.DraggingControl == this)
+            // ## BEGIN - END ## // TAZUO
+            //if (!IsDisposed && UIManager.IsDragging && UIManager.DraggingControl == this)
+            // ## BEGIN - END ## // TAZUO
+            if (!IsDisposed && UIManager.IsDragging && UIManager.DraggingControl == this && AnchorType != ANCHOR_TYPE.DISABLED)
+            // ## BEGIN - END ## // TAZUO
             {
                 _anchorCandidate = UIManager.AnchorManager.GetAnchorableControlUnder(this);
             }
