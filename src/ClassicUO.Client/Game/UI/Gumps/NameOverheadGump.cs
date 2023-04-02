@@ -319,7 +319,11 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add
             (
-                _background = new AlphaBlendControl(.7f)
+                // ## BEGIN - END ## // TAZUO
+                //_background = new AlphaBlendControl(.7f)
+                // ## BEGIN - END ## // TAZUO
+                _background = new AlphaBlendControl(ProfileManager.CurrentProfile.NamePlateOpacity / 100f)
+                // ## BEGIN - END ## // TAZUO
                 {
                     WantUpdateSize = false,
                     Hue = entity is Mobile m ? Notoriety.GetHue(m.NotorietyFlag) : (ushort) 0x0481,
@@ -340,7 +344,7 @@ namespace ClassicUO.Game.UI.Gumps
             }
 
             base.CloseWithRightClick();
-        }     
+        }
 
         private void DoDrag()
         {
@@ -366,10 +370,14 @@ namespace ClassicUO.Game.UI.Gumps
                 BaseHealthBarGump gump = UIManager.GetGump<BaseHealthBarGump>(LocalSerial);
                 gump?.Dispose();
 
+                // ## BEGIN - END ## // TAZUO
+                /*
                 if (entity == World.Player)
                 {
                     StatusGumpBase.GetStatusGump()?.Dispose();
                 }
+                */
+                // ## BEGIN - END ## // TAZUO
 
                 if (ProfileManager.CurrentProfile.CustomBarsToggled)
                 {
@@ -615,7 +623,11 @@ namespace ClassicUO.Game.UI.Gumps
 
                 _lockedPosition.X = (int) (m.RealScreenPosition.X + m.Offset.X + 22 + 5);
 
-                _lockedPosition.Y = (int) (m.RealScreenPosition.Y + (m.Offset.Y - m.Offset.Z) - (height + centerY + 8) + (m.IsGargoyle && m.IsFlying ? -22 : !m.IsMounted ? 22 : 0));
+                // ## BEGIN - END ## // TAZUO
+                //_lockedPosition.Y = (int) (m.RealScreenPosition.Y + (m.Offset.Y - m.Offset.Z) - (height + centerY + 8) + (m.IsGargoyle && m.IsFlying ? -22 : !m.IsMounted ? 22 : 0));
+                // ## BEGIN - END ## // TAZUO
+                _lockedPosition.Y = (int) (m.RealScreenPosition.Y + (m.Offset.Y - m.Offset.Z) - (height + centerY + 15) + (m.IsGargoyle && m.IsFlying ? -22 : !m.IsMounted ? 22 : 0));
+                // ## BEGIN - END ## // TAZUO
             }
 
             base.OnMouseOver(x, y);
@@ -717,6 +729,10 @@ namespace ClassicUO.Game.UI.Gumps
                 return false;
             }
 
+            // ## BEGIN - END ## // TAZUO
+            bool _isMobile = false;
+            double _hpPercent = 1;
+            // ## BEGIN - END ## // TAZUO
             if (SerialHelper.IsMobile(LocalSerial))
             {
                 Mobile m = World.Mobiles.Get(LocalSerial);
@@ -727,6 +743,17 @@ namespace ClassicUO.Game.UI.Gumps
 
                     return false;
                 }
+
+                // ## BEGIN - END ## // TAZUO
+                _isMobile = true;
+                _hpPercent = (double)m.Hits / (double)m.HitsMax;
+
+                if (ProfileManager.CurrentProfile.NamePlateHideAtFullHealth && _hpPercent >= 1 && World.Player.InWarMode)
+                {
+                    Dispose();
+                    return false;
+                }
+                // ## BEGIN - END ## // TAZUO
 
                 if (_positionLocked)
                 {
@@ -753,7 +780,12 @@ namespace ClassicUO.Game.UI.Gumps
                     );
 
                     x = (int) (m.RealScreenPosition.X + m.Offset.X + 22 + 5);
-                    y = (int) (m.RealScreenPosition.Y + (m.Offset.Y - m.Offset.Z) - (height + centerY + 8) + (m.IsGargoyle && m.IsFlying ? -22 : !m.IsMounted ? 22 : 0));
+                    // ## BEGIN - END ## // TAZUO
+                    //y = (int) (m.RealScreenPosition.Y + (m.Offset.Y - m.Offset.Z) - (height + centerY + 8) + (m.IsGargoyle && m.IsFlying ? -22 : !m.IsMounted ? 22 : 0));
+                    // ## BEGIN - END ## // TAZUO
+                    y = (int) (m.RealScreenPosition.Y + (m.Offset.Y - m.Offset.Z) - (height + centerY + 15) + (m.IsGargoyle && m.IsFlying ? -22 : !m.IsMounted ? 22 : 0));
+                    // ## BEGIN - END ## // TAZUO
+
                 }
             }
             else if (SerialHelper.IsItem(LocalSerial))
@@ -825,6 +857,19 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // NAMEOVERHEAD
 
             base.Draw(batcher, x, y);
+
+            // ## BEGIN - END ## // TAZUO
+            if (ProfileManager.CurrentProfile.NamePlateHealthBar && _isMobile)
+            {
+                batcher.Draw
+                (
+                    SolidColorTextureCache.GetTexture(Color.White),
+                    new Vector2(x, y),
+                    new Rectangle(x, y, (int) (Width * _hpPercent), Height),
+                    ShaderHueTranslator.GetHueVector(_background.Hue, false, ProfileManager.CurrentProfile.NamePlateHealthBarOpacity / 100f)
+                );
+            }
+            // ## BEGIN - END ## // TAZUO
 
             int renderedTextOffset = Math.Max(0, Width - _renderedText.Width - 4) >> 1;
 

@@ -210,7 +210,7 @@ namespace ClassicUO.Assets
                      * into every pixel in 'data'. We must zero the buffer here since it is
                      * re-used. But we only have to zero out the (width * height) worth.
                      */
-                        data.Slice(0, (width * height)).Fill(0);
+                    data.Slice(0, (width * height)).Fill(0);
 
                     ushort fixedGraphic = (ushort)(g - 0x4000);
 
@@ -300,6 +300,15 @@ namespace ClassicUO.Assets
         public Texture2D GetStaticTexture(uint g, out Rectangle bounds)
         {
             g += 0x4000;
+
+            // ## BEGIN - END ## // TAZUO
+            Texture2D png = PNGLoader.LoadArtTexture(g);
+            if (png != null)
+            {
+                bounds = png.Bounds;
+                return png;
+            }
+            // ## BEGIN - END ## // TAZUO
 
             ref var spriteInfo = ref _spriteInfos[g];
 

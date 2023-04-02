@@ -51,7 +51,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace ClassicUO.Game.Scenes
 {
     internal partial class GameScene
-    {      
+    {
         private static GameObject[] _foliages = new GameObject[100];
         private static readonly TreeUnion[] _treeInfos =
         {
@@ -73,7 +73,7 @@ namespace ClassicUO.Game.Scenes
         private Point _offset, _maxTile, _minTile, _last_scaled_offset;
         private int _oldPlayerX, _oldPlayerY, _oldPlayerZ;
         private int _foliageCount;
-      
+
 
         // statics
         private GameObject _renderListStaticsHead, _renderList;
@@ -297,7 +297,7 @@ namespace ClassicUO.Game.Scenes
                 obj.UpdateTextCoordsV();
             }
         }
-     
+
         private void CheckIfBehindATree(GameObject obj, int worldX, int worldY, ref StaticTiles itemData)
         {
             if (obj.Z < _maxZ && itemData.IsFoliage)
@@ -351,6 +351,34 @@ namespace ClassicUO.Game.Scenes
         {
             allowSelection = true;
 
+            // ## BEGIN - END ## // TAZUO
+            if (ProfileManager.CurrentProfile.UseCircleOfTransparency && ProfileManager.CurrentProfile.CircleOfTransparencyType == 2)
+            {
+                if (Vector2.Distance(new Vector2(obj.RealScreenPosition.X, obj.RealScreenPosition.Y), playerPos) < ProfileManager.CurrentProfile.CircleOfTransparencyRadius)
+                {
+                    if (obj.Z >= _maxZ)
+                    {
+                        CalculateAlpha(ref obj.AlphaHue, 0);
+                    }
+                    else if (itemData.IsWall || itemData.IsWindow)
+                    {
+                        obj.AlphaHue = 65;
+                        allowSelection = false;
+                        return true;
+                    }
+                    else if (itemData.IsDoor || itemData.IsRoof)
+                    {
+                        obj.AlphaHue = 65;
+                        allowSelection = true;
+                        return true;
+                    }
+                    else if (itemData.IsRoof && _noDrawRoofs)
+                    {
+                        return false;
+                    }
+                }
+            }
+            // ## BEGIN - END ## // TAZUO
             if (obj.Z >= _maxZ)
             {
                 bool changed;
@@ -553,7 +581,7 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // MISC2
 
             bool found = false;
-            
+
             for (int y = -1; y <= 2; ++y)
             {
                 for (int x = -1; x <= 2; ++x)
@@ -653,12 +681,12 @@ namespace ClassicUO.Game.Scenes
 
         private unsafe bool AddTileToRenderList
         (
-            GameObject obj, 
+            GameObject obj,
             int worldX,
             int worldY,
-            bool useObjectHandles, 
+            bool useObjectHandles,
             int maxZ,
-            int cotZ, 
+            int cotZ,
             ref Vector2 playerScreePos
         )
         {
@@ -772,7 +800,7 @@ namespace ClassicUO.Game.Scenes
                     else
                     {
                         PushToRenderList(obj, ref _renderList, ref _renderListStaticsHead, ref _renderListStaticsCount, allowSelection);
-                    } 
+                    }
                 }
                 else if (obj is Multi multi)
                 {
@@ -805,7 +833,7 @@ namespace ClassicUO.Game.Scenes
                         {
                             continue;
                         }
-                    }          
+                    }
 
                     byte height = 0;
 
@@ -925,7 +953,7 @@ namespace ClassicUO.Game.Scenes
                     else
                     {
                         PushToRenderList(obj, ref _renderList, ref _renderListStaticsHead, ref _renderListStaticsCount, true);
-                    }         
+                    }
                 }
                 else if (obj is GameEffect effect)
                 {

@@ -254,6 +254,11 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
+            // ## BEGIN - END ## // TAZUO
+            if (ProfileManager.CurrentProfile.DisableSystemChat)
+                return;
+            // ## BEGIN - END ## // TAZUO
+
             switch (e.Type)
             {
                 case MessageType.Regular when e.Parent == null || !SerialHelper.IsValid(e.Parent.Serial):

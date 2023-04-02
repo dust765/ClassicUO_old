@@ -440,7 +440,11 @@ namespace ClassicUO.Game.GameObjects
                 }
                 else
                 {
-                    if (ProfileManager.CurrentProfile.GridLootType > 0 && SelectedObject.CorpseObject == owner)
+                    // ## BEGIN - END ## // TAZUO
+                    //if (ProfileManager.CurrentProfile.GridLootType > 0 && SelectedObject.CorpseObject == owner)
+                    // ## BEGIN - END ## // TAZUO
+                    if ((ProfileManager.CurrentProfile.GridLootType > 0 || ProfileManager.CurrentProfile.UseGridLayoutContainerGumps) && SelectedObject.CorpseObject == owner)
+                    // ## BEGIN - END ## // TAZUO
                     {
                         color = 0x0034;
                     }

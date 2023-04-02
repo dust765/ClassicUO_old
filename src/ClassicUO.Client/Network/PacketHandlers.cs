@@ -1050,6 +1050,11 @@ namespace ClassicUO.Network
                     }
 
                     UIManager.GetGump<ContainerGump>(cont)?.RequestUpdateContents();
+                    // ## BEGIN - END ## // TAZUO
+                    #region GridContainer
+                    UIManager.GetGump<GridContainer>(cont)?.RequestUpdateContents();
+                    #endregion
+                    // ## BEGIN - END ## // TAZUO
 
                     if (top != null && top.Graphic == 0x2006 && (ProfileManager.CurrentProfile.GridLootType == 1 || ProfileManager.CurrentProfile.GridLootType == 2))
                     {
@@ -1386,8 +1391,13 @@ namespace ClassicUO.Network
                 {
                     if (item.IsCorpse && (ProfileManager.CurrentProfile.GridLootType == 1 || ProfileManager.CurrentProfile.GridLootType == 2))
                     {
+                        // ## BEGIN - END ## // TAZUO
                         //UIManager.GetGump<GridLootGump>(serial)?.Dispose();
                         //UIManager.Add(new GridLootGump(serial));
+                        // ## BEGIN - END ## // TAZUO
+                        UIManager.GetGump<GridLootGump>(serial)?.Dispose();
+                        UIManager.Add(new GridLootGump(serial));
+                        // ## BEGIN - END ## // TAZUO
                         _requestedGridLoot = serial;
 
                         if (ProfileManager.CurrentProfile.GridLootType == 1)
@@ -1396,9 +1406,11 @@ namespace ClassicUO.Network
                         }
                     }
 
-                    ContainerGump container = UIManager.GetGump<ContainerGump>(serial);
-                    bool playsound = false;
-                    int x, y;
+                    // ## BEGIN - END ## // TAZUO
+                    //ContainerGump container = UIManager.GetGump<ContainerGump>(serial);
+                    //bool playsound = false;
+                    //int x, y;
+                    // ## BEGIN - END ## // TAZUO
 
                     // TODO: check client version ?
                     if (Client.Version >= Utility.ClientVersion.CV_706000 && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.UseLargeContainerGumps)
@@ -1480,8 +1492,8 @@ namespace ClassicUO.Network
                                 break;
                         }
                     }
-
-
+                    // ## BEGIN - END ## // TAZUO
+                    /*
                     if (container != null)
                     {
                         x = container.ScreenCoordinateX;
@@ -1495,8 +1507,6 @@ namespace ClassicUO.Network
                         y = ContainerManager.Y;
                         playsound = true;
                     }
-
-
                     UIManager.Add
                     (
                         new ContainerGump(item, graphic, playsound)
@@ -1506,6 +1516,54 @@ namespace ClassicUO.Network
                             InvalidateContents = true
                         }
                     );
+                    */
+                    // ## BEGIN - END ## // TAZUO
+                    if (ProfileManager.CurrentProfile.UseGridLayoutContainerGumps)
+                    {
+                        GridContainer gridContainer = UIManager.GetGump<GridContainer>(serial);
+                        if (gridContainer != null)
+                        {
+                            gridContainer.RequestUpdateContents();
+                        }
+                        else
+                        {
+                            UIManager.Add(new GridContainer(serial, graphic));
+                        }
+                    }
+                    else
+                    {
+
+                        ContainerGump container = UIManager.GetGump<ContainerGump>(serial);
+                        bool playsound = false;
+                        int x, y;
+
+
+                        if (container != null)
+                        {
+                            x = container.ScreenCoordinateX;
+                            y = container.ScreenCoordinateY;
+                            container.Dispose();
+                        }
+                        else
+                        {
+                            ContainerManager.CalculateContainerPosition(serial, graphic);
+                            x = ContainerManager.X;
+                            y = ContainerManager.Y;
+                            playsound = true;
+                        }
+
+
+                        UIManager.Add
+                        (
+                            new ContainerGump(item, graphic, playsound)
+                            {
+                                X = x,
+                                Y = y,
+                                InvalidateContents = true
+                            }
+                        );
+                    }
+                    // ## BEGIN - END ## // TAZUO
 
                     UIManager.RemovePosition(serial);
                 }
@@ -1726,12 +1784,23 @@ namespace ClassicUO.Network
                 }
 
                 GameActions.RequestWarMode(false);
-
                 // ## BEGIN - END ## // MISC2
                 World.Player.DeathX = World.Player.X;
                 World.Player.DeathY = World.Player.Y;
                 World.Player.DeathTick = Time.Ticks;
                 // ## BEGIN - END ## // MISC2
+                // ## BEGIN - END ## // TAZUO
+                World.WMapManager._corpse = new WMapEntity(World.Player.Serial)
+                {
+                    X = World.Player.X,
+                    Y = World.Player.Y,
+                    HP = 0,
+                    Map = World.Map.Index,
+                    LastUpdate = Time.Ticks + (1000 * 60 * 5),
+                    IsGuild = false,
+                    Name = $"Your Corpse"
+                };
+                // ## BEGIN - END ## // TAZUO
             }
         }
 
@@ -2470,10 +2539,6 @@ namespace ClassicUO.Network
             // ## BEGIN - END ## // AUTOMATIONS
             Defender.gfxTrigger(source, target, graphic);
             // ## BEGIN - END ## // AUTOMATIONS
-            // ## BEGIN - END ## // OUTLANDS
-            //if (graphic == 0x5683)
-            //    CombatCollection.SetHamstrungTime(source);
-            // ## BEGIN - END ## // OUTLANDS
         }
 
         private static void ClientViewRange(ref StackDataReader p)
@@ -5646,7 +5711,11 @@ namespace ClassicUO.Network
 
                         string text = $"<left>{title}{description}{wtf}</left>";
                         bool alreadyExists = World.Player.IsBuffIconExists(ic);
-                        World.Player.AddBuff(ic, BuffTable.Table[iconID], timer, text);
+                        // ## BEGIN - END ## // TAZUO
+                        //World.Player.AddBuff(ic, BuffTable.Table[iconID], timer, text);
+                        // ## BEGIN - END ## // TAZUO
+                        World.Player.AddBuff(ic, BuffTable.Table[iconID], timer, text, title);
+                        // ## BEGIN - END ## // TAZUO
 
                         if (!alreadyExists)
                         {
@@ -6227,6 +6296,15 @@ namespace ClassicUO.Network
                         {
                             ((ContainerGump)gump).CheckItemControlPosition(item);
                         }
+                        // ## BEGIN - END ## // TAZUO
+                        #region GridContainer
+                        GridContainer gridGump = UIManager.GetGump<GridContainer>(containerSerial);
+                        if (gridGump != null)
+                        {
+                            gridGump.RequestUpdateContents();
+                        }
+                        #endregion
+                        // ## BEGIN - END ## // TAZUO
 
                         if (ProfileManager.CurrentProfile.GridLootType > 0)
                         {

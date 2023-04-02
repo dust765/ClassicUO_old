@@ -34,6 +34,9 @@ using System;
 // ## BEGIN - END ## // NAMEOVERHEAD
 using System.Collections.Generic;
 // ## BEGIN - END ## // NAMEOVERHEAD
+// ## BEGIN - END ## // TAZUO
+using ClassicUO.Configuration;
+// ## BEGIN - END ## // TAZUO
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Resources;
@@ -90,6 +93,9 @@ namespace ClassicUO.Game.UI.Gumps
 
             // ## BEGIN - END ## // NAMEOVERHEAD
             /*
+            // ## BEGIN - END ## // TAZUO
+            Checkbox stayActive;
+            // ## BEGIN - END ## // TAZUO
             RadioButton all, mobiles, items, mobilesCorpses;
             AlphaBlendControl alpha;
 
@@ -101,6 +107,22 @@ namespace ClassicUO.Game.UI.Gumps
                 }
             );
 
+            // ## BEGIN - END ## // TAZUO
+            Add
+            (
+                stayActive = new Checkbox
+                (
+                    0x00D2,
+                    0x00D3,
+                    "Stay active",
+                    color: 0xFFFF
+                )
+                {
+                    IsChecked = ProfileManager.CurrentProfile.NameOverheadToggled,
+                }
+            );
+            stayActive.ValueChanged += (sender, e) => { ProfileManager.CurrentProfile.NameOverheadToggled = stayActive.IsChecked; };
+            // ## BEGIN - END ## // TAZUO
 
             Add
             (
@@ -113,6 +135,9 @@ namespace ClassicUO.Game.UI.Gumps
                     color: 0xFFFF
                 )
                 {
+                    // ## BEGIN - END ## // TAZUO
+                    Y = stayActive.Height + stayActive.Y,
+                    // ## BEGIN - END ## // TAZUO
                     IsChecked = NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.All
                 }
             );
@@ -166,7 +191,11 @@ namespace ClassicUO.Game.UI.Gumps
             );
 
             alpha.Width = Math.Max(mobilesCorpses.Width, Math.Max(items.Width, Math.Max(all.Width, mobiles.Width)));
-            alpha.Height = all.Height + mobiles.Height + items.Height + mobilesCorpses.Height;
+            // ## BEGIN - END ## // TAZUO
+            //alpha.Height = all.Height + mobiles.Height + items.Height + mobilesCorpses.Height;
+            // ## BEGIN - END ## // TAZUO
+            alpha.Height = stayActive.Height + all.Height + mobiles.Height + items.Height + mobilesCorpses.Height;
+            // ## BEGIN - END ## // TAZUO
 
             Width = alpha.Width;
             Height = alpha.Height;

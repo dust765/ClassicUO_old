@@ -153,7 +153,12 @@ namespace ClassicUO.Game.GameObjects
             }
             else if (IsHidden)
             {
-                overridedHue = 0x038E;
+                // ## BEGIN - END ## // TAZUO
+                //overridedHue = 0x038E;
+                // ## BEGIN - END ## // TAZUO
+                overridedHue = ProfileManager.CurrentProfile.HiddenBodyHue;
+                hueVec = ShaderHueTranslator.GetHueVector(0, false, ((float) ProfileManager.CurrentProfile.HiddenBodyAlpha / 100));
+                // ## BEGIN - END ## // TAZUO
             }
             else
             {

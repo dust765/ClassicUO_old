@@ -160,6 +160,15 @@ namespace ClassicUO.Assets
 
         public Texture2D GetGumpTexture(uint g, out Rectangle bounds)
         {
+            // ## BEGIN - END ## // TAZUO
+            Texture2D png = PNGLoader.LoadGumpTexture(g);
+            if (png != null)
+            {
+                bounds = png.Bounds;
+                return png;
+            }
+            // ## BEGIN - END ## // TAZUO
+
             ref var spriteInfo = ref _spriteInfos[g];
 
             if (spriteInfo.Texture == null)
@@ -261,12 +270,12 @@ namespace ClassicUO.Assets
                 if (buffer != null)
                 {
                     System.Buffers.ArrayPool<uint>.Shared.Return(buffer, true);
-                }             
+                }
             }
         }
 
 
-       
+
         public bool PixelCheck(int index, int x, int y)
         {
             return _picker.Get((ulong) index, x, y);

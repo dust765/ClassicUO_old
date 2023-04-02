@@ -104,10 +104,15 @@ namespace ClassicUO.Configuration
         public bool SaveJournalToFile { get; set; } = true;
         public bool ForceUnicodeJournal { get; set; }
 
+        // ## BEGIN - END ## // TAZUO
         // ## BEGIN - END ## // MULTIJOURNAL
         //public bool IgnoreAllianceMessages { get; set; }
         //public bool IgnoreGuildMessages { get; set; }
         // ## BEGIN - END ## // MULTIJOURNAL
+        // ## BEGIN - END ## // TAZUO
+        public bool IgnoreAllianceMessages { get; set; }
+        public bool IgnoreGuildMessages { get; set; }
+        // ## BEGIN - END ## // TAZUO
 
         // hues
         public ushort SpeechHue { get; set; } = 0x02B2;
@@ -311,7 +316,7 @@ namespace ClassicUO.Configuration
         public bool UseLargeContainerGumps { get; set; } = false;
 
         public bool RelativeDragAndDropItems { get; set; }
-
+        
         public bool HighlightContainerWhenSelected { get; set; }
 
         public bool ShowHouseContent { get; set; }
@@ -624,7 +629,74 @@ namespace ClassicUO.Configuration
         public bool WorldMapShowGridIfZoomed { get; set; } = true;
         public bool WorldMapAllowPositionalTarget { get; set; } = false;
 
+        // ## BEGIN - END ## // TAZUO
+        public ushort AltJournalBackgroundHue { get; set; } = 0x0000;
+        public ushort AltGridContainerBackgroundHue { get; set; } = 0x0000;
+        public ushort HiddenBodyHue { get; set; } = 0x038E;
+        public byte HiddenBodyAlpha { get; set; } = 40;
+        public byte JournalOpacity { get; set; } = 50;
+        public byte ContainerOpacity { get; set; } = 50;
+        public bool WorldMapShowCorpse { get; set; } = true;
+        public int AutoFollowDistance { get; set; } = 2;
+        public Point ResizeJournalSize { get; set; } = new Point(410, 350);
+        public bool FollowingMode { get; set; } = false;
+        public uint FollowingTarget { get; set; }
+        public bool NamePlateHealthBar { get; set; } = true;
+        public byte NamePlateOpacity { get; set; } = 75;
+        public byte NamePlateHealthBarOpacity { get; set; } = 50;
+        public bool NamePlateHideAtFullHealth { get; set; } = true;
+        public bool DisableSystemChat { get; set; } = false;
+        #region GRID CONTAINER
+        public bool UseGridLayoutContainerGumps { get; set; } = true;
+        public int GridContainerSearchMode { get; set; } = 1;
+        public bool EnableGridContainerAnchor { get; set; } = false;
+        public byte GridBorderAlpha { get; set; } = 75;
+        public ushort GridBorderHue { get; set; } = 0;
+        public byte GridContainersScale { get; set; } = 100;
+        public bool GridContainerScaleItems { get; set; } = true;
+        public bool GridEnableContPreview { get; set; } = true;
+        public int Grid_BorderStyle { get; set; } = 0;
+        public int Grid_DefaultColumns { get; set; } = 4;
+        public int Grid_DefaultRows { get; set; } = 4;
+        public bool Grid_UseContainerHue { get; set; } = false;
+        #endregion
+        #region COOLDOWNS
+        public int CoolDownX { get; set; } = 50;
+        public int CoolDownY { get; set; } = 50;
 
+        public List<ushort> Condition_Hue { get; set; } = new List<ushort>();
+        public List<string> Condition_Label { get; set; } = new List<string>();
+        public List<int> Condition_Duration { get; set; } = new List<int>();
+        public List<string> Condition_Trigger { get; set; } = new List<string>();
+        public List<int> Condition_Type { get; set; } = new List<int>();
+        public int CoolDownConditionCount
+        {
+            get
+            {
+                return Condition_Hue.Count;
+            }
+            set { }
+        }
+        #endregion
+        #region IMPROVED BUFF BAR
+        public bool UseImprovedBuffBar { get; set; } = true;
+        public ushort ImprovedBuffBarHue { get; set; } = 905;
+        #endregion
+        #region DAMAGE NUMBER HUES
+        public ushort DamageHueSelf { get; set; } = 0x0034;
+        public ushort DamageHuePet { get; set; } = 0x0033;
+        public ushort DamageHueAlly { get; set; } = 0x0030;
+        public ushort DamageHueLastAttck { get; set; } = 0x1F;
+        public ushort DamageHueOther { get; set; } = 0x0021;
+        #endregion
+        #region GridHighlightingProps
+        public List<string> GridHighlight_Name { get; set; } = new List<string>();
+        public List<ushort> GridHighlight_Hue { get; set; } = new List<ushort>();
+        public List<List<string>> GridHighlight_PropNames { get; set; } = new List<List<string>>();
+        public List<List<int>> GridHighlight_PropMinVal { get; set; } = new List<List<int>>();
+        public bool GridHighlight_CorpseOnly { get; set; } = false;
+        #endregion
+        // ## BEGIN - END ## // TAZUO
         public static uint GumpsVersion { get; private set; }
 
         public void Save(string path)
@@ -665,7 +737,7 @@ namespace ClassicUO.Configuration
                         gumps.AddLast(gump);
                     }
                 }
-                
+
                 LinkedListNode<Gump> first = gumps.First;
 
                 while (first != null)
@@ -810,8 +882,14 @@ namespace ClassicUO.Configuration
                             switch (type)
                             {
                                 case GumpType.Buff:
-                                    gump = new BuffGump();
-
+                                    // ## BEGIN - END ## // TAZUO
+                                    //gump = new BuffGump();
+                                    // ## BEGIN - END ## // TAZUO
+                                    if (ProfileManager.CurrentProfile.UseImprovedBuffBar)
+                                        gump = new ImprovedBuffGump();
+                                    else
+                                        gump = new BuffGump(100, 100);
+                                    // ## BEGIN - END ## // TAZUO
                                     break;
 
                                 // ## BEGIN - END ## // MODERNCOOLDOWNBAR
@@ -869,8 +947,11 @@ namespace ClassicUO.Configuration
                                     break;
 
                                 case GumpType.Journal:
-                                    gump = new JournalGump();
-
+                                    // ## BEGIN - END ## // TAZUO
+                                    //gump = new JournalGump();
+                                    // ## BEGIN - END ## // TAZUO
+                                    gump = new ResizableJournal();
+                                    // ## BEGIN - END ## // TAZUO
                                     break;
 
                                 // ## BEGIN - END ## // MACROS
@@ -959,6 +1040,12 @@ namespace ClassicUO.Configuration
                                     NameOverHeadHandlerGump.LastPosition = new Point(x, y);
                                     // Gump gets opened by NameOverHeadManager, we just want to save the last position from profile
                                     break;
+                                // ## BEGIN - END ## // TAZUO
+                                case GumpType.GridContainer:
+                                    ushort ogContainer = ushort.Parse(xml.GetAttribute("ogContainer"));
+                                    gump = new GridContainer(serial, ogContainer);
+                                    break;
+                                // ## BEGIN - END ## // TAZUO
                             }
 
                             if (gump == null)
@@ -1042,6 +1129,18 @@ namespace ClassicUO.Configuration
                                         gump = new MacroButtonGump();
 
                                         break;
+                                    // ## BEGIN - END ## // TAZUO
+                                    case GumpType.GridContainer:
+                                        ushort ogContainer = ushort.Parse(xml.GetAttribute("ogContainer"));
+                                        gump = new GridContainer(serial, ogContainer);
+                                        break;
+                                    case GumpType.Journal:
+                                        gump = new ResizableJournal();
+                                        break;
+                                    case GumpType.WorldMap:
+                                        gump = new WorldMapGump();
+                                        break;
+                                    // ## BEGIN - END ## // TAZUO
                                 }
 
                                 if (gump != null)

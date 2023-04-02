@@ -85,7 +85,9 @@ namespace ClassicUO.Game.UI.Gumps
         ECStateGump,
         ModernCooldownBar,
         // ## BEGIN - END ## // MODERNCOOLDOWNBAR
-
-        NameOverHeadHandler
+        NameOverHeadHandler,
+        // ## BEGIN - END ## // TAZUO
+        GridContainer = 8787
+        // ## BEGIN - END ## // TAZUO
     }
 }

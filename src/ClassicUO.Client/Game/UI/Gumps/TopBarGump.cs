@@ -185,6 +185,37 @@ namespace ClassicUO.Game.UI.Gumps
                 background.Width = startX;
             }
 
+            // ## BEGIN - END ## // TAZUO
+            /*
+            RighClickableButton supporters;
+            Add
+            (supporters =
+                new RighClickableButton
+                (
+                    998877,
+                    0x098D,
+                    0x098D,
+                    0x098D,
+                    "Supporters",
+                    1,
+                    true,
+                    0,
+                    0x0036
+                )
+                {
+                    ButtonAction = ButtonAction.Activate,
+                    X = startX,
+                    Y = 1,
+                    FontCenter = true
+                },
+                1
+            );
+            supporters.MouseUp += (s, e) => { UIManager.Add(new Supporters()); };
+
+            startX += largeWidth + 1;
+            */
+            // ## BEGIN - END ## // TAZUO
+
             background.Width = startX + 1;
 
             //layer

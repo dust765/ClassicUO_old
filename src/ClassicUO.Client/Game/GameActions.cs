@@ -141,6 +141,8 @@ namespace ClassicUO.Game
             }
         }
 
+        // ## BEGIN - END ## // TAZUO
+        /*
         public static void OpenJournal()
         {
             // ## BEGIN - END ## // MULTIJOURNAL
@@ -164,6 +166,36 @@ namespace ClassicUO.Game
                 }
             }
         }
+        */
+        // ## BEGIN - END ## // TAZUO
+        public static void OpenJournal()
+        {
+            ResizableJournal resizableJournal = UIManager.GetGump<ResizableJournal>(0);
+            if (resizableJournal == null)
+                UIManager.Add(new ResizableJournal());
+            else
+            {
+                resizableJournal.SetInScreen();
+                resizableJournal.BringOnTop();
+            }
+            //JournalGump journalGump = UIManager.GetGump<JournalGump>();
+
+            //if (journalGump == null)
+            //{
+            //    UIManager.Add(new JournalGump { X = 64, Y = 64 });
+            //}
+            //else
+            //{
+            //    journalGump.SetInScreen();
+            //    journalGump.BringOnTop();
+
+            //    if (journalGump.IsMinimized)
+            //    {
+            //        journalGump.IsMinimized = false;
+            //    }
+            //}
+        }
+        // ## BEGIN - END ## // TAZUO
 
         public static void OpenSkills()
         {
@@ -273,6 +305,8 @@ namespace ClassicUO.Game
                 return false;
             }
 
+            // ## BEGIN - END ## // TAZUO
+            /*
             ContainerGump backpackGump = UIManager.GetGump<ContainerGump>(backpack);
 
             if (backpackGump == null)
@@ -289,7 +323,31 @@ namespace ClassicUO.Game
                 backpackGump.SetInScreen();
                 backpackGump.BringOnTop();
             }
+            */
+            // ## BEGIN - END ## // TAZUO
 
+            Gump backpackGump = UIManager.GetGump<ContainerGump>(backpack);
+            if (backpackGump == null)
+            {
+                backpackGump = UIManager.GetGump<GridContainer>(backpack);
+                if (backpackGump == null)
+                {
+                    GameActions.DoubleClick(backpack);
+                    return true;
+                }
+                else
+                {
+                    backpackGump.SetInScreen();
+                    backpackGump.BringOnTop();
+                }
+            }
+            else
+            {
+                ((ContainerGump) backpackGump).IsMinimized = false;
+                backpackGump.SetInScreen();
+                backpackGump.BringOnTop();
+            }
+            // ## BEGIN - END ## // TAZUO
             return true;
         }
 

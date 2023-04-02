@@ -104,6 +104,9 @@ namespace ClassicUO.Game
         // ## BEGIN - END ## // VISUALRESPONSEMANAGER
         public static VisualResponseManager VisualResponseManager { get; } = new VisualResponseManager();
         // ## BEGIN - END ## // VISUALRESPONSEMANAGER
+        // ## BEGIN - END ## // TAZUO
+        public static CoolDownBarManager CoolDownBarManager { get; } = new CoolDownBarManager();
+        // ## BEGIN - END ## // TAZUO
 
 
         public static int MapIndex
@@ -156,7 +159,7 @@ namespace ClassicUO.Game
                     {
                         Client.Game.GameCursor.Graphic = 0xFFFF;
                     }
-                    
+
                     UoAssist.SignalMapChanged(value);
                 }
             }
@@ -265,6 +268,11 @@ namespace ClassicUO.Game
                             else if (SerialHelper.IsItem(container.Serial))
                             {
                                 UIManager.GetGump<ContainerGump>(container.Serial)?.RequestUpdateContents();
+                                // ## BEGIN - END ## // TAZUO
+                                #region GridContainer
+                                UIManager.GetGump<GridContainer>(container.Serial)?.RequestUpdateContents();
+                                #endregion
+                                // ## BEGIN - END ## // TAZUO
 
                                 if (container.Graphic == 0x2006)
                                 {
@@ -484,6 +492,11 @@ namespace ClassicUO.Game
                 else if (SerialHelper.IsItem(containerSerial))
                 {
                     UIManager.GetGump<ContainerGump>(containerSerial)?.RequestUpdateContents();
+                    // ## BEGIN - END ## // TAZUO
+                    #region GridContainer
+                    UIManager.GetGump<GridContainer>(containerSerial)?.RequestUpdateContents();
+                    #endregion
+                    // ## BEGIN - END ## // TAZUO
                 }
 
                 Entity container = Get(containerSerial);
@@ -509,7 +522,7 @@ namespace ClassicUO.Game
             {
                 return false;
             }
-            
+
             LinkedObject first = item.Items;
             RemoveItemFromContainer(item);
 
@@ -541,7 +554,7 @@ namespace ClassicUO.Game
             {
                 return false;
             }
-     
+
             LinkedObject first = mobile.Items;
 
             while (first != null)
@@ -761,7 +774,7 @@ namespace ClassicUO.Game
             return 0;
         }
 
-       
+
         public static void Clear()
         {
             foreach (Mobile mobile in Mobiles.Values)
