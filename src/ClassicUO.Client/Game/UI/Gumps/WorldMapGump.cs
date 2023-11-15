@@ -2473,7 +2473,7 @@ namespace ClassicUO.Game.UI.Gumps
                         {
                             WMapEntity wme = World.WMapManager.GetEntity(partyMember.Serial);
 
-                            if (wme != null && wme.IsGuild || wme != null && mob.NotorietyFlag == NotorietyFlag.Ally)
+                            if (wme != null && wme.IsGuild)
                             {
                                 DrawWMEntity
                                 (

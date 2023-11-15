@@ -57,18 +57,16 @@ namespace ClassicUO.Game.Managers
         public WMapEntity(uint serial)
         {
 
-            Serial = serial;
-
-            GetName();
+            GetName(serial);
         }
 
 
 
-        public string GetName()
+        public string GetName(uint serial)
         {
 
-            Mobile mob = World.Mobiles.Get(Serial);
-            Entity e = World.Get(Serial);
+            Mobile mob = World.Mobiles.Get(serial);
+            Entity e = World.Get(serial);
 
             if (mob != null)
             {
@@ -82,16 +80,15 @@ namespace ClassicUO.Game.Managers
                         wme.Name = mob.Name;
 
                         Name = wme.Name;
-                        nameCache[Serial] = Name;
+                        nameCache[serial] = Name;
                     }
                 }
             }
             if (e != null)
             {
                 Name = e.Name;
-                Serial = e.Serial;
 
-                nameCache[Serial] = Name;
+                nameCache[serial] = Name;
             }
 
 
@@ -105,7 +102,7 @@ namespace ClassicUO.Game.Managers
             //     Name = e.Name;
             //}
 
-            if (nameCache.TryGetValue(Serial, out string cachedName))
+            if (nameCache.TryGetValue(serial, out string cachedName))
             {
 
                 return string.IsNullOrEmpty(Name) ? cachedName : Name;

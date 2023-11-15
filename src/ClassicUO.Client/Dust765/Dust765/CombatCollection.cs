@@ -375,20 +375,8 @@ namespace ClassicUO.Dust765.Dust765
             GameCursor._startSpellTime = Time.Ticks;
         }
 
-        public static bool CheckHighLineToTeleport(int destinationX, int destinationY)
-        {
-            GameObject selectedObject = World.Map.GetTile(destinationX, destinationY, false);
-
-            ref StaticTiles staticTiles = ref TileDataLoader.Instance.StaticData[selectedObject.Graphic];
-
-            if (!staticTiles.IsImpassable)
-            {
-                return true;
-            }
-            return false;
-        }
-
         //GAME\GAMEOBJECTS\VIEWS\ - MULTIVIEW.CS - STATICVIEW.CS - TILEVIEW.CS
+        //22 - Teleport
         //24 - Wall of Stone
         //28 - Fire Field
         //39 - Poison Field
