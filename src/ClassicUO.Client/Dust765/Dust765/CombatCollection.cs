@@ -280,7 +280,7 @@ namespace ClassicUO.Dust765.Dust765
                 else if (ww < 1)
                     ww = 0;
 
-                World.Player.UpdateHits((byte) ww);
+                World.Player.UpdateHits((byte)ww);
             }
 
             if (World.Player.HitsPercentage < 20)
@@ -292,7 +292,7 @@ namespace ClassicUO.Dust765.Dust765
             else if (World.Player.HitsPercentage < 80)
                 color = 0x0035; //yellow (but shows green?)
             else if (World.Player.HitsPercentage == 100)
-                color = (ushort) Notoriety.GetHue(World.Player.NotorietyFlag);
+                color = (ushort)Notoriety.GetHue(World.Player.NotorietyFlag);
             // "original colors from overhead %, < 30 0x0021, < 50 0x0030, < 80 0x0058"
 
             return color;
@@ -375,6 +375,19 @@ namespace ClassicUO.Dust765.Dust765
             GameCursor._startSpellTime = Time.Ticks;
         }
 
+        public static bool CheckHighLineToTeleport(int destinationX, int destinationY)
+        {
+            GameObject selectedObject = World.Map.GetTile(destinationX, destinationY, false);
+
+            ref StaticTiles staticTiles = ref TileDataLoader.Instance.StaticData[selectedObject.Graphic];
+
+            if (!staticTiles.IsImpassable)
+            {
+                return true;
+            }
+            return false;
+        }
+
         //GAME\GAMEOBJECTS\VIEWS\ - MULTIVIEW.CS - STATICVIEW.CS - TILEVIEW.CS
         //24 - Wall of Stone
         //28 - Fire Field
@@ -444,6 +457,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
+
                 if (GameActions.LastSpellIndexCursor == 28 || GameActions.LastSpellIndexCursor == 39 || GameActions.LastSpellIndexCursor == 47 || GameActions.LastSpellIndexCursor == 50)
                 {
                     //Calc _fieldEastToWest
@@ -515,7 +529,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
+                if (GameActions.LastSpellIndexCursor == 22 || GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
@@ -677,6 +691,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
+
                 if (GameActions.LastSpellIndexCursor == 28 || GameActions.LastSpellIndexCursor == 39 || GameActions.LastSpellIndexCursor == 47 || GameActions.LastSpellIndexCursor == 50)
                 {
                     //Calc _fieldEastToWest
@@ -748,7 +763,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
+                if (GameActions.LastSpellIndexCursor == 22 || GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
@@ -850,6 +865,9 @@ namespace ClassicUO.Dust765.Dust765
             }
             return false;
         }
+
+
+
         public static bool LandFieldPreview(Land obj)
         {
             if (GameCursor._spellTime >= 1)
@@ -911,6 +929,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
+
                 if (GameActions.LastSpellIndexCursor == 28 || GameActions.LastSpellIndexCursor == 39 || GameActions.LastSpellIndexCursor == 47 || GameActions.LastSpellIndexCursor == 50)
                 {
                     //Calc _fieldEastToWest
@@ -982,7 +1001,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
+                if (GameActions.LastSpellIndexCursor == 22 || GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
@@ -1088,6 +1107,7 @@ namespace ClassicUO.Dust765.Dust765
         {
             if (GameCursor._spellTime >= 1)
             {
+
                 if (GameActions.LastSpellIndexCursor == 24)
                 {
                     //Calc _fieldEastToWest
@@ -1145,6 +1165,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
+
                 if (GameActions.LastSpellIndexCursor == 28 || GameActions.LastSpellIndexCursor == 39 || GameActions.LastSpellIndexCursor == 47 || GameActions.LastSpellIndexCursor == 50)
                 {
                     //Calc _fieldEastToWest
@@ -1216,7 +1237,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
+                if (GameActions.LastSpellIndexCursor == 22 || GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
@@ -1343,7 +1364,8 @@ namespace ClassicUO.Dust765.Dust765
             if (ProfileManager.CurrentProfile.OnCastingGump)
             {
                 if (!GameActions.iscasting)
-                    World.Player.OnCasting.Start((uint) GameActions.LastSpellIndexCursor);
+                    World.Player.OnCasting.Start((uint)GameActions.LastSpellIndexCursor);
+                World.Player.Hue = 0x0023;
             }
             // ## BEGIN - END ## // ONCASTINGGUMP
         }
@@ -1355,7 +1377,7 @@ namespace ClassicUO.Dust765.Dust765
             switch (TargetManager.TargetingType)
             {
                 case TargetType.Neutral:
-                    hue = 0x0000;  //BETTER HUE? 0x03B2
+                    hue = 0x03B2;  //BETTER HUE? 0x03B2
                     return hue;
 
                 case TargetType.Harmful:
@@ -1489,8 +1511,8 @@ namespace ClassicUO.Dust765.Dust765
         public static Point CalcUnderChar5(Mobile mobile)
         {
             Point p = mobile.RealScreenPosition;
-            p.X += (int) mobile.Offset.X + 22 + 5;
-            p.Y += (int) (mobile.Offset.Y - mobile.Offset.Z) + 22 + 5;
+            p.X += (int)mobile.Offset.X + 22 + 5;
+            p.Y += (int)(mobile.Offset.Y - mobile.Offset.Z) + 22 + 5;
 
             p = Client.Game.Scene.Camera.WorldToScreen(p);
 
@@ -1500,8 +1522,8 @@ namespace ClassicUO.Dust765.Dust765
         public static Point CalcUnderChar(Mobile mobile)
         {
             Point p = mobile.RealScreenPosition;
-            p.X += (int) mobile.Offset.X + 22;
-            p.Y += (int) (mobile.Offset.Y - mobile.Offset.Z) + 22;
+            p.X += (int)mobile.Offset.X + 22;
+            p.Y += (int)(mobile.Offset.Y - mobile.Offset.Z) + 22;
 
             p = Client.Game.Scene.Camera.WorldToScreen(p);
 
@@ -1510,8 +1532,8 @@ namespace ClassicUO.Dust765.Dust765
         public static Point CalcOverChar(Mobile mobile)
         {
             Point p = mobile.RealScreenPosition;
-            p.X += (int) mobile.Offset.X + 22;
-            p.Y += (int) (mobile.Offset.Y - mobile.Offset.Z) + 22;
+            p.X += (int)mobile.Offset.X + 22;
+            p.Y += (int)(mobile.Offset.Y - mobile.Offset.Z) + 22;
 
             AnimationsLoader.Instance.GetAnimationDimensions
                             (
@@ -1532,8 +1554,8 @@ namespace ClassicUO.Dust765.Dust765
 
             Point p1 = p;
 
-            p1.X = (int) (mobile.RealScreenPosition.X + mobile.Offset.X + 22);
-            p1.Y = (int) (mobile.RealScreenPosition.Y + (mobile.Offset.Y - mobile.Offset.Z) - (height + centerY + 8 + 22) + (mobile.IsGargoyle && mobile.IsFlying ? -22 : !mobile.IsMounted ? 22 : 0));
+            p1.X = (int)(mobile.RealScreenPosition.X + mobile.Offset.X + 22);
+            p1.Y = (int)(mobile.RealScreenPosition.Y + (mobile.Offset.Y - mobile.Offset.Z) - (height + centerY + 8 + 22) + (mobile.IsGargoyle && mobile.IsFlying ? -22 : !mobile.IsMounted ? 22 : 0));
 
             if (mobile.ObjectHandlesStatus == ObjectHandlesStatus.DISPLAYING)
             {

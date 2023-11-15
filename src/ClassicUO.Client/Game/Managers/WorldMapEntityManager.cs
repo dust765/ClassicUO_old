@@ -30,6 +30,8 @@
 
 #endregion
 
+using System;
+using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Generic;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
@@ -43,33 +45,76 @@ namespace ClassicUO.Game.Managers
 {
     internal class WMapEntity
     {
-        public WMapEntity(uint serial)
-        {
-            Serial = serial;
-
-            //var mob = World.Mobiles.Get(serial);
-
-            //if (mob != null)
-            //    GetName();
-        }
-
         public bool IsGuild;
         public uint LastUpdate;
         public string Name;
-        public readonly uint Serial;
+        public uint Serial;
         public int X, Y, HP, Map;
+        private static readonly Dictionary<uint, string> nameCache = new Dictionary<uint, string>();
 
-        //public string GetName()
-        //{
-        //    Entity e = World.Get(Serial);
 
-        //    if (e != null && !e.IsDestroyed && !string.IsNullOrEmpty(e.Name) && Name != e.Name)
-        //    {
-        //        Name = e.Name;
-        //    }
 
-        //    return string.IsNullOrEmpty(Name) ? "<out of range>" : Name;
-        //}
+        public WMapEntity(uint serial)
+        {
+
+            Serial = serial;
+
+            GetName();
+        }
+
+
+
+        public string GetName()
+        {
+
+            Mobile mob = World.Mobiles.Get(Serial);
+            Entity e = World.Get(Serial);
+
+            if (mob != null)
+            {
+                WMapEntity wme = World.WMapManager.GetEntity(mob);
+
+                if (wme != null)
+                {
+                    if (string.IsNullOrEmpty(wme.Name))
+                    {
+
+                        wme.Name = mob.Name;
+
+                        Name = wme.Name;
+                        nameCache[Serial] = Name;
+                    }
+                }
+            }
+            if (e != null)
+            {
+                Name = e.Name;
+                Serial = e.Serial;
+
+                nameCache[Serial] = Name;
+            }
+
+
+
+
+            // Entity e = World.Get(Serial);
+            // Mobile mob = World.Mobiles.Get(Serial);
+
+            // if (e != null && !e.IsDestroyed && !string.IsNullOrEmpty(e.Name) && Name != e.Name)
+            //{
+            //     Name = e.Name;
+            //}
+
+            if (nameCache.TryGetValue(Serial, out string cachedName))
+            {
+
+                return string.IsNullOrEmpty(Name) ? cachedName : Name;
+            }
+
+            return "out of range";
+
+
+        }
     }
 
     internal class WorldMapEntityManager
@@ -87,7 +132,7 @@ namespace ClassicUO.Game.Managers
             {
                 return ((World.ClientFeatures.Flags & CharacterListFlags.CLF_NEW_MOVEMENT_SYSTEM) == 0 || _ackReceived) &&
                         EncryptionHelper.Type == 0 &&
-                        ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WorldMapShowParty && 
+                        ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WorldMapShowParty &&
                         UIManager.GetGump<WorldMapGump>() != null; // horrible, but works
             }
         }
@@ -158,7 +203,10 @@ namespace ClassicUO.Game.Managers
             {
                 entity = new WMapEntity(serial)
                 {
-                    X = x, Y = y, HP = hp, Map = map,
+                    X = x,
+                    Y = y,
+                    HP = hp,
+                    Map = map,
                     LastUpdate = Time.Ticks + 1000,
                     IsGuild = isguild,
                     Name = name
@@ -269,6 +317,29 @@ namespace ClassicUO.Game.Managers
                             }
                         }
                     }
+                }
+                else
+                {
+                    foreach (Mobile mob in World.Mobiles.Values)
+                    {
+                        if (mob == World.Player)
+                        {
+                            continue;
+                        }
+
+                        Mobile mobs = World.Mobiles.Get(mob.Serial);
+                        if (mobs.NotorietyFlag == NotorietyFlag.Ally)
+                        {
+                            if (mobs == null || mobs.Distance > 2000000)
+                            {
+                                NetClient.Socket.Send_QueryGuildPosition();
+
+                                break;
+                            }
+                        }
+
+                    }
+
                 }
             }
         }

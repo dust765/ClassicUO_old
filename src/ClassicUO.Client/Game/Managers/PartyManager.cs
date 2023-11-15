@@ -31,6 +31,7 @@
 #endregion
 
 using System;
+using Microsoft.Extensions.Caching.Memory;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
@@ -38,6 +39,7 @@ using ClassicUO.Game.UI.Gumps;
 using ClassicUO.IO;
 using ClassicUO.Network;
 using ClassicUO.Resources;
+using System.Collections.Generic;
 
 namespace ClassicUO.Game.Managers
 {
@@ -54,6 +56,8 @@ namespace ClassicUO.Game.Managers
 
         public long PartyHealTimer { get; set; }
         public uint PartyHealTarget { get; set; }
+
+
 
         public void ParsePacket(ref StackDataReader p)
         {
@@ -246,6 +250,7 @@ namespace ClassicUO.Game.Managers
     internal class PartyMember : IEquatable<PartyMember>
     {
         private string _name;
+        public Dictionary<uint, string> nameCache = new Dictionary<uint, string>();
 
         public PartyMember(uint serial)
         {
@@ -262,10 +267,19 @@ namespace ClassicUO.Game.Managers
                 if (mobile != null)
                 {
                     _name = mobile.Name;
+                    nameCache[mobile.Serial] = _name;
 
                     if (string.IsNullOrEmpty(_name))
                     {
-                        _name = ResGeneral.NotSeeing;
+                        if (nameCache.TryGetValue(Serial, out string cachedName))
+                        {
+                            _name = string.IsNullOrEmpty(_name) ? cachedName : _name;
+                        }
+                        else
+                        {
+                            _name = ResGeneral.NotSeeing;
+                        }
+
                     }
                 }
 
