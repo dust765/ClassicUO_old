@@ -50,7 +50,7 @@ namespace ClassicUO.Game.Managers
         public string Name;
         public uint Serial;
         public int X, Y, HP, Map;
-        private static readonly Dictionary<uint, string> nameCache = new Dictionary<uint, string>();
+        public static readonly Dictionary<uint, string> nameCache = new Dictionary<uint, string>();
 
 
 
@@ -87,6 +87,7 @@ namespace ClassicUO.Game.Managers
             if (e != null)
             {
                 Name = e.Name;
+                serial = e.Serial;
 
                 nameCache[serial] = Name;
             }
@@ -104,11 +105,12 @@ namespace ClassicUO.Game.Managers
 
             if (nameCache.TryGetValue(serial, out string cachedName))
             {
-
+                
                 return string.IsNullOrEmpty(Name) ? cachedName : Name;
+            } else
+            {
+                return string.IsNullOrEmpty(Name) ? "Player Out" : Name;
             }
-
-            return "out of range";
 
 
         }
@@ -119,6 +121,7 @@ namespace ClassicUO.Game.Managers
         private bool _ackReceived;
         private uint _lastUpdate, _lastPacketSend, _lastPacketRecv;
         private readonly List<WMapEntity> _toRemove = new List<WMapEntity>();
+        public static readonly Dictionary<uint, string> nameCache = new Dictionary<uint, string>();
         // ## BEGIN - END ## // TAZUO
         public WMapEntity _corpse;
         // ## BEGIN - END ## // TAZUO
@@ -198,8 +201,10 @@ namespace ClassicUO.Game.Managers
 
             if (!Entities.TryGetValue(serial, out WMapEntity entity) || entity == null)
             {
+                var nameFilter = name != "" ? name : entity.GetName(serial);
                 entity = new WMapEntity(serial)
                 {
+                   
                     X = x,
                     Y = y,
                     HP = hp,
@@ -207,7 +212,7 @@ namespace ClassicUO.Game.Managers
                     LastUpdate = Time.Ticks + 1000,
                     IsGuild = isguild,
                     Name = name
-                };
+                }; 
 
                 Entities[serial] = entity;
             }
@@ -222,7 +227,9 @@ namespace ClassicUO.Game.Managers
 
                 if (string.IsNullOrEmpty(entity.Name) && !string.IsNullOrEmpty(name))
                 {
-                    entity.Name = name;
+                    
+                    entity.Name = entity.IsGuild ? name : entity.GetName(serial);
+
                 }
             }
         }
