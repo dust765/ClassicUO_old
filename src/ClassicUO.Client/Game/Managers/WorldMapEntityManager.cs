@@ -65,12 +65,13 @@ namespace ClassicUO.Game.Managers
         {
             Mobile mob = World.Mobiles.Get(serial);
             Entity e = World.Get(serial);
+            WMapEntity wmee = World.WMapManager.GetEntity(serial);
 
             if (mob != null)
             {
                 GameActions.Print("Is Mobile in mob " + mob.Serial + " Name: " + mob.Name);
                 WMapEntity wme = World.WMapManager.GetEntity(mob.Serial);
-                GameActions.Print("Is wme in mob " + wme.Serial + " Name: " + wme.Name);
+                
 
                 if (wme != null)
                 {
@@ -87,7 +88,6 @@ namespace ClassicUO.Game.Managers
             if (e != null)
             {
                 WMapEntity wme = World.WMapManager.GetEntity(e.Serial);
-                GameActions.Print("Is wme in entity " + wme.Serial + " Name: " + wme.Name);
                 GameActions.Print("Is Entity in entity " + e.Serial + " Name: " + e.Name);
 
                 // Substituído o uso do nameCache pelo MapNameMobilesManager
