@@ -3401,7 +3401,17 @@ namespace ClassicUO.Network
 
             if (wme != null && !string.IsNullOrEmpty(name))
             {
-                wme.Name = name;
+                
+                if(wme.IsGuild)
+                {
+                    wme.Name = wme.GetName(wme.Serial);
+
+                }
+                else
+                {
+                    wme.Name = name;
+
+                }
             }
 
 
