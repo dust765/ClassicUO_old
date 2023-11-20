@@ -2248,7 +2248,7 @@ namespace ClassicUO.Game.UI.Gumps
             //    {
             //        batcher.Draw2D(Textures.GetTexture())
             //    }
-            //}
+            // }
 
 
             return base.Draw(batcher, x, y);

@@ -50,300 +50,301 @@ namespace ClassicUO.Game.Managers
         public string Name;
         public uint Serial;
         public int X, Y, HP, Map;
-
-
+        public static readonly Dictionary<uint, string> nameCache = new Dictionary<uint, string>();
 
         public WMapEntity(uint serial)
         {
-
             GetName(serial);
         }
 
-
-
+        // ## BEGIN - START ## // DUST765 - Fix to use cache for name in Map Gump
         public string GetName(uint serial)
         {
+
             Mobile mob = World.Mobiles.Get(serial);
             Entity e = World.Get(serial);
-            WMapEntity wmee = World.WMapManager.GetEntity(serial);
+
 
             if (mob != null)
             {
-                GameActions.Print("Is Mobile in mob " + mob.Serial + " Name: " + mob.Name);
-                WMapEntity wme = World.WMapManager.GetEntity(mob.Serial);
-                
+                WMapEntity wme = World.WMapManager.GetEntity(mob);
 
                 if (wme != null)
                 {
                     if (string.IsNullOrEmpty(wme.Name))
                     {
                         wme.Name = mob.Name;
-
-                        // Substituído o uso do nameCache pelo MapNameMobilesManager
-                        MapNameMobilesManager.Instance.AddNameMobile((int)wme.Serial, wme.Name);
+                        Name = wme.Name;
+                        nameCache[serial] = Name;
                     }
                 }
             }
-
-            if (e != null)
+            if (e != null && !e.IsDestroyed)
             {
-                WMapEntity wme = World.WMapManager.GetEntity(e.Serial);
-                GameActions.Print("Is Entity in entity " + e.Serial + " Name: " + e.Name);
-
-                // Substituído o uso do nameCache pelo MapNameMobilesManager
-                MapNameMobilesManager.Instance.AddNameMobile((int)e.Serial, e.Name);
+                Name = e.Name;
+                serial = e.Serial;
+                nameCache[serial] = Name;
             }
 
-            // Removido o trecho de código que atribui a variável 'serial' e 'Name' diretamente, pois parece desnecessário.
+            // Entity e = World.Get(Serial);
+            // Mobile mob = World.Mobiles.Get(Serial);
 
-            if (MapNameMobilesManager.Instance.IsNameMobile((int)serial))
+            // if (e != null && !e.IsDestroyed && !string.IsNullOrEmpty(e.Name) && Name != e.Name)
+            //{
+            //     Name = e.Name;
+            //}
+
+            if (nameCache.TryGetValue(serial, out string cachedName))
             {
-                // Substituído o uso do nameCache pelo MapNameMobilesManager
-                return MapNameMobilesManager.Instance.GetTileName((int)serial);
+
+                return string.IsNullOrEmpty(Name) ? cachedName : Name;
             }
             else
             {
-                return string.IsNullOrEmpty(Name) ? "Player Out" : Name;
+                return string.IsNullOrEmpty(Name) ? "Out of range" : Name;
+            }
+
+            // ## BEGIN - END ## // DUST765 - Fix to use cache for name in Map Gump
+        }
+    }
+
+    internal class WorldMapEntityManager
+    {
+        private bool _ackReceived;
+        private uint _lastUpdate, _lastPacketSend, _lastPacketRecv;
+        private readonly List<WMapEntity> _toRemove = new List<WMapEntity>();
+        public static readonly Dictionary<uint, string> nameCache = new Dictionary<uint, string>();
+        // ## BEGIN - START ## // TAZUO
+        public WMapEntity _corpse;
+        // ## BEGIN - END ## // TAZUO
+
+        public bool Enabled
+        {
+            get
+            {
+                return ((World.ClientFeatures.Flags & CharacterListFlags.CLF_NEW_MOVEMENT_SYSTEM) == 0 || _ackReceived) &&
+                        EncryptionHelper.Type == 0 &&
+                        ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WorldMapShowParty &&
+                        UIManager.GetGump<WorldMapGump>() != null; // horrible, but works
             }
         }
 
-        internal class WorldMapEntityManager
+        public readonly Dictionary<uint, WMapEntity> Entities = new Dictionary<uint, WMapEntity>();
+
+        public void SetACKReceived()
         {
-            private bool _ackReceived;
-            private uint _lastUpdate, _lastPacketSend, _lastPacketRecv;
-            private readonly List<WMapEntity> _toRemove = new List<WMapEntity>();
+            _ackReceived = true;
+        }
+
+        public void SetEnable(bool v)
+        {
+            if ((World.ClientFeatures.Flags & CharacterListFlags.CLF_NEW_MOVEMENT_SYSTEM) != 0 && !_ackReceived)
+            {
+                Log.Warn("Server support new movement system. Can't use the 0xF0 packet to query guild/party position");
+                v = false;
+            }
+            else if (EncryptionHelper.Type != 0 && !_ackReceived)
+            {
+                Log.Warn("Server has encryption. Can't use the 0xF0 packet to query guild/party position");
+                v = false;
+            }
+
+            if (v)
+            {
+                RequestServerPartyGuildInfo(true);
+            }
+        }
+
+        public void AddOrUpdate
+        (
+            uint serial,
+            int x,
+            int y,
+            int hp,
+            int map,
+            bool isguild,
+            string name = null,
+            bool from_packet = false
+        )
+        {
+            if (from_packet)
+            {
+                _lastPacketRecv = Time.Ticks + 10000;
+            }
+            else if (_lastPacketRecv < Time.Ticks)
+            {
+                return;
+            }
+
+            if (!Enabled)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                Entity ent = World.Get(serial);
+
+                if (ent != null && !string.IsNullOrEmpty(ent.Name))
+                {
+                    name = ent.Name;
+                }
+            }
+
+            if (!Entities.TryGetValue(serial, out WMapEntity entity) || entity == null)
+            {
+                var nameFilter = name != "" ? name : entity.GetName(serial);
+                entity = new WMapEntity(serial)
+                {
+
+                    X = x,
+                    Y = y,
+                    HP = hp,
+                    Map = map,
+                    LastUpdate = Time.Ticks + 1000,
+                    IsGuild = isguild,
+                    Name = nameFilter
+                };
+
+                Entities[serial] = entity;
+            }
+            else
+            {
+                entity.X = x;
+                entity.Y = y;
+                entity.HP = hp;
+                entity.Map = map;
+                entity.IsGuild = isguild;
+                entity.LastUpdate = Time.Ticks + 1000;
+
+                if (string.IsNullOrEmpty(entity.Name) && !string.IsNullOrEmpty(name))
+                {
+
+                    entity.Name = entity.IsGuild ? name : entity.GetName(serial);
+
+                }
+            }
+        }
+
+        public void Remove(uint serial)
+        {
+            if (Entities.ContainsKey(serial))
+            {
+                Entities.Remove(serial);
+            }
+        }
+
+        public void RemoveUnupdatedWEntity()
+        {
             // ## BEGIN - END ## // TAZUO
-            public WMapEntity _corpse;
+            if (_corpse != null && _corpse.LastUpdate < Time.Ticks - 1000)
+            {
+                _corpse = null;
+            }
             // ## BEGIN - END ## // TAZUO
-
-            public bool Enabled
+            if (_lastUpdate > Time.Ticks)
             {
-                get
+                return;
+            }
+
+            _lastUpdate = Time.Ticks + 1000;
+
+            long ticks = Time.Ticks - 1000;
+
+            foreach (WMapEntity entity in Entities.Values)
+            {
+                if (entity.LastUpdate < ticks)
                 {
-                    return ((World.ClientFeatures.Flags & CharacterListFlags.CLF_NEW_MOVEMENT_SYSTEM) == 0 || _ackReceived) &&
-                            EncryptionHelper.Type == 0 &&
-                            ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.WorldMapShowParty &&
-                            UIManager.GetGump<WorldMapGump>() != null; // horrible, but works
+                    _toRemove.Add(entity);
                 }
             }
 
-            public readonly Dictionary<uint, WMapEntity> Entities = new Dictionary<uint, WMapEntity>();
-
-            public void SetACKReceived()
+            if (_toRemove.Count != 0)
             {
-                _ackReceived = true;
+                foreach (WMapEntity entity in _toRemove)
+                {
+                    Entities.Remove(entity.Serial);
+                }
+
+                _toRemove.Clear();
+            }
+        }
+
+        public WMapEntity GetEntity(uint serial)
+        {
+            Entities.TryGetValue(serial, out WMapEntity entity);
+
+            return entity;
+        }
+
+        public void RequestServerPartyGuildInfo(bool force = false)
+        {
+            if (!force && !Enabled)
+            {
+                return;
             }
 
-            public void SetEnable(bool v)
+            if (World.InGame && _lastPacketSend < Time.Ticks)
             {
-                if ((World.ClientFeatures.Flags & CharacterListFlags.CLF_NEW_MOVEMENT_SYSTEM) != 0 && !_ackReceived)
-                {
-                    Log.Warn("Server support new movement system. Can't use the 0xF0 packet to query guild/party position");
-                    v = false;
-                }
-                else if (EncryptionHelper.Type != 0 && !_ackReceived)
-                {
-                    Log.Warn("Server has encryption. Can't use the 0xF0 packet to query guild/party position");
-                    v = false;
-                }
+                //GameActions.Print($"SENDING PACKET! {Time.Ticks}");
 
-                if (v)
-                {
-                    RequestServerPartyGuildInfo(true);
-                }
-            }
+                _lastPacketSend = Time.Ticks + 250;
 
-            public void AddOrUpdate
-            (
-                uint serial,
-                int x,
-                int y,
-                int hp,
-                int map,
-                bool isguild,
-                string name = null,
-                bool from_packet = false
-            )
-            {
-                if (from_packet)
-                {
-                    _lastPacketRecv = Time.Ticks + 10000;
-                }
-                else if (_lastPacketRecv < Time.Ticks)
-                {
-                    return;
-                }
+                //if (!force && !_can_send)
+                //{
+                //    return;
+                //}
 
-                if (!Enabled)
-                {
-                    return;
-                }
+                NetClient.Socket.Send_QueryGuildPosition();
 
-                if (string.IsNullOrEmpty(name))
+                if (World.Party != null && World.Party.Leader != 0)
                 {
-                    Entity ent = World.Get(serial);
-
-                    if (ent != null && !string.IsNullOrEmpty(ent.Name))
+                    foreach (PartyMember e in World.Party.Members)
                     {
-                        name = ent.Name;
+                        if (e != null && SerialHelper.IsValid(e.Serial))
+                        {
+                            Mobile mob = World.Mobiles.Get(e.Serial);
+
+                            if (mob == null || mob.Distance > World.ClientViewRange)
+                            {
+                                NetClient.Socket.Send_QueryPartyPosition();
+
+                                break;
+                            }
+                        }
                     }
-                }
-
-                if (!Entities.TryGetValue(serial, out WMapEntity entity) || entity == null)
-                {
-                    var nameFilter = name != "" ? name : entity.GetName(serial);
-                    entity = new WMapEntity(serial)
-                    {
-
-                        X = x,
-                        Y = y,
-                        HP = hp,
-                        Map = map,
-                        LastUpdate = Time.Ticks + 1000,
-                        IsGuild = isguild,
-                        Name = nameFilter
-                    };
-
-                    Entities[serial] = entity;
                 }
                 else
                 {
-                    entity.X = x;
-                    entity.Y = y;
-                    entity.HP = hp;
-                    entity.Map = map;
-                    entity.IsGuild = isguild;
-                    entity.LastUpdate = Time.Ticks + 1000;
-
-                    if (string.IsNullOrEmpty(entity.Name) && !string.IsNullOrEmpty(name))
+                    foreach (Mobile mob in World.Mobiles.Values)
                     {
-
-                        entity.Name = entity.IsGuild ? name : entity.GetName(serial);
-
-                    }
-                }
-            }
-
-            public void Remove(uint serial)
-            {
-                if (Entities.ContainsKey(serial))
-                {
-                    Entities.Remove(serial);
-                }
-            }
-
-            public void RemoveUnupdatedWEntity()
-            {
-                // ## BEGIN - END ## // TAZUO
-                if (_corpse != null && _corpse.LastUpdate < Time.Ticks - 1000)
-                {
-                    _corpse = null;
-                }
-                // ## BEGIN - END ## // TAZUO
-                if (_lastUpdate > Time.Ticks)
-                {
-                    return;
-                }
-
-                _lastUpdate = Time.Ticks + 1000;
-
-                long ticks = Time.Ticks - 1000;
-
-                foreach (WMapEntity entity in Entities.Values)
-                {
-                    if (entity.LastUpdate < ticks)
-                    {
-                        _toRemove.Add(entity);
-                    }
-                }
-
-                if (_toRemove.Count != 0)
-                {
-                    foreach (WMapEntity entity in _toRemove)
-                    {
-                        Entities.Remove(entity.Serial);
-                    }
-
-                    _toRemove.Clear();
-                }
-            }
-
-            public WMapEntity GetEntity(uint serial)
-            {
-                Entities.TryGetValue(serial, out WMapEntity entity);
-
-                return entity;
-            }
-
-            public void RequestServerPartyGuildInfo(bool force = false)
-            {
-                if (!force && !Enabled)
-                {
-                    return;
-                }
-
-                if (World.InGame && _lastPacketSend < Time.Ticks)
-                {
-                    //GameActions.Print($"SENDING PACKET! {Time.Ticks}");
-
-                    _lastPacketSend = Time.Ticks + 250;
-
-                    //if (!force && !_can_send)
-                    //{
-                    //    return;
-                    //}
-
-                    NetClient.Socket.Send_QueryGuildPosition();
-
-                    if (World.Party != null && World.Party.Leader != 0)
-                    {
-                        foreach (PartyMember e in World.Party.Members)
+                        if (mob == World.Player)
                         {
-                            if (e != null && SerialHelper.IsValid(e.Serial))
-                            {
-                                Mobile mob = World.Mobiles.Get(e.Serial);
-
-                                if (mob == null || mob.Distance > World.ClientViewRange)
-                                {
-                                    NetClient.Socket.Send_QueryPartyPosition();
-
-                                    break;
-                                }
-                            }
+                            continue;
                         }
-                    }
-                    else
-                    {
-                        foreach (Mobile mob in World.Mobiles.Values)
+
+                        Mobile mobs = World.Mobiles.Get(mob.Serial);
+                        if (mobs.NotorietyFlag == NotorietyFlag.Ally)
                         {
-                            if (mob == World.Player)
+                            if (mobs == null || mobs.Distance > 2000000)
                             {
-                                continue;
+                                NetClient.Socket.Send_QueryGuildPosition();
+
+                                break;
                             }
-
-                            Mobile mobs = World.Mobiles.Get(mob.Serial);
-                            if (mobs.NotorietyFlag == NotorietyFlag.Ally)
-                            {
-                                if (mobs == null || mobs.Distance > 2000000)
-                                {
-                                    NetClient.Socket.Send_QueryGuildPosition();
-
-                                    break;
-                                }
-                            }
-
                         }
 
                     }
+
                 }
             }
+        }
 
-            public void Clear()
-            {
-                Entities.Clear();
-                _ackReceived = false;
-                SetEnable(false);
-            }
+        public void Clear()
+        {
+            Entities.Clear();
+            _ackReceived = false;
+            SetEnable(false);
         }
     }
 }
