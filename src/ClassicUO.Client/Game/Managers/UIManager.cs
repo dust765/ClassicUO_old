@@ -30,18 +30,17 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using ClassicUO.Configuration;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Game.UI.Gumps;
 using ClassicUO.Input;
 using ClassicUO.Renderer;
 using Microsoft.Xna.Framework;
+using System.Collections.Generic;
 
 namespace ClassicUO.Game.Managers
 {
-    internal static class UIManager
+    public static class UIManager
     {
         private static readonly Dictionary<uint, Point> _gumpPositionCache = new Dictionary<uint, Point>();
         private static readonly Control[] _mouseDownControls = new Control[0xFF];
@@ -71,11 +70,11 @@ namespace ClassicUO.Game.Managers
                 Point mouse = Mouse.Position;
                 Profile profile = ProfileManager.CurrentProfile;
 
-                return profile != null && 
+                return profile != null &&
                     Client.Game.GameCursor.AllowDrawSDLCursor &&
                     DraggingControl == null &&
-                    MouseOverControl == null && 
-                    !IsModalOpen && 
+                    MouseOverControl == null &&
+                    !IsModalOpen &&
                     Client.Game.Scene.Camera.Bounds.Contains(mouse);
             }
         }
@@ -127,9 +126,9 @@ namespace ClassicUO.Game.Managers
 
         public static bool IsModalControlOpen()
         {
-            foreach (Gump control in Gumps)
+            for (LinkedListNode<Gump> last = Gumps.Last; last != null; last = last.Previous)
             {
-                if (control.IsModal)
+                if (last.Value.IsModal)
                 {
                     return true;
                 }
@@ -143,11 +142,11 @@ namespace ClassicUO.Game.Managers
         {
             HandleMouseInput();
 
-            if (_mouseDownControls[(int) MouseButtonType.Left] != null)
+            if (_mouseDownControls[(int)MouseButtonType.Left] != null)
             {
                 if (ProfileManager.CurrentProfile == null || !ProfileManager.CurrentProfile.HoldAltToMoveGumps || Keyboard.Alt)
                 {
-                    AttemptDragControl(_mouseDownControls[(int) MouseButtonType.Left], true);
+                    AttemptDragControl(_mouseDownControls[(int)MouseButtonType.Left], true);
                 }
             }
 
@@ -181,7 +180,7 @@ namespace ClassicUO.Game.Managers
                     _keyboardFocusControl = MouseOverControl;
                 }
 
-                _mouseDownControls[(int) button] = MouseOverControl;
+                _mouseDownControls[(int)button] = MouseOverControl;
             }
             else
             {
@@ -206,7 +205,7 @@ namespace ClassicUO.Game.Managers
             EndDragControl(Mouse.Position);
             HandleMouseInput();
 
-            int index = (int) button;
+            int index = (int)button;
 
             if (MouseOverControl != null)
             {
@@ -219,7 +218,7 @@ namespace ClassicUO.Game.Managers
                     if (!_mouseDownControls[index].IsDisposed)
                     {
                         _mouseDownControls[index].InvokeMouseUp(Mouse.Position, button);
-                    }                   
+                    }
                 }
             }
             else if (_mouseDownControls[index] != null && !_mouseDownControls[index].IsDisposed)
@@ -231,10 +230,10 @@ namespace ClassicUO.Game.Managers
             {
                 var mouseDownControl = _mouseDownControls[index];
                 // only attempt to close the gump if the mouse is still on the gump when right click mouse up occurs
-                if(mouseDownControl != null && MouseOverControl == mouseDownControl)
+                if (mouseDownControl != null && MouseOverControl == mouseDownControl)
                 {
                     mouseDownControl.InvokeMouseCloseGumpWithRClick();
-                }                
+                }
             }
 
             _mouseDownControls[index] = null;
@@ -270,7 +269,7 @@ namespace ClassicUO.Game.Managers
 
         public static Control LastControlMouseDown(MouseButtonType button)
         {
-            return _mouseDownControls[(int) button];
+            return _mouseDownControls[(int)button];
         }
 
         public static void SavePosition(uint serverSerial, Point point)
@@ -646,10 +645,10 @@ namespace ClassicUO.Game.Managers
                     DraggingControl = dragTarget;
                     _dragOrigin = Mouse.LClickPosition;
 
-                     for (int i = 0; i < (int) MouseButtonType.Size; i++)
-                     {
+                    for (int i = 0; i < (int)MouseButtonType.Size; i++)
+                    {
                         _mouseDownControls[i] = null;
-                     }
+                    }
                 }
 
                 Point delta = Mouse.Position - _dragOrigin;

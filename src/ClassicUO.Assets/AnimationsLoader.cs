@@ -343,7 +343,7 @@ namespace ClassicUO.Assets
                         }
                     }
                 }
-                
+
                 return animIndices;
             }
 
@@ -372,7 +372,7 @@ namespace ClassicUO.Assets
                 return ReadOnlySpan<AnimIdxBlock>.Empty;
             }
 
-            if (offset + (actionCount * MAX_DIRECTIONS * sizeof(AnimIdxBlock)) >= end)
+            if (offset + (actionCount * MAX_DIRECTIONS * sizeof(AnimIdxBlock)) > end)
             {
                 return ReadOnlySpan<AnimIdxBlock>.Empty;
             }
@@ -817,6 +817,20 @@ namespace ClassicUO.Assets
             41300000 anim 1246,1247 , group 0  (jack o lantern)
             */
 
+            /*
+            based on the current "mode" the mobile is in (e.g. IsFlying check) select the right set of definitions from the xtra array
+            then consult the num2 based list for stand/walk/run
+            and the num3 based list for NewCharacterAnimation packets
+            /
+            / flags
+            41100000
+            41400000 usually group 22,24 (walk run?)
+            40C00000 often group 31
+            42860000 anim 692   Animated weapon
+            41F80000 anim 692
+            41300000 anim 1246,1247 , group 0  (jack o lantern)
+            */
+
             var animSeq = new UOFileUop(
                 animationSequencePath,
                 "build/animationsequence/{0:D8}.bin"
@@ -1205,7 +1219,7 @@ namespace ClassicUO.Assets
             bool second,
             bool isRunning = false
         )
-        {        
+        {
             //ConvertBodyIfNeeded(ref animID);
 
             if (animFlags.HasFlag(AnimationFlags.CalculateOffsetByLowGroup))

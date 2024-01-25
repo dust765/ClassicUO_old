@@ -385,7 +385,41 @@ namespace ClassicUO.Game.Scenes
         )
         {
             allowSelection = true;
-
+            if (ProfileManager.CurrentProfile.UseCircleOfTransparency && ProfileManager.CurrentProfile.CircleOfTransparencyType == 2)
+            {
+                if (Vector2.Distance(new Vector2(obj.RealScreenPosition.X, obj.RealScreenPosition.Y), playerPos) < ProfileManager.CurrentProfile.CircleOfTransparencyRadius)
+                {
+                    if (obj.Z >= _maxZ)
+                    {
+                        CalculateAlpha(ref obj.AlphaHue, 0);
+                    }
+                    else
+                    {
+                        if (itemData.IsWall || itemData.IsWindow)
+                        {
+                            obj.AlphaHue = 65;
+                            allowSelection = false;
+                            return true;
+                        }
+                        if (itemData.IsDoor || itemData.IsRoof)
+                        {
+                            obj.AlphaHue = 65;
+                            allowSelection = true;
+                            return true;
+                        }
+                        if (itemData.IsRoof && _noDrawRoofs)
+                        {
+                            return false;
+                        }
+                        if (itemData.IsFoliage || obj.Graphic == Constants.TREE_REPLACE_GRAPHIC || StaticFilters.IsTree(obj.Graphic, out var _) || (!itemData.IsMultiMovable && obj is Static stat && stat.IsVegetation) || (!itemData.IsMultiMovable && obj is Multi multi && multi.IsVegetation))
+                        {
+                            obj.AlphaHue = 65;
+                            allowSelection = true;
+                            return true;
+                        }
+                    }
+                }
+            }
             if (obj.Z >= _maxZ)
             {
                 bool changed;
@@ -1106,11 +1140,11 @@ namespace ClassicUO.Game.Scenes
             int winGameHeight = Camera.Bounds.Height;
             int winGameCenterX = winGamePosX + (winGameWidth >> 1);
             int winGameCenterY = winGamePosY + (winGameHeight >> 1) + (World.Player.Z << 2);
-            winGameCenterX -= (int)World.Player.Offset.X;
-            winGameCenterY -= (int)(World.Player.Offset.Y - World.Player.Offset.Z);
+            winGameCenterX -= (int)World.Player.Offset.X - ProfileManager.CurrentProfile.PlayerOffset.X;
+            winGameCenterY -= (int)(World.Player.Offset.Y - World.Player.Offset.Z - ProfileManager.CurrentProfile.PlayerOffset.Y);
 
-            int tileOffX = World.Player.X;
-            int tileOffY = World.Player.Y;
+            int tileOffX = World.Player.X - ProfileManager.CurrentProfile.PlayerOffset.X;
+            int tileOffY = World.Player.Y - ProfileManager.CurrentProfile.PlayerOffset.Y;
 
             int winDrawOffsetX = (tileOffX - tileOffY) * 22 - winGameCenterX;
             int winDrawOffsetY = (tileOffX + tileOffY) * 22 - winGameCenterY;
@@ -1142,12 +1176,6 @@ namespace ClassicUO.Game.Scenes
                 winGameScaledHeight = 0;
             }
 
-            //if (_use_render_target)
-            //{
-            //    winDrawOffsetX += winGameScaledOffsetX >> 1;
-            //    winDrawOffsetY += winGameScaledOffsetY >> 1;
-            //}
-
             int size = (int)(Math.Max(winGameWidth / 44f + 1, winGameHeight / 44f + 1) * zoom);
 
             if (Camera.Offset.X != 0 || Camera.Offset.Y != 0)
@@ -1155,7 +1183,6 @@ namespace ClassicUO.Game.Scenes
                 tileOffX += (int)(zoom * (Camera.Offset.X + Camera.Offset.Y) / 44);
                 tileOffY += (int)(zoom * (Camera.Offset.Y - Camera.Offset.X) / 44);
             }
-            ;
 
             int realMinRangeX = Math.Max(0, tileOffX - size);
             int realMaxRangeX = tileOffX + size;

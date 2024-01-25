@@ -24,7 +24,12 @@ namespace ClassicUO.Renderer.Gumps
 
             if (spriteInfo.Texture == null)
             {
-                var gumpInfo = GumpsLoader.Instance.GetGump(idx);
+                var gumpInfo = PNGLoader.Instance.LoadGumpTexture(idx);
+
+                if (gumpInfo.Pixels == null || gumpInfo.Pixels.IsEmpty)
+                {
+                    gumpInfo = GumpsLoader.Instance.GetGump(idx);
+                }
                 if (!gumpInfo.Pixels.IsEmpty)
                 {
                     spriteInfo.Texture = _atlas.AddSprite(
@@ -41,6 +46,6 @@ namespace ClassicUO.Renderer.Gumps
             return ref spriteInfo;
         }
 
-        public bool PixelCheck(uint idx, int x, int y) => _picker.Get(idx, x, y);
+        public bool PixelCheck(uint idx, int x, int y, double scale = 1f) => _picker.Get(idx, x, y, scale: scale);
     }
 }

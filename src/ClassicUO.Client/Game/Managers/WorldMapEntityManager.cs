@@ -41,7 +41,7 @@ using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.Game.Managers
 {
-    internal class WMapEntity
+    public class WMapEntity
     {
         public WMapEntity(uint serial)
         {
@@ -72,11 +72,12 @@ namespace ClassicUO.Game.Managers
         //}
     }
 
-    internal class WorldMapEntityManager
+    public class WorldMapEntityManager
     {
         private bool _ackReceived;
         private uint _lastUpdate, _lastPacketSend, _lastPacketRecv;
         private readonly List<WMapEntity> _toRemove = new List<WMapEntity>();
+        public WMapEntity _corpse;
 
         public bool Enabled
         {
@@ -189,6 +190,10 @@ namespace ClassicUO.Game.Managers
 
         public void RemoveUnupdatedWEntity()
         {
+            if (_corpse != null && _corpse.LastUpdate < Time.Ticks - 1000)
+            {
+                _corpse = null;
+            }
             if (_lastUpdate > Time.Ticks)
             {
                 return;

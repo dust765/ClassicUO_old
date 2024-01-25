@@ -43,24 +43,31 @@ using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.UI.Gumps
 {
-    internal class InfoBarGump : Gump
+    internal class InfoBarGump : ResizableGump
     {
         private readonly AlphaBlendControl _background;
 
         private readonly List<InfoBarControl> _infobarControls = new List<InfoBarControl>();
         private long _refreshTime;
 
-        public InfoBarGump() : base(0, 0)
+        public override bool IsLocked => _isLocked;
+
+        public InfoBarGump() : base(ProfileManager.CurrentProfile.InfoBarSize.X, ProfileManager.CurrentProfile.InfoBarSize.Y, 50, 20, 0, 0)
         {
+            CanBeLocked = true; //For base gump locking, resizable uses a special locking procedure
             CanMove = true;
+            _prevCanMove = true;
             AcceptMouseInput = true;
             AcceptKeyboardInput = false;
             CanCloseWithRightClick = false;
-            Height = 20;
+            _prevCloseWithRightClick = false;
+            ShowBorder = true;
+            _prevBorder = true;
 
-            Add(_background = new AlphaBlendControl(0.7f) { Width = Width, Height = Height });
+            Insert(0, _background = new AlphaBlendControl(0.7f) { Width = Width - 8, Height = Height - 8, X = 4, Y = 4, Parent = this });
 
             ResetItems();
+
         }
 
         public override GumpType GumpType => GumpType.InfoBar;
@@ -85,41 +92,17 @@ namespace ClassicUO.Game.UI.Gumps
             }
         }
 
-        public override void Save(XmlTextWriter writer)
+        public void UpdateOptions()
         {
-            base.Save(writer);
-            //writer.WriteStartElement("controls");
-
-            //foreach (InfoBarControl co in _infobarControls)
-            //{
-            //    writer.WriteStartElement("control");
-            //    writer.WriteAttributeString("label", co.Text);
-            //    writer.WriteAttributeString("var", ((int) co.Var).ToString());
-            //    writer.WriteAttributeString("hue", co.Hue.ToString());
-            //    writer.WriteEndElement();
-            //}
-            //writer.WriteEndElement();
+            ResetItems();
         }
 
-        public override void Restore(XmlElement xml)
+        public static void UpdateAllOptions()
         {
-            base.Restore(xml);
-
-            //XmlElement controlsXml = xml["controls"];
-            //_infobarControls.Clear();
-
-            //if (controlsXml != null)
-            //{
-            //    foreach (XmlElement controlXml in controlsXml.GetElementsByTagName("control"))
-            //    {
-            //        InfoBarControl control = new InfoBarControl(controlXml.GetAttribute("label"),
-            //                                                    (InfoBarVars) int.Parse(controlXml.GetAttribute("var")),
-            //                                                    ushort.Parse(controlXml.GetAttribute("hue")));
-
-            //        Add(control);
-            //        _infobarControls.Add(control);
-            //    }
-            //}
+            foreach(InfoBarGump g in UIManager.Gumps.OfType<InfoBarGump>())
+            {
+                g.UpdateOptions();
+            }
         }
 
         public override void Update()
@@ -131,35 +114,52 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (_refreshTime < Time.Ticks)
             {
-                _refreshTime = (long)Time.Ticks + 125;
+                _refreshTime = (long)Time.Ticks + 250;
 
-                int x = 5;
+                int x = 6, y = 6;
 
                 foreach (InfoBarControl c in _infobarControls)
                 {
+                    if (x + c.Width + 8 > Width)
+                    {
+                        y += c.Height;
+                        x = 6;
+                    }
+
                     c.X = x;
-                    x += c.Width + 5;
+                    c.Y = y;
+
+                    x += c.Width + 8;
                 }
+                ProfileManager.CurrentProfile.InfoBarLocked = IsLocked;
             }
 
             base.Update();
 
-            Control last = Children.LastOrDefault();
+            _background.Width = Width - 8;
+            _background.Height = Height - 8;
+        }
 
-            if (last != null)
-            {
-                Width = last.Bounds.Right;
-            }
+        public override void OnResize()
+        {
+            base.OnResize();
 
-            _background.Width = Width;
+            ProfileManager.CurrentProfile.InfoBarSize = new Point(Width, Height);
+        }
+
+        public override void Restore(XmlElement xml)
+        {
+            base.Restore(xml);
+            SetLockStatus(ProfileManager.CurrentProfile.InfoBarLocked);
         }
     }
 
 
     internal class InfoBarControl : Control
     {
-        private readonly Label _data;
-        private readonly Label _label;
+        private readonly TextBox _data;
+        private readonly TextBox _label;
+        private readonly ResizableStaticPic _pic;
         private ushort _warningLinesHue;
 
         public InfoBarControl(string label, InfoBarVars var, ushort hue)
@@ -167,11 +167,37 @@ namespace ClassicUO.Game.UI.Gumps
             AcceptMouseInput = false;
             WantUpdateSize = true;
             CanMove = false;
+            Hue = hue;
 
-            _label = new Label(label, true, 999) { Height = 20, Hue = hue };
+            _label = new TextBox(
+                label,
+                ProfileManager.CurrentProfile.InfoBarFont,
+                ProfileManager.CurrentProfile.InfoBarFontSize,
+                null,
+                hue,
+                strokeEffect: false
+                );
+            if (label.StartsWith(@"\"))
+            {
+                if (ushort.TryParse(label.Substring(1), out ushort gphc))
+                {
+                    _label.IsVisible = false;
+                    Add(_pic = new ResizableStaticPic(gphc, 20, 20) { Hue = hue });
+                }
+            }
+
             Var = var;
 
-            _data = new Label("", true, 999) { Height = 20, X = _label.Width, Hue = 0x0481 };
+            _data = new TextBox(
+                "",
+                ProfileManager.CurrentProfile.InfoBarFont,
+                ProfileManager.CurrentProfile.InfoBarFontSize,
+                null,
+                0x0481,
+                strokeEffect: false
+                )
+            { X = _label.IsVisible ? _label.Width + 3 : _pic.Width };
+
             Add(_label);
             Add(_data);
         }
@@ -179,8 +205,8 @@ namespace ClassicUO.Game.UI.Gumps
         public string Text => _label.Text;
         public InfoBarVars Var { get; }
 
-        public ushort Hue => _label.Hue;
-        protected long _refreshTime;
+        public ushort Hue { get; }
+        protected long _refreshTime = (long)Time.Ticks - 1;
 
         public override void Update()
         {
@@ -191,24 +217,33 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (_refreshTime < Time.Ticks)
             {
-                _refreshTime = (long)Time.Ticks + 125;
+                _refreshTime = (long)Time.Ticks + 250;
 
-                _data.Text = GetVarData(Var);
+                string newData = GetVarData(Var) ?? string.Empty;
+                if (!newData.Equals(_data.Text))
+                {
+                    _data.UpdateText(newData);
+                    _data.WantUpdateSize = true;
+                    WantUpdateSize = true;
+                }
 
                 if (ProfileManager.CurrentProfile.InfoBarHighlightType == 0 || Var == InfoBarVars.NameNotoriety)
                 {
-                    _data.Hue = GetVarHue(Var);
+                    ushort hue = GetVarHue(Var);
+                    if (!hue.Equals((ushort)_data.Hue))
+                    {
+                        _data.Hue = hue;
+                    }
                 }
                 else
                 {
-                    _data.Hue = 0x0481;
+                    if ((ushort)_data.Hue != 0x0481)
+                    {
+                        _data.Hue = 0x0481;
+                    }
                     _warningLinesHue = GetVarHue(Var);
                 }
-
-                _data.WantUpdateSize = true;
             }
-
-            WantUpdateSize = true;
 
             base.Update();
         }
@@ -316,7 +351,7 @@ namespace ClassicUO.Game.UI.Gumps
             switch (var)
             {
                 case InfoBarVars.HP:
-                    percent = World.Player.Hits / (float) World.Player.HitsMax;
+                    percent = World.Player.Hits / (float)World.Player.HitsMax;
 
                     if (percent <= 0.25)
                     {
@@ -336,7 +371,7 @@ namespace ClassicUO.Game.UI.Gumps
                     }
 
                 case InfoBarVars.Mana:
-                    percent = World.Player.Mana / (float) World.Player.ManaMax;
+                    percent = World.Player.Mana / (float)World.Player.ManaMax;
 
                     if (percent <= 0.25)
                     {
@@ -356,7 +391,7 @@ namespace ClassicUO.Game.UI.Gumps
                     }
 
                 case InfoBarVars.Stamina:
-                    percent = World.Player.Stamina / (float) World.Player.StaminaMax;
+                    percent = World.Player.Stamina / (float)World.Player.StaminaMax;
 
                     if (percent <= 0.25)
                     {
@@ -376,7 +411,7 @@ namespace ClassicUO.Game.UI.Gumps
                     }
 
                 case InfoBarVars.Weight:
-                    percent = World.Player.Weight / (float) World.Player.WeightMax;
+                    percent = World.Player.Weight / (float)World.Player.WeightMax;
 
                     if (percent >= 1)
                     {

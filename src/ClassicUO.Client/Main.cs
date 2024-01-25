@@ -38,7 +38,6 @@ using ClassicUO.Network;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
-using ClassicUO.Utility.Platforms;
 using SDL2;
 using System;
 using System.Globalization;
@@ -58,7 +57,7 @@ namespace ClassicUO
         public static void Main(string[] args)
         {
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
-
+            Language.Load();
 #if !NETFRAMEWORK
             DllMap.Initialise();
 #endif
@@ -67,6 +66,12 @@ namespace ClassicUO
 
             CUOEnviroment.GameThread = Thread.CurrentThread;
             CUOEnviroment.GameThread.Name = "CUO_MAIN_THREAD";
+
+#if DEBUG
+            ScriptCompiler.Compile(true, true);
+#else
+            ScriptCompiler.Compile(false, true);
+#endif
 
 #if !DEBUG
             AppDomain.CurrentDomain.UnhandledException += (s, e) =>
@@ -98,6 +103,12 @@ namespace ClassicUO
                 sb.AppendLine();
                 sb.AppendLine();
 
+                System.Threading.Tasks.Task reportCrash = System.Threading.Tasks.Task.Factory.StartNew(() =>
+                {
+                    string s = "CV: " + Settings.GlobalSettings.ClientVersion + " - TUO: " + CUOEnviroment.Version.ToString() + "\n" + e.ExceptionObject.ToString();
+                    new CrashReportWebhook().SendMessage(s);
+                });
+
                 Log.Panic(e.ExceptionObject.ToString());
                 string path = Path.Combine(CUOEnviroment.ExecutablePath, "Logs");
 
@@ -108,6 +119,7 @@ namespace ClassicUO
                 {
                     crashfile.WriteAsync(sb.ToString()).RunSynchronously();
                 }
+                reportCrash.Wait();
             };
 #endif
             ReadSettingsFromArgs(args);
@@ -138,6 +150,8 @@ namespace ClassicUO
             CUOEnviroment.IsOutlands = Settings.GlobalSettings.ShardType == 2;
 
             ReadSettingsFromArgs(args);
+
+            UpdateManager.CheckForUpdates();
 
             // still invalid, cannot load settings
             if (Settings.GlobalSettings == null)
@@ -189,7 +203,30 @@ namespace ClassicUO
 
             if (!Directory.Exists(Settings.GlobalSettings.UltimaOnlineDirectory) || !File.Exists(Path.Combine(Settings.GlobalSettings.UltimaOnlineDirectory, "tiledata.mul")))
             {
-                flags |= INVALID_UO_DIRECTORY;
+                bool foundFolder = false;
+                if (!CUOEnviroment.IsUnix)
+                {
+                    using (var fbd = new System.Windows.Forms.FolderBrowserDialog())
+                    {
+                        fbd.Description = "Please select your Ultima Online directory.";
+                        System.Windows.Forms.DialogResult result = fbd.ShowDialog();
+
+                        if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                        {
+                            if (Directory.Exists(fbd.SelectedPath) && File.Exists(Path.Combine(fbd.SelectedPath, "tiledata.mul")))
+                            {
+                                Settings.GlobalSettings.UltimaOnlineDirectory = fbd.SelectedPath;
+                                Settings.GlobalSettings.Save();
+                                foundFolder = true;
+                            }
+                        }
+                    }
+                }
+
+                if (!foundFolder)
+                {
+                    flags |= INVALID_UO_DIRECTORY;
+                }
             }
 
             string clientVersionText = Settings.GlobalSettings.ClientVersion;
@@ -218,14 +255,14 @@ namespace ClassicUO
             {
                 if ((flags & INVALID_UO_DIRECTORY) != 0)
                 {
-                    Client.ShowErrorMessage(ResGeneral.YourUODirectoryIsInvalid);
+                    Client.ShowErrorMessage("Make sure your settings.json file is correctly filled out, could not find the UO directory.");
                 }
                 else if ((flags & INVALID_UO_VERSION) != 0)
                 {
                     Client.ShowErrorMessage(ResGeneral.YourUOClientVersionIsInvalid);
                 }
 
-                PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
+                //PlatformHelper.LaunchBrowser(ResGeneral.ClassicUOLink);
             }
             else
             {
@@ -243,6 +280,7 @@ namespace ClassicUO
                 }
 
                 Client.Run();
+
             }
 
             Log.Trace("Closing...");
@@ -521,6 +559,10 @@ namespace ClassicUO
 
                         CUOEnviroment.NoServerPing = true;
 
+                        break;
+
+                    case "skipupdatecheck":
+                        UpdateManager.SkipUpdateCheck = true;
                         break;
                 }
             }

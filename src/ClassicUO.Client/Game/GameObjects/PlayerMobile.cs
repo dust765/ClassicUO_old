@@ -30,23 +30,25 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
+using ClassicUO.Assets;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Game.UI.Gumps;
-using ClassicUO.Assets;
 using ClassicUO.Network;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ClassicUO.Game.GameObjects
 {
-    internal class PlayerMobile : Mobile
+    public class PlayerMobile : Mobile
     {
         private readonly Dictionary<BuffIconType, BuffIcon> _buffIcons = new Dictionary<BuffIconType, BuffIcon>();
+
+        private static SpellVisualRangeManager.CastTimerProgressBar castTimer;
 
         public PlayerMobile(uint serial) : base(serial)
         {
@@ -57,6 +59,16 @@ namespace ClassicUO.Game.GameObjects
                 SkillEntry skill = SkillsLoader.Instance.Skills[i];
                 Skills[i] = new Skill(skill.Name, skill.Index, skill.HasAction);
             }
+
+            Skill.SkillValueChangedEvent += (s, e) =>
+            {
+                if (ProfileManager.CurrentProfile.DisplaySkillBarOnChange)
+                {
+                    SkillProgressBar.QueManager.AddSkill(e.Index);
+                }
+            };
+
+            UIManager.Add(castTimer = new SpellVisualRangeManager.CastTimerProgressBar());
         }
 
         public Skill[] Skills { get; }
@@ -107,7 +119,7 @@ namespace ClassicUO.Game.GameObjects
         public short LowerReagentCost;
         public ushort Luck;
         public short ManaIncrease;
-        public short ManaRegeneration;      
+        public short ManaRegeneration;
         public short MaxColdResistence;
         public short MaxDefenseChanceIncrease;
         public short MaxEnergyResistence;
@@ -177,7 +189,7 @@ namespace ClassicUO.Game.GameObjects
             {
                 for (LinkedObject i = container.Items; i != null; i = i.Next)
                 {
-                    Item item = (Item) i;
+                    Item item = (Item)i;
 
                     if (item.Graphic == graphic)
                     {
@@ -207,7 +219,7 @@ namespace ClassicUO.Game.GameObjects
             {
                 for (LinkedObject i = container.Items; i != null; i = i.Next)
                 {
-                    Item item = (Item) i;
+                    Item item = (Item)i;
 
 
                     if (cliloc == World.OPL.GetNameCliloc(item.Serial))
@@ -247,11 +259,19 @@ namespace ClassicUO.Game.GameObjects
             return item;
         }
 
-        public void AddBuff(BuffIconType type, ushort graphic, uint time, string text)
+        public void AddBuff(BuffIconType type, ushort graphic, uint time, string text, string title = "")
         {
-            _buffIcons[type] = new BuffIcon(type, graphic, time, text);
-        }
+            _buffIcons[type] = new BuffIcon(type, graphic, time, text, title);
 
+            if (ProfileManager.CurrentProfile.UseImprovedBuffBar)
+            {
+                ImprovedBuffGump gump = UIManager.GetGump<ImprovedBuffGump>();
+                if (gump != null)
+                    gump.AddBuff(new BuffIcon(type, graphic, time, text, title));
+            }
+
+            EventSink.InvokeOnBuffAdded(null, new BuffEventArgs(_buffIcons[type]));
+        }
 
         public bool IsBuffIconExists(BuffIconType graphic)
         {
@@ -260,7 +280,18 @@ namespace ClassicUO.Game.GameObjects
 
         public void RemoveBuff(BuffIconType graphic)
         {
-            _buffIcons.Remove(graphic);
+            if (_buffIcons.TryGetValue(graphic, out BuffIcon ev))
+            {
+                EventSink.InvokeOnBuffRemoved(null, new BuffEventArgs(ev));
+                _buffIcons.Remove(graphic);
+            }
+
+            if (ProfileManager.CurrentProfile.UseImprovedBuffBar)
+            {
+                ImprovedBuffGump gump = UIManager.GetGump<ImprovedBuffGump>();
+                if (gump != null)
+                    gump.RemoveBuff(graphic);
+            }
         }
 
         public void UpdateAbilities()
@@ -297,7 +328,7 @@ namespace ClassicUO.Game.GameObjects
 
                     int count = 1;
 
-                    ushort testGraphic = (ushort) (equippedGraphic - 1);
+                    ushort testGraphic = (ushort)(equippedGraphic - 1);
 
                     if (TileDataLoader.Instance.StaticData[testGraphic].AnimID == imageID)
                     {
@@ -306,7 +337,7 @@ namespace ClassicUO.Game.GameObjects
                     }
                     else
                     {
-                        testGraphic = (ushort) (equippedGraphic + 1);
+                        testGraphic = (ushort)(equippedGraphic + 1);
 
                         if (TileDataLoader.Instance.StaticData[testGraphic].AnimID == imageID)
                         {
@@ -1297,7 +1328,7 @@ namespace ClassicUO.Game.GameObjects
                     }
                 }
 
-                done: ;
+                done:;
             }
 
 
@@ -1309,8 +1340,10 @@ namespace ClassicUO.Game.GameObjects
 
             int max = 0;
 
-            foreach (Gump control in UIManager.Gumps)
+            for (LinkedListNode<Gump> last = UIManager.Gumps.Last; last != null; last = last.Previous)
             {
+                Control control = last.Value;
+
                 if (control is UseAbilityButtonGump s)
                 {
                     s.RequestUpdateContents();
@@ -1332,6 +1365,8 @@ namespace ClassicUO.Game.GameObjects
 
             TryOpenDoors();
             TryOpenCorpses();
+
+            EventSink.InvokeOnPositionChanged(this, new PositionChangedArgs(new Microsoft.Xna.Framework.Vector3(X, Y, Z)));
         }
 
         public void TryOpenCorpses()
@@ -1359,7 +1394,6 @@ namespace ClassicUO.Game.GameObjects
             }
         }
 
-
         protected override void OnDirectionChanged()
         {
             base.OnDirectionChanged();
@@ -1371,7 +1405,7 @@ namespace ClassicUO.Game.GameObjects
             if (!World.Player.IsDead && ProfileManager.CurrentProfile.AutoOpenDoors)
             {
                 int x = X, y = Y, z = Z;
-                Pathfinder.GetNewXY((byte) Direction, ref x, ref y);
+                Pathfinder.GetNewXY((byte)Direction, ref x, ref y);
 
                 if (World.Items.Values.Any(s => s.ItemData.IsDoor && s.X == x && s.Y == y && s.Z - 15 <= z && s.Z + 15 >= z))
                 {
@@ -1401,11 +1435,11 @@ namespace ClassicUO.Game.GameObjects
             {
                 if (!bank.IsEmpty)
                 {
-                    Item first = (Item) bank.Items;
+                    Item first = (Item)bank.Items;
 
                     while (first != null)
                     {
-                        Item next = (Item) first.Next;
+                        Item next = (Item)first.Next;
 
                         World.RemoveItem(first, true);
 
@@ -1416,6 +1450,9 @@ namespace ClassicUO.Game.GameObjects
                 }
 
                 UIManager.GetGump<ContainerGump>(bank.Serial)?.Dispose();
+                #region GridContainer
+                UIManager.GetGump<GridContainer>(bank.Serial)?.Dispose();
+                #endregion
 
                 bank.Opened = false;
             }
@@ -1423,10 +1460,18 @@ namespace ClassicUO.Game.GameObjects
 
         public void CloseRangedGumps()
         {
-            foreach (Gump gump in UIManager.Gumps)
+            for (int i = 0; i < UIManager.Gumps.Count; i++)
             {
+                if (UIManager.Gumps.Count > i)
+                    continue;
+
+                Gump gump = UIManager.Gumps.ElementAt(i);
+                //}
+                //foreach (Gump gump in UIManager.Gumps)
+                //{
                 switch (gump)
                 {
+                    case ModernPaperdoll _:
                     case PaperDollGump _:
                     case MapGump _:
                     case SpellbookGump _:
@@ -1448,7 +1493,7 @@ namespace ClassicUO.Game.GameObjects
                         {
                             if (SerialHelper.IsItem(ent.Serial))
                             {
-                                Entity top = World.Get(((Item) ent).RootContainer);
+                                Entity top = World.Get(((Item)ent).RootContainer);
 
                                 if (top != null)
                                 {
@@ -1477,7 +1522,7 @@ namespace ClassicUO.Game.GameObjects
                         {
                             if (SerialHelper.IsItem(ent.Serial))
                             {
-                                Entity top = World.Get(((Item) ent).RootContainer);
+                                Entity top = World.Get(((Item)ent).RootContainer);
 
                                 if (top != null)
                                 {
@@ -1496,6 +1541,36 @@ namespace ClassicUO.Game.GameObjects
                         }
 
                         break;
+                    #region GridContainer
+                    case GridContainer _:
+                        distance = int.MaxValue;
+
+                        ent = World.Get(gump.LocalSerial);
+
+                        if (ent != null)
+                        {
+                            if (SerialHelper.IsItem(ent.Serial))
+                            {
+                                Entity top = World.Get(((Item)ent).RootContainer);
+
+                                if (top != null)
+                                {
+                                    distance = top.Distance;
+                                }
+                            }
+                            else
+                            {
+                                distance = ent.Distance;
+                            }
+                        }
+
+                        if (distance > Constants.MAX_CONTAINER_OPENED_ON_GROUND_RANGE)
+                        {
+                            gump.Dispose();
+                        }
+
+                        break;
+                        #endregion
                 }
             }
         }
@@ -1560,7 +1635,7 @@ namespace ClassicUO.Game.GameObjects
                 x = walkStep.X;
                 y = walkStep.Y;
                 z = walkStep.Z;
-                oldDirection = (Direction) walkStep.Direction;
+                oldDirection = (Direction)walkStep.Direction;
             }
 
             sbyte oldZ = z;
@@ -1589,7 +1664,7 @@ namespace ClassicUO.Game.GameObjects
                     y = newY;
                     z = newZ;
 
-                    walkTime = (ushort) MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
+                    walkTime = (ushort)MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
                 }
             }
             else
@@ -1613,7 +1688,7 @@ namespace ClassicUO.Game.GameObjects
                     y = newY;
                     z = newZ;
 
-                    walkTime = (ushort) MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
+                    walkTime = (ushort)MovementSpeed.TimeToCompleteMovement(run, IsMounted || SpeedMode == CharacterSpeedType.FastUnmount || SpeedMode == CharacterSpeedType.FastUnmountAndCantRun || IsFlying);
                 }
 
                 direction = newDir;
@@ -1635,13 +1710,13 @@ namespace ClassicUO.Game.GameObjects
             step.Sequence = Walker.WalkSequence;
             step.Accepted = false;
             step.Running = run;
-            step.OldDirection = (byte) (oldDirection & Direction.Mask);
-            step.Direction = (byte) direction;
+            step.OldDirection = (byte)(oldDirection & Direction.Mask);
+            step.Direction = (byte)direction;
             step.Timer = Time.Ticks;
-            step.X = (ushort) x;
-            step.Y = (ushort) y;
+            step.X = (ushort)x;
+            step.Y = (ushort)y;
             step.Z = z;
-            step.NoRotation = step.OldDirection == (byte) direction && oldZ - z >= 11;
+            step.NoRotation = step.OldDirection == (byte)direction && oldZ - z >= 11;
 
             Walker.StepsCount++;
 
@@ -1652,7 +1727,7 @@ namespace ClassicUO.Game.GameObjects
                     X = x,
                     Y = y,
                     Z = z,
-                    Direction = (byte) direction,
+                    Direction = (byte)direction,
                     Run = run
                 }
             );

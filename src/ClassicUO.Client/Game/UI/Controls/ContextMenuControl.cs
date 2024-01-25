@@ -30,17 +30,17 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using ClassicUO.Game.Managers;
 using ClassicUO.Game.UI.Gumps;
 using ClassicUO.Input;
 using ClassicUO.Renderer;
 using Microsoft.Xna.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace ClassicUO.Game.UI.Controls
 {
-    internal class ContextMenuControl
+    public class ContextMenuControl
     {
         private readonly List<ContextMenuItemEntry> _items;
 
@@ -92,7 +92,7 @@ namespace ClassicUO.Game.UI.Controls
         }
     }
 
-    internal sealed class ContextMenuItemEntry
+    public class ContextMenuItemEntry
     {
         public ContextMenuItemEntry(string text, Action action = null, bool canBeSelected = false, bool defaultValue = false)
         {
@@ -115,7 +115,7 @@ namespace ClassicUO.Game.UI.Controls
     }
 
 
-    internal class ContextMenuShowMenu : Gump
+    public class ContextMenuShowMenu : Gump
     {
         private readonly AlphaBlendControl _background;
         private List<ContextMenuShowMenu> _subMenus;
@@ -254,16 +254,13 @@ namespace ClassicUO.Game.UI.Controls
                 Add(_label);
 
 
-                if (entry.CanBeSelected)
+                _selectedPic = new GumpPic(3, 0, 0x838, 0)
                 {
-                    _selectedPic = new GumpPic(3, 0, 0x838, 0)
-                    {
-                        IsVisible = entry.IsSelected,
-                        IsEnabled = false
-                    };
+                    IsVisible = entry.IsSelected,
+                    IsEnabled = false
+                };
 
-                    Add(_selectedPic);
-                }
+                Add(_selectedPic);
 
                 Height = 25;
 
@@ -308,6 +305,11 @@ namespace ClassicUO.Game.UI.Controls
                 if (Width > _label.Width)
                 {
                     _label.Width = Width;
+                }
+
+                if (_selectedPic != null)
+                {
+                    _selectedPic.IsVisible = _entry.IsSelected;
                 }
 
                 if (_subMenu != null)

@@ -43,7 +43,7 @@ using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.GameObjects
 {
-    internal partial class Mobile : Entity
+    public partial class Mobile : Entity
     {
         private static readonly QueuedPool<Mobile> _pool = new QueuedPool<Mobile>(
             Constants.PREDICTABLE_CHUNKS,
@@ -1001,7 +1001,7 @@ namespace ClassicUO.Game.GameObjects
 
             for (; last != null; last = (TextObject)last.Previous)
             {
-                if (last.RenderedText != null && !last.RenderedText.IsDestroyed)
+                if (last.TextBox != null && !last.TextBox.IsDisposed)
                 {
                     if (offY == 0 && last.Time < Time.Ticks)
                     {
@@ -1009,9 +1009,9 @@ namespace ClassicUO.Game.GameObjects
                     }
 
                     last.OffsetY = offY;
-                    offY += last.RenderedText.Height;
+                    offY += last.TextBox.Height;
 
-                    last.RealScreenPosition.X = p.X - (last.RenderedText.Width >> 1);
+                    last.RealScreenPosition.X = p.X - (last.TextBox.Width >> 1);
                     last.RealScreenPosition.Y = p.Y - offY;
                 }
             }
@@ -1086,12 +1086,13 @@ namespace ClassicUO.Game.GameObjects
             if (!(this is PlayerMobile))
             {
                 UIManager.GetGump<PaperDollGump>(serial)?.Dispose();
+                UIManager.GetGump<ModernPaperdoll>(serial)?.Dispose();
 
                 _pool.ReturnOne(this);
             }
         }
 
-        internal struct Step
+        public struct Step
         {
             public int X,
                 Y;

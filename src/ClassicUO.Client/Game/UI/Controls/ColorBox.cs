@@ -38,7 +38,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ClassicUO.Game.UI.Controls
 {
-    internal class ColorBox : Control
+    public class ColorBox : Control
     {
         public ColorBox(int width, int height, ushort hue)
         {
@@ -56,6 +56,8 @@ namespace ClassicUO.Game.UI.Controls
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)
         {
             Vector3 hueVector = ShaderHueTranslator.GetHueVector(Hue);
+
+            hueVector.Z = Alpha;
 
             batcher.Draw
             (

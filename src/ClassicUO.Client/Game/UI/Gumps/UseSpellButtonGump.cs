@@ -61,7 +61,8 @@ namespace ClassicUO.Game.UI.Gumps
             CanMove = true;
             AcceptMouseInput = true;
             CanCloseWithRightClick = true;
-
+            Width = (int)Math.Round(44 * (ProfileManager.CurrentProfile.SpellIconScale / 100f));
+            Height = (int)Math.Round(44 * (ProfileManager.CurrentProfile.SpellIconScale / 100f));
             _mm = Client.Game.GetScene<GameScene>().Macros;
         }
 
@@ -82,12 +83,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void BuildGump()
         {
-            Add(
-                _background = new GumpPic(0, 0, (ushort)_spell.GumpIconSmallID, 0)
-                {
-                    AcceptMouseInput = false
-                }
-            );
+            Add(_background = new GumpPic(0, 0, (ushort)_spell.GumpIconSmallID, 0) { AcceptMouseInput = false, Width = Width, Height = Height });
 
             int cliloc = GetSpellTooltip(_spell.ID);
 
@@ -96,11 +92,45 @@ namespace ClassicUO.Game.UI.Gumps
                 SetTooltip(ClilocLoader.Instance.GetString(cliloc), 80);
             }
 
-            WantUpdateSize = true;
+            if (ProfileManager.CurrentProfile.SpellIcon_DisplayHotkey)
+            {
+                Macro macro = _mm.FindMacro(_spell.Name);
+                if (macro != null)
+                {
+                    string hotKeyString = "";
+
+                    if (macro.Ctrl)
+                        hotKeyString += "Ctrl ";
+                    if (macro.Alt)
+                        hotKeyString += "Alt ";
+                    if (macro.Shift)
+                        hotKeyString += "Shift ";
+                    if (macro.Key != SDL2.SDL.SDL_Keycode.SDLK_UNKNOWN)
+                    {
+                        hotKeyString += (char)macro.Key;
+                    }
+                    else if (macro.MouseButton != MouseButtonType.None)
+                    {
+                        hotKeyString += macro.MouseButton;
+                    }
+                    else if (macro.WheelScroll == true)
+                    {
+                        hotKeyString += macro.WheelScroll;
+                    }
+
+                    Label hotkeyLabel = new Label(hotKeyString, true, ProfileManager.CurrentProfile.SpellIcon_HotkeyHue, Width, style: FontStyle.BlackBorder);
+                    Add(hotkeyLabel);
+                }
+            }
+
             AcceptMouseInput = true;
-            GroupMatrixWidth = 44;
-            GroupMatrixHeight = 44;
+            GroupMatrixWidth = Width;
+            GroupMatrixHeight = Height;
             AnchorType = ANCHOR_TYPE.SPELL;
+
+            Alpha += AlphaOffset;
+            foreach (Control c in Children)
+                c.Alpha += AlphaOffset;
         }
 
         public override bool Draw(UltimaBatcher2D batcher, int x, int y)

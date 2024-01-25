@@ -45,7 +45,7 @@ using MathHelper = ClassicUO.Utility.MathHelper;
 
 namespace ClassicUO.Game.GameObjects
 {
-    internal partial class Item
+    public partial class Item
     {
         private static EquipConvData? _equipConvData;
 
@@ -215,17 +215,7 @@ namespace ClassicUO.Game.GameObjects
                 UsedLayer
             );
 
-            bool ishuman =
-                MathHelper.InRange(Amount, 0x0190, 0x0193)
-                || MathHelper.InRange(Amount, 0x00B7, 0x00BA)
-                || MathHelper.InRange(Amount, 0x025D, 0x0260)
-                || MathHelper.InRange(Amount, 0x029A, 0x029B)
-                || MathHelper.InRange(Amount, 0x02B6, 0x02B7)
-                || Amount == 0x03DB
-                || Amount == 0x03DF
-                || Amount == 0x03E2
-                || Amount == 0x02E8
-                || Amount == 0x02E9;
+            bool ishuman = IsHumanCorpse;
 
             DrawLayer(
                 batcher,
@@ -413,10 +403,7 @@ namespace ClassicUO.Game.GameObjects
                 }
                 else
                 {
-                    if (
-                        ProfileManager.CurrentProfile.GridLootType > 0
-                        && SelectedObject.CorpseObject == owner
-                    )
+                    if ((ProfileManager.CurrentProfile.GridLootType > 0 || ProfileManager.CurrentProfile.UseGridLayoutContainerGumps) && SelectedObject.CorpseObject == owner)
                     {
                         color = 0x0034;
                     }

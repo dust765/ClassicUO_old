@@ -47,7 +47,7 @@ using SDL2;
 
 namespace ClassicUO.Game.UI.Gumps
 {
-    internal enum ChatMode
+    public enum ChatMode
     {
         Default,
         Whisper,
@@ -63,7 +63,7 @@ namespace ClassicUO.Game.UI.Gumps
         UOChat
     }
 
-    internal class SystemChatControl : Control
+    public class SystemChatControl : Control
     {
         private const int MAX_MESSAGE_LENGHT = 100;
         private const int CHAT_X_OFFSET = 3;
@@ -136,7 +136,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             WantUpdateSize = false;
 
-            MessageManager.MessageReceived += ChatOnMessageReceived;
+            EventSink.MessageReceived += ChatOnMessageReceived;
             Mode = ChatMode.Default;
 
             IsActive = !ProfileManager.CurrentProfile.ActivateChatAfterEnter;
@@ -254,6 +254,9 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
+            if (ProfileManager.CurrentProfile.DisableSystemChat)
+                return;
+
             switch (e.Type)
             {
                 case MessageType.Regular when e.Parent == null || !SerialHelper.IsValid(e.Parent.Serial):
@@ -288,7 +291,9 @@ namespace ClassicUO.Game.UI.Gumps
                     AddLine(string.Format(ResGumps.AllianceName0Text1, e.Name, e.Text), e.Font, ProfileManager.CurrentProfile.AllyMessageHue, e.IsUnicode);
 
                     break;
-
+                case MessageType.ChatSystem:
+                    AddLine($"{e.Name}: {e.Text}", e.Font, ProfileManager.CurrentProfile.ChatMessageHue, e.IsUnicode);
+                    break;
                 default:
 
                     if (e.Parent == null || !SerialHelper.IsValid(e.Parent.Serial))
@@ -305,7 +310,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         public override void Dispose()
         {
-            MessageManager.MessageReceived -= ChatOnMessageReceived;
+            EventSink.MessageReceived -= ChatOnMessageReceived;
             base.Dispose();
         }
 
@@ -883,27 +888,19 @@ namespace ClassicUO.Game.UI.Gumps
         private class ChatLineTime
         {
             private uint _createdTime;
-            private RenderedText _renderedText;
+            private TextBox textBox;
 
             public ChatLineTime(string text, byte font, bool isunicode, ushort hue)
             {
-                _renderedText = RenderedText.Create
-                (
-                    text,
-                    hue,
-                    font,
-                    isunicode,
-                    FontStyle.BlackBorder,
-                    maxWidth: 320
-                );
+                textBox = new TextBox(text, ProfileManager.CurrentProfile.GameWindowSideChatFont, ProfileManager.CurrentProfile.GameWindowSideChatFontSize, 320, hue, strokeEffect: true);
                 _createdTime = Time.Ticks + Constants.TIME_DISPLAY_SYSTEM_MESSAGE_TEXT;
             }
 
-            private string Text => _renderedText?.Text ?? string.Empty;
+            private string Text => textBox?.Text ?? string.Empty;
 
-            public bool IsDisposed => _renderedText == null || _renderedText.IsDestroyed;
+            public bool IsDisposed => textBox == null || textBox.IsDisposed;
 
-            public int TextHeight => _renderedText?.Height ?? 0;
+            public int TextHeight => textBox?.Height ?? 0;
 
             public void Update()
             {
@@ -916,7 +913,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             public bool Draw(UltimaBatcher2D batcher, int x, int y)
             {
-                return !IsDisposed && _renderedText.Draw(batcher, x, y /*, ShaderHueTranslator.GetHueVector(0, false, _alpha, true)*/);
+                return !IsDisposed && textBox.Draw(batcher, x, y);
             }
 
             public override string ToString()
@@ -928,8 +925,8 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (!IsDisposed)
                 {
-                    _renderedText?.Destroy();
-                    _renderedText = null;
+                    textBox?.Dispose();
+                    textBox = null;
                 }
             }
         }

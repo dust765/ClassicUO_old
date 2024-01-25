@@ -30,19 +30,19 @@
 
 #endregion
 
+using ClassicUO.Assets;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.UI.Gumps;
 using ClassicUO.Input;
-using ClassicUO.Assets;
 using ClassicUO.Network;
 using ClassicUO.Resources;
 using ClassicUO.Utility;
 
 namespace ClassicUO.Game.Managers
 {
-    internal enum CursorTarget
+    public enum CursorTarget
     {
         Invalid = -1,
         Object = 0,
@@ -52,15 +52,17 @@ namespace ClassicUO.Game.Managers
         Grab,
         SetGrabBag,
         HueCommandTarget,
-        IgnorePlayerTarget
+        IgnorePlayerTarget,
+        MoveItemContainer,
+        Internal
     }
 
-    internal class CursorType
+    public class CursorType
     {
         public static readonly uint Target = 6983686;
     }
 
-    internal enum TargetType
+    public enum TargetType
     {
         Neutral,
         Harmful,
@@ -68,7 +70,7 @@ namespace ClassicUO.Game.Managers
         Cancel
     }
 
-    internal class MultiTargetInfo
+    public class MultiTargetInfo
     {
         public MultiTargetInfo(ushort model, ushort x, ushort y, ushort z, ushort hue)
         {
@@ -82,7 +84,7 @@ namespace ClassicUO.Game.Managers
         public readonly ushort XOff, YOff, ZOff, Model, Hue;
     }
 
-    internal class LastTargetInfo
+    public class LastTargetInfo
     {
         public bool IsEntity => SerialHelper.IsValid(Serial);
         public bool IsStatic => !IsEntity && Graphic != 0 && Graphic != 0xFFFF;
@@ -128,12 +130,51 @@ namespace ClassicUO.Game.Managers
         }
     }
 
-    internal static class TargetManager
+    public static class TargetManager
     {
-        private static uint _targetCursorId;
+        private static uint _targetCursorId, _lastAttack;
         private static readonly byte[] _lastDataBuffer = new byte[19];
 
-        public static uint LastAttack, SelectedTarget;
+        public static uint SelectedTarget;
+
+        public static uint LastAttack
+        {
+            get { return _lastAttack; }
+            set
+            {
+                _lastAttack = value;
+                if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.OpenHealthBarForLastAttack)
+                {
+                    if (ProfileManager.CurrentProfile.UseOneHPBarForLastAttack)
+                    {
+                        if (BaseHealthBarGump.LastAttackBar != null && !BaseHealthBarGump.LastAttackBar.IsDisposed)
+                        {
+                            if (BaseHealthBarGump.LastAttackBar.LocalSerial != value)
+                            {
+                                BaseHealthBarGump.LastAttackBar.SetNewMobile(value);
+                            }
+                        }
+                        else
+                        {
+                            if (ProfileManager.CurrentProfile.CustomBarsToggled)
+                                UIManager.Add(BaseHealthBarGump.LastAttackBar = new HealthBarGumpCustom(value) { Location = ProfileManager.CurrentProfile.LastTargetHealthBarPos, IsLastTarget = true });
+                            else
+                                UIManager.Add(BaseHealthBarGump.LastAttackBar = new HealthBarGump(value) { Location = ProfileManager.CurrentProfile.LastTargetHealthBarPos, IsLastTarget = true });
+                        }
+                    }
+                    else
+                    {
+                        if (UIManager.GetGump<BaseHealthBarGump>(value) == null)
+                        {
+                            if (ProfileManager.CurrentProfile.CustomBarsToggled)
+                                UIManager.Add(new HealthBarGumpCustom(value) { Location = ProfileManager.CurrentProfile.LastTargetHealthBarPos, IsLastTarget = true });
+                            else
+                                UIManager.Add(new HealthBarGump(value) { Location = ProfileManager.CurrentProfile.LastTargetHealthBarPos, IsLastTarget = true });
+                        }
+                    }
+                }
+            }
+        }
 
         public static readonly LastTargetInfo LastTargetInfo = new LastTargetInfo();
 
@@ -192,7 +233,7 @@ namespace ClassicUO.Game.Managers
             // https://github.com/andreakarasho/ClassicUO/issues/1373
             // when receiving a cancellation target from the server we need
             // to send the last active cursorID, so update cursor data later
-            
+
             _targetCursorId = cursorID;
         }
 
@@ -262,13 +303,14 @@ namespace ClassicUO.Game.Managers
                 {
                     case CursorTarget.Invalid: return;
 
+                    case CursorTarget.Internal:
                     case CursorTarget.MultiPlacement:
                     case CursorTarget.Position:
                     case CursorTarget.Object:
                     case CursorTarget.HueCommandTarget:
                     case CursorTarget.SetTargetClientSide:
 
-                        if (entity != World.Player)
+                        if (TargetingState != CursorTarget.Internal && entity != World.Player)
                         {
                             LastTargetInfo.SetEntity(serial);
                         }
@@ -324,7 +366,7 @@ namespace ClassicUO.Game.Managers
                             }
                         }
 
-                        if (TargetingState != CursorTarget.SetTargetClientSide)
+                        if (TargetingState != CursorTarget.SetTargetClientSide && TargetingState != CursorTarget.Internal)
                         {
                             _lastDataBuffer[0] = 0x6C;
 
@@ -335,7 +377,7 @@ namespace ClassicUO.Game.Managers
                             _lastDataBuffer[4] = (byte)(_targetCursorId >> 8);
                             _lastDataBuffer[5] = (byte)_targetCursorId;
 
-                            _lastDataBuffer[6] = (byte) TargetingType;
+                            _lastDataBuffer[6] = (byte)TargetingType;
 
                             _lastDataBuffer[7] = (byte)(entity.Serial >> 24);
                             _lastDataBuffer[8] = (byte)(entity.Serial >> 16);
@@ -379,7 +421,7 @@ namespace ClassicUO.Game.Managers
 
                         if (SerialHelper.IsItem(serial))
                         {
-                            GameActions.GrabItem(serial, ((Item) entity).Amount);
+                            GameActions.GrabItem(serial, ((Item)entity).Amount);
                         }
 
                         ClearTargetingWithoutTargetCancelPacket();
@@ -403,6 +445,13 @@ namespace ClassicUO.Game.Managers
                             IgnoreManager.AddIgnoredTarget(pmEntity);
                         }
                         CancelTarget();
+                        return;
+                    case CursorTarget.MoveItemContainer:
+                        if (SerialHelper.IsItem(serial))
+                        {
+                            MultiItemMoveGump.OnContainerTarget(serial);
+                        }
+                        ClearTargetingWithoutTargetCancelPacket();
                         return;
                 }
             }
@@ -437,9 +486,9 @@ namespace ClassicUO.Game.Managers
                 }
             }
 
-            LastTargetInfo.SetStatic(graphic, x, y, (sbyte) z);
+            LastTargetInfo.SetStatic(graphic, x, y, (sbyte)z);
 
-            TargetPacket(graphic, x, y, (sbyte) z);
+            TargetPacket(graphic, x, y, (sbyte)z);
         }
 
         public static void SendMultiTarget(ushort x, ushort y, sbyte z)
@@ -456,12 +505,12 @@ namespace ClassicUO.Game.Managers
             }
 
             _lastDataBuffer[0] = 0x6C;
-            _lastDataBuffer[1] = (byte) TargetingState;
-            _lastDataBuffer[2] = (byte) (_targetCursorId >> 24);
-            _lastDataBuffer[3] = (byte) (_targetCursorId >> 16);
-            _lastDataBuffer[4] = (byte) (_targetCursorId >> 8);
-            _lastDataBuffer[5] = (byte) _targetCursorId;
-            _lastDataBuffer[6] = (byte) TargetingType;
+            _lastDataBuffer[1] = (byte)TargetingState;
+            _lastDataBuffer[2] = (byte)(_targetCursorId >> 24);
+            _lastDataBuffer[3] = (byte)(_targetCursorId >> 16);
+            _lastDataBuffer[4] = (byte)(_targetCursorId >> 8);
+            _lastDataBuffer[5] = (byte)_targetCursorId;
+            _lastDataBuffer[6] = (byte)TargetingType;
 
             NetClient.Socket.Send(_lastDataBuffer);
             Mouse.CancelDoubleClick = true;
@@ -503,7 +552,7 @@ namespace ClassicUO.Game.Managers
             _lastDataBuffer[17] = (byte)(graphic >> 8);
             _lastDataBuffer[18] = (byte)graphic;
 
-            
+
 
             NetClient.Socket.Send_TargetXYZ(graphic,
                                             x,

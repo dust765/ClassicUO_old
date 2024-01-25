@@ -36,6 +36,7 @@ using ClassicUO.Game.GameObjects;
 using ClassicUO.Assets;
 using ClassicUO.Renderer;
 using Microsoft.Xna.Framework;
+using FontStashSharp;
 
 namespace ClassicUO.Game.Managers
 {
@@ -261,7 +262,17 @@ namespace ClassicUO.Game.Managers
                 return;
             }
 
-            int per = BAR_WIDTH * entity.HitsPercentage / 100;
+            int multiplier = 1;
+            if (ProfileManager.CurrentProfile != null)
+                multiplier = ProfileManager.CurrentProfile.HealthLineSizeMultiplier;
+
+            int per = (BAR_WIDTH * multiplier) * entity.HitsPercentage / 100;
+            int offset = 2;
+
+            if (per >> 2 == 0)
+            {
+                offset = per;
+            }
 
             Mobile mobile = entity as Mobile;
 
@@ -278,69 +289,45 @@ namespace ClassicUO.Game.Managers
                 y += 22;
             }
 
-            const int MULTIPLER = 1;
 
             ref readonly var gumpInfo = ref Client.Game.Gumps.GetGump(BACKGROUND_GRAPHIC);
+            Rectangle bounds = gumpInfo.UV;
+
+            if (multiplier > 1)
+                x -= (int)(((BAR_WIDTH * multiplier) / 2) - (BAR_WIDTH / 2));
 
             batcher.Draw(
                 gumpInfo.Texture,
-                new Rectangle(x, y, gumpInfo.UV.Width * MULTIPLER, gumpInfo.UV.Height * MULTIPLER),
+                new Rectangle(x, y, gumpInfo.UV.Width * multiplier, gumpInfo.UV.Height * multiplier),
                 gumpInfo.UV,
                 hueVec
             );
 
-            hueVec.X = 0x21;
+            hueVec.X = 90;
 
-            if (entity.Hits != entity.HitsMax || entity.HitsMax == 0)
+            if (mobile != null)
             {
-                int offset = 2;
-
-                if (per >> 2 == 0)
+                if (mobile.IsPoisoned)
                 {
-                    offset = per;
+                    hueVec.X = 63;
                 }
-
-                gumpInfo = ref Client.Game.Gumps.GetGump(HP_GRAPHIC);
-
-                batcher.DrawTiled(
-                    gumpInfo.Texture,
-                    new Rectangle(
-                        x + per * MULTIPLER - offset,
-                        y,
-                        (BAR_WIDTH - per) * MULTIPLER - offset / 2,
-                        gumpInfo.UV.Height * MULTIPLER
-                    ),
-                    gumpInfo.UV,
-                    hueVec
-                );
+                else if (mobile.IsYellowHits)
+                {
+                    hueVec.X = 53;
+                }
             }
 
-            hue = 90;
+            float hitPerecentage = (float)entity.Hits / (float)entity.HitsMax;
 
-            if (per > 0)
-            {
-                if (mobile != null)
-                {
-                    if (mobile.IsPoisoned)
-                    {
-                        hue = 63;
-                    }
-                    else if (mobile.IsYellowHits)
-                    {
-                        hue = 53;
-                    }
-                }
+            if (entity.HitsMax == 0)
+                hitPerecentage = 1;
 
-                hueVec.X = hue;
-
-                gumpInfo = ref Client.Game.Gumps.GetGump(HP_GRAPHIC);
-                batcher.DrawTiled(
-                    gumpInfo.Texture,
-                    new Rectangle(x, y, per * MULTIPLER, gumpInfo.UV.Height * MULTIPLER),
-                    gumpInfo.UV,
-                    hueVec
+            batcher.Draw(
+                SolidColorTextureCache.GetTexture(Color.White),
+                new Vector2(x + (3 * multiplier), y + (4 * multiplier)),
+                new Rectangle(0, 0, (int)(((BAR_WIDTH * multiplier) - (6 * multiplier)) * hitPerecentage), (bounds.Height * multiplier) - (6 * multiplier)),
+                hueVec
                 );
-            }
         }
     }
 }

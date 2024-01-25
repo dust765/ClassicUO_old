@@ -39,7 +39,7 @@ using Microsoft.Xna.Framework;
 
 namespace ClassicUO.Game.UI.Controls
 {
-    internal abstract class GumpPicBase : Control
+    public abstract class GumpPicBase : Control
     {
         private ushort _graphic;
 
@@ -81,7 +81,7 @@ namespace ClassicUO.Game.UI.Controls
                 return false;
             }
 
-            if (Client.Game.Gumps.PixelCheck(Graphic, x - Offset.X, y - Offset.Y))
+            if (Client.Game.Gumps.PixelCheck(Graphic, x - Offset.X, y - Offset.Y, InternalScale))
             {
                 return true;
             }
@@ -178,7 +178,7 @@ namespace ClassicUO.Game.UI.Controls
             {
                 batcher.Draw(
                     gumpInfo.Texture,
-                    new Rectangle(x, y, Width, Height),
+                    new Rectangle(x, y, (int)(Width * Scale), (int)(Height * Scale)),
                     gumpInfo.UV,
                     hueVector
                 );
@@ -190,7 +190,19 @@ namespace ClassicUO.Game.UI.Controls
 
     internal class GumpPicInPic : GumpPicBase
     {
-        private readonly Rectangle _picInPicBounds;
+        private Rectangle _picInPicBounds;
+
+        public Vector2 DrawOffset { get; set; } = Vector2.Zero;
+
+        public Rectangle PicInPicBounds
+        {
+            get => _picInPicBounds; set
+            {
+                _picInPicBounds = value;
+                Width = _picInPicBounds.Width;
+                Height = _picInPicBounds.Height;
+            }
+        }
 
         public GumpPicInPic(
             int x,
@@ -245,7 +257,7 @@ namespace ClassicUO.Game.UI.Controls
             {
                 batcher.Draw(
                     gumpInfo.Texture,
-                    new Rectangle(x, y, Width, Height),
+                    new Rectangle((int)(x + DrawOffset.X), (int)(y + DrawOffset.Y), (int)(Width * Scale), (int)(Height * Scale)),
                     sourceBounds,
                     hueVector
                 );
