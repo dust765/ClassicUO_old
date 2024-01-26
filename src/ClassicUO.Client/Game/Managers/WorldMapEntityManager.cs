@@ -40,6 +40,7 @@ using ClassicUO.Game.UI.Gumps;
 using ClassicUO.Network;
 using ClassicUO.Network.Encryption;
 using ClassicUO.Utility.Logging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ClassicUO.Game.Managers
 {
@@ -65,7 +66,7 @@ namespace ClassicUO.Game.Managers
             Entity e = World.Get(serial);
 
 
-            if (mob != null)
+            if (mob != null && !mob.IsDestroyed)
             {
                 WMapEntity wme = World.WMapManager.GetEntity(mob);
 
@@ -73,36 +74,36 @@ namespace ClassicUO.Game.Managers
                 {
                     if (string.IsNullOrEmpty(wme.Name))
                     {
+                       
                         wme.Name = mob.Name;
                         Name = wme.Name;
                         nameCache[serial] = Name;
+                        GameActions.Print("Mob  is not null Is wme != null  " + wme.Serial + " Name: " + mob.Name + " nameCache: " + nameCache[serial]);
                     }
                 }
             }
-            if (e != null && !e.IsDestroyed)
+            if (e != null)
             {
                 Name = e.Name;
                 serial = e.Serial;
                 nameCache[serial] = Name;
+                GameActions.Print("Entity  is not null Is wme != null  " + e.Name + " Name: " + mob.Name + " nameCache: " + nameCache[serial]);
             }
-
-            // Entity e = World.Get(Serial);
-            // Mobile mob = World.Mobiles.Get(Serial);
-
-            // if (e != null && !e.IsDestroyed && !string.IsNullOrEmpty(e.Name) && Name != e.Name)
-            //{
-            //     Name = e.Name;
-            //}
-
+           
+         
             if (nameCache.TryGetValue(serial, out string cachedName))
             {
-
+                var teste = string.IsNullOrEmpty(Name) ? cachedName : Name;
+                GameActions.Print("Entity  is not null Is wme != null  " + teste);
                 return string.IsNullOrEmpty(Name) ? cachedName : Name;
             }
             else
             {
-                return string.IsNullOrEmpty(Name) ? "Out of range" : Name;
+                return string.IsNullOrEmpty(Name) ? "<out of range>" : Name;
             }
+            
+            
+
 
             // ## BEGIN - END ## // DUST765 - Fix to use cache for name in Map Gump
         }

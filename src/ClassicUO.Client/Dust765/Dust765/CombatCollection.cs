@@ -1353,7 +1353,6 @@ namespace ClassicUO.Dust765.Dust765
             {
                 if (!GameActions.iscasting)
                     World.Player.OnCasting.Start((uint)GameActions.LastSpellIndexCursor);
-                World.Player.Hue = 0x0023;
             }
             // ## BEGIN - END ## // ONCASTINGGUMP
         }

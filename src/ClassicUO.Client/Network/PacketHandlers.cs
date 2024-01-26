@@ -1798,7 +1798,7 @@ namespace ClassicUO.Network
                     Map = World.Map.Index,
                     LastUpdate = Time.Ticks + (1000 * 60 * 5),
                     IsGuild = false,
-                    Name = $"Your Corpse"
+                    Name = $"YOUR CORPOSE"
                 };
                 // ## BEGIN - END ## // TAZUO
             }

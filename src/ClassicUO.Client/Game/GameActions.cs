@@ -32,6 +32,7 @@
 
 using System;
 using ClassicUO.Configuration;
+using ClassicUO.Dust765.Dust765;
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Managers;
@@ -720,6 +721,7 @@ namespace ClassicUO.Game
                 // ## BEGIN - END ## // VISUAL HELPERS
                 LastSpellIndexCursor = index;
                 GameCursor._spellTime = 0;
+                
                 // ## BEGIN - END ## // VISUAL HELPERS
                 // ## BEGIN - END ## // ONCASTINGGUMP
                 if (ProfileManager.CurrentProfile.OnCastingGump)
@@ -741,6 +743,8 @@ namespace ClassicUO.Game
                 // ## BEGIN - END ## // VISUAL HELPERS
                 LastSpellIndexCursor = index;
                 GameCursor._spellTime = 0;
+                CombatCollection.StartSpelltime();
+               
                 // ## BEGIN - END ## // VISUAL HELPERS
                 // ## BEGIN - END ## // ONCASTINGGUMP
                 if (ProfileManager.CurrentProfile.OnCastingGump)
@@ -751,6 +755,7 @@ namespace ClassicUO.Game
                 // ## BEGIN - END ## // ONCASTINGGUMP
 
                 LastSpellIndex = index;
+
                 Socket.Send_CastSpell(index);
             }
         }
