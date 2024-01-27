@@ -3316,7 +3316,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (_showGroupName)
             {
-                string name = entity.Name ?? ResGumps.OutOfRange;
+                string name = entity.Name ?? entity.GetName(entity.Serial);
                 Vector2 size = Fonts.Regular.MeasureString(entity.Name ?? name);
 
                 if (rot.X + size.X / 2 > x + Width - 8)
