@@ -82,7 +82,7 @@ namespace ClassicUO.Game.Managers
             }
             else
             {
-                return string.IsNullOrEmpty(Name) ? "<out of range>" : Name;
+                return string.IsNullOrEmpty(Name) ? "<friend>" : Name;
             }
         }
     }

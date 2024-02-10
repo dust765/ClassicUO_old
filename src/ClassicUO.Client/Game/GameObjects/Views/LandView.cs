@@ -41,6 +41,7 @@ using ClassicUO.Renderer;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using ClassicUO.Game.Managers;
 
 namespace ClassicUO.Game.GameObjects
 {
@@ -91,7 +92,7 @@ namespace ClassicUO.Game.GameObjects
             }
             if (ProfileManager.CurrentProfile.HighlightTileAtRangeSpell)
             {
-                if (GameActions.LastSpellIndexCursor > 0 && Distance == ProfileManager.CurrentProfile.HighlightTileAtRangeRangeSpell)
+                if (TargetManager.IsTargeting && Distance == ProfileManager.CurrentProfile.HighlightTileAtRangeRangeSpell)
                 {
                     hueVec.X = ProfileManager.CurrentProfile.HighlightTileRangeHueSpell;
                     hueVec.Y = 1;
