@@ -305,7 +305,8 @@ namespace ClassicUO.Game
                     }
                     else
                     {
-                        if (mob.NotorietyFlag == NotorietyFlag.Ally)
+                        WMapEntity wme = WMapManager.GetEntity(mob.Serial);
+                        if (mob.NotorietyFlag == NotorietyFlag.Ally || wme != null && wme.IsGuild)
                         {
                             WMapManager.AddOrUpdate
                             (

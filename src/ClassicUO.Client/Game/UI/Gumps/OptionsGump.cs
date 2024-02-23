@@ -232,7 +232,7 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _SpecialSetLastTargetClilocText, _blockWoSArt, _blockEnergyFArt;
         // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // MISC2
-        private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap, _drawMobilesWithSurfaceOverhead;
+        private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap, _showMapCloseFriend, _drawMobilesWithSurfaceOverhead;
         private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ, _dontRemoveHouseBelowZ;
         // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // MACROS
@@ -4424,6 +4424,10 @@ namespace ClassicUO.Game.UI.Gumps
 
             section8.Add(_showDeathOnWorldmap = AddCheckBox(null, "Show death location on world map for 5min:", _currentProfile.ShowDeathOnWorldmap, startX, startY));
             startY += _showDeathOnWorldmap.Height + 2;
+
+            section8.Add(_showMapCloseFriend = AddCheckBox(null, "Show closed friend in World Map:", _currentProfile.ShowMapCloseFriend, startX, startY));
+            startY += _showMapCloseFriend.Height + 2;
+
             // ## BEGIN - END ## // MISC2
             // ## BEGIN - END ## // NAMEOVERHEAD
             SettingsSection section9 = AddSettingsSection(box, "-----NAMEOVERHEAD-----");
@@ -7821,6 +7825,7 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // ONCASTINGGUMP
             _currentProfile.OnCastingGump = _onCastingGump.IsChecked;
             _currentProfile.OnCastingGump_hidden = _onCastingGump_hidden.IsChecked;
+            _currentProfile.ShowMapCloseFriend = _showMapCloseFriend.IsChecked;
             // ## BEGIN - END ## // ONCASTINGGUMP
             // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
             _currentProfile.ShowAllLayers = _showAllLayers.IsChecked;
