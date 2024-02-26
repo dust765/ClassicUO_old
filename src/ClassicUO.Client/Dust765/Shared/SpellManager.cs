@@ -36,7 +36,8 @@ namespace ClassicUO.Dust765.Managers
         Fifth,
         Sixth,
         Seventh,
-        Eighth
+        Eighth,
+        Nine
     }
 
     public enum SpellAction : ushort
@@ -247,7 +248,6 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.Strength:
                 case SpellAction.CurseWeapon:
                 case SpellAction.PainSpike:
-                case SpellAction.AttuneWeapon:
                 case SpellAction.CleansebyFire:
                 case SpellAction.Thunderstorm:
                     return SpellCircle.Second;
@@ -265,8 +265,6 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.SummonFey:
                 case SpellAction.SummonFiend:
                 case SpellAction.ReaperForm:
-                case SpellAction.Wildfire:
-                case SpellAction.EssenceofWind:
                 case SpellAction.DryadAllure:
                 case SpellAction.EtherealVoyage:
                 case SpellAction.WordofDeath:
@@ -281,7 +279,6 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.ManaDrain:
                 case SpellAction.Recall:
                 case SpellAction.RemoveCurse:
-                case SpellAction.GiftofLife:
                 case SpellAction.ArcaneCircle:
                 case SpellAction.HorrificBeast:
                 case SpellAction.Exorcism:
@@ -337,8 +334,13 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.EarthElemental:
                 case SpellAction.FireElemental:
                 case SpellAction.WaterElemental:
-                case SpellAction.GiftofRenewal:
                     return SpellCircle.Eighth;
+                case SpellAction.GiftofRenewal:
+                case SpellAction.AttuneWeapon:
+                case SpellAction.GiftofLife:
+                case SpellAction.Wildfire:
+                case SpellAction.EssenceofWind:
+                    return SpellCircle.Nine;
             }
             throw new InvalidOperationException();
         }
