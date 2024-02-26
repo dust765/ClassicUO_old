@@ -37,7 +37,7 @@ namespace ClassicUO.Dust765.Managers
         Sixth,
         Seventh,
         Eighth,
-        Nine
+        Ninth
     }
 
     public enum SpellAction : ushort
@@ -268,6 +268,9 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.DryadAllure:
                 case SpellAction.EtherealVoyage:
                 case SpellAction.WordofDeath:
+                case SpellAction.Wildfire:
+                case SpellAction.EssenceofWind:
+                
                     return SpellCircle.Third;
 
                 case SpellAction.ArchCure:
@@ -288,6 +291,8 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.PoisonStrike:
                 case SpellAction.Wither:
                 case SpellAction.MindRot:
+                case SpellAction.GiftofLife:
+                case SpellAction.AttuneWeapon:
                     return SpellCircle.Fourth;
 
                 case SpellAction.BladeSpirits:
@@ -336,11 +341,7 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.WaterElemental:
                     return SpellCircle.Eighth;
                 case SpellAction.GiftofRenewal:
-                case SpellAction.AttuneWeapon:
-                case SpellAction.GiftofLife:
-                case SpellAction.Wildfire:
-                case SpellAction.EssenceofWind:
-                    return SpellCircle.Nine;
+                    return SpellCircle.Ninth;
             }
             throw new InvalidOperationException();
         }

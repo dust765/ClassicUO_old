@@ -54,10 +54,9 @@ namespace ClassicUO.Dust765.External
         {
             _startTime = Time.Ticks;
             uint circle;
-            System.TimeSpan spellTime;
 
             if (!ProfileManager.CurrentProfile.OnCastingGump_hidden)
-            {
+            {s
                 IsVisible = true;
             }
 
@@ -69,13 +68,12 @@ namespace ClassicUO.Dust765.External
                 if (World.Player.IsBuffIconExists(BuffIconType.Protection))
                 {
                     protection_delay = 1;
-                    if (circle != 9)
+                    if (circle < 9)
                     {
-                        protection_delay = protection_delay + 2;
+                        protection_delay = protection_delay ;
                     } else
                     {
-                        protection_delay = protection_delay + 5;
-                        circle = circle + 2;
+                        protection_delay = protection_delay + 4;
                     }
                 }
                 _endTime = _startTime + 400 + (circle + protection_delay) * 250 + _re; // (0.5+ 0.25 * circle) * 1000
