@@ -37,7 +37,9 @@ namespace ClassicUO.Dust765.Managers
         Sixth,
         Seventh,
         Eighth,
-        Ninth
+        Ninth,
+        Eleventh,
+        Twelfth
     }
 
     public enum SpellAction : ushort
@@ -341,7 +343,7 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.WaterElemental:
                     return SpellCircle.Eighth;
                 case SpellAction.GiftofRenewal:
-                    return SpellCircle.Ninth;
+                    return SpellCircle.Twelfth;
             }
             throw new InvalidOperationException();
         }

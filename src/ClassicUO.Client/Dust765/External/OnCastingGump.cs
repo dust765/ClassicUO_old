@@ -56,7 +56,7 @@ namespace ClassicUO.Dust765.External
             uint circle;
 
             if (!ProfileManager.CurrentProfile.OnCastingGump_hidden)
-            {s
+            {
                 IsVisible = true;
             }
 
@@ -67,14 +67,7 @@ namespace ClassicUO.Dust765.External
                 uint protection_delay = 0;
                 if (World.Player.IsBuffIconExists(BuffIconType.Protection))
                 {
-                    protection_delay = 1;
-                    if (circle < 9)
-                    {
-                        protection_delay = protection_delay ;
-                    } else
-                    {
-                        protection_delay = protection_delay + 4;
-                    }
+                    protection_delay = protection_delay + 4;
                 }
                 _endTime = _startTime + 400 + (circle + protection_delay) * 250 + _re; // (0.5+ 0.25 * circle) * 1000
                 GameActions.iscasting = true;
