@@ -415,6 +415,8 @@ namespace ClassicUO.Configuration
         public bool DrawMobilesWithSurfaceOverhead { get; set; } = false;
         public bool IgnoreCoTEnabled { get; set; } = false;
         public bool ShowDeathOnWorldmap { get; set; } = false;
+
+        public bool ShowMapCloseFriend { get; set; }
         // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // MACROS
         public int LastTargetRange { get; set; }

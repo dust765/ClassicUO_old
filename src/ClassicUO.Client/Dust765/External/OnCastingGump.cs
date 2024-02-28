@@ -7,6 +7,7 @@ using ClassicUO.Assets;
 using ClassicUO.Renderer;
 using ClassicUO.Dust765.Managers;
 using System;
+using ClassicUO.Game.Data;
 
 namespace ClassicUO.Dust765.External
 {
@@ -60,10 +61,15 @@ namespace ClassicUO.Dust765.External
             }
 
             try
-            { 
+            {
                 SpellAction spell = (SpellAction)_spell_id;
                 circle = (uint)SpellManager.GetCircle(spell);
-                _endTime = _startTime + 400 + circle * 250 + _re; // (0.5+ 0.25 * circle) * 1000
+                uint protection_delay = 0;
+                if (World.Player.IsBuffIconExists(BuffIconType.Protection))
+                {
+                    protection_delay = protection_delay + 4;
+                }
+                _endTime = _startTime + 400 + (circle + protection_delay) * 250 + _re; // (0.5+ 0.25 * circle) * 1000
                 GameActions.iscasting = true;
             }
             catch

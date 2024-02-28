@@ -2448,7 +2448,7 @@ namespace ClassicUO.Game.UI.Gumps
                             {
                                 if (string.IsNullOrEmpty(wme.Name) && !string.IsNullOrEmpty(partyMember.Name))
                                 {
-                                    wme.Name = partyMember.Name;
+                                    wme.Name = wme.GetName(partyMember.Serial);
                                 }
                             }
 

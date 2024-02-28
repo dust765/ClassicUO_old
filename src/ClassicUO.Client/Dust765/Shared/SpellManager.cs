@@ -36,7 +36,10 @@ namespace ClassicUO.Dust765.Managers
         Fifth,
         Sixth,
         Seventh,
-        Eighth
+        Eighth,
+        Ninth,
+        Eleventh,
+        Twelfth
     }
 
     public enum SpellAction : ushort
@@ -247,7 +250,6 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.Strength:
                 case SpellAction.CurseWeapon:
                 case SpellAction.PainSpike:
-                case SpellAction.AttuneWeapon:
                 case SpellAction.CleansebyFire:
                 case SpellAction.Thunderstorm:
                     return SpellCircle.Second;
@@ -265,11 +267,12 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.SummonFey:
                 case SpellAction.SummonFiend:
                 case SpellAction.ReaperForm:
-                case SpellAction.Wildfire:
-                case SpellAction.EssenceofWind:
                 case SpellAction.DryadAllure:
                 case SpellAction.EtherealVoyage:
                 case SpellAction.WordofDeath:
+                case SpellAction.Wildfire:
+                case SpellAction.EssenceofWind:
+                
                     return SpellCircle.Third;
 
                 case SpellAction.ArchCure:
@@ -281,7 +284,6 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.ManaDrain:
                 case SpellAction.Recall:
                 case SpellAction.RemoveCurse:
-                case SpellAction.GiftofLife:
                 case SpellAction.ArcaneCircle:
                 case SpellAction.HorrificBeast:
                 case SpellAction.Exorcism:
@@ -291,6 +293,8 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.PoisonStrike:
                 case SpellAction.Wither:
                 case SpellAction.MindRot:
+                case SpellAction.GiftofLife:
+                case SpellAction.AttuneWeapon:
                     return SpellCircle.Fourth;
 
                 case SpellAction.BladeSpirits:
@@ -337,8 +341,9 @@ namespace ClassicUO.Dust765.Managers
                 case SpellAction.EarthElemental:
                 case SpellAction.FireElemental:
                 case SpellAction.WaterElemental:
-                case SpellAction.GiftofRenewal:
                     return SpellCircle.Eighth;
+                case SpellAction.GiftofRenewal:
+                    return SpellCircle.Twelfth;
             }
             throw new InvalidOperationException();
         }
