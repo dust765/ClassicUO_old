@@ -280,8 +280,11 @@ namespace ClassicUO.Game.UI.Gumps
             
                 else
                 {
-                    TargetManager.LastTargetInfo.Serial = LocalEntity.Serial;
-                    GameActions.Print(World.Player, $"Target: {LocalEntity.Name}");
+                    if (LocalEntity != null && LocalEntity.Serial != default)
+                    {
+                        TargetManager.LastTargetInfo.Serial = LocalEntity.Serial;
+                    }
+                    
                 }
                 // ## BEGIN - END ## // MISC
                 Mouse.LastLeftButtonClickTime = 0;
