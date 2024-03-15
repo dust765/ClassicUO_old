@@ -65,7 +65,7 @@ namespace ClassicUO.Dust765.External
                 SpellAction spell = (SpellAction)_spell_id;
                 circle = (uint)SpellManager.GetCircle(spell);
                 uint protection_delay = 0;
-                if (World.Player.IsBuffIconExists(BuffIconType.Protection))
+                if (World.Player.IsBuffIconExists(BuffIconType.Protection) || World.Player.IsBuffIconExists(BuffIconType.ArchProtection))
                 {
                     protection_delay = protection_delay + 4;
                 }
@@ -74,7 +74,7 @@ namespace ClassicUO.Dust765.External
             }
             catch
             {
-                // cant discover the spell
+
                 Stop();
 
             }
