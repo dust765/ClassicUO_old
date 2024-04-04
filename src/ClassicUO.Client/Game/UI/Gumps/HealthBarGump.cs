@@ -655,6 +655,7 @@ namespace ClassicUO.Game.UI.Gumps
                 if (!string.IsNullOrEmpty(entity.Name) && _name != entity.Name)
                 {
                     _name = entity.Name;
+                    _serial = entity.Serial;
 
                     if (_textBox != null)
                     {
