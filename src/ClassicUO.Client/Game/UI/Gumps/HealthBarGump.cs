@@ -160,7 +160,6 @@ namespace ClassicUO.Game.UI.Gumps
             if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 writer.WriteAttributeString("name", _name);
-                writer.WriteAttributeString("serial", _serial.ToString());
             }
         }
 
@@ -176,15 +175,7 @@ namespace ClassicUO.Game.UI.Gumps
             else if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 _name = xml.GetAttribute("name");
-                string serial = xml.GetAttribute("serial");
-                if (uint.TryParse(serial, out uint serialValues))
-                {
-                    _serial = serialValues;
-                }
-                else
-                {
-                    _serial = 0000;
-                }
+               
                 _outOfRange = true;
                 BuildGump();
             }
@@ -664,7 +655,6 @@ namespace ClassicUO.Game.UI.Gumps
                 if (!string.IsNullOrEmpty(entity.Name) && _name != entity.Name)
                 {
                     _name = entity.Name;
-                    _serial = entity.Serial;
 
                     if (_textBox != null)
                     {
@@ -2106,6 +2096,7 @@ namespace ClassicUO.Game.UI.Gumps
                 if (!string.IsNullOrEmpty(entity.Name) && !(inparty && LocalSerial == World.Player.Serial) && _name != entity.Name)
                 {
                     _name = entity.Name;
+                    _serial = entity.Serial;
 
                     if (_textBox != null)
                     {
