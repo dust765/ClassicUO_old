@@ -297,6 +297,54 @@ namespace ClassicUO.Dust765.Dust765
 
             return color;
         }
+
+        public static ushort LastFriendHue(Mobile mobile, ushort hue)
+        {
+            WMapEntity wme = World.WMapManager.GetEntity(mobile.Serial);
+
+            if (wme != null)
+            {
+                if (mobile.NotorietyFlag == NotorietyFlag.Ally || World.Party.Contains(mobile.Serial) || wme.IsGuild)
+                {
+
+
+                    if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 1)
+                        hue = BRIGHT_WHITE_COLOR;
+                    else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 2)
+                        hue = BRIGHT_PINK_COLOR;
+                    else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 3)
+                        hue = BRIGHT_ICE_COLOR;
+                    else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 4)
+                        hue = BRIGHT_FIRE_COLOR;
+                    else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 5)
+                        hue = ProfileManager.CurrentProfile.HighlighFriendsGuildTypeHue;
+                }
+                return hue;
+            }
+            else
+            {
+                if (mobile.NotorietyFlag == NotorietyFlag.Ally || World.Party.Contains(mobile.Serial))
+                {
+
+
+                    if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 1)
+                        hue = BRIGHT_WHITE_COLOR;
+                    else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 2)
+                        hue = BRIGHT_PINK_COLOR;
+                    else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 3)
+                        hue = BRIGHT_ICE_COLOR;
+                    else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 4)
+                        hue = BRIGHT_FIRE_COLOR;
+                    else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 5)
+                        hue = ProfileManager.CurrentProfile.HighlighFriendsGuildTypeHue;
+                }
+                return hue;
+            }
+
+
+
+        }
+
         public static ushort WeaponsHue(ushort hue)
         {
             if (ProfileManager.CurrentProfile.GlowingWeaponsType == 1)
@@ -324,6 +372,19 @@ namespace ClassicUO.Dust765.Dust765
                 hue = BRIGHT_FIRE_COLOR;
             else if (ProfileManager.CurrentProfile.HighlightLastTargetType == 5)
                 hue = ProfileManager.CurrentProfile.HighlightLastTargetTypeHue;
+            if (mobile.NotorietyFlag == NotorietyFlag.Ally)
+            {
+                if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 1)
+                    hue = BRIGHT_WHITE_COLOR;
+                else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 2)
+                    hue = BRIGHT_PINK_COLOR;
+                else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 3)
+                    hue = BRIGHT_ICE_COLOR;
+                else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 4)
+                    hue = BRIGHT_FIRE_COLOR;
+                else if (ProfileManager.CurrentProfile.HighlighFriendsGuildType == 5)
+                    hue = ProfileManager.CurrentProfile.HighlighFriendsGuildTypeHue;
+            }
 
             if (mobile.IsPoisoned)
             {
@@ -515,7 +576,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
+                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55 || GameActions.LastSpellIndexCursor == 22)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
@@ -748,7 +809,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
+                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55 || GameActions.LastSpellIndexCursor == 22)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
@@ -982,7 +1043,7 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
+                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55 || GameActions.LastSpellIndexCursor == 22)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {

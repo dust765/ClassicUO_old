@@ -209,8 +209,8 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // VISUAL HELPERS
         private Checkbox _highlightTileRange, _highlightTileRangeSpell, _ownAuraByHP, _previewFields;
         private HSliderBar _highlightTileRangeRange, _highlightTileRangeRangeSpell;
-        private ClickableColorBox _highlightTileRangeColorPickerBox, _highlightTileRangeColorPickerBoxSpell, _highlightLastTargetTypeColorPickerBox, _highlightLastTargetTypeColorPickerBoxPoison, _highlightLastTargetTypeColorPickerBoxPara, _highlightGlowingWeaponsTypeColorPickerBoxHue, _hueImpassableViewColorPickerBox;
-        private Combobox _glowingWeaponsType, _highlightLastTargetType, _highlightLastTargetTypePoison, _highlightLastTargetTypePara;
+        private ClickableColorBox _highlightTileRangeColorPickerBox, _highlightTileRangeColorPickerBoxSpell, _highlightLastTargetTypeColorPickerBox, _highlighFriendsGuildTypeHueColorPickerBox, _highlightLastTargetTypeColorPickerBoxPoison, _highlightLastTargetTypeColorPickerBoxPara, _highlightGlowingWeaponsTypeColorPickerBoxHue, _hueImpassableViewColorPickerBox;
+        private Combobox _glowingWeaponsType, _highlightLastTargetType, _highlighFriendsGuildType, _highlightLastTargetTypePoison, _highlightLastTargetTypePara;
         // ## BEGIN - END ## // VISUAL HELPERS
         // ## BEGIN - END ## // HEALTHBAR
         private Checkbox _highlightLastTargetHealthBarOutline, _highlightHealthBarByState, _flashingHealthbarOutlineSelf, _flashingHealthbarOutlineParty, _flashingHealthbarOutlineGreen, _flashingHealthbarOutlineOrange, _flashingHealthbarOutlineAll, _flashingHealthbarNegativeOnly;
@@ -4163,6 +4163,16 @@ namespace ClassicUO.Game.UI.Gumps
             startY += _highlightLastTargetTypeColorPickerBox.Height + 2;
             section2.AddRight(AddLabel(null, "Custom color lasttarget", 0, 0), 2);
 
+            section2.Add(AddLabel(null, "Highlight Friends Guild Mobiles:", startX, startY));
+
+            mode = _currentProfile.HighlighFriendsGuildType;
+            section2.Add(_highlighFriendsGuildType = AddCombobox(null, new[] { "Off", "White", "Pink", "Ice", "Fire", "Custom" }, mode, startX, startY, 100));
+            startY += _highlighFriendsGuildType.Height + 2;
+
+            section2.Add(_highlighFriendsGuildTypeHueColorPickerBox = AddColorBox(null, startX, startY, _currentProfile.HighlighFriendsGuildTypeHue, ""));
+            startY += _highlighFriendsGuildTypeHueColorPickerBox.Height + 2;
+            section2.AddRight(AddLabel(null, "Custom color friends guild", 0, 0), 2);
+
             section2.Add(AddLabel(null, "Highlight lasttarget poisoned:", startX, startY));
 
             mode = _currentProfile.HighlightLastTargetTypePoison;
@@ -7411,9 +7421,11 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.OwnAuraByHP = _ownAuraByHP.IsChecked;
             _currentProfile.HighlightGlowingWeaponsTypeHue = _highlightGlowingWeaponsTypeColorPickerBoxHue.Hue;
             _currentProfile.HighlightLastTargetType = _highlightLastTargetType.SelectedIndex;
+            _currentProfile.HighlighFriendsGuildType = _highlighFriendsGuildType.SelectedIndex;
             _currentProfile.HighlightLastTargetTypePoison = _highlightLastTargetTypePoison.SelectedIndex;
             _currentProfile.HighlightLastTargetTypePara = _highlightLastTargetTypePara.SelectedIndex;
             _currentProfile.HighlightLastTargetTypeHue = _highlightLastTargetTypeColorPickerBox.Hue;
+            _currentProfile.HighlighFriendsGuildTypeHue = _highlighFriendsGuildTypeHueColorPickerBox.Hue;
             _currentProfile.HighlightLastTargetTypePoisonHue = _highlightLastTargetTypeColorPickerBoxPoison.Hue;
             _currentProfile.HighlightLastTargetTypeParaHue = _highlightLastTargetTypeColorPickerBoxPara.Hue;
             // ## BEGIN - END ## // VISUAL HELPERS

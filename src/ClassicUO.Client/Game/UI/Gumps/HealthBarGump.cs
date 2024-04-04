@@ -49,12 +49,16 @@ using ClassicUO.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
+using Microsoft.Extensions.Caching.Memory;
+using System.Xml.Linq;
+using System.Text.Json;
 
 namespace ClassicUO.Game.UI.Gumps
 {
     internal abstract class BaseHealthBarGump : AnchorableGump
     {
         private bool _targetBroke;
+        public static readonly MemoryCache entityCache = new MemoryCache(new MemoryCacheOptions());
 
         protected BaseHealthBarGump(Entity entity) : this(0, 0)
         {
@@ -70,10 +74,26 @@ namespace ClassicUO.Game.UI.Gumps
             CanCloseWithRightClick = true;
             _name = entity.Name;
             _isDead = entity is Mobile mm && mm.IsDead;
-
+            _serial = entity.Serial;
             // ## BEGIN - END ## // MISC
             LocalEntity = entity;
             // ## BEGIN - END ## // MISC
+
+            if (!entityCache.TryGetValue(entity.Serial, out Entity cachedEntity))
+            {
+                // A entidade não foi encontrada no cache, então a adicionamos
+                entityCache.Set(entity.Serial, entity, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(2),
+
+                    Priority = CacheItemPriority.Normal
+                });
+            }
+            else
+            {
+                LocalSerial = cachedEntity.Serial;
+                LocalEntity = cachedEntity;
+            }
 
             BuildGump();
         }
@@ -105,6 +125,7 @@ namespace ClassicUO.Game.UI.Gumps
         protected bool _canChangeName;
         protected bool _isDead;
         protected string _name;
+        protected uint _serial;
         protected bool _outOfRange;
         protected StbTextBox _textBox;
         // ## BEGIN - END ## // OUTLANDS
@@ -120,7 +141,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 GameActions.SendCloseStatus(LocalSerial);
             }*/
-            
+
             _textBox?.Dispose();
             _textBox = null;
 
@@ -139,6 +160,7 @@ namespace ClassicUO.Game.UI.Gumps
             if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 writer.WriteAttributeString("name", _name);
+                writer.WriteAttributeString("serial", _serial.ToString());
             }
         }
 
@@ -154,6 +176,15 @@ namespace ClassicUO.Game.UI.Gumps
             else if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 _name = xml.GetAttribute("name");
+                string serial = xml.GetAttribute("serial");
+                if (uint.TryParse(serial, out uint serialValues))
+                {
+                    _serial = serialValues;
+                }
+                else
+                {
+                    _serial = 0000;
+                }
                 _outOfRange = true;
                 BuildGump();
             }
@@ -272,19 +303,37 @@ namespace ClassicUO.Game.UI.Gumps
                 TargetManager.Target(LocalSerial);
                 // ## BEGIN - END ## // MISC
                 Entity ent = World.Get(LocalSerial);
-                if (ent == null)
+                if (ent == null && LocalSerial != World.Player.Serial)
                 {
-                    TargetManager.LastTargetInfo.Serial = LocalSerial;
-                    TargetManager.CancelTarget();
-                }
-            
-                else
-                {
-                    if (LocalEntity != null && LocalEntity.Serial != default)
+                    if (_serial != null)
                     {
-                        TargetManager.LastTargetInfo.Serial = LocalEntity.Serial;
+
+                        GameActions.Print(World.Player, $"Target OutRange: {_name}");
+                        TargetManager.LastTargetInfo.Serial = _serial;
+                        TargetManager.TargetFromHealthBar(_serial);
+
                     }
-                    
+                    else
+                    {
+
+                        Entity cachedEntity;
+                        if (entityCache.TryGetValue(_serial, out cachedEntity))
+                        {
+
+                            GameActions.Print(World.Player, $"Target OutRange : {cachedEntity.Name}");
+                            TargetManager.LastTargetInfo.Serial = cachedEntity.Serial;
+                            TargetManager.TargetFromHealthBar(_serial);
+
+                        }
+                        else
+                        {
+                            GameActions.Print($"No has info for Target, need see for updates infos.", 88);
+                        }
+
+
+                    }
+
+
                 }
                 // ## BEGIN - END ## // MISC
                 Mouse.LastLeftButtonClickTime = 0;
@@ -523,7 +572,7 @@ namespace ClassicUO.Game.UI.Gumps
                     {
                         GameActions.SendCloseStatus(LocalSerial);
                     }
-                    
+
                     if (inparty)
                     {
                         if (_textBox != null && _textBox.Hue != textColor)
@@ -615,6 +664,7 @@ namespace ClassicUO.Game.UI.Gumps
                 if (!string.IsNullOrEmpty(entity.Name) && _name != entity.Name)
                 {
                     _name = entity.Name;
+                    _serial = entity.Serial;
 
                     if (_textBox != null)
                     {
@@ -826,7 +876,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _textBox.Hue = textColor;
                 }
 
-                ushort barColor = mobile != null ? Notoriety.GetHue(mobile.NotorietyFlag) : (ushort) 912;
+                ushort barColor = mobile != null ? Notoriety.GetHue(mobile.NotorietyFlag) : (ushort)912;
 
                 if (_background.Hue != barColor)
                 {
@@ -874,7 +924,7 @@ namespace ClassicUO.Game.UI.Gumps
                         _normalHits = true;
                     }
                 }
-                
+
                 // ## BEGIN - END ## // OUTLANDS
                 //CombatCollection.UpdateHamstrung(mobile);
                 // ## BEGIN - END ## // OUTLANDS
@@ -1089,7 +1139,8 @@ namespace ClassicUO.Game.UI.Gumps
                         HPB_BAR_WIDTH,
                         HPB_BAR_HEIGHT,
                         HPB_COLOR_DRAW_BLUE.PackedValue
-                    ) { LineWidth = 0 }
+                    )
+                    { LineWidth = 0 }
                 );
 
                 Add
@@ -1101,7 +1152,8 @@ namespace ClassicUO.Game.UI.Gumps
                         HPB_BAR_WIDTH,
                         HPB_BAR_HEIGHT,
                         HPB_COLOR_DRAW_BLUE.PackedValue
-                    ) { LineWidth = 0 }
+                    )
+                    { LineWidth = 0 }
                 );
 
                 Add
@@ -1113,7 +1165,8 @@ namespace ClassicUO.Game.UI.Gumps
                         HPB_BAR_WIDTH,
                         HPB_BAR_HEIGHT,
                         HPB_COLOR_DRAW_BLUE.PackedValue
-                    ) { LineWidth = 0 }
+                    )
+                    { LineWidth = 0 }
                 );
 
                 Add
@@ -1259,7 +1312,8 @@ namespace ClassicUO.Game.UI.Gumps
                             HPB_BAR_WIDTH,
                             HPB_BAR_HEIGHT,
                             HPB_COLOR_DRAW_BLUE.PackedValue
-                        ) { LineWidth = 0 }
+                        )
+                        { LineWidth = 0 }
                     );
 
                     Add
@@ -1271,7 +1325,8 @@ namespace ClassicUO.Game.UI.Gumps
                             HPB_BAR_WIDTH,
                             HPB_BAR_HEIGHT,
                             HPB_COLOR_DRAW_BLUE.PackedValue
-                        ) { LineWidth = 0 }
+                        )
+                        { LineWidth = 0 }
                     );
 
                     Add
@@ -1283,7 +1338,8 @@ namespace ClassicUO.Game.UI.Gumps
                             HPB_BAR_WIDTH,
                             HPB_BAR_HEIGHT,
                             HPB_COLOR_DRAW_BLUE.PackedValue
-                        ) { LineWidth = 0 }
+                        )
+                        { LineWidth = 0 }
                     );
 
                     Add
@@ -1390,7 +1446,8 @@ namespace ClassicUO.Game.UI.Gumps
                             HPB_BAR_WIDTH,
                             HPB_BAR_HEIGHT,
                             HPB_COLOR_DRAW_BLUE.PackedValue
-                        ) { LineWidth = 0 }
+                        )
+                        { LineWidth = 0 }
                     );
 
                     Add
@@ -1698,6 +1755,7 @@ namespace ClassicUO.Game.UI.Gumps
                     );
 
                     _name = ResGumps.Self;
+     
                 }
                 else
                 {
@@ -1723,9 +1781,9 @@ namespace ClassicUO.Game.UI.Gumps
                     );
                 }
 
-                Add(_buttonHeal1 = new Button((int) ButtonParty.Heal1, 0x0938, 0x093A, 0x0938) { ButtonAction = ButtonAction.Activate, X = 0, Y = 20 });
+                Add(_buttonHeal1 = new Button((int)ButtonParty.Heal1, 0x0938, 0x093A, 0x0938) { ButtonAction = ButtonAction.Activate, X = 0, Y = 20 });
 
-                Add(_buttonHeal2 = new Button((int) ButtonParty.Heal2, 0x0939, 0x093A, 0x0939) { ButtonAction = ButtonAction.Activate, X = 0, Y = 33 });
+                Add(_buttonHeal2 = new Button((int)ButtonParty.Heal2, 0x0939, 0x093A, 0x0939) { ButtonAction = ButtonAction.Activate, X = 0, Y = 33 });
 
                 Add(_hpLineRed = new GumpPic(18, 20, LINE_RED_PARTY, 0));
                 Add(_manaLineRed = new GumpPic(18, 33, LINE_RED_PARTY, 0));
@@ -1838,7 +1896,7 @@ namespace ClassicUO.Game.UI.Gumps
                         }
                     }
 
-                    ushort barColor = entity == null || entity == World.Player || mobile == null || mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray ? (ushort) 0 : Notoriety.GetHue(mobile.NotorietyFlag);
+                    ushort barColor = entity == null || entity == World.Player || mobile == null || mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray ? (ushort)0 : Notoriety.GetHue(mobile.NotorietyFlag);
 
                     Add(_background = new GumpPic(0, 0, 0x0804, barColor) { ContainsByBounds = true });
                     Add(_hpLineRed = new GumpPic(34, 38, LINE_RED, hitsColor));
@@ -2094,7 +2152,7 @@ namespace ClassicUO.Game.UI.Gumps
                 */
                 // ## BEGIN - END ## // OUTLANDS
 
-            if (_outOfRange)
+                if (_outOfRange)
                 {
                     if (entity.HitsMax == 0)
                     {
@@ -2150,7 +2208,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _textBox.Hue = textColor;
                 }
 
-                ushort barColor = entity == World.Player || mobile == null || mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray ? (ushort) 0 : Notoriety.GetHue(mobile.NotorietyFlag);
+                ushort barColor = entity == World.Player || mobile == null || mobile.NotorietyFlag == NotorietyFlag.Criminal || mobile.NotorietyFlag == NotorietyFlag.Gray ? (ushort)0 : Notoriety.GetHue(mobile.NotorietyFlag);
 
                 if (_background.Hue != barColor)
                 {
@@ -2261,7 +2319,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         public override void OnButtonClick(int buttonID)
         {
-            switch ((ButtonParty) buttonID)
+            switch ((ButtonParty)buttonID)
             {
                 case ButtonParty.Heal1:
                     GameActions.CastSpell(29);

@@ -387,5 +387,6 @@ namespace ClassicUO.Network
 
             return _uncompressedBuffer.AsSpan(0, size);
         }
+
     }
 }
