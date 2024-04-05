@@ -68,7 +68,6 @@ namespace ClassicUO.Game.UI.Gumps
             LocalSerial = entity.Serial;
             CanCloseWithRightClick = true;
             _name = entity.Name;
-            _serial = entity.Serial;
             _isDead = entity is Mobile mm && mm.IsDead;
             // ## BEGIN - END ## // MISC
             LocalEntity = entity;
@@ -118,7 +117,6 @@ namespace ClassicUO.Game.UI.Gumps
         protected bool _canChangeName;
         protected bool _isDead;
         protected string _name;
-        protected uint _serial;
         protected bool _outOfRange;
         protected StbTextBox _textBox;
         // ## BEGIN - END ## // OUTLANDS
@@ -153,7 +151,6 @@ namespace ClassicUO.Game.UI.Gumps
             if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 writer.WriteAttributeString("name", _name);
-                writer.WriteAttributeString("serial", _serial.ToString());
             }
         }
 
@@ -169,20 +166,7 @@ namespace ClassicUO.Game.UI.Gumps
             else if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 _name = xml.GetAttribute("name");
-                string serialString = xml.GetAttribute("serial");
-
-                // Usando uint.TryParse para tentar converter a string em uint
-                if (uint.TryParse(serialString, out uint serialUint))
-                {
-                    // A conversão foi bem-sucedida, o valor de serialUint é o número serial convertido
-                    _serial = serialUint;
-                }
-                else
-                {
-                    // A conversão falhou, você pode lidar com isso de acordo com sua lógica
-                    // Por exemplo, lançar uma exceção ou definir um valor padrão para _serial
-                    Console.WriteLine("A conversão de string para uint falhou. O valor da string não é um número válido.");
-                }
+                
                 _outOfRange = true;
                 BuildGump();
             }
