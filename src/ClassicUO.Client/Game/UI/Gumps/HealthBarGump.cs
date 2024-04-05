@@ -49,16 +49,12 @@ using ClassicUO.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
-using Microsoft.Extensions.Caching.Memory;
-using System.Xml.Linq;
-using System.Text.Json;
 
 namespace ClassicUO.Game.UI.Gumps
 {
     internal abstract class BaseHealthBarGump : AnchorableGump
     {
         private bool _targetBroke;
-        public static readonly MemoryCache entityCache = new MemoryCache(new MemoryCacheOptions());
 
         protected BaseHealthBarGump(Entity entity) : this(0, 0)
         {
@@ -74,25 +70,10 @@ namespace ClassicUO.Game.UI.Gumps
             CanCloseWithRightClick = true;
             _name = entity.Name;
             _isDead = entity is Mobile mm && mm.IsDead;
+
             // ## BEGIN - END ## // MISC
             LocalEntity = entity;
             // ## BEGIN - END ## // MISC
-
-            if (!entityCache.TryGetValue(entity.Serial, out Entity cachedEntity))
-            {
-                // A entidade não foi encontrada no cache, então a adicionamos
-                entityCache.Set(entity.Serial, entity, new MemoryCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(2),
-
-                    Priority = CacheItemPriority.Normal
-                });
-            }
-            else
-            {
-                LocalSerial = cachedEntity.Serial;
-                LocalEntity = cachedEntity;
-            }
 
             BuildGump();
         }
@@ -173,7 +154,6 @@ namespace ClassicUO.Game.UI.Gumps
             else if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 _name = xml.GetAttribute("name");
-               
                 _outOfRange = true;
                 BuildGump();
             }
@@ -292,37 +272,12 @@ namespace ClassicUO.Game.UI.Gumps
                 TargetManager.Target(LocalSerial);
                 // ## BEGIN - END ## // MISC
                 Entity ent = World.Get(LocalSerial);
-                if (ent == null && LocalSerial != World.Player.Serial)
+                if (ent == null)
                 {
-                    if (LocalSerial != null)
-                    {
-
-                        GameActions.Print(World.Player, $"Target OutRange: {_name}");
-                        TargetManager.LastTargetInfo.Serial = LocalSerial;
-                        TargetManager.TargetFromHealthBar(LocalSerial);
-
-                    }
-                    else
-                    {
-
-                        Entity cachedEntity;
-                        if (entityCache.TryGetValue(LocalSerial, out cachedEntity))
-                        {
-
-                            GameActions.Print(World.Player, $"Target OutRange : {cachedEntity.Name}");
-                            TargetManager.LastTargetInfo.Serial = cachedEntity.Serial;
-                            TargetManager.TargetFromHealthBar(cachedEntity.Serial);
-
-                        }
-                        else
-                        {
-                            GameActions.Print($"No has info for Target, need see for updates infos.", 88);
-                        }
-
-
-                    }
-
-
+                    TargetManager.LastTargetInfo.Serial = LocalEntity.Serial;
+                    GameActions.Print($"Changing last target to {LocalEntity.Name}");
+                    GameActions.Print(World.Player, $"Target: {LocalEntity.Name}");
+                    TargetManager.CancelTarget();
                 }
                 // ## BEGIN - END ## // MISC
                 Mouse.LastLeftButtonClickTime = 0;
@@ -653,7 +608,7 @@ namespace ClassicUO.Game.UI.Gumps
                 if (!string.IsNullOrEmpty(entity.Name) && _name != entity.Name)
                 {
                     _name = entity.Name;
-           
+
                     if (_textBox != null)
                     {
                         _textBox.SetText(_name);
@@ -1743,7 +1698,6 @@ namespace ClassicUO.Game.UI.Gumps
                     );
 
                     _name = ResGumps.Self;
-     
                 }
                 else
                 {
@@ -2091,10 +2045,9 @@ namespace ClassicUO.Game.UI.Gumps
                     _isDead = false;
                 }
 
-                if (!string.IsNullOrEmpty(entity.Name) && !(inparty && LocalSerial == World.Player.Serial) && _name != entity.Name )
+                if (!string.IsNullOrEmpty(entity.Name) && !(inparty && LocalSerial == World.Player.Serial) && _name != entity.Name)
                 {
                     _name = entity.Name;
-               
 
                     if (_textBox != null)
                     {
@@ -2151,7 +2104,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _outOfRange = false;
 
                     _canChangeName = !inparty && mobile != null && mobile.IsRenamable;
-                    //_serial = entity.Serial;
+
                     hitsColor = 0;
 
                     if (inparty)
