@@ -49,34 +49,47 @@ using ClassicUO.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
+using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ClassicUO.Game.UI.Gumps
 {
     internal abstract class BaseHealthBarGump : AnchorableGump
     {
-        private bool _targetBroke;
+
+        public static readonly MemoryCache entityCache = new MemoryCache(new MemoryCacheOptions());
 
         protected BaseHealthBarGump(Entity entity) : this(0, 0)
         {
-            if (entity == null || entity.IsDestroyed)
-            {
-                Dispose();
 
-                return;
-            }
 
             GameActions.RequestMobileStatus(entity.Serial, true);
             LocalSerial = entity.Serial;
             CanCloseWithRightClick = true;
             _name = entity.Name;
+            _serial = entity.Serial;
             _isDead = entity is Mobile mm && mm.IsDead;
-
             // ## BEGIN - END ## // MISC
             LocalEntity = entity;
             // ## BEGIN - END ## // MISC
 
+
+            if (!entityCache.TryGetValue(entity.Serial, out Entity cachedEntity))
+            {
+                // A entidade não foi encontrada no cache, então a adicionamos
+                entityCache.Set(entity.Serial, entity, new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(2),
+
+                    Priority = CacheItemPriority.Normal
+                });
+            }
+
+
             BuildGump();
         }
+
 
         protected BaseHealthBarGump(uint serial) : this(World.Get(serial))
         {
@@ -105,6 +118,7 @@ namespace ClassicUO.Game.UI.Gumps
         protected bool _canChangeName;
         protected bool _isDead;
         protected string _name;
+        protected uint _serial;
         protected bool _outOfRange;
         protected StbTextBox _textBox;
         // ## BEGIN - END ## // OUTLANDS
@@ -139,6 +153,7 @@ namespace ClassicUO.Game.UI.Gumps
             if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 writer.WriteAttributeString("name", _name);
+                writer.WriteAttributeString("serial", _serial.ToString());
             }
         }
 
@@ -154,6 +169,20 @@ namespace ClassicUO.Game.UI.Gumps
             else if (ProfileManager.CurrentProfile.SaveHealthbars)
             {
                 _name = xml.GetAttribute("name");
+                string serialString = xml.GetAttribute("serial");
+
+                // Usando uint.TryParse para tentar converter a string em uint
+                if (uint.TryParse(serialString, out uint serialUint))
+                {
+                    // A conversão foi bem-sucedida, o valor de serialUint é o número serial convertido
+                    _serial = serialUint;
+                }
+                else
+                {
+                    // A conversão falhou, você pode lidar com isso de acordo com sua lógica
+                    // Por exemplo, lançar uma exceção ou definir um valor padrão para _serial
+                    Console.WriteLine("A conversão de string para uint falhou. O valor da string não é um número válido.");
+                }
                 _outOfRange = true;
                 BuildGump();
             }
@@ -267,6 +296,7 @@ namespace ClassicUO.Game.UI.Gumps
             if (TargetManager.IsTargeting)
             {
                 // ## BEGIN - END ## // MISC
+                // ## BEGIN - END ## // MISC
                 //_targetBroke = true;
                 // ## BEGIN - END ## // MISC
                 TargetManager.Target(LocalSerial);
@@ -274,10 +304,33 @@ namespace ClassicUO.Game.UI.Gumps
                 Entity ent = World.Get(LocalSerial);
                 if (ent == null)
                 {
-                    TargetManager.LastTargetInfo.Serial = LocalEntity.Serial;
-                    GameActions.Print($"Changing last target to {LocalEntity.Name}");
-                    GameActions.Print(World.Player, $"Target: {LocalEntity.Name}");
-                    TargetManager.CancelTarget();
+
+                    if (LocalSerial != null)
+                    {
+
+                        GameActions.Print(World.Player, $"Target OutRange: {_name}");
+                        TargetManager.LastTargetInfo.Serial = LocalSerial;
+                        TargetManager.TargetFromHealthBar(LocalSerial);
+                    }
+                    else
+                    {
+
+                        Entity cachedEntity;
+                        if (entityCache.TryGetValue(LocalSerial, out cachedEntity))
+                        {
+
+                            GameActions.Print(World.Player, $"Target OutRange : {cachedEntity.Name}");
+                            TargetManager.LastTargetInfo.Serial = cachedEntity.Serial;
+                            TargetManager.TargetFromHealthBar(cachedEntity.Serial);
+
+                        }
+                        else
+                        {
+                            GameActions.Print($"No has info for Target, need see for updates infos.", 88);
+                        }
+
+
+                    }
                 }
                 // ## BEGIN - END ## // MISC
                 Mouse.LastLeftButtonClickTime = 0;

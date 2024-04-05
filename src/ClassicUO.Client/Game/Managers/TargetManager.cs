@@ -626,6 +626,8 @@ namespace ClassicUO.Game.Managers
                                                               _targetCursorId,
                                                               (byte)TargetingType);
 
+                            
+
                         }
 
                         if (SerialHelper.IsMobile(serial) && LastTargetInfo.Serial == serial)
