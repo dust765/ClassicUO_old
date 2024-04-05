@@ -212,7 +212,7 @@ namespace ClassicUO.Game.GameObjects
 
             // ## BEGIN - END ## // VISUAL HELPERS
 
-            if (ProfileManager.CurrentProfile.HighlighFriendsGuildType != 0 && World.Get(this.Serial) != null)
+            if (ProfileManager.CurrentProfile.HighlighFriendsGuildType != 0)
             {
                 overridedHue = CombatCollection.LastFriendHue(this, overridedHue);
                 hueVec.Y = 1;
