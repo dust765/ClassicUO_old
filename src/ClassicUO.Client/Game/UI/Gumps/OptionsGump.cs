@@ -7336,7 +7336,6 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     infoBarGump.ResetItems();
                     infoBarGump.SetInScreen();
-                    infoBarGump.SetInScreen();
                 }
             }
             else

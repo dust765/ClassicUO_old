@@ -3,8 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <ApplicationIcon>cuoicon.ico</ApplicationIcon>
-    <AssemblyName>ClassicUO</AssemblyName>
-    <RootNamespace>ClassicUO</RootNamespace>
+    <AssemblyName>Dust765UO</AssemblyName>
+    <RootNamespace>Dust765UO</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IS_DEV_BUILD)' == 'true'">
