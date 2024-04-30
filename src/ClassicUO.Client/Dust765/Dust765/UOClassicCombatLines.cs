@@ -233,6 +233,7 @@ namespace ClassicUO.Dust765.Dust765
         {
             base.OnDragEnd(x, y);
             ProfileManager.CurrentProfile.UOClassicCombatLinesLocation = Location;
+            //ProfileManager.CurrentProfile.UOClassicCombatLinesLocation = new Point(Location.X, Location.Y);
         }
         public void UpdateVars()
         {
