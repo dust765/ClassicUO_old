@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace ClassicUO.Assets
+namespace ClassicUO.Renderer
 {
-    public class PixelPicker
+    public sealed class PixelPicker
     {
         const int InitialDataCount = 0x40000; // 256kb
 
@@ -74,7 +74,7 @@ namespace ClassicUO.Assets
             height = ReadIntegerFromData(ref index);
         }
 
-        public void Set(ulong textureID, int width, int height, Span<uint> pixels)
+        public void Set(ulong textureID, int width, int height, ReadOnlySpan<uint> pixels)
         {
             if (Has(textureID))
             {

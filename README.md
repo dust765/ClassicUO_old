@@ -1160,22 +1160,19 @@ ClassicUO is natively cross platform and supports:
 | Browser | [Play!](https://play.classicuo.org) |
 | Windows x64 | [Download](https://www.classicuo.eu/launcher/win-x64/ClassicUOLauncher-win-x64-release.zip) |
 | Linux x64 | [Download](https://www.classicuo.eu/launcher/linux-x64/ClassicUOLauncher-linux-x64-release.zip) |
-| macOS | [Download](https://www.classicuo.eu/launcher/osx/ClassicUOLauncher-osx-x64-release.zip) |
+| macOS x64 | [Download](https://www.classicuo.eu/launcher/osx/ClassicUOLauncher-osx-x64-release.zip) |
 
 Or visit the [ClassicUO Website](https://www.classicuo.eu/)
 
-# How to build the project
-
-Clone repository with:
+# How to generate a release build
 ```
-git config --global url."https://".insteadOf git://
 git clone --recursive https://github.com/ClassicUO/ClassicUO.git
+cd ClassicUO/scripts
+bash build-naot.sh
 ```
-
-Build the project:
-```
-dotnet build -c Release
-```
+Binaries available in `bin/dist` folder
+> [!WARNING] 
+> To execute .sh scripts on Windows, use Git Bash which can be installed with Git itself: https://git-scm.com/download/win
 
 # Contribute
 Everyone is welcome to contribute! The GitHub issues and project tracker are kept up to date with tasks that need work.
@@ -1194,4 +1191,4 @@ Backend:
 This work is released under the BSD 4 license. This project does not distribute any copyrighted game assets. In order to run this client you'll need to legally obtain a copy of the Ultima Online Classic Client.
 Using a custom client to connect to official UO servers is strictly forbidden. We do not assume any responsibility of the usage of this client.
 
-Ultima Online(R) © 2022 Electronic Arts Inc. All Rights Reserved.
+Ultima Online(R) © 2024 Electronic Arts Inc. All Rights Reserved.

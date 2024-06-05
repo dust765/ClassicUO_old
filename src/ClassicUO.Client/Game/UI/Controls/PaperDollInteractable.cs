@@ -1,8 +1,8 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 1. Redistributions of source code must retain the above copyright
@@ -16,7 +16,7 @@
 // 4. Neither the name of the copyright holder nor the
 //    names of its contributors may be used to endorse or promote products
 //    derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -48,21 +48,59 @@ namespace ClassicUO.Game.UI.Controls
     {
         private static readonly Layer[] _layerOrder =
         {
-            Layer.Cloak, Layer.Shirt, Layer.Pants, Layer.Shoes, Layer.Legs, Layer.Arms, Layer.Torso, Layer.Tunic,
-            Layer.Ring, Layer.Bracelet, Layer.Face, Layer.Gloves, Layer.Skirt, Layer.Robe, Layer.Waist, Layer.Necklace,
-            Layer.Hair, Layer.Beard, Layer.Earrings, Layer.Helmet, Layer.OneHanded, Layer.TwoHanded, Layer.Talisman
+            Layer.Cloak,
+            Layer.Shirt,
+            Layer.Pants,
+            Layer.Shoes,
+            Layer.Legs,
+            Layer.Arms,
+            Layer.Torso,
+            Layer.Tunic,
+            Layer.Ring,
+            Layer.Bracelet,
+            Layer.Face,
+            Layer.Gloves,
+            Layer.Skirt,
+            Layer.Robe,
+            Layer.Waist,
+            Layer.Necklace,
+            Layer.Hair,
+            Layer.Beard,
+            Layer.Earrings,
+            Layer.Helmet,
+            Layer.OneHanded,
+            Layer.TwoHanded,
+            Layer.Talisman
         };
 
         private static readonly Layer[] _layerOrder_quiver_fix =
         {
-            Layer.Shirt, Layer.Pants, Layer.Shoes, Layer.Legs, Layer.Arms, Layer.Torso, Layer.Tunic,
-            Layer.Ring, Layer.Bracelet, Layer.Face, Layer.Gloves, Layer.Skirt, Layer.Robe, Layer.Cloak, Layer.Waist,
+            Layer.Shirt,
+            Layer.Pants,
+            Layer.Shoes,
+            Layer.Legs,
+            Layer.Arms,
+            Layer.Torso,
+            Layer.Tunic,
+            Layer.Ring,
+            Layer.Bracelet,
+            Layer.Face,
+            Layer.Gloves,
+            Layer.Skirt,
+            Layer.Robe,
+            Layer.Cloak,
+            Layer.Waist,
             Layer.Necklace,
-            Layer.Hair, Layer.Beard, Layer.Earrings, Layer.Helmet, Layer.OneHanded, Layer.TwoHanded, Layer.Talisman
+            Layer.Hair,
+            Layer.Beard,
+            Layer.Earrings,
+            Layer.Helmet,
+            Layer.OneHanded,
+            Layer.TwoHanded,
+            Layer.Talisman
         };
 
         private readonly PaperDollGump _paperDollGump;
-
 
         private bool _updateUI;
 
@@ -77,7 +115,6 @@ namespace ClassicUO.Game.UI.Controls
         }
 
         public bool HasFakeItem { get; private set; }
-
 
         public override void Update()
         {
@@ -104,7 +141,7 @@ namespace ClassicUO.Game.UI.Controls
                 return;
             }
 
-            Mobile mobile = World.Mobiles.Get(LocalSerial);
+            Mobile mobile = _paperDollGump.World.Mobiles.Get(LocalSerial);
 
             if (mobile == null || mobile.IsDestroyed)
             {
@@ -158,19 +195,11 @@ namespace ClassicUO.Game.UI.Controls
             }
 
             // body
-            Add
-            (
-                new GumpPic(0, 0, body, hue)
-                {
-                    IsPartialHue = true
-                }
-            );
-
+            Add(new GumpPic(0, 0, body, hue) { IsPartialHue = true });
 
             if (mobile.Graphic == 0x03DB)
             {
-                Add
-                (
+                Add(
                     new GumpPic(0, 0, 0xC72B, mobile.Hue)
                     {
                         AcceptMouseInput = true,
@@ -189,9 +218,16 @@ namespace ClassicUO.Game.UI.Controls
             {
                 switch_arms_with_torso = arms.Graphic == 0x1410 || arms.Graphic == 0x1417;
             }
-            else if (HasFakeItem && Client.Game.GameCursor.ItemHold.Enabled && !Client.Game.GameCursor.ItemHold.IsFixedPosition && (byte) Layer.Arms == Client.Game.GameCursor.ItemHold.ItemData.Layer)
+            else if (
+                HasFakeItem
+                && Client.Game.UO.GameCursor.ItemHold.Enabled
+                && !Client.Game.UO.GameCursor.ItemHold.IsFixedPosition
+                && (byte)Layer.Arms == Client.Game.UO.GameCursor.ItemHold.ItemData.Layer
+            )
             {
-                switch_arms_with_torso = Client.Game.GameCursor.ItemHold.Graphic == 0x1410 || Client.Game.GameCursor.ItemHold.Graphic == 0x1417;
+                switch_arms_with_torso =
+                    Client.Game.UO.GameCursor.ItemHold.Graphic == 0x1410
+                    || Client.Game.UO.GameCursor.ItemHold.Graphic == 0x1417;
             }
 
             Layer[] layers;
@@ -200,15 +236,21 @@ namespace ClassicUO.Game.UI.Controls
             {
                 layers = equipItem.ItemData.IsContainer ? _layerOrder_quiver_fix : _layerOrder;
             }
-            else if (HasFakeItem && Client.Game.GameCursor.ItemHold.Enabled && !Client.Game.GameCursor.ItemHold.IsFixedPosition && (byte) Layer.Cloak == Client.Game.GameCursor.ItemHold.ItemData.Layer)
+            else if (
+                HasFakeItem
+                && Client.Game.UO.GameCursor.ItemHold.Enabled
+                && !Client.Game.UO.GameCursor.ItemHold.IsFixedPosition
+                && (byte)Layer.Cloak == Client.Game.UO.GameCursor.ItemHold.ItemData.Layer
+            )
             {
-                layers = Client.Game.GameCursor.ItemHold.ItemData.IsContainer ? _layerOrder_quiver_fix : _layerOrder;
+                layers = Client.Game.UO.GameCursor.ItemHold.ItemData.IsContainer
+                    ? _layerOrder_quiver_fix
+                    : _layerOrder;
             }
             else
             {
                 layers = _layerOrder;
             }
-
 
             for (int i = 0; i < layers.Length; i++)
             {
@@ -235,87 +277,105 @@ namespace ClassicUO.Game.UI.Controls
                         continue;
                     }
 
-                    ushort id = GetAnimID(mobile.Graphic, equipItem.ItemData.AnimID, mobile.IsFemale);
+                    ushort id = GetAnimID(
+                        mobile.Graphic,
+                        equipItem.ItemData.AnimID,
+                        mobile.IsFemale
+                    );
 
-                    Add
-                    (
-                        new GumpPicEquipment
-                        (
+                    Add(
+                        new GumpPicEquipment(
+                            _paperDollGump,
                             equipItem.Serial,
                             0,
                             0,
                             id,
-                            (ushort) (equipItem.Hue & 0x3FFF),
+                            (ushort)(equipItem.Hue & 0x3FFF),
                             layer
                         )
                         {
                             AcceptMouseInput = true,
                             IsPartialHue = equipItem.ItemData.IsPartialHue,
-                            CanLift = World.InGame && !World.Player.IsDead && layer != Layer.Beard && layer != Layer.Hair && (_paperDollGump.CanLift || LocalSerial == World.Player)
+                            CanLift =
+                                _paperDollGump.World.InGame
+                                && !_paperDollGump.World.Player.IsDead
+                                && layer != Layer.Beard
+                                && layer != Layer.Hair
+                                && (_paperDollGump.CanLift || LocalSerial == _paperDollGump.World.Player)
                         }
                     );
                 }
-                else if (HasFakeItem && Client.Game.GameCursor.ItemHold.Enabled && !Client.Game.GameCursor.ItemHold.IsFixedPosition && (byte) layer == Client.Game.GameCursor.ItemHold.ItemData.Layer && Client.Game.GameCursor.ItemHold.ItemData.AnimID != 0)
+                else if (
+                    HasFakeItem
+                    && Client.Game.UO.GameCursor.ItemHold.Enabled
+                    && !Client.Game.UO.GameCursor.ItemHold.IsFixedPosition
+                    && (byte)layer == Client.Game.UO.GameCursor.ItemHold.ItemData.Layer
+                    && Client.Game.UO.GameCursor.ItemHold.ItemData.AnimID != 0
+                )
                 {
-                    ushort id = GetAnimID(mobile.Graphic, Client.Game.GameCursor.ItemHold.ItemData.AnimID, mobile.IsFemale);
+                    ushort id = GetAnimID(
+                        mobile.Graphic,
+                        Client.Game.UO.GameCursor.ItemHold.ItemData.AnimID,
+                        mobile.IsFemale
+                    );
 
-                    Add
-                    (
-                        new GumpPicEquipment
-                        (
+                    Add(
+                        new GumpPicEquipment(
+                            _paperDollGump,
                             0,
                             0,
                             0,
                             id,
-                            (ushort) (Client.Game.GameCursor.ItemHold.Hue & 0x3FFF),
-                            Client.Game.GameCursor.ItemHold.Layer
+                            (ushort)(Client.Game.UO.GameCursor.ItemHold.Hue & 0x3FFF),
+                            Client.Game.UO.GameCursor.ItemHold.Layer
                         )
                         {
                             AcceptMouseInput = true,
-                            IsPartialHue = Client.Game.GameCursor.ItemHold.IsPartialHue,
+                            IsPartialHue = Client.Game.UO.GameCursor.ItemHold.IsPartialHue,
                             Alpha = 0.5f
                         }
                     );
                 }
             }
 
-
             equipItem = mobile.FindItemByLayer(Layer.Backpack);
 
             if (equipItem != null && equipItem.ItemData.AnimID != 0)
             {
-                ushort backpackGraphic = (ushort) (equipItem.ItemData.AnimID + Constants.MALE_GUMP_OFFSET);
-                
+                ushort backpackGraphic = (ushort)(
+                    equipItem.ItemData.AnimID + Constants.MALE_GUMP_OFFSET
+                );
+
                 // If player, apply backpack skin
-                if (mobile.Serial == World.Player.Serial)
+                if (mobile.Serial == _paperDollGump.World.Player.Serial)
                 {
-                    GumpsLoader loader = GumpsLoader.Instance;
+                    var gump = Client.Game.UO.Gumps;
 
                     switch (ProfileManager.CurrentProfile.BackpackStyle)
                     {
                         case 1:
-                            if (loader.GetGumpTexture(0x777B, out _) != null)
+                            if (gump.GetGump(0x777B).Texture != null)
                             {
                                 backpackGraphic = 0x777B; // Suede Backpack
                             }
 
                             break;
                         case 2:
-                            if (loader.GetGumpTexture(0x777C, out _) != null)
+                            if (gump.GetGump(0x777C).Texture != null)
                             {
                                 backpackGraphic = 0x777C; // Polar Bear Backpack
                             }
 
                             break;
                         case 3:
-                            if (loader.GetGumpTexture(0x777D, out _) != null)
+                            if (gump.GetGump(0x777D).Texture != null)
                             {
                                 backpackGraphic = 0x777D; // Ghoul Skin Backpack
                             }
 
                             break;
                         default:
-                            if (loader.GetGumpTexture(0xC4F6, out _) != null)
+                            if (gump.GetGump(0xC4F6).Texture != null)
                             {
                                 backpackGraphic = 0xC4F6; // Default Backpack
                             }
@@ -326,20 +386,19 @@ namespace ClassicUO.Game.UI.Controls
 
                 int bx = 0;
 
-                if (World.ClientFeatures.PaperdollBooks)
+                if (_paperDollGump.World.ClientFeatures.PaperdollBooks)
                 {
                     bx = 6;
                 }
 
-                Add
-                (
-                    new GumpPicEquipment
-                    (
+                Add(
+                    new GumpPicEquipment(
+                        _paperDollGump,
                         equipItem.Serial,
                         -bx,
                         0,
                         backpackGraphic,
-                        (ushort) (equipItem.Hue & 0x3FFF),
+                        (ushort)(equipItem.Hue & 0x3FFF),
                         Layer.Backpack
                     )
                     {
@@ -358,21 +417,33 @@ namespace ClassicUO.Game.UI.Controls
         {
             int offset = isfemale ? Constants.FEMALE_GUMP_OFFSET : Constants.MALE_GUMP_OFFSET;
 
-            if (Client.Version >= ClientVersion.CV_7000 && animID == 0x03CA                          // graphic for dead shroud
-                                                        && (graphic == 0x02B7 || graphic == 0x02B6)) // dead gargoyle graphics
+            if (
+                Client.Game.UO.Version >= ClientVersion.CV_7000
+                && animID == 0x03CA // graphic for dead shroud
+                && (graphic == 0x02B7 || graphic == 0x02B6)
+            ) // dead gargoyle graphics
             {
                 animID = 0x0223;
             }
 
-            AnimationsLoader.Instance.ConvertBodyIfNeeded(ref graphic);
+            Client.Game.UO.Animations.ConvertBodyIfNeeded(ref graphic);
 
-            if (AnimationsLoader.Instance.EquipConversions.TryGetValue(graphic, out Dictionary<ushort, EquipConvData> dict))
+            if (
+                AnimationsLoader.Instance.EquipConversions.TryGetValue(
+                    graphic,
+                    out Dictionary<ushort, EquipConvData> dict
+                )
+            )
             {
                 if (dict.TryGetValue(animID, out EquipConvData data))
                 {
                     if (data.Gump > Constants.MALE_GUMP_OFFSET)
                     {
-                        animID = (ushort) (data.Gump >= Constants.FEMALE_GUMP_OFFSET ? data.Gump - Constants.FEMALE_GUMP_OFFSET : data.Gump - Constants.MALE_GUMP_OFFSET);
+                        animID = (ushort)(
+                            data.Gump >= Constants.FEMALE_GUMP_OFFSET
+                                ? data.Gump - Constants.FEMALE_GUMP_OFFSET
+                                : data.Gump - Constants.MALE_GUMP_OFFSET
+                        );
                     }
                     else
                     {
@@ -381,26 +452,32 @@ namespace ClassicUO.Game.UI.Controls
                 }
             }
 
-            if (animID + offset > GumpsLoader.MAX_GUMP_DATA_INDEX_COUNT || GumpsLoader.Instance.GetGumpTexture((ushort)(animID + offset), out _) == null)
+            if (
+                animID + offset > GumpsLoader.MAX_GUMP_DATA_INDEX_COUNT
+                || Client.Game.UO.Gumps.GetGump((ushort)(animID + offset)).Texture == null
+            )
             {
                 // inverse
                 offset = isfemale ? Constants.MALE_GUMP_OFFSET : Constants.FEMALE_GUMP_OFFSET;
             }
 
-            if (GumpsLoader.Instance.GetGumpTexture((ushort)(animID + offset), out _) == null)
+            if (Client.Game.UO.Gumps.GetGump((ushort)(animID + offset)).Texture == null)
             {
-                Log.Error($"Texture not found in paperdoll: gump_graphic: {(ushort) (animID + offset)}");
+                Log.Error(
+                    $"Texture not found in paperdoll: gump_graphic: {(ushort)(animID + offset)}"
+                );
             }
 
-            return (ushort) (animID + offset);
+            return (ushort)(animID + offset);
         }
 
         public class GumpPicEquipment : GumpPic
         {
             private readonly Layer _layer;
+            private readonly Gump _gump;
 
-            public GumpPicEquipment
-            (
+            public GumpPicEquipment(
+                Gump gump,
                 uint serial,
                 int x,
                 int y,
@@ -409,11 +486,12 @@ namespace ClassicUO.Game.UI.Controls
                 Layer layer
             ) : base(x, y, graphic, hue)
             {
+                _gump = gump;
                 LocalSerial = serial;
                 CanMove = false;
                 _layer = layer;
 
-                if (SerialHelper.IsValid(serial) && World.InGame)
+                if (SerialHelper.IsValid(serial) && _gump.World.InGame)
                 {
                     SetTooltip(serial);
                 }
@@ -429,9 +507,9 @@ namespace ClassicUO.Game.UI.Controls
                 }
 
                 // this check is necessary to avoid crashes during character creation
-                if (World.InGame)
+                if (_gump.World.InGame)
                 {
-                    GameActions.DoubleClick(LocalSerial);
+                    GameActions.DoubleClick(_gump.World, LocalSerial);
                 }
 
                 return true;
@@ -439,7 +517,7 @@ namespace ClassicUO.Game.UI.Controls
 
             protected override void OnMouseUp(int x, int y, MouseButtonType button)
             {
-                SelectedObject.Object = World.Get(LocalSerial);
+                SelectedObject.Object = _gump.World.Get(LocalSerial);
                 base.OnMouseUp(x, y, button);
             }
 
@@ -447,27 +525,39 @@ namespace ClassicUO.Game.UI.Controls
             {
                 base.Update();
 
-                if (World.InGame)
+                if (_gump.World.InGame)
                 {
-                    if (CanLift && !Client.Game.GameCursor.ItemHold.Enabled && Mouse.LButtonPressed && UIManager.LastControlMouseDown(MouseButtonType.Left) == this && (Mouse.LastLeftButtonClickTime != 0xFFFF_FFFF && Mouse.LastLeftButtonClickTime != 0 && Mouse.LastLeftButtonClickTime + Mouse.MOUSE_DELAY_DOUBLE_CLICK < Time.Ticks || Mouse.LDragOffset != Point.Zero))
+                    if (
+                        CanLift
+                        && !Client.Game.UO.GameCursor.ItemHold.Enabled
+                        && Mouse.LButtonPressed
+                        && UIManager.LastControlMouseDown(MouseButtonType.Left) == this
+                        && (
+                            Mouse.LastLeftButtonClickTime != 0xFFFF_FFFF
+                                && Mouse.LastLeftButtonClickTime != 0
+                                && Mouse.LastLeftButtonClickTime + Mouse.MOUSE_DELAY_DOUBLE_CLICK
+                                    < Time.Ticks
+                            || Mouse.LDragOffset != Point.Zero
+                        )
+                    )
                     {
-                        GameActions.PickUp(LocalSerial, 0, 0);
+                        GameActions.PickUp(_gump.World, LocalSerial, 0, 0);
 
                         if (_layer == Layer.OneHanded || _layer == Layer.TwoHanded)
                         {
-                            World.Player.UpdateAbilities();
+                            _gump.World.Player.UpdateAbilities();
                         }
                     }
                     else if (MouseIsOver)
                     {
-                        SelectedObject.Object = World.Get(LocalSerial);
+                        SelectedObject.Object = _gump.World.Get(LocalSerial);
                     }
                 }
             }
 
             protected override void OnMouseOver(int x, int y)
             {
-                SelectedObject.Object = World.Get(LocalSerial);
+                SelectedObject.Object = _gump.World.Get(LocalSerial);
             }
         }
     }

@@ -1,8 +1,8 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 1. Redistributions of source code must retain the above copyright
@@ -16,7 +16,7 @@
 // 4. Neither the name of the copyright holder nor the
 //    names of its contributors may be used to endorse or promote products
 //    derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -40,6 +40,7 @@ using ClassicUO.Assets;
 using ClassicUO.Network;
 using ClassicUO.Resources;
 using Microsoft.Xna.Framework;
+using ClassicUO.Game.Scenes;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -53,27 +54,17 @@ namespace ClassicUO.Game.UI.Gumps
         private readonly Label _textCost;
         private readonly Label _textFixtures;
 
-        public HouseCustomizationGump(uint serial, int x, int y) : base(serial, 0)
+        public HouseCustomizationGump(World world, uint serial, int x, int y) : base(world, serial, 0)
         {
             X = x;
             Y = y;
             CanMove = true;
             AcceptMouseInput = false;
             CanCloseWithRightClick = true;
-            _customHouseManager = new HouseCustomizationManager(serial);
+            _customHouseManager = new HouseCustomizationManager(world, serial);
             World.CustomHouseManager = _customHouseManager;
 
-            Add
-            (
-                new GumpPicTiled
-                (
-                    121,
-                    36,
-                    397,
-                    120,
-                    0x0E14
-                )
-            );
+            Add(new GumpPicTiled(121, 36, 397, 120, 0x0E14));
 
             _dataBox = new DataBox(0, 0, 0, 0)
             {
@@ -86,23 +77,22 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add(new GumpPic(0, 17, 0x55F0, 0));
 
-            _gumpPic = new GumpPic(486, 17, (ushort) (_customHouseManager.FloorCount == 4 ? 0x55F2 : 0x55F9), 0);
+            _gumpPic = new GumpPic(
+                486,
+                17,
+                (ushort)(_customHouseManager.FloorCount == 4 ? 0x55F2 : 0x55F9),
+                0
+            );
             Add(_gumpPic);
 
-            Add
-            (
-                new GumpPicTiled
-                (
-                    153,
-                    17,
-                    333,
-                    154,
-                    0x55F1
-                )
-            );
+            Add(new GumpPicTiled(153, 17, 333, 154, 0x55F1));
 
-
-            Button button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_WALL, 0x5654, 0x5656, 0x5655)
+            Button button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_WALL,
+                0x5654,
+                0x5656,
+                0x5655
+            )
             {
                 X = 9,
                 Y = 41,
@@ -112,7 +102,7 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.Walls);
             Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_DOOR, 0x5657, 0x5659, 0x5658)
+            button = new Button((int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_DOOR, 0x5657, 0x5659, 0x5658)
             {
                 X = 39,
                 Y = 40,
@@ -122,7 +112,12 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.Doors);
             Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_FLOOR, 0x565A, 0x565C, 0x565B)
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_FLOOR,
+                0x565A,
+                0x565C,
+                0x565B
+            )
             {
                 X = 70,
                 Y = 40,
@@ -132,7 +127,12 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.Floors);
             Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_STAIR, 0x565D, 0x565F, 0x565E)
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_STAIR,
+                0x565D,
+                0x565F,
+                0x565E
+            )
             {
                 X = 9,
                 Y = 72,
@@ -142,7 +142,7 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.Stairs);
             Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_ROOF, 0x5788, 0x578A, 0x5789)
+            button = new Button((int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_ROOF, 0x5788, 0x578A, 0x5789)
             {
                 X = 39,
                 Y = 72,
@@ -152,7 +152,7 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.Roofs);
             Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_MISC, 0x5663, 0x5665, 0x5664)
+            button = new Button((int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_MISC, 0x5663, 0x5665, 0x5664)
             {
                 X = 69,
                 Y = 72,
@@ -162,7 +162,7 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.Miscellaneous);
             Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_MENU, 0x566C, 0x566E, 0x566D)
+            button = new Button((int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_MENU, 0x566C, 0x566E, 0x566D)
             {
                 X = 69,
                 Y = 100,
@@ -181,11 +181,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add(_textComponents);
 
-            Label text = new Label(":", false, 0x0481, font: 9)
-            {
-                X = 84,
-                Y = 142
-            };
+            Label text = new Label(":", false, 0x0481, font: 9) { X = 84, Y = 142 };
 
             Add(text);
 
@@ -229,20 +225,23 @@ namespace ClassicUO.Game.UI.Gumps
 
             Add(_dataBoxGUI);
 
-
             UpdateMaxPage();
             Update();
         }
-
 
         public new void Update()
         {
             _dataBox.Clear();
             _dataBoxGUI.Clear();
 
-            _gumpPic.Graphic = (ushort) (_customHouseManager.FloorCount == 4 ? 0x55F2 : 0x55F9);
+            _gumpPic.Graphic = (ushort)(_customHouseManager.FloorCount == 4 ? 0x55F2 : 0x55F9);
 
-            Button button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_ERASE, (ushort) (0x5666 + (_customHouseManager.Erasing ? 1 : 0)), 0x5668, 0x5667)
+            Button button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_ERASE,
+                (ushort)(0x5666 + (_customHouseManager.Erasing ? 1 : 0)),
+                0x5668,
+                0x5667
+            )
             {
                 X = 9,
                 Y = 100,
@@ -252,7 +251,12 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.Erase);
             _dataBoxGUI.Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_EYEDROPPER, (ushort) (0x5669 + (_customHouseManager.SeekTile ? 1 : 0)), 0x566B, 0x566A)
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_STATE_EYEDROPPER,
+                (ushort)(0x5669 + (_customHouseManager.SeekTile ? 1 : 0)),
+                0x566B,
+                0x566A
+            )
             {
                 X = 39,
                 Y = 100,
@@ -266,17 +270,21 @@ namespace ClassicUO.Game.UI.Gumps
             ushort[] floorVisionGraphic2 = { 0x5725, 0x5728, 0x572B };
             ushort[] floorVisionGraphic3 = { 0x571C, 0x571F, 0x5722 };
 
-            int[] associateGraphicTable =
-            {
-                0, 1, 2, 1, 2, 1, 2
-            };
+            int[] associateGraphicTable = { 0, 1, 2, 1, 2, 1, 2 };
 
-            ushort floorVisionGraphic = floorVisionGraphic1[associateGraphicTable[_customHouseManager.FloorVisionState[0]]];
+            ushort floorVisionGraphic = floorVisionGraphic1[
+                associateGraphicTable[_customHouseManager.FloorVisionState[0]]
+            ];
 
             int graphicOffset = _customHouseManager.CurrentFloor == 1 ? 3 : 0;
             int graphicOffset2 = _customHouseManager.CurrentFloor == 1 ? 4 : 0;
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_1, floorVisionGraphic, (ushort) (floorVisionGraphic + 2), (ushort) (floorVisionGraphic + 1))
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_1,
+                floorVisionGraphic,
+                (ushort)(floorVisionGraphic + 2),
+                (ushort)(floorVisionGraphic + 1)
+            )
             {
                 X = 533,
                 Y = 108,
@@ -286,7 +294,12 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(string.Format(ResGumps.Store0Visibility, 1));
             _dataBoxGUI.Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_1, (ushort) (0x56CD + graphicOffset2), 0x56D1, (ushort) (0x56CD + graphicOffset2))
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_1,
+                (ushort)(0x56CD + graphicOffset2),
+                0x56D1,
+                (ushort)(0x56CD + graphicOffset2)
+            )
             {
                 X = 583,
                 Y = 96,
@@ -296,7 +309,12 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(string.Format(ResGumps.GoToStory0, 1));
             _dataBoxGUI.Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_1, (ushort) (0x56F6 + graphicOffset), (ushort) (0x56F8 + graphicOffset), (ushort) (0x56F7 + graphicOffset))
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_1,
+                (ushort)(0x56F6 + graphicOffset),
+                (ushort)(0x56F8 + graphicOffset),
+                (ushort)(0x56F7 + graphicOffset)
+            )
             {
                 X = 623,
                 Y = 103,
@@ -306,12 +324,18 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(string.Format(ResGumps.GoToStory0, 1));
             _dataBoxGUI.Add(button);
 
-
-            floorVisionGraphic = floorVisionGraphic2[associateGraphicTable[_customHouseManager.FloorVisionState[1]]];
+            floorVisionGraphic = floorVisionGraphic2[
+                associateGraphicTable[_customHouseManager.FloorVisionState[1]]
+            ];
             graphicOffset = _customHouseManager.CurrentFloor == 2 ? 3 : 0;
             graphicOffset2 = _customHouseManager.CurrentFloor == 2 ? 4 : 0;
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_2, floorVisionGraphic, (ushort) (floorVisionGraphic + 2), (ushort) (floorVisionGraphic + 1))
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_2,
+                floorVisionGraphic,
+                (ushort)(floorVisionGraphic + 2),
+                (ushort)(floorVisionGraphic + 1)
+            )
             {
                 X = 533,
                 Y = 86,
@@ -321,7 +345,12 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(string.Format(ResGumps.Store0Visibility, 2));
             _dataBoxGUI.Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_2, (ushort) (0x56CE + graphicOffset2), 0x56D2, (ushort) (0x56CE + graphicOffset2))
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_2,
+                (ushort)(0x56CE + graphicOffset2),
+                0x56D2,
+                (ushort)(0x56CE + graphicOffset2)
+            )
             {
                 X = 583,
                 Y = 73,
@@ -331,7 +360,12 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(string.Format(ResGumps.GoToStory0, 2));
             _dataBoxGUI.Add(button);
 
-            button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_2, (ushort) (0x56F0 + graphicOffset), (ushort) (0x56F2 + graphicOffset), (ushort) (0x56F1 + graphicOffset))
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_2,
+                (ushort)(0x56F0 + graphicOffset),
+                (ushort)(0x56F2 + graphicOffset),
+                (ushort)(0x56F1 + graphicOffset)
+            )
             {
                 X = 623,
                 Y = 86,
@@ -341,15 +375,21 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(string.Format(ResGumps.GoToStory0, 2));
             _dataBoxGUI.Add(button);
 
-
             graphicOffset = _customHouseManager.CurrentFloor == 3 ? 3 : 0;
             graphicOffset2 = _customHouseManager.CurrentFloor == 3 ? 4 : 0;
 
             if (_customHouseManager.FloorCount == 4)
             {
-                floorVisionGraphic = floorVisionGraphic2[associateGraphicTable[_customHouseManager.FloorVisionState[2]]];
+                floorVisionGraphic = floorVisionGraphic2[
+                    associateGraphicTable[_customHouseManager.FloorVisionState[2]]
+                ];
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_3, floorVisionGraphic, (ushort) (floorVisionGraphic + 2), (ushort) (floorVisionGraphic + 1))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_3,
+                    floorVisionGraphic,
+                    (ushort)(floorVisionGraphic + 2),
+                    (ushort)(floorVisionGraphic + 1)
+                )
                 {
                     X = 533,
                     Y = 64,
@@ -359,7 +399,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(string.Format(ResGumps.Store0Visibility, 3));
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3, (ushort) (0x56CE + graphicOffset2), 0x56D2, (ushort) (0x56CE + graphicOffset2))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3,
+                    (ushort)(0x56CE + graphicOffset2),
+                    0x56D2,
+                    (ushort)(0x56CE + graphicOffset2)
+                )
                 {
                     X = 582,
                     Y = 56,
@@ -369,7 +414,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(string.Format(ResGumps.GoToStory0, 3));
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3, (ushort) (0x56F0 + graphicOffset), (ushort) (0x56F2 + graphicOffset), (ushort) (0x56F1 + graphicOffset))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3,
+                    (ushort)(0x56F0 + graphicOffset),
+                    (ushort)(0x56F2 + graphicOffset),
+                    (ushort)(0x56F1 + graphicOffset)
+                )
                 {
                     X = 623,
                     Y = 69,
@@ -379,13 +429,19 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(string.Format(ResGumps.GoToStory0, 3));
                 _dataBoxGUI.Add(button);
 
-
-                floorVisionGraphic = floorVisionGraphic2[associateGraphicTable[_customHouseManager.FloorVisionState[3]]];
+                floorVisionGraphic = floorVisionGraphic2[
+                    associateGraphicTable[_customHouseManager.FloorVisionState[3]]
+                ];
 
                 graphicOffset = _customHouseManager.CurrentFloor == 4 ? 3 : 0;
                 graphicOffset2 = _customHouseManager.CurrentFloor == 4 ? 4 : 0;
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_4, floorVisionGraphic, (ushort) (floorVisionGraphic + 2), (ushort) (floorVisionGraphic + 1))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_4,
+                    floorVisionGraphic,
+                    (ushort)(floorVisionGraphic + 2),
+                    (ushort)(floorVisionGraphic + 1)
+                )
                 {
                     X = 533,
                     Y = 42,
@@ -395,7 +451,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(string.Format(ResGumps.Store0Visibility, 4));
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_4, (ushort) (0x56D0 + graphicOffset2), 0x56D4, (ushort) (0x56D0 + graphicOffset2))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_4,
+                    (ushort)(0x56D0 + graphicOffset2),
+                    0x56D4,
+                    (ushort)(0x56D0 + graphicOffset2)
+                )
                 {
                     X = 583,
                     Y = 42,
@@ -405,7 +466,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(string.Format(ResGumps.GoToStory0, 4));
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_4, (ushort) (0x56EA + graphicOffset), (ushort) (0x56EC + graphicOffset), (ushort) (0x56EB + graphicOffset))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_4,
+                    (ushort)(0x56EA + graphicOffset),
+                    (ushort)(0x56EC + graphicOffset),
+                    (ushort)(0x56EB + graphicOffset)
+                )
                 {
                     X = 623,
                     Y = 50,
@@ -417,9 +483,16 @@ namespace ClassicUO.Game.UI.Gumps
             }
             else
             {
-                floorVisionGraphic = floorVisionGraphic2[associateGraphicTable[_customHouseManager.FloorVisionState[2]]];
+                floorVisionGraphic = floorVisionGraphic2[
+                    associateGraphicTable[_customHouseManager.FloorVisionState[2]]
+                ];
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_3, floorVisionGraphic, (ushort) (floorVisionGraphic + 2), (ushort) (floorVisionGraphic + 1))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_3,
+                    floorVisionGraphic,
+                    (ushort)(floorVisionGraphic + 2),
+                    (ushort)(floorVisionGraphic + 1)
+                )
                 {
                     X = 533,
                     Y = 64,
@@ -429,7 +502,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(string.Format(ResGumps.Store0Visibility, 3));
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3, (ushort) (0x56D0 + graphicOffset2), 0x56D4, (ushort) (0x56D0 + graphicOffset2))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3,
+                    (ushort)(0x56D0 + graphicOffset2),
+                    0x56D4,
+                    (ushort)(0x56D0 + graphicOffset2)
+                )
                 {
                     X = 582,
                     Y = 56,
@@ -439,7 +517,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(string.Format(ResGumps.GoToStory0, 3));
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3, (ushort) (0x56EA + graphicOffset), (ushort) (0x56EC + graphicOffset), (ushort) (0x56EB + graphicOffset))
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3,
+                    (ushort)(0x56EA + graphicOffset),
+                    (ushort)(0x56EC + graphicOffset),
+                    (ushort)(0x56EB + graphicOffset)
+                )
                 {
                     X = 623,
                     Y = 69,
@@ -490,7 +573,12 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (_customHouseManager.MaxPage > 1)
             {
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_LIST_LEFT, 0x5625, 0x5627, 0x5626)
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_LIST_LEFT,
+                    0x5625,
+                    0x5627,
+                    0x5626
+                )
                 {
                     X = 110,
                     Y = 63,
@@ -500,7 +588,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(ResGumps.PreviousPage);
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_LIST_RIGHT, 0x5628, 0x562A, 0x5629)
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_LIST_RIGHT,
+                    0x5628,
+                    0x562A,
+                    0x5629
+                )
                 {
                     X = 510,
                     Y = 63,
@@ -522,15 +615,25 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     foreach (Multi item in house.Components)
                     {
-                        if (item.IsCustom && (item.State & CUSTOM_HOUSE_MULTI_OBJECT_FLAGS.CHMOF_GENERIC_INTERNAL) == 0)
+                        if (
+                            item.IsCustom
+                            && (item.State & CUSTOM_HOUSE_MULTI_OBJECT_FLAGS.CHMOF_GENERIC_INTERNAL)
+                                == 0
+                        )
                         {
                             CUSTOM_HOUSE_GUMP_STATE state = 0;
 
-                            (int res1, int res2) = _customHouseManager.ExistsInList(ref state, item.Graphic);
+                            (int res1, int res2) = _customHouseManager.ExistsInList(
+                                ref state,
+                                item.Graphic
+                            );
 
                             if (res1 != -1 && res2 != -1)
                             {
-                                if (state == CUSTOM_HOUSE_GUMP_STATE.CHGS_DOOR || state == CUSTOM_HOUSE_GUMP_STATE.CHGS_FIXTURE)
+                                if (
+                                    state == CUSTOM_HOUSE_GUMP_STATE.CHGS_DOOR
+                                    || state == CUSTOM_HOUSE_GUMP_STATE.CHGS_FIXTURE
+                                )
                                 {
                                     _customHouseManager.Fixtures++;
                                 }
@@ -544,22 +647,31 @@ namespace ClassicUO.Game.UI.Gumps
                 }
             }
 
-
-            _textComponents.Hue = (ushort) (_customHouseManager.Components >= _customHouseManager.MaxComponets ? 0x0026 : 0x0481);
+            _textComponents.Hue = (ushort)(
+                _customHouseManager.Components >= _customHouseManager.MaxComponets ? 0x0026 : 0x0481
+            );
 
             _textComponents.Text = _customHouseManager.Components.ToString();
             _textComponents.X = 82 - _textComponents.Width;
 
-            _textFixtures.Hue = (ushort) (_customHouseManager.Fixtures >= _customHouseManager.MaxFixtures ? 0x0026 : 0x0481);
+            _textFixtures.Hue = (ushort)(
+                _customHouseManager.Fixtures >= _customHouseManager.MaxFixtures ? 0x0026 : 0x0481
+            );
 
             _textFixtures.Text = _customHouseManager.Fixtures.ToString();
 
-            string tooltip = ClilocLoader.Instance.Translate(1061039, $"{_customHouseManager.MaxComponets}\t{_customHouseManager.MaxFixtures}", true);
+            string tooltip = ClilocLoader.Instance.Translate(
+                1061039,
+                $"{_customHouseManager.MaxComponets}\t{_customHouseManager.MaxFixtures}",
+                true
+            );
 
             _textComponents.SetTooltip(tooltip);
             _textFixtures.SetTooltip(tooltip);
 
-            _textCost.Text = ((_customHouseManager.Components + _customHouseManager.Fixtures) * 500).ToString();
+            _textCost.Text = (
+                (_customHouseManager.Components + _customHouseManager.Fixtures) * 500
+            ).ToString();
         }
 
         public void UpdateMaxPage()
@@ -571,11 +683,12 @@ namespace ClassicUO.Game.UI.Gumps
                 case CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL:
                     if (_customHouseManager.Category == -1)
                     {
-                        _customHouseManager.MaxPage = (int) Math.Ceiling(HouseCustomizationManager.Walls.Count / 16.0f);
+                        _customHouseManager.MaxPage = (int)
+                            Math.Ceiling(World.CustomHouseManager.Walls.Count / 16.0f);
                     }
                     else
                     {
-                        foreach (CustomHouseWallCategory c in HouseCustomizationManager.Walls)
+                        foreach (CustomHouseWallCategory c in World.CustomHouseManager.Walls)
                         {
                             if (c.Index == _customHouseManager.Category)
                             {
@@ -589,28 +702,29 @@ namespace ClassicUO.Game.UI.Gumps
                     break;
 
                 case CUSTOM_HOUSE_GUMP_STATE.CHGS_DOOR:
-                    _customHouseManager.MaxPage = HouseCustomizationManager.Doors.Count;
+                    _customHouseManager.MaxPage = World.CustomHouseManager.Doors.Count;
 
                     break;
 
                 case CUSTOM_HOUSE_GUMP_STATE.CHGS_FLOOR:
-                    _customHouseManager.MaxPage = HouseCustomizationManager.Floors.Count;
+                    _customHouseManager.MaxPage = World.CustomHouseManager.Floors.Count;
 
                     break;
 
                 case CUSTOM_HOUSE_GUMP_STATE.CHGS_STAIR:
-                    _customHouseManager.MaxPage = HouseCustomizationManager.Stairs.Count;
+                    _customHouseManager.MaxPage = World.CustomHouseManager.Stairs.Count;
 
                     break;
 
                 case CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF:
                     if (_customHouseManager.Category == -1)
                     {
-                        _customHouseManager.MaxPage = (int) Math.Ceiling(HouseCustomizationManager.Roofs.Count / 16.0f);
+                        _customHouseManager.MaxPage = (int)
+                            Math.Ceiling(World.CustomHouseManager.Roofs.Count / 16.0f);
                     }
                     else
                     {
-                        foreach (CustomHouseRoofCategory c in HouseCustomizationManager.Roofs)
+                        foreach (CustomHouseRoofCategory c in World.CustomHouseManager.Roofs)
                         {
                             if (c.Index == _customHouseManager.Category)
                             {
@@ -626,11 +740,12 @@ namespace ClassicUO.Game.UI.Gumps
                 case CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC:
                     if (_customHouseManager.Category == -1)
                     {
-                        _customHouseManager.MaxPage = (int) Math.Ceiling(HouseCustomizationManager.Miscs.Count / 16.0f);
+                        _customHouseManager.MaxPage = (int)
+                            Math.Ceiling(World.CustomHouseManager.Miscs.Count / 16.0f);
                     }
                     else
                     {
-                        foreach (CustomHouseMiscCategory c in HouseCustomizationManager.Miscs)
+                        foreach (CustomHouseMiscCategory c in World.CustomHouseManager.Miscs)
                         {
                             if (c.Index == _customHouseManager.Category)
                             {
@@ -647,54 +762,48 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void AddWall()
         {
-            int x = 0, y = 0;
+            int x = 0,
+                y = 0;
 
             if (_customHouseManager.Category == -1)
             {
                 int startCategory = Page * 16;
                 int endCategory = startCategory + 16;
 
-                if (endCategory > HouseCustomizationManager.Walls.Count)
+                if (endCategory > World.CustomHouseManager.Walls.Count)
                 {
-                    endCategory = HouseCustomizationManager.Walls.Count;
+                    endCategory = World.CustomHouseManager.Walls.Count;
                 }
 
-                _dataBox.Add
-                (
-                    new ScissorControl
-                    (
-                        true,
-                        121,
-                        36,
-                        384,
-                        60
-                    )
-                );
+                _dataBox.Add(new ScissorControl(true, 121, 36, 384, 60));
 
                 for (int i = startCategory; i < endCategory; i++)
                 {
-                    List<CustomHouseWall> vec = HouseCustomizationManager.Walls[i].Items;
+                    List<CustomHouseWall> vec = World.CustomHouseManager.Walls[i].Items;
 
                     if (vec.Count == 0)
                     {
                         continue;
                     }
 
-                    _ = ArtLoader.Instance.GetStaticTexture((ushort)vec[0].East1, out var bounds);
+                    ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt((uint)vec[0].East1);
 
-                    int offsetX = x + 121 + (48 - bounds.Width) / 2;
+                    int offsetX = x + 121 + (48 - artInfo.UV.Width) / 2;
                     int offsetY = y + 36;
 
-                    StaticPic pic = new StaticPic((ushort) vec[0].East1, 0)
+                    StaticPic pic = new StaticPic((ushort)vec[0].East1, 0)
                     {
                         X = offsetX,
                         Y = offsetY,
                         CanMove = false,
-                        LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
+                        LocalSerial = (uint)(ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
                         Height = 60
                     };
 
-                    pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                    pic.MouseUp += (sender, e) =>
+                    {
+                        OnButtonClick((int)pic.LocalSerial);
+                    };
                     _dataBox.Add(pic);
 
                     x += 48;
@@ -706,65 +815,55 @@ namespace ClassicUO.Game.UI.Gumps
 
                         _dataBox.Add(new ScissorControl(false));
 
-                        _dataBox.Add
-                        (
-                            new ScissorControl
-                            (
-                                true,
-                                121,
-                                96,
-                                384,
-                                60
-                            )
-                        );
+                        _dataBox.Add(new ScissorControl(true, 121, 96, 384, 60));
                     }
                 }
 
                 // disable scissor
                 _dataBox.Add(new ScissorControl(false));
             }
-            else if (_customHouseManager.Category >= 0 && _customHouseManager.Category < HouseCustomizationManager.Walls.Count)
+            else if (
+                _customHouseManager.Category >= 0
+                && _customHouseManager.Category < World.CustomHouseManager.Walls.Count
+            )
             {
-                List<CustomHouseWall> vec = HouseCustomizationManager.Walls[_customHouseManager.Category].Items;
+                List<CustomHouseWall> vec = World.CustomHouseManager.Walls[
+                    _customHouseManager.Category
+                ].Items;
 
                 if (Page >= 0 && Page < vec.Count)
                 {
                     CustomHouseWall item = vec[Page];
 
                     // add scissor
-                    _dataBox.Add
-                    (
-                        new ScissorControl
-                        (
-                            true,
-                            121,
-                            36,
-                            384,
-                            120
-                        )
-                    );
+                    _dataBox.Add(new ScissorControl(true, 121, 36, 384, 120));
 
                     for (int i = 0; i < 8; i++)
                     {
-                        ushort graphic = _customHouseManager.ShowWindow ? item.WindowGraphics[i] : item.Graphics[i];
+                        ushort graphic = _customHouseManager.ShowWindow
+                            ? item.WindowGraphics[i]
+                            : item.Graphics[i];
 
                         if (graphic != 0)
                         {
-                            _ = ArtLoader.Instance.GetStaticTexture(graphic, out var bounds);
+                            ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(graphic);
 
-                            int offsetX = x + 130 + (48 - bounds.Width) / 2;
-                            int offsetY = y + 36 + (120 - bounds.Height) / 2;
+                            int offsetX = x + 130 + (48 - artInfo.UV.Width) / 2;
+                            int offsetY = y + 36 + (120 - artInfo.UV.Height) / 2;
 
                             StaticPic pic = new StaticPic(graphic, 0)
                             {
                                 X = offsetX,
                                 Y = offsetY,
                                 CanMove = false,
-                                LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
+                                LocalSerial = (uint)(ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
                                 Height = 120
                             };
 
-                            pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                            pic.MouseUp += (sender, e) =>
+                            {
+                                OnButtonClick((int)pic.LocalSerial);
+                            };
                             _dataBox.Add(pic);
                         }
 
@@ -777,7 +876,12 @@ namespace ClassicUO.Game.UI.Gumps
 
                 _dataBoxGUI.Add(new GumpPic(152, 0, 0x55F3, 0));
 
-                Button button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_CATEGORY, 0x5622, 0x5624, 0x5623)
+                Button button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_CATEGORY,
+                    0x5622,
+                    0x5624,
+                    0x5623
+                )
                 {
                     X = 167,
                     Y = 5,
@@ -791,7 +895,12 @@ namespace ClassicUO.Game.UI.Gumps
 
                 if (_customHouseManager.ShowWindow)
                 {
-                    button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_WALL_SHOW_WINDOW, 0x562E, 0x5630, 0x562F)
+                    button = new Button(
+                        (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_WALL_SHOW_WINDOW,
+                        0x562E,
+                        0x5630,
+                        0x562F
+                    )
                     {
                         X = 228,
                         Y = 9,
@@ -803,7 +912,12 @@ namespace ClassicUO.Game.UI.Gumps
                 }
                 else
                 {
-                    button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_WALL_SHOW_WINDOW, 0x562B, 0x562D, 0x562C)
+                    button = new Button(
+                        (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_WALL_SHOW_WINDOW,
+                        0x562B,
+                        0x562D,
+                        0x562C
+                    )
                     {
                         X = 228,
                         Y = 9,
@@ -818,24 +932,15 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void AddDoor()
         {
-            if (Page >= 0 && Page < HouseCustomizationManager.Doors.Count)
+            if (Page >= 0 && Page < World.CustomHouseManager.Doors.Count)
             {
-                CustomHouseDoor item = HouseCustomizationManager.Doors[Page];
+                CustomHouseDoor item = World.CustomHouseManager.Doors[Page];
 
-                int x = 0, y = 0;
+                int x = 0,
+                    y = 0;
 
                 // add scissor
-                _dataBox.Add
-                (
-                    new ScissorControl
-                    (
-                        true,
-                        138,
-                        36,
-                        384,
-                        120
-                    )
-                );
+                _dataBox.Add(new ScissorControl(true, 138, 36, 384, 120));
 
                 for (int i = 0; i < 8; i++)
                 {
@@ -843,27 +948,30 @@ namespace ClassicUO.Game.UI.Gumps
 
                     if (graphic != 0)
                     {
-                        _ = ArtLoader.Instance.GetStaticTexture(graphic, out var bounds);
+                        ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(graphic);
 
-                        int offsetX = x + 138 + (48 - bounds.Width) / 2;
+                        int offsetX = x + 138 + (48 - artInfo.UV.Width) / 2;
 
                         if (i > 3)
                         {
                             offsetX -= 20;
                         }
 
-                        int offsetY = y + 36 + (120 - bounds.Height) / 2;
+                        int offsetY = y + 36 + (120 - artInfo.UV.Height) / 2;
 
                         StaticPic pic = new StaticPic(graphic, 0)
                         {
                             X = offsetX,
                             Y = offsetY,
                             CanMove = false,
-                            LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
+                            LocalSerial = (uint)(ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
                             Height = 120
                         };
 
-                        pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                        pic.MouseUp += (sender, e) =>
+                        {
+                            OnButtonClick((int)pic.LocalSerial);
+                        };
                         _dataBox.Add(pic);
                     }
 
@@ -965,24 +1073,15 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void AddFloor()
         {
-            if (Page >= 0 && Page < HouseCustomizationManager.Floors.Count)
+            if (Page >= 0 && Page < World.CustomHouseManager.Floors.Count)
             {
-                CustomHouseFloor item = HouseCustomizationManager.Floors[Page];
+                CustomHouseFloor item = World.CustomHouseManager.Floors[Page];
 
-                int x = 0, y = 0;
+                int x = 0,
+                    y = 0;
 
                 // add scissor
-                _dataBox.Add
-                (
-                    new ScissorControl
-                    (
-                        true,
-                        123,
-                        36,
-                        384,
-                        120
-                    )
-                );
+                _dataBox.Add(new ScissorControl(true, 123, 36, 384, 120));
 
                 int index = 0;
 
@@ -994,21 +1093,26 @@ namespace ClassicUO.Game.UI.Gumps
 
                         if (graphic != 0)
                         {
-                            _ = ArtLoader.Instance.GetStaticTexture(graphic, out var bounds);
+                            ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(graphic);
 
-                            int offsetX = x + 123 + (48 - bounds.Width) / 2;
-                            int offsetY = y + 36 + (60 - bounds.Height) / 2;
+                            int offsetX = x + 123 + (48 - artInfo.UV.Width) / 2;
+                            int offsetY = y + 36 + (60 - artInfo.UV.Height) / 2;
 
                             StaticPic pic = new StaticPic(graphic, 0)
                             {
                                 X = offsetX,
                                 Y = offsetY,
                                 CanMove = false,
-                                LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + index)
+                                LocalSerial = (uint)(
+                                    ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + index
+                                )
                                 //Height = 120
                             };
 
-                            pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                            pic.MouseUp += (sender, e) =>
+                            {
+                                OnButtonClick((int)pic.LocalSerial);
+                            };
                             _dataBox.Add(pic);
                         }
 
@@ -1027,9 +1131,9 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void AddStair()
         {
-            if (Page >= 0 && Page < HouseCustomizationManager.Stairs.Count)
+            if (Page >= 0 && Page < World.CustomHouseManager.Stairs.Count)
             {
-                CustomHouseStair item = HouseCustomizationManager.Stairs[Page];
+                CustomHouseStair item = World.CustomHouseManager.Stairs[Page];
 
                 for (int j = 0; j < 2; j++)
                 {
@@ -1037,20 +1141,9 @@ namespace ClassicUO.Game.UI.Gumps
                     int y = j != 0 ? 60 : 0;
 
                     // add scissor
-                    _dataBox.Add
-                    (
-                        new ScissorControl
-                        (
-                            true,
-                            121,
-                            36 + y,
-                            384,
-                            60
-                        )
-                    );
+                    _dataBox.Add(new ScissorControl(true, 121, 36 + y, 384, 60));
 
-                    Label text = new Label
-                    (
+                    Label text = new Label(
                         ClilocLoader.Instance.GetString(1062113 + j),
                         true,
                         0xFFFF,
@@ -1074,21 +1167,26 @@ namespace ClassicUO.Game.UI.Gumps
 
                         if (graphic != 0)
                         {
-                            _ = ArtLoader.Instance.GetStaticTexture(graphic, out var bounds);
+                            ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(graphic);
 
-                            int offsetX = x + 123 + (48 - bounds.Width) / 2;
-                            int offsetY = y + 36 + (60 - bounds.Height) / 2;
+                            int offsetX = x + 123 + (48 - artInfo.UV.Width) / 2;
+                            int offsetY = y + 36 + (60 - artInfo.UV.Height) / 2;
 
                             StaticPic pic = new StaticPic(graphic, 0)
                             {
                                 X = offsetX,
                                 Y = offsetY,
                                 CanMove = false,
-                                LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i + combinedStair),
+                                LocalSerial = (uint)(
+                                    ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i + combinedStair
+                                ),
                                 Height = 60
                             };
 
-                            pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                            pic.MouseUp += (sender, e) =>
+                            {
+                                OnButtonClick((int)pic.LocalSerial);
+                            };
                             _dataBox.Add(pic);
                         }
 
@@ -1099,68 +1197,55 @@ namespace ClassicUO.Game.UI.Gumps
                     _dataBox.Add(new ScissorControl(false));
                 }
 
-                _dataBox.Add
-                (
-                    new ColorBox(384, 2, 0)
-                    {
-                        X = 123,
-                        Y = 96
-                    }
-                );
+                _dataBox.Add(new ColorBox(384, 2, 0) { X = 123, Y = 96 });
             }
         }
 
         private void AddRoof()
         {
-            int x = 0, y = 0;
+            int x = 0,
+                y = 0;
 
             if (_customHouseManager.Category == -1)
             {
                 int startCategory = Page * 16;
                 int endCategory = startCategory + 16;
 
-                if (endCategory > HouseCustomizationManager.Roofs.Count)
+                if (endCategory > World.CustomHouseManager.Roofs.Count)
                 {
-                    endCategory = HouseCustomizationManager.Roofs.Count;
+                    endCategory = World.CustomHouseManager.Roofs.Count;
                 }
 
                 // push scissor
-                _dataBox.Add
-                (
-                    new ScissorControl
-                    (
-                        true,
-                        121,
-                        36,
-                        384,
-                        60
-                    )
-                );
+                _dataBox.Add(new ScissorControl(true, 121, 36, 384, 60));
 
                 for (int i = startCategory; i < endCategory; i++)
                 {
-                    List<CustomHouseRoof> vec = HouseCustomizationManager.Roofs[i].Items;
+                    List<CustomHouseRoof> vec = World.CustomHouseManager.Roofs[i].Items;
 
                     if (vec.Count == 0)
                     {
                         continue;
                     }
 
-                    _ = ArtLoader.Instance.GetStaticTexture((ushort)vec[0].NSCrosspiece, out var bounds);
+                    ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt((uint)vec[0].NSCrosspiece);
 
-                    int offsetX = x + 121 + (48 - bounds.Width) / 2;
+                    int offsetX = x + 121 + (48 - artInfo.UV.Width) / 2;
                     int offsetY = y + 36;
 
-                    StaticPic pic = new StaticPic((ushort) vec[0].NSCrosspiece, 0)
+                    StaticPic pic = new StaticPic((ushort)vec[0].NSCrosspiece, 0)
                     {
                         X = offsetX,
                         Y = offsetY,
                         CanMove = false,
-                        LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
+                        LocalSerial = (uint)(ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
                         Height = 60
                     };
 
-                    pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                    pic.MouseUp += (sender, e) =>
+                    {
+                        OnButtonClick((int)pic.LocalSerial);
+                    };
                     _dataBox.Add(pic);
 
                     x += 48;
@@ -1175,43 +1260,28 @@ namespace ClassicUO.Game.UI.Gumps
 
                         _dataBox.Add(new ScissorControl(false));
 
-                        _dataBox.Add
-                        (
-                            new ScissorControl
-                            (
-                                true,
-                                121,
-                                96,
-                                384,
-                                60
-                            )
-                        );
+                        _dataBox.Add(new ScissorControl(true, 121, 96, 384, 60));
                     }
                 }
 
                 // pop scissor
                 _dataBox.Add(new ScissorControl(false));
             }
-            else if (_customHouseManager.Category >= 0 && _customHouseManager.Category < HouseCustomizationManager.Roofs.Count)
+            else if (
+                _customHouseManager.Category >= 0
+                && _customHouseManager.Category < World.CustomHouseManager.Roofs.Count
+            )
             {
-                List<CustomHouseRoof> vec = HouseCustomizationManager.Roofs[_customHouseManager.Category].Items;
+                List<CustomHouseRoof> vec = World.CustomHouseManager.Roofs[
+                    _customHouseManager.Category
+                ].Items;
 
                 if (Page >= 0 && Page < vec.Count)
                 {
                     CustomHouseRoof item = vec[Page];
 
                     // push scissor
-                    _dataBox.Add
-                    (
-                        new ScissorControl
-                        (
-                            true,
-                            130,
-                            44,
-                            384,
-                            120
-                        )
-                    );
+                    _dataBox.Add(new ScissorControl(true, 130, 44, 384, 120));
 
                     int index = 0;
 
@@ -1223,21 +1293,26 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (graphic != 0)
                             {
-                                _ = ArtLoader.Instance.GetStaticTexture(graphic, out var bounds);
+                                ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(graphic);
 
-                                int offsetX = x + 130 + (48 - bounds.Width) / 2;
-                                int offsetY = y + 44 + (60 - bounds.Height) / 2;
+                                int offsetX = x + 130 + (48 - artInfo.UV.Width) / 2;
+                                int offsetY = y + 44 + (60 - artInfo.UV.Height) / 2;
 
                                 StaticPic pic = new StaticPic(graphic, 0)
                                 {
                                     X = offsetX,
                                     Y = offsetY,
                                     CanMove = false,
-                                    LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + index),
+                                    LocalSerial = (uint)(
+                                        ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + index
+                                    ),
                                     //Height = 120
                                 };
 
-                                pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                                pic.MouseUp += (sender, e) =>
+                                {
+                                    OnButtonClick((int)pic.LocalSerial);
+                                };
                                 _dataBox.Add(pic);
                             }
 
@@ -1255,7 +1330,12 @@ namespace ClassicUO.Game.UI.Gumps
 
                 _dataBoxGUI.Add(new GumpPic(152, 0, 0x55F3, 0));
 
-                Button button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_CATEGORY, 0x5622, 0x5624, 0x5623)
+                Button button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_CATEGORY,
+                    0x5622,
+                    0x5624,
+                    0x5623
+                )
                 {
                     X = 167,
                     Y = 5,
@@ -1265,7 +1345,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(ResGumps.ToCustomHouseManagerCategory);
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_ROOF_Z_DOWN, 0x578B, 0x578D, 0x578C)
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_ROOF_Z_DOWN,
+                    0x578B,
+                    0x578D,
+                    0x578C
+                )
                 {
                     X = 305,
                     Y = 0,
@@ -1275,7 +1360,12 @@ namespace ClassicUO.Game.UI.Gumps
                 button.SetTooltip(ResGumps.LowerRoofPlacementLevel);
                 _dataBoxGUI.Add(button);
 
-                button = new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_ROOF_Z_UP, 0x578E, 0x5790, 0x578F)
+                button = new Button(
+                    (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_ROOF_Z_UP,
+                    0x578E,
+                    0x5790,
+                    0x578F
+                )
                 {
                     X = 349,
                     Y = 0,
@@ -1299,55 +1389,49 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void AddMisc()
         {
-            int x = 0, y = 0;
+            int x = 0,
+                y = 0;
 
             if (_customHouseManager.Category == -1)
             {
                 int startCategory = Page * 16;
                 int endCategory = startCategory + 16;
 
-                if (endCategory > HouseCustomizationManager.Miscs.Count)
+                if (endCategory > World.CustomHouseManager.Miscs.Count)
                 {
-                    endCategory = HouseCustomizationManager.Miscs.Count;
+                    endCategory = World.CustomHouseManager.Miscs.Count;
                 }
 
                 // push scissor
-                _dataBox.Add
-                (
-                    new ScissorControl
-                    (
-                        true,
-                        121,
-                        36,
-                        384,
-                        60
-                    )
-                );
+                _dataBox.Add(new ScissorControl(true, 121, 36, 384, 60));
 
                 for (int i = startCategory; i < endCategory; i++)
                 {
-                    List<CustomHouseMisc> vec = HouseCustomizationManager.Miscs[i].Items;
+                    List<CustomHouseMisc> vec = World.CustomHouseManager.Miscs[i].Items;
 
                     if (vec.Count == 0)
                     {
                         continue;
                     }
 
-                    _ = ArtLoader.Instance.GetStaticTexture((ushort)vec[0].Piece5, out var bounds);
+                    ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt((uint)vec[0].Piece5);
 
-                    int offsetX = x + 121 + (48 - bounds.Width) / 2;
+                    int offsetX = x + 121 + (48 - artInfo.UV.Width) / 2;
                     int offsetY = y + 36;
 
-                    StaticPic pic = new StaticPic((ushort) vec[0].Piece5, 0)
+                    StaticPic pic = new StaticPic((ushort)vec[0].Piece5, 0)
                     {
                         X = offsetX,
                         Y = offsetY,
                         CanMove = false,
-                        LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
+                        LocalSerial = (uint)(ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
                         Height = 60
                     };
 
-                    pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                    pic.MouseUp += (sender, e) =>
+                    {
+                        OnButtonClick((int)pic.LocalSerial);
+                    };
                     _dataBox.Add(pic);
 
                     x += 48;
@@ -1361,43 +1445,28 @@ namespace ClassicUO.Game.UI.Gumps
                         // push scissor
                         _dataBox.Add(new ScissorControl(false));
 
-                        _dataBox.Add
-                        (
-                            new ScissorControl
-                            (
-                                true,
-                                121,
-                                96,
-                                384,
-                                60
-                            )
-                        );
+                        _dataBox.Add(new ScissorControl(true, 121, 96, 384, 60));
                     }
                 }
 
                 // pop scissor
                 _dataBox.Add(new ScissorControl(false));
             }
-            else if (_customHouseManager.Category >= 0 && _customHouseManager.Category < HouseCustomizationManager.Miscs.Count)
+            else if (
+                _customHouseManager.Category >= 0
+                && _customHouseManager.Category < World.CustomHouseManager.Miscs.Count
+            )
             {
-                List<CustomHouseMisc> vec = HouseCustomizationManager.Miscs[_customHouseManager.Category].Items;
+                List<CustomHouseMisc> vec = World.CustomHouseManager.Miscs[
+                    _customHouseManager.Category
+                ].Items;
 
                 if (Page >= 0 && Page < vec.Count)
                 {
                     CustomHouseMisc item = vec[Page];
 
                     // push scissor
-                    _dataBox.Add
-                    (
-                        new ScissorControl
-                        (
-                            true,
-                            130,
-                            44,
-                            384,
-                            120
-                        )
-                    );
+                    _dataBox.Add(new ScissorControl(true, 130, 44, 384, 120));
 
                     for (int i = 0; i < 8; i++)
                     {
@@ -1405,21 +1474,24 @@ namespace ClassicUO.Game.UI.Gumps
 
                         if (graphic != 0)
                         {
-                            _ = ArtLoader.Instance.GetStaticTexture(graphic, out var bounds);
+                            ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(graphic);
 
-                            int offsetX = x + 130 + (48 - bounds.Width) / 2;
-                            int offsetY = y + 44 + (120 - bounds.Height) / 2;
+                            int offsetX = x + 130 + (48 - artInfo.UV.Width) / 2;
+                            int offsetY = y + 44 + (120 - artInfo.UV.Height) / 2;
 
                             StaticPic pic = new StaticPic(graphic, 0)
                             {
                                 X = offsetX,
                                 Y = offsetY,
                                 CanMove = false,
-                                LocalSerial = (uint) (ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
+                                LocalSerial = (uint)(ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST + i),
                                 //Height = 120
                             };
 
-                            pic.MouseUp += (sender, e) => { OnButtonClick((int) pic.LocalSerial); };
+                            pic.MouseUp += (sender, e) =>
+                            {
+                                OnButtonClick((int)pic.LocalSerial);
+                            };
                             _dataBox.Add(pic);
                         }
 
@@ -1432,9 +1504,8 @@ namespace ClassicUO.Game.UI.Gumps
 
                 _dataBoxGUI.Add(new GumpPic(152, 0, 0x55F3, 0));
 
-                _dataBoxGUI.Add
-                (
-                    new Button((int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_CATEGORY, 0x5622, 0x5624, 0x5623)
+                _dataBoxGUI.Add(
+                    new Button((int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_CATEGORY, 0x5622, 0x5624, 0x5623)
                     {
                         X = 167,
                         Y = 5,
@@ -1446,9 +1517,8 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void AddMenu()
         {
-            Button button = new Button
-            (
-                (int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_BACKUP,
+            Button button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_BACKUP,
                 0x098D,
                 0x098D,
                 0x098D,
@@ -1468,10 +1538,8 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.StoreDesignInProgress);
             _dataBox.Add(button);
 
-
-            button = new Button
-            (
-                (int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_RESTORE,
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_RESTORE,
                 0x098D,
                 0x098D,
                 0x098D,
@@ -1491,9 +1559,8 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.RestoreYourDesign);
             _dataBox.Add(button);
 
-            button = new Button
-            (
-                (int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_SYNCH,
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_SYNCH,
                 0x098D,
                 0x098D,
                 0x098D,
@@ -1513,9 +1580,8 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.SynchronizeDesignStateWithServer);
             _dataBox.Add(button);
 
-            button = new Button
-            (
-                (int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_CLEAR,
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_CLEAR,
                 0x098D,
                 0x098D,
                 0x098D,
@@ -1535,9 +1601,8 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.ClearAllChanges);
             _dataBox.Add(button);
 
-            button = new Button
-            (
-                (int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_COMMIT,
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_COMMIT,
                 0x098D,
                 0x098D,
                 0x098D,
@@ -1557,10 +1622,8 @@ namespace ClassicUO.Game.UI.Gumps
             button.SetTooltip(ResGumps.SaveExistingChanges);
             _dataBox.Add(button);
 
-
-            button = new Button
-            (
-                (int) ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_REVERT,
+            button = new Button(
+                (int)ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_REVERT,
                 0x098D,
                 0x098D,
                 0x098D,
@@ -1583,29 +1646,47 @@ namespace ClassicUO.Game.UI.Gumps
 
         public override void OnButtonClick(int buttonID)
         {
-            ID_GUMP_CUSTOM_HOUSE idd = (ID_GUMP_CUSTOM_HOUSE) buttonID;
+            ID_GUMP_CUSTOM_HOUSE idd = (ID_GUMP_CUSTOM_HOUSE)buttonID;
 
             if (idd >= ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST)
             {
                 int index = idd - ID_GUMP_CUSTOM_HOUSE.ID_GCH_ITEM_IN_LIST;
 
-                if (_customHouseManager.Category == -1 && (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL || _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF || _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC))
+                if (
+                    _customHouseManager.Category == -1
+                    && (
+                        _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL
+                        || _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF
+                        || _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC
+                    )
+                )
                 {
                     int newCategory = -1;
 
-                    if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL && index >= 0 && index < HouseCustomizationManager.Walls.Count)
+                    if (
+                        _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL
+                        && index >= 0
+                        && index < World.CustomHouseManager.Walls.Count
+                    )
                     {
-                        newCategory = HouseCustomizationManager.Walls[index].Index;
+                        newCategory = World.CustomHouseManager.Walls[index].Index;
                     }
-                    else if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF && index >= 0 && index < HouseCustomizationManager.Roofs.Count)
+                    else if (
+                        _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF
+                        && index >= 0
+                        && index < World.CustomHouseManager.Roofs.Count
+                    )
                     {
-                        newCategory = HouseCustomizationManager.Roofs[index].Index;
+                        newCategory = World.CustomHouseManager.Roofs[index].Index;
                     }
-                    else if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC && index >= 0 && index < HouseCustomizationManager.Miscs.Count)
+                    else if (
+                        _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC
+                        && index >= 0
+                        && index < World.CustomHouseManager.Miscs.Count
+                    )
                     {
-                        newCategory = HouseCustomizationManager.Miscs[index].Index;
+                        newCategory = World.CustomHouseManager.Miscs[index].Index;
                     }
-
 
                     if (newCategory != -1)
                     {
@@ -1624,31 +1705,58 @@ namespace ClassicUO.Game.UI.Gumps
                     bool combinedStairs = false;
                     ushort graphic = 0;
 
-                    if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL || _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF || _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC)
+                    if (
+                        _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL
+                        || _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF
+                        || _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC
+                    )
                     {
                         if (_customHouseManager.Category >= 0)
                         {
-                            if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL && _customHouseManager.Category < HouseCustomizationManager.Walls.Count && index < CustomHouseWall.GRAPHICS_COUNT)
+                            if (
+                                _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_WALL
+                                && _customHouseManager.Category
+                                    < World.CustomHouseManager.Walls.Count
+                                && index < CustomHouseWall.GRAPHICS_COUNT
+                            )
                             {
-                                List<CustomHouseWall> list = HouseCustomizationManager.Walls[_customHouseManager.Category].Items;
+                                List<CustomHouseWall> list = World.CustomHouseManager.Walls[
+                                    _customHouseManager.Category
+                                ].Items;
 
                                 if (Page < list.Count)
                                 {
-                                    graphic = _customHouseManager.ShowWindow ? list[Page].WindowGraphics[index] : list[Page].Graphics[index];
+                                    graphic = _customHouseManager.ShowWindow
+                                        ? list[Page].WindowGraphics[index]
+                                        : list[Page].Graphics[index];
                                 }
                             }
-                            else if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF && _customHouseManager.Category < HouseCustomizationManager.Roofs.Count && index < CustomHouseRoof.GRAPHICS_COUNT)
+                            else if (
+                                _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_ROOF
+                                && _customHouseManager.Category
+                                    < World.CustomHouseManager.Roofs.Count
+                                && index < CustomHouseRoof.GRAPHICS_COUNT
+                            )
                             {
-                                List<CustomHouseRoof> list = HouseCustomizationManager.Roofs[_customHouseManager.Category].Items;
+                                List<CustomHouseRoof> list = World.CustomHouseManager.Roofs[
+                                    _customHouseManager.Category
+                                ].Items;
 
                                 if (Page < list.Count)
                                 {
                                     graphic = list[Page].Graphics[index];
                                 }
                             }
-                            else if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC && _customHouseManager.Category < HouseCustomizationManager.Miscs.Count && index < CustomHouseMisc.GRAPHICS_COUNT)
+                            else if (
+                                _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_MISC
+                                && _customHouseManager.Category
+                                    < World.CustomHouseManager.Miscs.Count
+                                && index < CustomHouseMisc.GRAPHICS_COUNT
+                            )
                             {
-                                List<CustomHouseMisc> list = HouseCustomizationManager.Miscs[_customHouseManager.Category].Items;
+                                List<CustomHouseMisc> list = World.CustomHouseManager.Miscs[
+                                    _customHouseManager.Category
+                                ].Items;
 
                                 if (Page < list.Count)
                                 {
@@ -1659,15 +1767,26 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                     else
                     {
-                        if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_DOOR && Page < HouseCustomizationManager.Doors.Count && index < CustomHouseDoor.GRAPHICS_COUNT)
+                        if (
+                            _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_DOOR
+                            && Page < World.CustomHouseManager.Doors.Count
+                            && index < CustomHouseDoor.GRAPHICS_COUNT
+                        )
                         {
-                            graphic = HouseCustomizationManager.Doors[Page].Graphics[index];
+                            graphic = World.CustomHouseManager.Doors[Page].Graphics[index];
                         }
-                        else if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_FLOOR && Page < HouseCustomizationManager.Floors.Count && index < CustomHouseFloor.GRAPHICS_COUNT)
+                        else if (
+                            _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_FLOOR
+                            && Page < World.CustomHouseManager.Floors.Count
+                            && index < CustomHouseFloor.GRAPHICS_COUNT
+                        )
                         {
-                            graphic = HouseCustomizationManager.Floors[Page].Graphics[index];
+                            graphic = World.CustomHouseManager.Floors[Page].Graphics[index];
                         }
-                        else if (_customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_STAIR && Page < HouseCustomizationManager.Stairs.Count)
+                        else if (
+                            _customHouseManager.State == CUSTOM_HOUSE_GUMP_STATE.CHGS_STAIR
+                            && Page < World.CustomHouseManager.Stairs.Count
+                        )
                         {
                             if (index > 10)
                             {
@@ -1677,7 +1796,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (index < CustomHouseStair.GRAPHICS_COUNT)
                             {
-                                graphic = HouseCustomizationManager.Stairs[Page].Graphics[index];
+                                graphic = World.CustomHouseManager.Stairs[Page].Graphics[index];
                             }
                         }
                     }
@@ -1703,7 +1822,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _customHouseManager.SelectedGraphic = 0;
                     _customHouseManager.CombinedStair = false;
                     UpdateMaxPage();
-                    TargetManager.CancelTarget();
+                    World.TargetManager.CancelTarget();
                     Update();
 
                     break;
@@ -1715,7 +1834,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _customHouseManager.SelectedGraphic = 0;
                     _customHouseManager.CombinedStair = false;
                     UpdateMaxPage();
-                    TargetManager.CancelTarget();
+                    World.TargetManager.CancelTarget();
                     Update();
 
                     break;
@@ -1727,7 +1846,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _customHouseManager.SelectedGraphic = 0;
                     _customHouseManager.CombinedStair = false;
                     UpdateMaxPage();
-                    TargetManager.CancelTarget();
+                    World.TargetManager.CancelTarget();
                     Update();
 
                     break;
@@ -1739,7 +1858,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _customHouseManager.SelectedGraphic = 0;
                     _customHouseManager.CombinedStair = false;
                     UpdateMaxPage();
-                    TargetManager.CancelTarget();
+                    World.TargetManager.CancelTarget();
                     Update();
 
                     break;
@@ -1751,7 +1870,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _customHouseManager.SelectedGraphic = 0;
                     _customHouseManager.CombinedStair = false;
                     UpdateMaxPage();
-                    TargetManager.CancelTarget();
+                    World.TargetManager.CancelTarget();
                     Update();
 
                     break;
@@ -1763,7 +1882,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _customHouseManager.SelectedGraphic = 0;
                     _customHouseManager.CombinedStair = false;
                     UpdateMaxPage();
-                    TargetManager.CancelTarget();
+                    World.TargetManager.CancelTarget();
                     Update();
 
                     break;
@@ -1793,7 +1912,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _customHouseManager.MaxPage = 1;
                     _customHouseManager.SelectedGraphic = 0;
                     _customHouseManager.CombinedStair = false;
-                    TargetManager.CancelTarget();
+                    World.TargetManager.CancelTarget();
                     Update();
 
                     break;
@@ -1802,13 +1921,19 @@ namespace ClassicUO.Game.UI.Gumps
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_2:
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_3:
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_4:
-                    int selectedFloor = (ID_GUMP_CUSTOM_HOUSE) buttonID - ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_1;
+                    int selectedFloor =
+                        (ID_GUMP_CUSTOM_HOUSE)buttonID
+                        - ID_GUMP_CUSTOM_HOUSE.ID_GCH_VISIBILITY_STORY_1;
 
                     _customHouseManager.FloorVisionState[selectedFloor]++;
 
-                    if (_customHouseManager.FloorVisionState[selectedFloor] > (int) CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_HIDE_ALL)
+                    if (
+                        _customHouseManager.FloorVisionState[selectedFloor]
+                        > (int)CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_HIDE_ALL
+                    )
                     {
-                        _customHouseManager.FloorVisionState[selectedFloor] = (int) CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
+                        _customHouseManager.FloorVisionState[selectedFloor] = (int)
+                            CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
                     }
 
                     _customHouseManager.GenerateFloorPlace();
@@ -1818,11 +1943,12 @@ namespace ClassicUO.Game.UI.Gumps
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_1:
                     _customHouseManager.CurrentFloor = 1;
-                    NetClient.Socket.Send_CustomHouseGoToFloor(1);
+                    NetClient.Socket.Send_CustomHouseGoToFloor(World, 1);
 
                     for (int i = 0; i < _customHouseManager.FloorVisionState.Length; i++)
                     {
-                        _customHouseManager.FloorVisionState[i] = (int) CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
+                        _customHouseManager.FloorVisionState[i] = (int)
+                            CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
                     }
 
                     Update();
@@ -1831,11 +1957,12 @@ namespace ClassicUO.Game.UI.Gumps
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_2:
                     _customHouseManager.CurrentFloor = 2;
-                    NetClient.Socket.Send_CustomHouseGoToFloor(2);
+                    NetClient.Socket.Send_CustomHouseGoToFloor(World, 2);
 
                     for (int i = 0; i < _customHouseManager.FloorVisionState.Length; i++)
                     {
-                        _customHouseManager.FloorVisionState[i] = (int) CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
+                        _customHouseManager.FloorVisionState[i] = (int)
+                            CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
                     }
 
                     Update();
@@ -1844,11 +1971,12 @@ namespace ClassicUO.Game.UI.Gumps
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_3:
                     _customHouseManager.CurrentFloor = 3;
-                    NetClient.Socket.Send_CustomHouseGoToFloor(3);
+                    NetClient.Socket.Send_CustomHouseGoToFloor(World, 3);
 
                     for (int i = 0; i < _customHouseManager.FloorVisionState.Length; i++)
                     {
-                        _customHouseManager.FloorVisionState[i] = (int) CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
+                        _customHouseManager.FloorVisionState[i] = (int)
+                            CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
                     }
 
                     Update();
@@ -1857,11 +1985,12 @@ namespace ClassicUO.Game.UI.Gumps
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_GO_FLOOR_4:
                     _customHouseManager.CurrentFloor = 4;
-                    NetClient.Socket.Send_CustomHouseGoToFloor(4);
+                    NetClient.Socket.Send_CustomHouseGoToFloor(World, 4);
 
                     for (int i = 0; i < _customHouseManager.FloorVisionState.Length; i++)
                     {
-                        _customHouseManager.FloorVisionState[i] = (int) CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
+                        _customHouseManager.FloorVisionState[i] = (int)
+                            CUSTOM_HOUSE_FLOOR_VISION_STATE.CHGVS_NORMAL;
                     }
 
                     Update();
@@ -1898,32 +2027,32 @@ namespace ClassicUO.Game.UI.Gumps
                     break;
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_BACKUP:
-                    NetClient.Socket.Send_CustomHouseBackup();
+                    NetClient.Socket.Send_CustomHouseBackup(World);
 
                     break;
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_RESTORE:
-                    NetClient.Socket.Send_CustomHouseRestore();
+                    NetClient.Socket.Send_CustomHouseRestore(World);
 
                     break;
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_SYNCH:
-                    NetClient.Socket.Send_CustomHouseSync();
+                    NetClient.Socket.Send_CustomHouseSync(World);
 
                     break;
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_CLEAR:
-                    NetClient.Socket.Send_CustomHouseClear();
+                    NetClient.Socket.Send_CustomHouseClear(World);
 
                     break;
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_COMMIT:
-                    NetClient.Socket.Send_CustomHouseCommit();
+                    NetClient.Socket.Send_CustomHouseCommit(World);
 
                     break;
 
                 case ID_GUMP_CUSTOM_HOUSE.ID_GCH_MENU_REVERT:
-                    NetClient.Socket.Send_CustomHouseRevert();
+                    NetClient.Socket.Send_CustomHouseRevert(World);
 
                     break;
 
@@ -1933,7 +2062,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _customHouseManager.SelectedGraphic = 0;
                     _customHouseManager.CombinedStair = false;
                     UpdateMaxPage();
-                    TargetManager.CancelTarget();
+                    World.TargetManager.CancelTarget();
                     Update();
 
                     break;
@@ -1964,12 +2093,11 @@ namespace ClassicUO.Game.UI.Gumps
             }
         }
 
-
         public override void Dispose()
         {
             World.CustomHouseManager = null;
-            NetClient.Socket.Send_CustomHouseBuildingExit();
-            TargetManager.CancelTarget();
+            NetClient.Socket.Send_CustomHouseBuildingExit(World);
+            World.TargetManager.CancelTarget();
 
             base.Dispose();
         }

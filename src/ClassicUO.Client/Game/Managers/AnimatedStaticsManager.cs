@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,7 @@ using ClassicUO.Utility.Collections;
 
 namespace ClassicUO.Game.Managers
 {
-    class AnimatedStaticsManager
+    sealed class AnimatedStaticsManager
     {
         private readonly FastList<StaticAnimationInfo> _staticInfos = new FastList<StaticAnimationInfo>();
         private uint _processTime;

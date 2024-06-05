@@ -1,8 +1,8 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 1. Redistributions of source code must retain the above copyright
@@ -16,7 +16,7 @@
 // 4. Neither the name of the copyright holder nor the
 //    names of its contributors may be used to endorse or promote products
 //    derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -50,12 +50,12 @@ namespace ClassicUO.Game.UI.Gumps
         private readonly BorderControl _borderControl;
         private readonly Button _button;
         private bool _clicked;
-        private Point _lastSize, _savedSize;
+        private Point _lastSize,
+            _savedSize;
         private readonly GameScene _scene;
         private readonly SystemChatControl _systemChatControl;
 
-
-        public WorldViewportGump(GameScene scene) : base(0, 0)
+        public WorldViewportGump(World world, GameScene scene) : base(world, 0, 0)
         {
             _scene = scene;
             AcceptMouseInput = false;
@@ -65,7 +65,10 @@ namespace ClassicUO.Game.UI.Gumps
             LayerOrder = UILayer.Under;
             X = scene.Camera.Bounds.X - BORDER_WIDTH;
             Y = scene.Camera.Bounds.Y - BORDER_WIDTH;
-            _savedSize = _lastSize = new Point(scene.Camera.Bounds.Width, scene.Camera.Bounds.Height);
+            _savedSize = _lastSize = new Point(
+                scene.Camera.Bounds.Width,
+                scene.Camera.Bounds.Height
+            );
 
             _button = new Button(0, 0x837, 0x838, 0x838);
 
@@ -85,7 +88,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                     UIManager.GetGump<OptionsGump>()?.UpdateVideo();
 
-                    if (Client.Version >= ClientVersion.CV_200)
+                    if (Client.Game.UO.Version >= ClientVersion.CV_200)
                     {
                         NetClient.Socket.Send_GameWindowSize((uint)n.X, (uint)n.Y);
                     }
@@ -98,25 +101,26 @@ namespace ClassicUO.Game.UI.Gumps
             Width = scene.Camera.Bounds.Width + BORDER_WIDTH * 2;
             Height = scene.Camera.Bounds.Height + BORDER_WIDTH * 2;
 
-            _borderControl = new BorderControl
-            (
-                0,
-                0,
-                Width,
-                Height,
-                4
+            _borderControl = new BorderControl(0, 0, Width, Height, 4);
+
+            _borderControl.DragEnd += (sender, e) =>
+            {
+                UIManager.GetGump<OptionsGump>()?.UpdateVideo();
+            };
+
+            UIManager.SystemChat = _systemChatControl = new SystemChatControl(
+                this,
+                BORDER_WIDTH,
+                BORDER_WIDTH,
+                scene.Camera.Bounds.Width,
+                scene.Camera.Bounds.Height
             );
-
-            _borderControl.DragEnd += (sender, e) => { UIManager.GetGump<OptionsGump>()?.UpdateVideo(); };
-
-            UIManager.SystemChat = _systemChatControl = new SystemChatControl(BORDER_WIDTH, BORDER_WIDTH, scene.Camera.Bounds.Width, scene.Camera.Bounds.Height);
 
             Add(_borderControl);
             Add(_button);
             Add(_systemChatControl);
             Resize();
         }
-
 
         public override void Update()
         {
@@ -162,7 +166,10 @@ namespace ClassicUO.Game.UI.Gumps
                     _lastSize.Y = h;
                 }
 
-                if (_scene.Camera.Bounds.Width != _lastSize.X || _scene.Camera.Bounds.Height != _lastSize.Y)
+                if (
+                    _scene.Camera.Bounds.Width != _lastSize.X
+                    || _scene.Camera.Bounds.Height != _lastSize.Y
+                )
                 {
                     Width = _lastSize.X + BORDER_WIDTH * 2;
                     Height = _lastSize.Y + BORDER_WIDTH * 2;
@@ -204,7 +211,6 @@ namespace ClassicUO.Game.UI.Gumps
             _scene.Camera.Bounds.X = position.X + BORDER_WIDTH;
             _scene.Camera.Bounds.Y = position.Y + BORDER_WIDTH;
 
-
             UIManager.GetGump<OptionsGump>()?.UpdateVideo();
             UpdateGameWindowPos();
         }
@@ -226,7 +232,6 @@ namespace ClassicUO.Game.UI.Gumps
                 _scene.UpdateDrawPosition = true;
             }
         }
-
 
         private void Resize()
         {
@@ -267,7 +272,10 @@ namespace ClassicUO.Game.UI.Gumps
             //Resize();
             _lastSize = _savedSize = newSize;
 
-            if (_scene.Camera.Bounds.Width != _lastSize.X || _scene.Camera.Bounds.Height != _lastSize.Y)
+            if (
+                _scene.Camera.Bounds.Width != _lastSize.X
+                || _scene.Camera.Bounds.Height != _lastSize.Y
+            )
             {
                 _scene.Camera.Bounds.Width = _lastSize.X;
                 _scene.Camera.Bounds.Height = _lastSize.Y;
@@ -282,7 +290,20 @@ namespace ClassicUO.Game.UI.Gumps
 
         public override bool Contains(int x, int y)
         {
-            if (x >= BORDER_WIDTH && x < Width - BORDER_WIDTH * 2 && y >= BORDER_WIDTH && y < Height - BORDER_WIDTH * 2 - (_systemChatControl?.TextBoxControl != null && _systemChatControl.IsActive ? _systemChatControl.TextBoxControl.Height : 0))
+            if (
+                x >= BORDER_WIDTH
+                && x < Width - BORDER_WIDTH * 2
+                && y >= BORDER_WIDTH
+                && y
+                    < Height
+                        - BORDER_WIDTH * 2
+                        - (
+                            _systemChatControl?.TextBoxControl != null
+                            && _systemChatControl.IsActive
+                                ? _systemChatControl.TextBoxControl.Height
+                                : 0
+                        )
+            )
             {
                 return false;
             }
@@ -357,66 +378,43 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // TAZUO
             /*
             var texture = GumpsLoader.Instance.GetGumpTexture(H_BORDER, out var bounds);
+             ref readonly var gumpInfo = ref Client.Game.UO.Gumps.GetGump(H_BORDER);
 
             // sopra
-            batcher.DrawTiled
-            (
-                texture,
-                new Rectangle
-                (
-                    x,
-                    y,
-                    Width,
-                    _borderSize
-                ),
-                bounds,
+            batcher.DrawTiled(
+                gumpInfo.Texture,
+                new Rectangle(x, y, Width, _borderSize),
+                gumpInfo.UV,
                 hueVector
             );
 
             // sotto
-            batcher.DrawTiled
-            (
-                texture,
-                new Rectangle
-                (
-                    x,
-                    y + Height - _borderSize,
-                    Width,
-                    _borderSize
-                ),
-                bounds,
+            batcher.DrawTiled(
+                gumpInfo.Texture,
+                new Rectangle(x, y + Height - _borderSize, Width, _borderSize),
+                gumpInfo.UV,
                 hueVector
             );
 
-            texture = GumpsLoader.Instance.GetGumpTexture(V_BORDER, out bounds);
-
+            gumpInfo = ref Client.Game.UO.Gumps.GetGump(V_BORDER);
             //sx
-            batcher.DrawTiled
-            (
-                texture,
-                new Rectangle
-                (
-                    x,
-                    y,
-                    _borderSize,
-                    Height
-                ),
-                bounds,
+            batcher.DrawTiled(
+                gumpInfo.Texture,
+                new Rectangle(x, y, _borderSize, Height),
+                gumpInfo.UV,
                 hueVector
             );
 
             //dx
-            batcher.DrawTiled
-            (
-                texture,
-                new Rectangle
-                (
+            batcher.DrawTiled(
+                gumpInfo.Texture,
+                new Rectangle(
                     x + Width - _borderSize,
-                    y + (bounds.Width >> 1),
+                    y + (gumpInfo.UV.Width >> 1),
                     _borderSize,
                     Height - _borderSize
                 ),
-                bounds,
+                gumpInfo.UV,
                 hueVector
             );
             */

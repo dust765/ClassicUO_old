@@ -1,4 +1,4 @@
-﻿using ClassicUO.Assets;
+using ClassicUO.Assets;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
@@ -29,7 +29,7 @@ namespace ClassicUO.Game.UI.Gumps
         };
         private Item hair, beard;
 
-        #region 
+        #region
         private ushort raceTextGraphic
         {
             get
@@ -71,7 +71,7 @@ namespace ClassicUO.Game.UI.Gumps
         }
         #endregion
 
-        public RaceChangeGump(bool isFemale, byte race) : base(0, 0)
+        public RaceChangeGump(World world, bool isFemale, byte race) : base(world, 0, 0)
         {
             if (race <= 0 || race > (int)RaceType.GARGOYLE)
             {
@@ -156,7 +156,7 @@ namespace ClassicUO.Game.UI.Gumps
             Add(new GumpPic(185, 25, 0x708, 0));
             Add
             (
-                paperDollInteractable = new CustomPaperDollGump(210, 75, fakeMobile, hair, beard)
+                paperDollInteractable = new CustomPaperDollGump(this, 210, 75, fakeMobile, hair, beard)
                 {
                     AcceptMouseInput = false
                 }
@@ -187,7 +187,7 @@ namespace ClassicUO.Game.UI.Gumps
             CharacterCreationValues.ComboContent content = CharacterCreationValues.GetHairComboContent(isFemale, selectedRace);
 
             CurrentOption[Layer.Beard] = 0;
-            CurrentOption[Layer.Hair] = 1;
+            CurrentOption[Layer.Hair] = 0;
 
             #region Hair style
             Add
@@ -216,7 +216,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 CurrentOption[Layer.Hair] = e;
                 UpdateEquipments();
-                paperDollInteractable.RequestUpdate(this.hair, beard);
+                paperDollInteractable.RequestUpdate();
             };
             y += 30;
             #endregion
@@ -252,7 +252,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     CurrentOption[Layer.Beard] = e;
                     UpdateEquipments();
-                    paperDollInteractable.RequestUpdate(this.hair, beard);
+                    paperDollInteractable.RequestUpdate();
                 };
             }
             #endregion
@@ -320,8 +320,7 @@ namespace ClassicUO.Game.UI.Gumps
             #region Create a fake character to use for the gump
             if (fakeMobile == null || fakeMobile.IsDestroyed)
             {
-                fakeMobile = new PlayerMobile(1);
-                World.Mobiles.Add(fakeMobile);
+                fakeMobile = new PlayerMobile(World, 0);
             }
 
             LinkedObject first = fakeMobile.Items;
@@ -357,6 +356,12 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 fakeMobile.Graphic = (ushort)(isFemale ? 0x0191 : 0x0190);
             }
+
+            hair = CreateItem(0x4000_0000 + (int)Layer.Hair, 0, Layer.Hair);
+            if (!isFemale && selectedRace != RaceType.ELF)
+            {
+                beard = CreateItem(0x4000_0000 + (int)Layer.Beard, 0, Layer.Beard);
+            }
         }
 
         private void AddCustomColorPicker
@@ -376,6 +381,7 @@ namespace ClassicUO.Game.UI.Gumps
             (
                 colorPicker = new CustomColorPicker
                 (
+                    this,
                     layer,
                     clilocLabel,
                     pallet,
@@ -410,34 +416,56 @@ namespace ClassicUO.Game.UI.Gumps
 
             CurrentColorOption[e.Layer] = new Tuple<int, ushort>(e.SelectedIndex, e.SelectedHue);
 
-            if (e.Layer != Layer.Invalid)
+            switch (e.Layer)
             {
-                Item item = fakeMobile.FindItemByLayer(e.Layer);
-
-                if (item != null)
-                {
-                    item.Hue = e.SelectedHue;
-                }
+                case Layer.Beard:
+                    beard.Hue = e.SelectedHue;
+                    break;
+                case Layer.Hair:
+                    hair.Hue = e.SelectedHue;
+                    break;
+                case Layer.Invalid:
+                    fakeMobile.Hue = e.SelectedHue;
+                    break;
             }
-            else
-            {
-                fakeMobile.Hue = e.SelectedHue;
-            }
 
-            paperDollInteractable.RequestUpdate(hair, beard);
+            paperDollInteractable.RequestUpdate();
         }
 
-        private void ConfirmButton_MouseUp(object sender, Input.MouseEventArgs e)
+        private void ConfirmButton_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == Input.MouseButtonType.Left)
             {
-                NetClient.Socket.Send_ChangeRaceRequest(
-                    CurrentColorOption[Layer.Invalid].Item2,
-                    (ushort)CharacterCreationValues.GetHairComboContent(isFemale, selectedRace).GetGraphic(CurrentOption[Layer.Hair]),
-                    CurrentColorOption[Layer.Hair].Item2,
-                    (ushort)CharacterCreationValues.GetFacialHairComboContent(selectedRace).GetGraphic(CurrentOption[Layer.Beard]),
-                    CurrentColorOption[Layer.Beard].Item2
+                if (!isFemale && selectedRace != RaceType.ELF) //Has beard
+                {
+                    NetClient.Socket.Send_ChangeRaceRequest(
+                        CurrentColorOption[Layer.Invalid].Item2,
+                        (ushort)CharacterCreationValues.GetHairComboContent(isFemale, selectedRace).GetGraphic(CurrentOption[Layer.Hair]),
+                        CurrentColorOption[Layer.Hair].Item2,
+                        (ushort)CharacterCreationValues.GetFacialHairComboContent(selectedRace).GetGraphic(CurrentOption[Layer.Beard]),
+                        CurrentColorOption[Layer.Beard].Item2
                     );
+                }
+                else //No beard
+                {
+                    NetClient.Socket.Send_ChangeRaceRequest(
+                        CurrentColorOption[Layer.Invalid].Item2,
+                        (ushort)CharacterCreationValues.GetHairComboContent(isFemale, selectedRace).GetGraphic(CurrentOption[Layer.Hair]),
+                        CurrentColorOption[Layer.Hair].Item2,
+                        0,
+                        0
+                    );
+                }
+
+                //Cleanup
+                if (hair != null)
+                {
+                    World.RemoveItem(hair, true);
+                }
+                if (beard != null)
+                {
+                    World.RemoveItem(beard, true);
+                }
                 Dispose();
             }
         }
@@ -449,43 +477,33 @@ namespace ClassicUO.Game.UI.Gumps
 
             fakeMobile.Hue = CurrentColorOption[Layer.Invalid].Item2;
 
-            if (!isFemale && selectedRace != RaceType.ELF)
+            if (beard != null)
             {
                 layer = Layer.Beard;
                 content = CharacterCreationValues.GetFacialHairComboContent(selectedRace);
 
-                beard = CreateItem(content.GetGraphic(CurrentOption[layer]), CurrentColorOption[layer].Item2, layer);
+                beard.Graphic = (ushort)content.GetGraphic(CurrentOption[layer]);
+                beard.Hue = CurrentColorOption[layer].Item2;
             }
 
             layer = Layer.Hair;
             content = CharacterCreationValues.GetHairComboContent(isFemale, selectedRace);
 
-            hair = CreateItem(content.GetGraphic(CurrentOption[layer]), CurrentColorOption[layer].Item2, layer);
+            hair.Graphic = (ushort)content.GetGraphic(CurrentOption[layer]);
+            hair.Hue = CurrentColorOption[layer].Item2;
         }
 
         private Item CreateItem(int id, ushort hue, Layer layer)
         {
-            Item existsItem = fakeMobile.FindItemByLayer(layer);
-
-            if (existsItem != null)
-            {
-                World.RemoveItem(existsItem, true);
-                fakeMobile.Remove(existsItem);
-            }
-
             if (id == 0)
             {
                 return null;
             }
-            // This is a workaround to avoid to see naked guy
-            // We are simulating server objects into World.Items map.
+
             Item item = World.GetOrCreateItem(0x4000_0000 + (uint)layer); // use layer as unique Serial
-            fakeMobile.Remove(item);
             item.Graphic = (ushort)id;
             item.Hue = hue;
             item.Layer = layer;
-            item.Container = fakeMobile;
-            fakeMobile.PushToBack(item);
             //
 
             return item;
@@ -521,9 +539,11 @@ namespace ClassicUO.Game.UI.Gumps
             private int _lastSelectedIndex;
             private readonly Layer _layer;
             private readonly ushort[] _pallet;
+            private readonly RaceChangeGump _gump;
 
-            public CustomColorPicker(Layer layer, int label, ushort[] pallet, int rows, int columns)
+            public CustomColorPicker(RaceChangeGump gump, Layer layer, int label, ushort[] pallet, int rows, int columns)
             {
+                _gump = gump;
                 Width = 121;
                 Height = 25;
                 _cellW = 125 / columns;
@@ -608,6 +628,7 @@ namespace ClassicUO.Game.UI.Gumps
                     {
                         _colorPickerBox = new ColorPickerBox
                         (
+                            _gump.World,
                             485,
                             109,
                             _rows,
@@ -643,13 +664,15 @@ namespace ClassicUO.Game.UI.Gumps
         /// </summary>
         private class CustomPaperDollGump : PaperDollInteractable
         {
+            private readonly Gump _gump;
             private readonly Mobile playerMobile;
             private Item hair;
             private Item beard;
             private bool requestUpdate = false;
 
-            public CustomPaperDollGump(int x, int y, Mobile playerMobile, Item hair, Item beard) : base(x, y, playerMobile, null)
+            public CustomPaperDollGump(Gump gump, int x, int y, Mobile playerMobile, Item hair, Item beard) : base(x, y, playerMobile, new PaperDollGump(gump.World))
             {
+                _gump = gump;
                 this.playerMobile = playerMobile;
                 this.hair = hair;
                 this.beard = beard;
@@ -748,6 +771,7 @@ namespace ClassicUO.Game.UI.Gumps
                     (
                         new GumpPicEquipment
                         (
+                            _gump,
                             hair.Serial,
                             0,
                             0,
@@ -771,6 +795,7 @@ namespace ClassicUO.Game.UI.Gumps
                     (
                         new GumpPicEquipment
                         (
+                            _gump,
                             beard.Serial,
                             0,
                             0,
@@ -785,13 +810,6 @@ namespace ClassicUO.Game.UI.Gumps
                         }
                     );
                 }
-            }
-
-            public void RequestUpdate(Item hair, Item beard)
-            {
-                this.hair = hair;
-                this.beard = beard;
-                requestUpdate = true;
             }
 
             public new void RequestUpdate()

@@ -1,8 +1,8 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 1. Redistributions of source code must retain the above copyright
@@ -16,7 +16,7 @@
 // 4. Neither the name of the copyright holder nor the
 //    names of its contributors may be used to endorse or promote products
 //    derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -52,75 +52,63 @@ namespace ClassicUO.Assets
 
         public const int MAX_LAND_TEXTURES_DATA_INDEX_COUNT = 0x4000;
 
-        private TexmapsLoader(int count)
-        {
-        }
+        private TexmapsLoader(int count) { }
 
         public static TexmapsLoader Instance =>
             _instance ?? (_instance = new TexmapsLoader(MAX_LAND_TEXTURES_DATA_INDEX_COUNT));
 
         public override Task Load()
         {
-            return Task.Run
-            (
-                () =>
+            return Task.Run(() =>
+            {
+                string path = UOFileManager.GetUOFilePath("texmaps.mul");
+                string pathidx = UOFileManager.GetUOFilePath("texidx.mul");
+
+                FileSystemHelper.EnsureFileExists(path);
+                FileSystemHelper.EnsureFileExists(pathidx);
+
+                _file = new UOFileMul(path, pathidx, MAX_LAND_TEXTURES_DATA_INDEX_COUNT, 10);
+                _file.FillEntries(ref Entries);
+                string pathdef = UOFileManager.GetUOFilePath("TexTerr.def");
+
+                if (File.Exists(pathdef))
                 {
-                    string path = UOFileManager.GetUOFilePath("texmaps.mul");
-                    string pathidx = UOFileManager.GetUOFilePath("texidx.mul");
-
-                    FileSystemHelper.EnsureFileExists(path);
-                    FileSystemHelper.EnsureFileExists(pathidx);
-
-                    _file = new UOFileMul(path, pathidx, MAX_LAND_TEXTURES_DATA_INDEX_COUNT, 10);
-                    _file.FillEntries(ref Entries);
-                    string pathdef = UOFileManager.GetUOFilePath("TexTerr.def");
-
-                    if (File.Exists(pathdef))
+                    using (DefReader defReader = new DefReader(pathdef))
                     {
-                        using (DefReader defReader = new DefReader(pathdef))
+                        while (defReader.Next())
                         {
-                            while (defReader.Next())
+                            int index = defReader.ReadInt();
+
+                            if (index < 0 || index >= Entries.Length)
                             {
-                                int index = defReader.ReadInt();
+                                continue;
+                            }
 
-                                if (index < 0 || index >= Entries.Length)
+                            int[] group = defReader.ReadGroup();
+
+                            if (group == null)
+                            {
+                                continue;
+                            }
+
+                            for (int i = 0; i < group.Length; i++)
+                            {
+                                int checkindex = group[i];
+
+                                if (checkindex < 0 || checkindex >= Entries.Length)
                                 {
                                     continue;
                                 }
 
-                                int[] group = defReader.ReadGroup();
-
-                                if (group == null)
-                                {
-                                    continue;
-                                }
-
-                                for (int i = 0; i < group.Length; i++)
-                                {
-                                    int checkindex = group[i];
-
-                                    if (checkindex < 0 || checkindex >= Entries.Length)
-                                    {
-                                        continue;
-                                    }
-
-                                    Entries[index] = Entries[checkindex];
-                                }
+                                Entries[index] = Entries[checkindex];
                             }
                         }
                     }
-                    _spriteInfos = new SpriteInfo[Entries.Length];
                 }
-            );
-        }
-      
-
-        struct SpriteInfo
-        {
-            public Texture2D Texture;
-            public Rectangle UV;
+            });
         }
 
+<<<<<<< HEAD
         private SpriteInfo[] _spriteInfos;
 
         // ## BEGIN - END ## // MISC2
@@ -158,17 +146,22 @@ namespace ClassicUO.Assets
         // ## BEGIN - END ## // MISC2
         {
             ref UOFileIndex entry = ref GetValidRefEntry((int) (index));
+=======
+        public TexmapInfo GetTexmap(uint idx)
+        {
+            ref UOFileIndex entry = ref GetValidRefEntry((int)idx);
+>>>>>>> classicuo/main
 
             if (entry.Length <= 0)
             {
-                return;
+                return default;
             }
 
             _file.SetData(entry.Address, entry.FileSize);
             _file.Seek(entry.Offset);
 
-            int size = entry.Length == 0x2000 ? 64 : 128;
-            Span<uint> data = stackalloc uint[size * size];
+            var size = entry.Length == 0x2000 ? 64 : 128;
+            var data = new uint[size * size];
 
             for (int i = 0; i < size; ++i)
             {
@@ -211,9 +204,19 @@ namespace ClassicUO.Assets
                 }
             }
 
-            ref var spriteInfo = ref _spriteInfos[index];
-
-            spriteInfo.Texture = atlas.AddSprite(data, size, size, out spriteInfo.UV);
+            return new TexmapInfo()
+            {
+                Pixels = data,
+                Width = size,
+                Height = size
+            };
         }
+    }
+
+    public ref struct TexmapInfo
+    {
+        public Span<uint> Pixels;
+        public int Width;
+        public int Height;
     }
 }

@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -146,7 +146,7 @@ namespace ClassicUO.Game.Managers
     }
     // ## BEGIN - END ## // NAMEOVERHEAD IMPROVEMENTS // PKRION
 
-    internal static class NameOverHeadManager
+    internal sealed class NameOverHeadManager
     {
         private static NameOverHeadHandlerGump _gump;
         // ## BEGIN - END ## // NAMEOVERHEAD
@@ -170,9 +170,7 @@ namespace ClassicUO.Game.Managers
         }
         // ## BEGIN - END ## // NAMEOVERHEAD
 
-        // ## BEGIN - END ## // NAMEOVERHEAD
-        /*
-        public static bool IsToggled
+        public bool IsToggled
         {
             get => ProfileManager.CurrentProfile.NameOverheadToggled;
             set => ProfileManager.CurrentProfile.NameOverheadToggled = value;
@@ -214,7 +212,7 @@ namespace ClassicUO.Game.Managers
         private static List<string> PropertyList { get; set; } = new List<string>();
         // ## BEGIN - END ## // NAMEOVERHEAD IMPROVEMENTS // PKRION
 
-        public static bool IsAllowed(Entity serial)
+        public bool IsAllowed(Entity serial)
         {
             if (serial == null)
             {
@@ -238,7 +236,7 @@ namespace ClassicUO.Game.Managers
                 return true;
             }
 
-            if (TypeAllowed.HasFlag(NameOverheadTypeAllowed.Corpses) && SerialHelper.IsItem(serial.Serial) && World.Items.Get(serial)?.IsCorpse == true)
+            if (TypeAllowed.HasFlag(NameOverheadTypeAllowed.Corpses) && SerialHelper.IsItem(serial.Serial) && _world.Items.Get(serial)?.IsCorpse == true)
             {
                 return true;
             }
@@ -437,11 +435,11 @@ namespace ClassicUO.Game.Managers
         }
         // ## BEGIN - END ## // NAMEOVERHEAD
 
-        public static void Open()
+        public void Open()
         {
             if (_gump == null || _gump.IsDisposed)
             {
-                _gump = new NameOverHeadHandlerGump();
+                _gump = new NameOverHeadHandlerGump(_world);
                 UIManager.Add(_gump);
             }
 
@@ -449,7 +447,7 @@ namespace ClassicUO.Game.Managers
             _gump.IsVisible = true;
         }
 
-        public static void Close()
+        public void Close()
         {
             if (_gump == null)
                 return;
@@ -458,7 +456,7 @@ namespace ClassicUO.Game.Managers
             _gump.IsVisible = false;
         }
 
-        public static void ToggleOverheads()
+        public void ToggleOverheads()
         {
             // ## BEGIN - END ## // NAMEOVERHEAD
             //IsToggled = !IsToggled;

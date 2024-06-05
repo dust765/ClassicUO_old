@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -48,15 +48,22 @@ namespace ClassicUO.Game.Map
 {
     internal sealed class Chunk
     {
-        private static readonly QueuedPool<Chunk> _pool = new QueuedPool<Chunk>
-        (
-            Constants.PREDICTABLE_CHUNKS,
-            c =>
-            {
-                c.LastAccessTime = Time.Ticks + Constants.CLEAR_TEXTURES_DELAY;
-                c.IsDestroyed = false;
-            }
-        );
+        //private static readonly QueuedPool<Chunk> _pool = new QueuedPool<Chunk>
+        //(
+        //    Constants.PREDICTABLE_CHUNKS,
+        //    c =>
+        //    {
+        //        c.LastAccessTime = Time.Ticks + Constants.CLEAR_TEXTURES_DELAY;
+        //        c.IsDestroyed = false;
+        //    }
+        //);
+
+        private readonly World _world;
+
+        public Chunk(World world)
+        {
+            _world = world;
+        }
 
         public GameObject[,] Tiles { get; } = new GameObject[8, 8];
         public bool IsDestroyed;
@@ -71,9 +78,10 @@ namespace ClassicUO.Game.Map
         //private GuardRegion[] guard_Regions = GuardRegion.guardLinesRead();
         // ## BEGIN - END ## // POC - GUARDLINE
 
-        public static Chunk Create(int x, int y)
+        public static Chunk Create(World world, int x, int y)
         {
-            Chunk c = _pool.GetOne();
+            Chunk c = new Chunk(world); // _pool.GetOne();
+            c.LastAccessTime = Time.Ticks + Constants.CLEAR_TEXTURES_DELAY;
             c.X = x;
             c.Y = y;
 
@@ -85,7 +93,7 @@ namespace ClassicUO.Game.Map
         {
             IsDestroyed = false;
 
-            Map map = World.Map;
+            Map map = _world.Map;
 
             ref IndexMap im = ref GetIndex(index);
 
@@ -107,7 +115,7 @@ namespace ClassicUO.Game.Map
 
                         sbyte z = cells[pos].Z;
 
-                        Land land = Land.Create(tileID);
+                        Land land = Land.Create(_world, tileID);
 
                         ushort tileX = (ushort) (bx + x);
 
@@ -142,7 +150,7 @@ namespace ClassicUO.Game.Map
                                     continue;
                                 }
 
-                                Static staticObject = Static.Create(sb->Color, sb->Hue, pos);
+                                Static staticObject = Static.Create(_world, sb->Color, sb->Hue, pos);
                                 staticObject.X = (ushort) (bx + sb->X);
                                 staticObject.Y = (ushort) (by + sb->Y);
                                 staticObject.Z = sb->Z;
@@ -407,7 +415,7 @@ namespace ClassicUO.Game.Map
                     {
                         GameObject next = first.TNext;
 
-                        if (!ReferenceEquals(first, World.Player))
+                        if (!ReferenceEquals(first, _world.Player))
                         {
                             first.Destroy();
                         }
@@ -427,7 +435,7 @@ namespace ClassicUO.Game.Map
             }
 
             IsDestroyed = true;
-            _pool.ReturnOne(this);
+            //_pool.ReturnOne(this);
         }
 
         public void Clear()
@@ -449,7 +457,7 @@ namespace ClassicUO.Game.Map
                     {
                         GameObject next = first.TNext;
 
-                        if (!ReferenceEquals(first, World.Player))
+                        if (!ReferenceEquals(first, _world.Player))
                         {
                             first.Destroy();
                         }

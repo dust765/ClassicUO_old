@@ -1,8 +1,8 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 1. Redistributions of source code must retain the above copyright
@@ -16,7 +16,7 @@
 // 4. Neither the name of the copyright holder nor the
 //    names of its contributors may be used to endorse or promote products
 //    derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -32,9 +32,6 @@
 
 using ClassicUO.IO;
 using ClassicUO.Utility;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using SDL2;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -46,77 +43,74 @@ namespace ClassicUO.Assets
         private static ArtLoader _instance;
         private UOFile _file;
         private readonly ushort _graphicMask;
-        private readonly PixelPicker _picker = new PixelPicker();
+
+        [ThreadStatic]
+        private static uint[] _data = null;
 
         public const int MAX_LAND_DATA_INDEX_COUNT = 0x4000;
         public const int MAX_STATIC_DATA_INDEX_COUNT = 0x14000;
 
         private ArtLoader(int staticCount, int landCount)
         {
-            _graphicMask = UOFileManager.IsUOPInstallation ? (ushort) 0xFFFF : (ushort) 0x3FFF;
+            _graphicMask = UOFileManager.IsUOPInstallation ? (ushort)0xFFFF : (ushort)0x3FFF;
         }
 
-        public static ArtLoader Instance => _instance ?? (_instance = new ArtLoader(MAX_STATIC_DATA_INDEX_COUNT, MAX_LAND_DATA_INDEX_COUNT));
-
+        public static ArtLoader Instance =>
+            _instance
+            ?? (_instance = new ArtLoader(MAX_STATIC_DATA_INDEX_COUNT, MAX_LAND_DATA_INDEX_COUNT));
 
         public override Task Load()
         {
-            return Task.Run
-            (
-                () =>
-                {
-                    string filePath = UOFileManager.GetUOFilePath("artLegacyMUL.uop");
-
-                    if (UOFileManager.IsUOPInstallation && File.Exists(filePath))
-                    {
-                        _file = new UOFileUop(filePath, "build/artlegacymul/{0:D8}.tga");
-                        Entries = new UOFileIndex[Math.Max(((UOFileUop) _file).TotalEntriesCount, MAX_STATIC_DATA_INDEX_COUNT)];
-                    }
-                    else
-                    {
-                        filePath = UOFileManager.GetUOFilePath("art.mul");
-                        string idxPath = UOFileManager.GetUOFilePath("artidx.mul");
-
-                        if (File.Exists(filePath) && File.Exists(idxPath))
-                        {
-                            _file = new UOFileMul(filePath, idxPath, MAX_STATIC_DATA_INDEX_COUNT);
-                        }
-                    }
-
-                    _file.FillEntries(ref Entries);
-                    _spriteInfos = new SpriteInfo[Entries.Length];
-                }
-            );
-        }
-
-        struct SpriteInfo
-        {
-            public Texture2D Texture;
-            public Rectangle UV;
-            public Rectangle ArtBounds;
-        }
-
-        private SpriteInfo[] _spriteInfos;
-
-        public Rectangle GetRealArtBounds(int index) => index + 0x4000 >= _spriteInfos.Length ? Rectangle.Empty : _spriteInfos[index + 0x4000].ArtBounds;
-
-        // ## BEGIN - END ## // MISC2
-        //private bool LoadData(Span<uint> data, int g, out short width, out short height, bool isTerrain)
-        // ## BEGIN - END ## // MISC2
-        private bool LoadData(Span<uint> data, int g, out short width, out short height, bool isTerrain, bool IsImpassable)
-        // ## BEGIN - END ## // MISC2
-        {
-            ref UOFileIndex entry = ref GetValidRefEntry(g);
-
-            if (isTerrain)
+            return Task.Run(() =>
             {
-                if (entry.Length == 0)
+                string filePath = UOFileManager.GetUOFilePath("artLegacyMUL.uop");
+
+                if (UOFileManager.IsUOPInstallation && File.Exists(filePath))
                 {
-                    width = 0;
-                    height = 0;
-                    return false;
+                    _file = new UOFileUop(filePath, "build/artlegacymul/{0:D8}.tga");
+                    Entries = new UOFileIndex[
+                        Math.Max(((UOFileUop)_file).TotalEntriesCount, MAX_STATIC_DATA_INDEX_COUNT)
+                    ];
+                }
+                else
+                {
+                    filePath = UOFileManager.GetUOFilePath("art.mul");
+                    string idxPath = UOFileManager.GetUOFilePath("artidx.mul");
+
+                    if (File.Exists(filePath) && File.Exists(idxPath))
+                    {
+                        _file = new UOFileMul(filePath, idxPath, MAX_STATIC_DATA_INDEX_COUNT);
+                    }
                 }
 
+                _file.FillEntries(ref Entries);
+            });
+        }
+
+        // public Rectangle GetRealArtBounds(int index) =>
+        //     index + 0x4000 >= _spriteInfos.Length
+        //         ? Rectangle.Empty
+        //         : _spriteInfos[index + 0x4000].ArtBounds;
+
+        private bool LoadData(Span<uint> data, int g, out short width, out short height)
+        {
+            ref var entry = ref GetValidRefEntry(g);
+
+            if (entry.Length == 0)
+            {
+                width = 0;
+                height = 0;
+
+                return false;
+            }
+
+            _file.SetData(entry.Address, entry.FileSize);
+            _file.Seek(entry.Offset);
+            //var flags = _file.ReadUInt();
+
+            //if (flags > 0xFFFF || flags == 0)
+            if (g < 0x4000)
+            {
                 width = 44;
                 height = 44;
 
@@ -125,15 +119,12 @@ namespace ClassicUO.Assets
                     return false;
                 }
 
-                /* 
+                /*
                  * Since the data only contains the diamond shape, we may not actually read
                  * into every pixel in 'data'. We must zero the buffer here since it is
                  * re-used. But we only have to zero out the (44 * 44) worth.
                  */
                 data.Slice(0, (width * height)).Fill(0);
-
-                _file.SetData(entry.Address, entry.FileSize);
-                _file.Seek(entry.Offset);
 
                 for (int i = 0; i < 22; ++i)
                 {
@@ -194,78 +185,56 @@ namespace ClassicUO.Assets
                         */
                         // ## BEGIN - END ## // MISC2
                     }
-                };
+                }
             }
             else
             {
-                if (ReadHeader(_file, ref entry, out width, out height))
+                var flags = _file.ReadUInt();
+                width = _file.ReadShort();
+                height = _file.ReadShort();
+
+                if (width <= 0 || height <= 0 || data.Length < (width * height))
                 {
-                    if (data.Length < (width * height))
-                    {
-                        return false;
-                    }
+                    return false;
+                }
 
-                    /* 
-                     * Since the data is run-length-encoded, we may not actually read
-                     * into every pixel in 'data'. We must zero the buffer here since it is
-                     * re-used. But we only have to zero out the (width * height) worth.
-                     */
-                    data.Slice(0, (width * height)).Fill(0);
+                /*
+                    * Since the data is run-length-encoded, we may not actually read
+                    * into every pixel in 'data'. We must zero the buffer here since it is
+                    * re-used. But we only have to zero out the (width * height) worth.
+                    */
+                data.Slice(0, (width * height)).Fill(0);
 
-                    ushort fixedGraphic = (ushort)(g - 0x4000);
+                ushort fixedGraphic = (ushort)(g - 0x4000);
 
-                    if (ReadData(data, width, height, _file))
-                    {
-                        // keep the cursor graphic check to cleanup edges
-                        if ((fixedGraphic >= 0x2053 && fixedGraphic <= 0x2062) || (fixedGraphic >= 0x206A && fixedGraphic <= 0x2079))
-                        {
-                            for (int i = 0; i < width; i++)
-                            {
-                                data[i] = 0;
-                                data[(height - 1) * width + i] = 0;
-                            }
+                if (ReadData(data, width, height, _file))
+                {
+                    // keep the cursor graphic check to cleanup edges
+                    //if ((fixedGraphic >= 0x2053 && fixedGraphic <= 0x2062) || (fixedGraphic >= 0x206A && fixedGraphic <= 0x2079))
+                    //{
+                    //    for (int i = 0; i < width; i++)
+                    //    {
+                    //        data[i] = 0;
+                    //        data[(height - 1) * width + i] = 0;
+                    //    }
 
-                            for (int i = 0; i < height; i++)
-                            {
-                                data[i * width] = 0;
-                                data[i * width + width - 1] = 0;
-                            }
-                        }
-
-                        ref var spriteInfo = ref _spriteInfos[g];
-
-                        FinalizeData
-                        (
-                            data,
-                            ref entry,
-                            fixedGraphic,
-                            width,
-                            height,
-                            out spriteInfo.ArtBounds
-                        );
-                    }
+                    //    for (int i = 0; i < height; i++)
+                    //    {
+                    //        data[i * width] = 0;
+                    //        data[i * width + width - 1] = 0;
+                    //    }
+                    //}
                 }
             }
 
             return true;
         }
 
-        [ThreadStatic] private static uint[] _data = null;
-
-        // ## BEGIN - END ## // MISC2
-        //FLATLAND
-        //public Texture2D GetLandTexture(uint g, out Rectangle bounds)
-        // ## BEGIN - END ## // MISC2
-        public Texture2D GetLandTexture(uint g, out Rectangle bounds, bool IsImpassable)
-        // ## BEGIN - END ## // MISC2
+        public Span<uint> GetRawImage(uint g, out short width, out short height)
         {
-            g &= _graphicMask;
-
-            ref var spriteInfo = ref _spriteInfos[g];
-
-            if (spriteInfo.Texture == null)
+            if (!LoadData(_data, (int)g, out width, out height))
             {
-                // ## BEGIN - END ## // MISC2
+               // ## BEGIN - END ## // MISC2
                 //if (!LoadData(_data, (int) g, out var width, out var height, true))
                 // ## BEGIN - END ## // MISC2
                 if (!LoadData(_data, (int) g, out var width, out var height, true, IsImpassable))
@@ -290,8 +259,6 @@ namespace ClassicUO.Assets
                     }
                 }
 
-                spriteInfo.Texture = TextureAtlas.Shared.AddSprite(_data.AsSpan(), 44, 44, out spriteInfo.UV);
-            }
 
             bounds = spriteInfo.UV;
             return spriteInfo.Texture;
@@ -442,16 +409,16 @@ namespace ClassicUO.Assets
                     }
                 }
             }
-            
-            return IntPtr.Zero;
+
+            return _data.AsSpan(0, width * height);
         }
 
-        public bool PixelCheck(int index, int x, int y)
-        {
-            return _picker.Get((ulong) index, x, y);
-        }
-
-        private bool ReadHeader(DataReader file, ref UOFileIndex entry, out short width, out short height)
+        private bool ReadHeader(
+            DataReader file,
+            ref UOFileIndex entry,
+            out short width,
+            out short height
+        )
         {
             if (entry.Length == 0)
             {
@@ -517,50 +484,50 @@ namespace ClassicUO.Assets
             return true;
         }
 
-        private void FinalizeData(Span<uint> pixels, ref UOFileIndex entry, ushort graphic, int width, int height, out Rectangle bounds)
-        {
-            int pos1 = 0;
-            int minX = width, minY = height, maxX = 0, maxY = 0;
+        // private void FinalizeData(
+        //     Span<uint> pixels,
+        //     ref UOFileIndex entry,
+        //     ushort graphic,
+        //     int width,
+        //     int height,
+        //     out Rectangle bounds
+        // )
+        // {
+        //     int pos1 = 0;
+        //     int minX = width,
+        //         minY = height,
+        //         maxX = 0,
+        //         maxY = 0;
 
-            // ## BEGIN - END ## // MISC
-            /* Temporarily broken. This isn't the right way to do it anyway since it can't be toggled on/off.
-            if (StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
-            {
-                AddBlackBorder(pixels, width, height);
-            }
-            */
-            // ## BEGIN - END ## // MISC
-            /* Temporarily broken. ProfileManager is not accessible here.
-            if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.BlackOutlineStatics || StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
-            {
-                AddBlackBorder(pixels, width, height);
-            }
-            */
-            // ## BEGIN - END ## // MISC
+        //     /* Temporarily broken. This isn't the right way to do it anyway since it can't be toggled on/off.
+        //     if (StaticFilters.IsCave(graphic) && ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.EnableCaveBorder)
+        //     {
+        //         AddBlackBorder(pixels, width, height);
+        //     }
+        //     */
 
-            for (int y = 0; y < height; ++y)
-            {
-                for (int x = 0; x < width; ++x)
-                {
-                    if (pixels[pos1++] != 0)
-                    {
-                        minX = Math.Min(minX, x);
-                        maxX = Math.Max(maxX, x);
-                        minY = Math.Min(minY, y);
-                        maxY = Math.Max(maxY, y);
-                    }
-                }
-            }
+        //     for (int y = 0; y < height; ++y)
+        //     {
+        //         for (int x = 0; x < width; ++x)
+        //         {
+        //             if (pixels[pos1++] != 0)
+        //             {
+        //                 minX = Math.Min(minX, x);
+        //                 maxX = Math.Max(maxX, x);
+        //                 minY = Math.Min(minY, y);
+        //                 maxY = Math.Max(maxY, y);
+        //             }
+        //         }
+        //     }
 
-            entry.Width = (short)((width >> 1) - 22);
-            entry.Height = (short)(height - 44);
+        //     entry.Width = (short)((width >> 1) - 22);
+        //     entry.Height = (short)(height - 44);
 
-            bounds.X = minX;
-            bounds.Y = minY;
-            bounds.Width = maxX - minX;
-            bounds.Height = maxY - minY;
-        }
-
+        //     bounds.X = minX;
+        //     bounds.Y = minY;
+        //     bounds.Width = maxX - minX;
+        //     bounds.Height = maxY - minY;
+        // }
 
         private void AddBlackBorder(Span<uint> pixels, int width, int height)
         {
@@ -600,5 +567,24 @@ namespace ClassicUO.Assets
                 }
             }
         }
+
+        public ArtInfo GetArt(uint idx)
+        {
+            var pixels = GetRawImage(idx, out var width, out var height);
+
+            return new ArtInfo()
+            {
+                Pixels = pixels,
+                Width = width,
+                Height = height
+            };
+        }
+    }
+
+    public ref struct ArtInfo
+    {
+        public Span<uint> Pixels;
+        public int Width;
+        public int Height;
     }
 }

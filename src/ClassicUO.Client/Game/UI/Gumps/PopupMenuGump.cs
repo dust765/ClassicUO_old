@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -44,7 +44,7 @@ namespace ClassicUO.Game.UI.Gumps
         private ushort _selectedItem;
         private readonly PopupMenuData _data;
 
-        public PopupMenuGump(PopupMenuData data) : base(0, 0)
+        public PopupMenuGump(World world, PopupMenuData data) : base(world, 0, 0)
         {
             CanMove = false;
             CanCloseWithRightClick = true;

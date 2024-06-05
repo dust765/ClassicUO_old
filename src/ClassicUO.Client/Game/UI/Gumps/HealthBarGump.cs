@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -52,6 +52,7 @@ using SDL2;
 using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
+using ClassicUO.Game.Scenes;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -60,11 +61,11 @@ namespace ClassicUO.Game.UI.Gumps
 
         public static readonly MemoryCache entityCache = new MemoryCache(new MemoryCacheOptions());
 
-        protected BaseHealthBarGump(Entity entity) : this(0, 0)
+        protected BaseHealthBarGump(World world, Entity entity) : this(world, 0, 0)
         {
 
 
-            GameActions.RequestMobileStatus(entity.Serial, true);
+            GameActions.RequestMobileStatus(world, entity.Serial, true);
             LocalSerial = entity.Serial;
             CanCloseWithRightClick = true;
             _name = entity.Name;
@@ -89,12 +90,11 @@ namespace ClassicUO.Game.UI.Gumps
             BuildGump();
         }
 
-
-        protected BaseHealthBarGump(uint serial) : this(World.Get(serial))
+        protected BaseHealthBarGump(World world, uint serial) : this(world, world.Get(serial))
         {
         }
 
-        protected BaseHealthBarGump(uint local, uint server) : base(local, server)
+        protected BaseHealthBarGump(World world, uint local, uint server) : base(world, local, server)
         {
             CanMove = true;
             AnchorType = ANCHOR_TYPE.HEALTHBAR;
@@ -195,9 +195,9 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
-            if (TargetManager.IsTargeting)
+            if (World.TargetManager.IsTargeting)
             {
-                TargetManager.Target(LocalSerial);
+                World.TargetManager.Target(LocalSerial);
                 Mouse.LastLeftButtonClickTime = 0;
             }
             // ## BEGIN - END ## // MISC
@@ -238,7 +238,7 @@ namespace ClassicUO.Game.UI.Gumps
         protected override void OnDragEnd(int x, int y)
         {
             // when dragging an healthbar with target on, we have to reset the dclick timer 
-            if (TargetManager.IsTargeting)
+            if (World.TargetManager.IsTargeting)
             {
                 Mouse.LastLeftButtonClickTime = 0;
                 Mouse.CancelDoubleClick = true;
@@ -277,7 +277,7 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
-            if (TargetManager.IsTargeting)
+            if (World.TargetManager.IsTargeting)
             {
                 // ## BEGIN - END ## // MISC
                 // ## BEGIN - END ## // MISC
@@ -317,6 +317,8 @@ namespace ClassicUO.Game.UI.Gumps
                     }
                 }
                 // ## BEGIN - END ## // MISC
+                _targetBroke = true;
+                World.TargetManager.Target(LocalSerial);
                 Mouse.LastLeftButtonClickTime = 0;
             }
             else if (_canChangeName)
@@ -359,11 +361,11 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     if (World.Player.InWarMode)
                     {
-                        GameActions.Attack(entity);
+                        GameActions.Attack(World, entity);
                     }
-                    else if (!GameActions.OpenCorpse(entity))
+                    else if (!GameActions.OpenCorpse(World, entity))
                     {
-                        GameActions.DoubleClick(entity);
+                        GameActions.DoubleClick(World, entity);
                     }
                 }
                 else
@@ -373,7 +375,8 @@ namespace ClassicUO.Game.UI.Gumps
                     //Dispose();
                     // ## BEGIN - END ## // TAZUO
                     if (StatusGumpBase.GetStatusGump() == null)
-                        UIManager.Add(StatusGumpBase.AddStatusGump(ScreenCoordinateX, ScreenCoordinateY));
+                        UIManager.Add(StatusGumpBase.AddStatusGump(World, ScreenCoordinateX, ScreenCoordinateY));
+                        Dispose();
                     // ## BEGIN - END ## // TAZUO
                 }
             }
@@ -467,15 +470,15 @@ namespace ClassicUO.Game.UI.Gumps
 
         private bool _oldWarMode, _normalHits, _poisoned, _yellowHits;
 
-        public HealthBarGumpCustom(Entity entity) : base(entity)
+        public HealthBarGumpCustom(World world, Entity entity) : base(world, entity)
         {
         }
 
-        public HealthBarGumpCustom(uint serial) : base(serial)
+        public HealthBarGumpCustom(World world, uint serial) : base(world, serial)
         {
         }
 
-        public HealthBarGumpCustom() : base(0, 0)
+        public HealthBarGumpCustom(World world) : base(world, 0, 0)
         {
         }
 
@@ -549,9 +552,9 @@ namespace ClassicUO.Game.UI.Gumps
                     _outOfRange = true;
                     textColor = 912;
 
-                    if (TargetManager.LastAttack != LocalSerial)
+                    if (World.TargetManager.LastAttack != LocalSerial)
                     {
-                        GameActions.SendCloseStatus(LocalSerial);
+                        GameActions.SendCloseStatus(World,LocalSerial);
                     }
 
                     if (inparty)
@@ -695,7 +698,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     if (entity.HitsMax == 0)
                     {
-                        GameActions.RequestMobileStatus(entity);
+                        GameActions.RequestMobileStatus(World, entity);
                     }
 
                     _outOfRange = false;
@@ -753,7 +756,7 @@ namespace ClassicUO.Game.UI.Gumps
                             _border[1].LineColor = _border[2].LineColor = _border[3].LineColor = HPB_COLOR_RED;
                         }
                     }
-                    else if (mobile != TargetManager.LastTargetInfo.Serial)
+                    else if (mobile != World.TargetManager.LastTargetInfo.Serial)
                     {
                         _border[0].LineColor = HPB_COLOR_BLACK;
 
@@ -1645,15 +1648,15 @@ namespace ClassicUO.Game.UI.Gumps
         private bool _oldWarMode, _normalHits, _poisoned, _yellowHits;
 
 
-        public HealthBarGump(Entity entity) : base(entity)
+        public HealthBarGump(World world, Entity entity) : base(world,entity)
         {
         }
 
-        public HealthBarGump(uint serial) : base(serial)
+        public HealthBarGump(World world, uint serial) : base(world,serial)
         {
         }
 
-        public HealthBarGump() : base(0, 0)
+        public HealthBarGump(World world) : base(world, 0, 0)
         {
         }
 
@@ -1992,9 +1995,9 @@ namespace ClassicUO.Game.UI.Gumps
 
                     _outOfRange = true;
 
-                    if (TargetManager.LastAttack != LocalSerial)
+                    if (World.TargetManager.LastAttack != LocalSerial)
                     {
-                        GameActions.SendCloseStatus(LocalSerial);
+                        GameActions.SendCloseStatus(World, LocalSerial);
                     }
 
                     if (inparty)
@@ -2135,7 +2138,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     if (entity.HitsMax == 0)
                     {
-                        GameActions.RequestMobileStatus(entity);
+                        GameActions.RequestMobileStatus(World, entity);
                     }
 
                     _outOfRange = false;

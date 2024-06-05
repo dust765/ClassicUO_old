@@ -1,8 +1,8 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 1. Redistributions of source code must retain the above copyright
@@ -16,7 +16,7 @@
 // 4. Neither the name of the copyright holder nor the
 //    names of its contributors may be used to endorse or promote products
 //    derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -62,12 +62,40 @@ namespace ClassicUO.Game
         // ## BEGIN - END ## // CURSOR
         {
             {
-                0x206A, 0x206B, 0x206C, 0x206D, 0x206E, 0x206F, 0x2070, 0x2071, 0x2072, 0x2073, 0x2074, 0x2075, 0x2076,
-                0x2077, 0x2078, 0x2079
+                0x206A,
+                0x206B,
+                0x206C,
+                0x206D,
+                0x206E,
+                0x206F,
+                0x2070,
+                0x2071,
+                0x2072,
+                0x2073,
+                0x2074,
+                0x2075,
+                0x2076,
+                0x2077,
+                0x2078,
+                0x2079
             },
             {
-                0x2053, 0x2054, 0x2055, 0x2056, 0x2057, 0x2058, 0x2059, 0x205A, 0x205B, 0x205C, 0x205D, 0x205E, 0x205F,
-                0x2060, 0x2061, 0x2062
+                0x2053,
+                0x2054,
+                0x2055,
+                0x2056,
+                0x2057,
+                0x2058,
+                0x2059,
+                0x205A,
+                0x205B,
+                0x205C,
+                0x205D,
+                0x205E,
+                0x205F,
+                0x2060,
+                0x2061,
+                0x2062
             },
             {
                 0x206A, 0x206B, 0x206C, 0x206D, 0x206E, 0x206F, 0x2070, 0x2071, 0x2072, 0x2073, 0x2074, 0x2075, 0x2076,
@@ -85,7 +113,7 @@ namespace ClassicUO.Game
             // ## BEGIN - END ## // CURSOR
         };
 
-        private readonly Aura _aura = new Aura(30);
+        private readonly Aura _aura;
         private readonly CustomBuildObject[] _componentsList = new CustomBuildObject[10];
         private readonly int[,] _cursorOffset = new int[2, 16];
         // ## BEGIN - END ## // CURSOR
@@ -110,11 +138,14 @@ namespace ClassicUO.Game
         private readonly ushort HUE_HOSTILE = 0x0023;
         private readonly ushort HUE_NEUTRAL = 0x03b2;
         private readonly ushort HUE_FRIENDLY = 0x005A;
+        private readonly World _world;
         // ## BEGIN - END ## // CURSOR
 
-        public GameCursor()
+        public GameCursor(World world)
         {
-            _tooltip = new Tooltip();
+            _world = world;
+            _tooltip = new Tooltip(world);
+            _aura = new Aura(30);
 
             // ## BEGIN - END ## // CURSOR
             //for (int i = 0; i < 3; i++)
@@ -186,22 +217,26 @@ namespace ClassicUO.Game
 
             if (graphic != 0xFFFF)
             {
-                _ = ArtLoader.Instance.GetStaticTexture(graphic, out var bounds);
+                ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(graphic);
 
                 float scale = 1;
 
-                if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ScaleItemsInsideContainers)
+                if (
+                    ProfileManager.CurrentProfile != null
+                    && ProfileManager.CurrentProfile.ScaleItemsInsideContainers
+                )
                 {
                     scale = UIManager.ContainerScale;
                 }
 
-                return new Point((int)((bounds.Width >> 1) * scale) - ItemHold.MouseOffset.X, (int)((bounds.Height >> 1) * scale) - ItemHold.MouseOffset.Y);
+                return new Point(
+                    (int)((artInfo.UV.Width >> 1) * scale) - ItemHold.MouseOffset.X,
+                    (int)((artInfo.UV.Height >> 1) * scale) - ItemHold.MouseOffset.Y
+                );
             }
 
             return Point.Zero;
         }
-
-
 
         public void Update()
         {
@@ -266,14 +301,19 @@ namespace ClassicUO.Game
 
                 if (draggingGraphic != 0xFFFF && ItemHold.IsFixedPosition && !UIManager.IsDragging)
                 {
-                    _ = ArtLoader.Instance.GetStaticTexture(draggingGraphic, out var bounds);
+                    ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(draggingGraphic);
 
                     Point offset = GetDraggingItemOffset();
 
                     int x = ItemHold.FixedX - offset.X;
                     int y = ItemHold.FixedY - offset.Y;
 
-                    if (Mouse.Position.X >= x && Mouse.Position.X < x + bounds.Width && Mouse.Position.Y >= y && Mouse.Position.Y < y + bounds.Height)
+                    if (
+                        Mouse.Position.X >= x
+                        && Mouse.Position.X < x + artInfo.UV.Width
+                        && Mouse.Position.Y >= y
+                        && Mouse.Position.Y < y + artInfo.UV.Height
+                    )
                     {
                         if (!ItemHold.IgnoreFixedPosition)
                         {
@@ -292,17 +332,25 @@ namespace ClassicUO.Game
 
         public void Draw(UltimaBatcher2D sb)
         {
-            if (World.InGame && TargetManager.IsTargeting && ProfileManager.CurrentProfile != null)
+            if (_world.InGame && _world.TargetManager.IsTargeting && ProfileManager.CurrentProfile != null)
             {
-                if (TargetManager.TargetingState == CursorTarget.MultiPlacement)
+                if (_world.TargetManager.TargetingState == CursorTarget.MultiPlacement)
                 {
-                    if (World.CustomHouseManager != null && World.CustomHouseManager.SelectedGraphic != 0)
+                    if (
+                        _world.CustomHouseManager != null
+                        && _world.CustomHouseManager.SelectedGraphic != 0
+                    )
                     {
                         ushort hue = 0;
 
                         Array.Clear(_componentsList, 0, 10);
 
-                        if (!World.CustomHouseManager.CanBuildHere(_componentsList, out CUSTOM_HOUSE_BUILD_TYPE type))
+                        if (
+                            !_world.CustomHouseManager.CanBuildHere(
+                                _componentsList,
+                                out CUSTOM_HOUSE_BUILD_TYPE type
+                            )
+                        )
                         {
                             hue = 0x0021;
                         }
@@ -319,7 +367,7 @@ namespace ClassicUO.Game
                                     break;
                                 }
 
-                                Multi m = Multi.Create(_componentsList[i].Graphic);
+                                Multi m = Multi.Create(_world, _componentsList[i].Graphic);
 
                                 m.AlphaHue = 0xFF;
                                 m.Hue = hue;
@@ -334,9 +382,14 @@ namespace ClassicUO.Game
                             {
                                 int z = 0;
 
-                                if (selectedObj.Z < World.CustomHouseManager.MinHouseZ)
+                                if (selectedObj.Z < _world.CustomHouseManager.MinHouseZ)
                                 {
-                                    if (selectedObj.X >= World.CustomHouseManager.StartPos.X && selectedObj.X <= World.CustomHouseManager.EndPos.X - 1 && selectedObj.Y >= World.CustomHouseManager.StartPos.Y && selectedObj.Y <= World.CustomHouseManager.EndPos.Y - 1)
+                                    if (
+                                        selectedObj.X >= _world.CustomHouseManager.StartPos.X
+                                        && selectedObj.X <= _world.CustomHouseManager.EndPos.X - 1
+                                        && selectedObj.Y >= _world.CustomHouseManager.StartPos.Y
+                                        && selectedObj.Y <= _world.CustomHouseManager.EndPos.Y - 1
+                                    )
                                     {
                                         if (type != CUSTOM_HOUSE_BUILD_TYPE.CHBT_STAIR)
                                         {
@@ -354,7 +407,11 @@ namespace ClassicUO.Game
                                         break;
                                     }
 
-                                    _temp[i].SetInWorldTile((ushort)(selectedObj.X + item.X), (ushort)(selectedObj.Y + item.Y), (sbyte)(selectedObj.Z + z + item.Z));
+                                    _temp[i].SetInWorldTile(
+                                        (ushort)(selectedObj.X + item.X),
+                                        (ushort)(selectedObj.Y + item.Y),
+                                        (sbyte)(selectedObj.Z + z + item.Z)
+                                    );
                                 }
                             }
                         }
@@ -386,7 +443,7 @@ namespace ClassicUO.Game
 
                     ushort hue = 0;
 
-                    switch (TargetManager.TargetingType)
+                    switch (_world.TargetManager.TargetingType)
                     {
                         case TargetType.Neutral:
                             // ## BEGIN - END ## // CURSOR
@@ -450,10 +507,22 @@ namespace ClassicUO.Game
                             string dist = obj.Distance.ToString();
 
                             Vector3 hue = new Vector3(0, 1, 1f);
-                            sb.DrawString(Fonts.Bold, dist, Mouse.Position.X - 26, Mouse.Position.Y - 21, hue);
-                            
+                            sb.DrawString(
+                                Fonts.Bold,
+                                dist,
+                                Mouse.Position.X - 26,
+                                Mouse.Position.Y - 21,
+                                hue
+                            );
+
                             hue.Y = 0;
-                            sb.DrawString(Fonts.Bold, dist, Mouse.Position.X - 25, Mouse.Position.Y - 20, hue);
+                            sb.DrawString(
+                                Fonts.Bold,
+                                dist,
+                                Mouse.Position.X - 25,
+                                Mouse.Position.Y - 20,
+                                hue
+                            );
                         }
                     }
                 }
@@ -468,52 +537,52 @@ namespace ClassicUO.Game
             {
                 float scale = 1;
 
-                if (ProfileManager.CurrentProfile != null && ProfileManager.CurrentProfile.ScaleItemsInsideContainers)
+                if (
+                    ProfileManager.CurrentProfile != null
+                    && ProfileManager.CurrentProfile.ScaleItemsInsideContainers
+                )
                 {
                     scale = UIManager.ContainerScale;
                 }
 
                 ushort draggingGraphic = GetDraggingItemGraphic();
 
-                var texture = ArtLoader.Instance.GetStaticTexture(draggingGraphic, out var bounds);
+                ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(draggingGraphic);
 
-                if (texture != null)
+                if (artInfo.Texture != null)
                 {
                     Point offset = GetDraggingItemOffset();
 
-                    int x = (ItemHold.IsFixedPosition ? ItemHold.FixedX : Mouse.Position.X) - offset.X;
-                    int y = (ItemHold.IsFixedPosition ? ItemHold.FixedY : Mouse.Position.Y) - offset.Y;
+                    int x =
+                        (ItemHold.IsFixedPosition ? ItemHold.FixedX : Mouse.Position.X) - offset.X;
+                    int y =
+                        (ItemHold.IsFixedPosition ? ItemHold.FixedY : Mouse.Position.Y) - offset.Y;
 
-                    Vector3 hue = ShaderHueTranslator.GetHueVector(ItemHold.Hue, ItemHold.IsPartialHue, ItemHold.HasAlpha ? .5f : 1f);
+                    Vector3 hue = ShaderHueTranslator.GetHueVector(
+                        ItemHold.Hue,
+                        ItemHold.IsPartialHue,
+                        ItemHold.HasAlpha ? .5f : 1f
+                    );
 
-                    var rect = new Rectangle
-                    (
+                    var rect = new Rectangle(
                         x,
                         y,
-                        (int)(bounds.Width * scale),
-                        (int)(bounds.Height * scale)
+                        (int)(artInfo.UV.Width * scale),
+                        (int)(artInfo.UV.Height * scale)
                     );
 
-                    sb.Draw
-                    (
-                        texture,
-                        rect,
-                        bounds,
-                        hue
-                    );
+                    sb.Draw(artInfo.Texture, rect, artInfo.UV, hue);
 
-                    if (ItemHold.Amount > 1 && ItemHold.DisplayedGraphic == ItemHold.Graphic && ItemHold.IsStackable)
+                    if (
+                        ItemHold.Amount > 1
+                        && ItemHold.DisplayedGraphic == ItemHold.Graphic
+                        && ItemHold.IsStackable
+                    )
                     {
                         rect.X += 5;
                         rect.Y += 5;
 
-                        sb.Draw
-                        (
-                            texture,
-                            rect,
-                            bounds,
-                            hue
-                        );
+                        sb.Draw(artInfo.Texture, rect, artInfo.UV, hue);
                     }
                 }
             }
@@ -540,7 +609,7 @@ namespace ClassicUO.Game
 
                 Vector3 hueVec;
 
-                if (World.InGame && World.MapIndex != 0 && !World.Player.InWarMode)
+                if (_world.InGame && _world.MapIndex != 0 && !_world.Player.InWarMode)
                 {
                     // ## BEGIN - END ## // CURSOR
                     //hueVec = ShaderHueTranslator.GetHueVector(0x0033);
@@ -553,17 +622,20 @@ namespace ClassicUO.Game
                     hueVec = ShaderHueTranslator.GetHueVector(0);
                 }
 
-                var texture = ArtLoader.Instance.GetStaticTexture(Graphic, out var bounds);
+                ref readonly var artInfo = ref Client.Game.UO.Arts.GetArt(Graphic);
 
-                sb.Draw
-                (
-                    texture,
-                    new Vector2
-                    (
-                        Mouse.Position.X - offX,
-                        Mouse.Position.Y - offY
-                    ), 
-                    bounds,
+                var rect = artInfo.UV;
+
+                const int BORDER_SIZE = 1;
+                rect.X += BORDER_SIZE;
+                rect.Y += BORDER_SIZE;
+                rect.Width -= BORDER_SIZE * 2;
+                rect.Height -= BORDER_SIZE * 2;
+
+                sb.Draw(
+                    artInfo.Texture,
+                    new Vector2(Mouse.Position.X - offX, Mouse.Position.Y - offY),
+                    rect,
                     hueVec
                 );
             }
@@ -573,24 +645,36 @@ namespace ClassicUO.Game
         {
             if (Client.Game.Scene is GameScene gs)
             {
-                if (!World.ClientFeatures.TooltipsEnabled ||
-                    (SelectedObject.Object is Item selectedItem && 
-                    selectedItem.IsLocked && 
-                    selectedItem.ItemData.Weight == 255 && 
-                    !selectedItem.ItemData.IsContainer &&
-                    // We need to check if OPL contains data.
-                    // If not we can ignore tooltip.
-                    !World.OPL.Contains(selectedItem)) || 
-                    (ItemHold.Enabled && !ItemHold.IsFixedPosition))
+                if (
+                    !_world.ClientFeatures.TooltipsEnabled
+                    || (
+                        SelectedObject.Object is Item selectedItem
+                        && selectedItem.IsLocked
+                        && selectedItem.ItemData.Weight == 255
+                        && !selectedItem.ItemData.IsContainer
+                        &&
+                        // We need to check if OPL contains data.
+                        // If not we can ignore tooltip.
+                        !_world.OPL.Contains(selectedItem)
+                    )
+                    || (ItemHold.Enabled && !ItemHold.IsFixedPosition)
+                )
                 {
-                    if (!_tooltip.IsEmpty && (UIManager.MouseOverControl == null || UIManager.IsMouseOverWorld))
+                    if (
+                        !_tooltip.IsEmpty
+                        && (UIManager.MouseOverControl == null || UIManager.IsMouseOverWorld)
+                    )
                     {
                         _tooltip.Clear();
                     }
                 }
                 else
                 {
-                    if (UIManager.IsMouseOverWorld && SelectedObject.Object is Entity item && World.OPL.Contains(item))
+                    if (
+                        UIManager.IsMouseOverWorld
+                        && SelectedObject.Object is Entity item
+                        && _world.OPL.Contains(item)
+                    )
                     {
                         if (_tooltip.IsEmpty || item != _tooltip.Serial)
                         {
@@ -602,9 +686,12 @@ namespace ClassicUO.Game
                         return;
                     }
 
-                    if (UIManager.MouseOverControl != null && UIManager.MouseOverControl.Tooltip is uint serial)
+                    if (
+                        UIManager.MouseOverControl != null
+                        && UIManager.MouseOverControl.Tooltip is uint serial
+                    )
                     {
-                        if (SerialHelper.IsValid(serial) && World.OPL.Contains(serial))
+                        if (SerialHelper.IsValid(serial) && _world.OPL.Contains(serial))
                         {
                             if (_tooltip.IsEmpty || serial != _tooltip.Serial)
                             {
@@ -619,7 +706,11 @@ namespace ClassicUO.Game
                 }
             }
 
-            if (UIManager.MouseOverControl != null && UIManager.MouseOverControl.HasTooltip && !Mouse.IsDragging)
+            if (
+                UIManager.MouseOverControl != null
+                && UIManager.MouseOverControl.HasTooltip
+                && !Mouse.IsDragging
+            )
             {
                 if (UIManager.MouseOverControl.Tooltip is string text)
                 {
@@ -639,9 +730,9 @@ namespace ClassicUO.Game
 
         private ushort AssignGraphicByState()
         {
-            int war = World.InGame && World.Player.InWarMode ? 1 : 0;
+            int war = _world.InGame && _world.Player.InWarMode ? 1 : 0;
 
-            if (TargetManager.IsTargeting)
+            if (_world.TargetManager.IsTargeting)
             {
                 return _cursorData[war, 12];
             }
@@ -656,7 +747,11 @@ namespace ClassicUO.Game
                 return _cursorData[war, 13];
             }
 
-            if (UIManager.MouseOverControl != null && UIManager.MouseOverControl.AcceptKeyboardInput && UIManager.MouseOverControl.IsEditable)
+            if (
+                UIManager.MouseOverControl != null
+                && UIManager.MouseOverControl.AcceptKeyboardInput
+                && UIManager.MouseOverControl.IsEditable
+            )
             {
                 return _cursorData[war, 14];
             }
@@ -678,15 +773,16 @@ namespace ClassicUO.Game
             int windowCenterX = camera.Bounds.X + (camera.Bounds.Width >> 1);
             int windowCenterY = camera.Bounds.Y + (camera.Bounds.Height >> 1);
 
-            return _cursorData[war,
-                               GetMouseDirection
-                               (
-                                   windowCenterX,
-                                   windowCenterY,
-                                   Mouse.Position.X,
-                                   Mouse.Position.Y,
-                                   1
-                               )];
+            return _cursorData[
+                war,
+                GetMouseDirection(
+                    windowCenterX,
+                    windowCenterY,
+                    Mouse.Position.X,
+                    Mouse.Position.Y,
+                    1
+                )
+            ];
         }
 
         public static int GetMouseDirection(int x1, int y1, int to_x, int to_y, int current_facing)
@@ -723,37 +819,53 @@ namespace ClassicUO.Game
 
             switch (hashf)
             {
-                case 111: return (int) Direction.West; // W
+                case 111:
+                    return (int)Direction.West; // W
 
-                case 112: return (int) Direction.Up; // NW
+                case 112:
+                    return (int)Direction.Up; // NW
 
-                case 113: return (int) Direction.North; // N
+                case 113:
+                    return (int)Direction.North; // N
 
-                case 120: return (int) Direction.West; // W
+                case 120:
+                    return (int)Direction.West; // W
 
-                case 131: return (int) Direction.West; // W
+                case 131:
+                    return (int)Direction.West; // W
 
-                case 132: return (int) Direction.Left; // SW
+                case 132:
+                    return (int)Direction.Left; // SW
 
-                case 133: return (int) Direction.South; // S
+                case 133:
+                    return (int)Direction.South; // S
 
-                case 210: return (int) Direction.North; // N
+                case 210:
+                    return (int)Direction.North; // N
 
-                case 230: return (int) Direction.South; // S
+                case 230:
+                    return (int)Direction.South; // S
 
-                case 311: return (int) Direction.East; // E
+                case 311:
+                    return (int)Direction.East; // E
 
-                case 312: return (int) Direction.Right; // NE
+                case 312:
+                    return (int)Direction.Right; // NE
 
-                case 313: return (int) Direction.North; // N
+                case 313:
+                    return (int)Direction.North; // N
 
-                case 320: return (int) Direction.East; // E
+                case 320:
+                    return (int)Direction.East; // E
 
-                case 331: return (int) Direction.East; // E
+                case 331:
+                    return (int)Direction.East; // E
 
-                case 332: return (int) Direction.Down; // SE
+                case 332:
+                    return (int)Direction.Down; // SE
 
-                case 333: return (int) Direction.South; // S
+                case 333:
+                    return (int)Direction.South; // S
             }
 
             return current_facing;
@@ -776,7 +888,8 @@ namespace ClassicUO.Game
                 Height = h;
             }
 
-            public readonly int Width, Height;
+            public readonly int Width,
+                Height;
             public readonly IntPtr CursorPtr;
         }
     }

@@ -1,8 +1,8 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 1. Redistributions of source code must retain the above copyright
@@ -16,7 +16,7 @@
 // 4. Neither the name of the copyright holder nor the
 //    names of its contributors may be used to endorse or promote products
 //    derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -58,6 +58,7 @@ using SDL2;
 using SpriteFont = ClassicUO.Renderer.SpriteFont;
 using System.Text.Json.Serialization;
 using static ClassicUO.Game.UI.Gumps.WorldMapGump;
+using ClassicUO.Game.Scenes;
 
 namespace ClassicUO.Game.UI.Gumps
 {
@@ -139,8 +140,9 @@ namespace ClassicUO.Game.UI.Gumps
         private readonly float[] _zooms = new float[10] { 0.125f, 0.25f, 0.5f, 0.75f, 1f, 1.5f, 2f, 4f, 6f, 8f };
         private readonly Color _semiTransparentWhiteForGrid = new Color(255, 255, 255, 56);
 
-        public WorldMapGump() : base
+        public WorldMapGump(World world) : base
         (
+            world,
             400,
             400,
             100,
@@ -158,7 +160,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             LoadSettings();
 
-            GameActions.Print(ResGumps.WorldMapLoading, 0x35);
+            GameActions.Print(World, ResGumps.WorldMapLoading, 0x35);
             Load();
             OnResize();
 
@@ -180,7 +182,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     _isTopMost = value;
 
-                    SaveSettings();            
+                    SaveSettings();
                 }
 
                 ShowBorder = !_isTopMost;
@@ -225,7 +227,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             ResizeWindow(new Point(Width, Height));
 
-            _flipMap = ProfileManager.CurrentProfile.WorldMapFlipMap;    
+            _flipMap = ProfileManager.CurrentProfile.WorldMapFlipMap;
             _showPartyMembers = ProfileManager.CurrentProfile.WorldMapShowParty;
 
             World.WMapManager.SetEnable(_showPartyMembers);
@@ -323,6 +325,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     EntryDialog dialog = new EntryDialog
                     (
+                        World,
                         250,
                         150,
                         ResGumps.EnterLocation,
@@ -332,7 +335,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (string.IsNullOrWhiteSpace(name))
                             {
-                                GameActions.Print(ResGumps.InvalidLocation, 0x35);
+                                GameActions.Print(World, ResGumps.InvalidLocation, 0x35);
 
                                 return;
                             }
@@ -350,19 +353,19 @@ namespace ClassicUO.Game.UI.Gumps
                                 }
                                 catch
                                 {
-                                    GameActions.Print(ResGumps.InvalidLocation, 0x35);
+                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35);
                                 }
                             }
                             else
                             {
                                 if (!int.TryParse(coords[0], out x))
                                 {
-                                    GameActions.Print(ResGumps.InvalidLocation, 0x35);
+                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35);
                                 }
 
                                 if (!int.TryParse(coords[1], out y))
                                 {
-                                    GameActions.Print(ResGumps.InvalidLocation, 0x35);
+                                    GameActions.Print(World, ResGumps.InvalidLocation, 0x35);
                                 }
                             }
 
@@ -424,7 +427,7 @@ namespace ClassicUO.Game.UI.Gumps
             _options["markers_manager"] = new ContextMenuItemEntry(ResGumps.MarkersManager,
                 () =>
                 {
-                    var mm = new MarkersManagerGump();
+                    var mm = new MarkersManagerGump(World);
 
                     UIManager.Add(mm);
                 }
@@ -511,7 +514,7 @@ namespace ClassicUO.Game.UI.Gumps
             BuildOptionDictionary();
 
             ContextMenu?.Dispose();
-            ContextMenu = new ContextMenuControl();
+            ContextMenu = new ContextMenuControl(this);
 
             ContextMenuItemEntry markerFontEntry = new ContextMenuItemEntry(ResGumps.FontStyle);
             markerFontEntry.Add(new ContextMenuItemEntry(string.Format(ResGumps.Style0, 1), () => { SetFont(1); }));
@@ -761,7 +764,7 @@ namespace ClassicUO.Game.UI.Gumps
             int x = position.X - X - ParentX;
             int y = position.Y - Y - ParentY;
             CanvasToWorld(x, y, out int xMap, out int yMap);
-            TargetManager.Target
+            World.TargetManager.Target
             (
                 0,
                 (ushort)xMap,
@@ -775,7 +778,7 @@ namespace ClassicUO.Game.UI.Gumps
             SaveSettings();
             World.WMapManager.SetEnable(false);
 
-            Client.Game.GameCursor.IsDraggingCursorForced = false;
+            Client.Game.UO.GameCursor.IsDraggingCursorForced = false;
 
             base.Dispose();
         }
@@ -1170,7 +1173,7 @@ namespace ClassicUO.Game.UI.Gumps
 
         #region Loading
 
-       
+
         private unsafe void LoadMapChunk(Span<uint> buffer, Span<sbyte> allZ, int chunkX, int chunkY)
         {
             if (World.Map == null)
@@ -1213,7 +1216,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                 for (int c = 0; c < count; ++c, ++sb)
                 {
-                    if (sb->Color != 0 && sb->Color != 0xFFFF && GameObject.CanBeDrawn(sb->Color))
+                    if (sb->Color != 0 && sb->Color != 0xFFFF && GameObject.CanBeDrawn(World, sb->Color))
                     {
                         int index = sb->Y * 8 + sb->X;
 
@@ -1315,7 +1318,7 @@ namespace ClassicUO.Game.UI.Gumps
                     }
 
                     cc = (uint)(r | (g << 8) | (b << 16) | (a << 24));
-                } 
+                }
             }
         }
 
@@ -1542,7 +1545,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                                         for (int c = 0; c < count; ++c, ++sb)
                                         {
-                                            if (sb->Color != 0 && sb->Color != 0xFFFF && GameObject.CanBeDrawn(sb->Color))
+                                            if (sb->Color != 0 && sb->Color != 0xFFFF && GameObject.CanBeDrawn(World, sb->Color))
                                             {
                                                 int block = (mapY + sb->Y + OFFSET_PIX_HALF) * (realWidth + OFFSET_PIX) + mapX + sb->X + OFFSET_PIX_HALF;
 
@@ -1626,7 +1629,7 @@ namespace ClassicUO.Game.UI.Gumps
                             Log.Error($"error loading worldmap: {ex}");
                         }
 
-                        GameActions.Print(ResGumps.WorldMapLoaded, 0x48);
+                        GameActions.Print(World, ResGumps.WorldMapLoaded, 0x48);
                     }
                 }
             );
@@ -1647,7 +1650,7 @@ namespace ClassicUO.Game.UI.Gumps
             public List<ZonesFileZoneData> Zones { get; set; }
         }
 
-        private class Zone 
+        private class Zone
         {
             public string Label;
             public Color Color;
@@ -1713,13 +1716,13 @@ namespace ClassicUO.Game.UI.Gumps
         {
             public Dictionary<string, ZoneSet> ZoneSetDict { get; } = new Dictionary<string, ZoneSet>();
 
-            public void AddZoneSetByFileName(string filename, bool hidden)
+            public void AddZoneSetByFileName(World world, string filename, bool hidden)
             {
                 try
                 {
                     var zf = System.Text.Json.JsonSerializer.Deserialize(File.ReadAllText(filename), ZonesJsonContext.Default.ZonesFile);
                     ZoneSetDict[filename] = new ZoneSet(zf, filename, hidden);
-                    GameActions.Print(string.Format(ResGumps.MapZoneFileLoaded, ZoneSetDict[filename].NiceFileName), 0x3A /* yellow green */);
+                    GameActions.Print(world, string.Format(ResGumps.MapZoneFileLoaded, ZoneSetDict[filename].NiceFileName), 0x3A /* yellow green */);
                 }
                 catch (Exception ee)
                 {
@@ -1762,7 +1765,7 @@ namespace ClassicUO.Game.UI.Gumps
                     _hiddenZoneFiles.FirstOrDefault(x => x.Contains(filename))
                 );
 
-                _zoneSets.AddZoneSetByFileName(filename, shouldHide);
+                _zoneSets.AddZoneSetByFileName(World, filename, shouldHide);
             }
         }
 
@@ -1779,7 +1782,7 @@ namespace ClassicUO.Game.UI.Gumps
                 {
                     _mapMarkersLoaded = false;
 
-                    GameActions.Print(ResGumps.LoadingWorldMapMarkers, 0x2A);
+                    GameActions.Print(World, ResGumps.LoadingWorldMapMarkers, 0x2A);
 
                     foreach (Texture2D t in _markerIcons.Values)
                     {
@@ -2007,7 +2010,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                             if (markerFile.Markers.Count > 0)
                             {
-                                GameActions.Print($"..{Path.GetFileName(mapFile)} ({markerFile.Markers.Count})", 0x2B);
+                                GameActions.Print(World, $"..{Path.GetFileName(mapFile)} ({markerFile.Markers.Count})", 0x2B);
                             }
                             _markerFiles.Add(markerFile);
                         }
@@ -2024,7 +2027,7 @@ namespace ClassicUO.Game.UI.Gumps
 
                     _mapMarkersLoaded = true;
 
-                    GameActions.Print(string.Format(ResGumps.WorldMapMarkersLoaded0, count), 0x2A);
+                    GameActions.Print(World, string.Format(ResGumps.WorldMapMarkersLoaded0, count), 0x2A);
                 }
             }
 
@@ -2038,7 +2041,7 @@ namespace ClassicUO.Game.UI.Gumps
                 return;
             }
 
-            var entryDialog = new EntryDialog(250, 150, ResGumps.EnterMarkerName, SaveMakerOnPlayer)
+            var entryDialog = new EntryDialog(World, 250, 150, ResGumps.EnterMarkerName, SaveMakerOnPlayer)
             {
                 CanCloseWithRightClick = true
             };
@@ -2055,7 +2058,7 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (string.IsNullOrWhiteSpace(markerName))
             {
-                GameActions.Print(ResGumps.InvalidMarkerName, 0x2A);
+                GameActions.Print(World, ResGumps.InvalidMarkerName, 0x2A);
             }
 
             var markerColor = "blue";
@@ -2974,7 +2977,7 @@ namespace ClassicUO.Game.UI.Gumps
             else
             {
                 batcher.Draw(marker.MarkerIcon, new Vector2(rot.X - (marker.MarkerIcon.Width >> 1), rot.Y - (marker.MarkerIcon.Height >> 1)), hueVector);
-               
+
                 if (!showMarkerName)
                 {
                     if (Mouse.Position.X >= rot.X - (marker.MarkerIcon.Width >> 1) &&
@@ -3102,7 +3105,7 @@ namespace ClassicUO.Game.UI.Gumps
                 _flipMap ? 45f : 0f
             );
 
-          
+
             rot.X += x + width;
             rot.Y += y + height;
 
@@ -3446,12 +3449,12 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override void OnMouseUp(int x, int y, MouseButtonType button)
         {
-            var allowTarget = _allowPositionalTarget && TargetManager.IsTargeting && TargetManager.TargetingState == CursorTarget.Position;
+            var allowTarget = _allowPositionalTarget && World.TargetManager.IsTargeting && World.TargetManager.TargetingState == CursorTarget.Position;
             if (allowTarget && button == MouseButtonType.Left)
             {
                 HandlePositionTarget();
             }
-            
+
             if (button == MouseButtonType.Left && !Keyboard.Alt)
             {
                 _isScrolling = false;
@@ -3472,14 +3475,14 @@ namespace ClassicUO.Game.UI.Gumps
             }
             // ## BEGIN - END ## // TAZUO
 
-            Client.Game.GameCursor.IsDraggingCursorForced = false;
+            Client.Game.UO.GameCursor.IsDraggingCursorForced = false;
 
             base.OnMouseUp(x, y, button);
         }
 
         protected override void OnMouseDown(int x, int y, MouseButtonType button)
         {
-            if (!Client.Game.GameCursor.ItemHold.Enabled)
+            if (!Client.Game.UO.GameCursor.ItemHold.Enabled)
             {
                 if (button == MouseButtonType.Left && (Keyboard.Alt || _freeView) || button == MouseButtonType.Middle)
                 {
@@ -3495,7 +3498,7 @@ namespace ClassicUO.Game.UI.Gumps
                         _isScrolling = true;
                         CanMove = false;
 
-                        Client.Game.GameCursor.IsDraggingCursorForced = true;
+                        Client.Game.UO.GameCursor.IsDraggingCursorForced = true;
                     }
                 }
 
@@ -3514,7 +3517,7 @@ namespace ClassicUO.Game.UI.Gumps
                     UserMarkersGump existingGump = UIManager.GetGump<UserMarkersGump>();
 
                     existingGump?.Dispose();
-                    UIManager.Add(new UserMarkersGump(_mouseCenter.X, _mouseCenter.Y, userFile.Markers));
+                    UIManager.Add(new UserMarkersGump(World, _mouseCenter.X, _mouseCenter.Y, userFile.Markers));
                 }
             }
 

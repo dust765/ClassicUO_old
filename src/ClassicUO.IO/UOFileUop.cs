@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -51,6 +51,7 @@ namespace ClassicUO.IO
 
         public int TotalEntriesCount { get; private set; }
         public string Pattern => _pattern;
+        public Dictionary<ulong, UOFileIndex> Hashes => _hashes;
 
         
         protected override void Load()

@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,7 @@ using ClassicUO.Utility.Logging;
 
 namespace ClassicUO.Game.Managers
 {
-    internal class JournalManager
+    internal sealed class JournalManager
     {
         private StreamWriter _fileWriter;
         private bool _writerHasException;
@@ -110,7 +110,14 @@ namespace ClassicUO.Game.Managers
                 CreateWriter();
             }
 
-            _fileWriter?.WriteLine($"[{timeNow:G}]  {name}: {text}");
+            string output = $"[{timeNow:G}]  {name}: {text}";
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                output = $"[{timeNow:G}]  {text}";
+            }
+
+            _fileWriter?.WriteLine(output);
         }
 
         private void CreateWriter()
@@ -130,6 +137,7 @@ namespace ClassicUO.Game.Managers
                     {
                         string[] files = Directory.GetFiles(path, "*_journal.txt");
                         Array.Sort(files);
+                        Array.Reverse(files);
 
                         for (int i = files.Length - 1; i >= 100; --i)
                         {

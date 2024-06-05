@@ -2,18 +2,31 @@ name: Deploy
 
 on:
   workflow_dispatch:
+<<<<<<< HEAD
   workflow_run:
     branches: [dev_dust765_x_tazuo]
     workflows: [Build-Test]
     types:
       - completed
 
+=======
+  # workflow_run:
+  #   branches: [main]
+  #   workflows: [Build-Test]
+  #   types:
+  #     - completed
+>>>>>>> classicuo/main
 
 env:
-  CUO_ASSEMBLY_VERSION: '0.1.11.${{ github.run_number }}'
-  CUO_OUTPUT_PATH: '../../bin/dist'
+  CUO_ASSEMBLY_VERSION: "1.1.0.${{ github.run_number }}"
+  CUO_OUTPUT_PATH: "../../bin/dist"
   CUO_PROJECT_PATH: "src/ClassicUO.Client/ClassicUO.Client.csproj"
+<<<<<<< HEAD
   CUO_ZIP_NAME: "ClassicUO-dev-dust765-x-tazuo.zip"
+=======
+  BOOT_PROJECT_PATH: "src/ClassicUO.Bootstrap/src/ClassicUO.Bootstrap.csproj"
+  TARGET_FRAMEWORK: net8.0
+>>>>>>> classicuo/main
 
   DOTNET_NOLOGO: false
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -24,9 +37,19 @@ jobs:
   build:
     if: ${{ github.event.workflow_run.conclusion == 'success' }} || github.event_name == 'workflow_dispatch' }}
     runs-on: ${{ matrix.os }}
+
+    env:
+      CUO_ZIP_NAME: "ClassicUO-${{ matrix.target }}-release.zip"
+
     strategy:
       matrix:
-       os: [ ubuntu-latest ]
+        include:
+          - os: windows-latest
+            target: win-x64
+          - os: ubuntu-latest
+            target: linux-x64
+          - os: macos-latest
+            target: osx-x64
 
     steps:
     - uses: actions/checkout@v3

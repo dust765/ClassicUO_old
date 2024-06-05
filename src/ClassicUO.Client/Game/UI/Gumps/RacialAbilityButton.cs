@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,7 @@ namespace ClassicUO.Game.UI.Gumps
 {
     internal class RacialAbilityButton : Gump
     {
-        public RacialAbilityButton(ushort graphic) : this()
+        public RacialAbilityButton(World world, ushort graphic) : this(world)
         {
             LocalSerial = (uint) (7000 + graphic);
 
@@ -52,7 +52,7 @@ namespace ClassicUO.Game.UI.Gumps
             BuildGump();
         }
 
-        public RacialAbilityButton() : base(0, 0)
+        public RacialAbilityButton(World world) : base(world, 0, 0)
         {
             CanMove = true;
             CanCloseWithRightClick = true;

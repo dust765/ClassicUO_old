@@ -1,6 +1,6 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -44,8 +44,10 @@ namespace ClassicUO.Game.UI.Controls
         // ## BEGIN - END ## // TAZUO
         private readonly bool useModernSelector;
         // ## BEGIN - END ## // TAZUO
+        private readonly World _world;
         public ClickableColorBox
         (
+            World world,
             int x,
             int y,
             int w,
@@ -56,6 +58,7 @@ namespace ClassicUO.Game.UI.Controls
             // ## BEGIN - END ## // TAZUO
         ) : base(w, h, hue)
         {
+            _world = world;
             X = x;
             Y = y;
             WantUpdateSize = false;

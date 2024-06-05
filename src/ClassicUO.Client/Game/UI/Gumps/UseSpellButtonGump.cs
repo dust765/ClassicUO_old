@@ -1,8 +1,8 @@
 ﻿#region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
 // 1. Redistributions of source code must retain the above copyright
@@ -16,7 +16,7 @@
 // 4. Neither the name of the copyright holder nor the
 //    names of its contributors may be used to endorse or promote products
 //    derived from this software without specific prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -53,19 +53,19 @@ namespace ClassicUO.Game.UI.Gumps
 
         private readonly MacroManager _mm;
 
+        public bool ShowEdit =>
+            Keyboard.Ctrl && Keyboard.Alt && ProfileManager.CurrentProfile.FastSpellsAssign;
 
-        public bool ShowEdit => Keyboard.Ctrl && Keyboard.Alt && ProfileManager.CurrentProfile.FastSpellsAssign;
-
-        public UseSpellButtonGump() : base(0, 0)
+        public UseSpellButtonGump(World world) : base(world,0, 0)
         {
             CanMove = true;
             AcceptMouseInput = true;
             CanCloseWithRightClick = true;
 
-            _mm = Client.Game.GetScene<GameScene>().Macros;
+            _mm = world.Macros;
         }
 
-        public UseSpellButtonGump(SpellDefinition spell) : this()
+        public UseSpellButtonGump(World world, SpellDefinition spell) : this(world)
         {
             _spell = spell;
             BuildGump();
@@ -82,7 +82,12 @@ namespace ClassicUO.Game.UI.Gumps
 
         private void BuildGump()
         {
-            Add(_background = new GumpPic(0, 0, (ushort) _spell.GumpIconSmallID, 0) { AcceptMouseInput = false });
+            Add(
+                _background = new GumpPic(0, 0, (ushort)_spell.GumpIconSmallID, 0)
+                {
+                    AcceptMouseInput = false
+                }
+            );
 
             int cliloc = GetSpellTooltip(_spell.ID);
 
@@ -106,21 +111,26 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 Vector3 hueVector = ShaderHueTranslator.GetHueVector(0);
 
-                var texture = GumpsLoader.Instance.GetGumpTexture(LOCK_GRAPHIC, out var bounds);
+                ref readonly var gumpInfo = ref Client.Game.UO.Gumps.GetGump(LOCK_GRAPHIC);
 
-                if (texture != null)
+                if (gumpInfo.Texture != null)
                 {
-                    if (UIManager.MouseOverControl != null && (UIManager.MouseOverControl == this || UIManager.MouseOverControl.RootParent == this))
+                    if (
+                        UIManager.MouseOverControl != null
+                        && (
+                            UIManager.MouseOverControl == this
+                            || UIManager.MouseOverControl.RootParent == this
+                        )
+                    )
                     {
                         hueVector.X = 34;
                         hueVector.Y = 1;
                     }
 
-                    batcher.Draw
-                    (
-                        texture, 
-                        new Vector2(x + (Width - bounds.Width), y),
-                        bounds,
+                    batcher.Draw(
+                        gumpInfo.Texture,
+                        new Vector2(x + (Width - gumpInfo.UV.Width), y),
+                        gumpInfo.UV,
                         hueVector
                     );
                 }
@@ -199,15 +209,24 @@ namespace ClassicUO.Game.UI.Gumps
 
             if (button == MouseButtonType.Left && ShowEdit)
             {
-                Macro mCast = Macro.CreateFastMacro(_spell.Name, MacroType.CastSpell, (MacroSubType)GetSpellsId() + SpellBookDefinition.GetSpellsGroup(_spell.ID));
+                Macro mCast = Macro.CreateFastMacro(
+                    _spell.Name,
+                    MacroType.CastSpell,
+                    (MacroSubType)GetSpellsId() + SpellBookDefinition.GetSpellsGroup(_spell.ID)
+                );
                 if (_mm.FindMacro(_spell.Name) == null)
                 {
                     _mm.MoveToBack(mCast);
                 }
-                GameActions.OpenMacroGump(_spell.Name);
+                GameActions.OpenMacroGump(World, _spell.Name);
             }
 
-            if (ProfileManager.CurrentProfile.CastSpellsByOneClick && button == MouseButtonType.Left && Math.Abs(offset.X) < 5 && Math.Abs(offset.Y) < 5)
+            if (
+                ProfileManager.CurrentProfile.CastSpellsByOneClick
+                && button == MouseButtonType.Left
+                && Math.Abs(offset.X) < 5
+                && Math.Abs(offset.Y) < 5
+            )
             {
                 GameActions.CastSpell(_spell.ID);
             }
@@ -215,7 +234,10 @@ namespace ClassicUO.Game.UI.Gumps
 
         protected override bool OnMouseDoubleClick(int x, int y, MouseButtonType button)
         {
-            if (!ProfileManager.CurrentProfile.CastSpellsByOneClick && button == MouseButtonType.Left)
+            if (
+                !ProfileManager.CurrentProfile.CastSpellsByOneClick
+                && button == MouseButtonType.Left
+            )
             {
                 GameActions.CastSpell(_spell.ID);
 

@@ -1,6 +1,6 @@
 #region license
 
-// Copyright (c) 2021, andreakarasho
+// Copyright (c) 2024, andreakarasho
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -38,6 +38,7 @@ using System.Collections.Generic;
 using ClassicUO.Configuration;
 // ## BEGIN - END ## // TAZUO
 using ClassicUO.Game.Managers;
+using ClassicUO.Game.Scenes;
 using ClassicUO.Game.UI.Controls;
 using ClassicUO.Resources;
 using Microsoft.Xna.Framework;
@@ -59,7 +60,7 @@ namespace ClassicUO.Game.UI.Gumps
         // ## BEGIN - END ## // NAMEOVERHEAD
 
 
-        public NameOverHeadHandlerGump() : base(0, 0)
+        public NameOverHeadHandlerGump(World world) : base(world, 0, 0)
         {
             CanMove = true;
             AcceptMouseInput = true;
@@ -138,7 +139,7 @@ namespace ClassicUO.Game.UI.Gumps
                     // ## BEGIN - END ## // TAZUO
                     Y = stayActive.Height + stayActive.Y,
                     // ## BEGIN - END ## // TAZUO
-                    IsChecked = NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.All
+                    IsChecked = World.NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.All
                 }
             );
 
@@ -154,7 +155,7 @@ namespace ClassicUO.Game.UI.Gumps
                 )
                 {
                     Y = all.Y + all.Height,
-                    IsChecked = NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.Mobiles
+                    IsChecked = World.NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.Mobiles
                 }
             );
 
@@ -170,7 +171,7 @@ namespace ClassicUO.Game.UI.Gumps
                 )
                 {
                     Y = mobiles.Y + mobiles.Height,
-                    IsChecked = NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.Items
+                    IsChecked = World.NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.Items
                 }
             );
 
@@ -186,7 +187,7 @@ namespace ClassicUO.Game.UI.Gumps
                 )
                 {
                     Y = items.Y + items.Height,
-                    IsChecked = NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.MobilesCorpses
+                    IsChecked = World.NameOverHeadManager.TypeAllowed == NameOverheadTypeAllowed.MobilesCorpses
                 }
             );
 
@@ -204,7 +205,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (all.IsChecked)
                 {
-                    NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.All;
+                    World.NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.All;
                 }
             };
 
@@ -212,7 +213,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (mobiles.IsChecked)
                 {
-                    NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.Mobiles;
+                    World.NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.Mobiles;
                 }
             };
 
@@ -220,7 +221,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (items.IsChecked)
                 {
-                    NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.Items;
+                    World.NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.Items;
                 }
             };
 
@@ -228,7 +229,7 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (mobilesCorpses.IsChecked)
                 {
-                    NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.MobilesCorpses;
+                    World.NameOverHeadManager.TypeAllowed = NameOverheadTypeAllowed.MobilesCorpses;
                 }
             };
             */
