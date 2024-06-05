@@ -2,31 +2,18 @@ name: Deploy
 
 on:
   workflow_dispatch:
-<<<<<<< HEAD
-  workflow_run:
-    branches: [dev_dust765_x_tazuo]
-    workflows: [Build-Test]
-    types:
-      - completed
+ # workflow_run:
+ #   branches: [main]
+ #   workflows: [Build-Test]
+ #   types:
+ #     - completed
 
-=======
-  # workflow_run:
-  #   branches: [main]
-  #   workflows: [Build-Test]
-  #   types:
-  #     - completed
->>>>>>> classicuo/main
 
 env:
-  CUO_ASSEMBLY_VERSION: "1.1.0.${{ github.run_number }}"
-  CUO_OUTPUT_PATH: "../../bin/dist"
+  CUO_ASSEMBLY_VERSION: '0.1.11.${{ github.run_number }}'
+  CUO_OUTPUT_PATH: '../../bin/dist'
   CUO_PROJECT_PATH: "src/ClassicUO.Client/ClassicUO.Client.csproj"
-<<<<<<< HEAD
-  CUO_ZIP_NAME: "ClassicUO-dev-dust765-x-tazuo.zip"
-=======
-  BOOT_PROJECT_PATH: "src/ClassicUO.Bootstrap/src/ClassicUO.Bootstrap.csproj"
-  TARGET_FRAMEWORK: net8.0
->>>>>>> classicuo/main
+  CUO_ZIP_NAME: "ClassicUO-dev-preview-release.zip"
 
   DOTNET_NOLOGO: false
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -35,26 +22,14 @@ env:
 
 jobs:
   build:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }} || github.event_name == 'workflow_dispatch' }}
+    #if: ${{ github.event.workflow_run.conclusion == 'success' }} && "${{ env.GITHUB_REPOSITORY }}" == 'ClassicUO/ClassicUO'
     runs-on: ${{ matrix.os }}
-
-    env:
-      CUO_ZIP_NAME: "ClassicUO-${{ matrix.target }}-release.zip"
-
     strategy:
       matrix:
-        include:
-          - os: windows-latest
-            target: win-x64
-          - os: ubuntu-latest
-            target: linux-x64
-          - os: macos-latest
-            target: osx-x64
+       os: [ ubuntu-latest ]
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: dev_dust765_x_tazuo
+    - uses: actions/checkout@v2
       
     - name: Get submodules
       run: |
@@ -72,7 +47,7 @@ jobs:
       
     - name: Create manifest
       run: |
-        dotnet run --project tools/ManifestCreator/ManifestCreator.csproj "${{ env.CUO_OUTPUT_PATH }}" "dev-dust765-x-tazuo" "${{ env.CUO_ZIP_NAME }}"
+        dotnet run --project tools/ManifestCreator/ManifestCreator.csproj "${{ env.CUO_OUTPUT_PATH }}" "dev-preview" "${{ env.CUO_ZIP_NAME }}"
         mkdir upload
         mv manifest.xml upload
       
@@ -91,7 +66,7 @@ jobs:
       uses: dev-drprasad/delete-tag-and-release@v0.2.1
       with:
         delete_release: true
-        tag_name: ClassicUO-dev-dust765-x-tazuo-release
+        tag_name: ClassicUO-dev-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
@@ -99,8 +74,19 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "upload/${{ env.CUO_ZIP_NAME }}"
-        name: '0.1.11.${{ github.run_number }} dev_dust765_x_tazuo'
-        body: 'This build may not be safe: use it at your own risk. including Dust765 and TazUO features'
+        name: 'ClassicUO dev preview'
+        body: 'This build may not be safe: use it at your own risk.'
         prerelease: true
-        tag: ClassicUO-dev-dust765-x-tazuo-release
+        tag: ClassicUO-dev-release
         token: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@4.3.2
+      with:
+        server: ftp.classicuo.eu
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PSW }}
+        protocol: ftps
+        server-dir: /www.classicuo.eu/dev/deploy/
+        local-dir: upload/
+        
