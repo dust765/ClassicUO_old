@@ -262,7 +262,7 @@ namespace ClassicUO.Assets
 
 
 
-        public bool PixelCheck(int index, int x, int y)
+        bool PixelCheck(int index, int x, int y)
         {
             return new GumpInfo()
             {
@@ -272,7 +272,7 @@ namespace ClassicUO.Assets
             };
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+       [StructLayout(LayoutKind.Sequential, Pack = 1)];
         private ref struct GumpBlock
         {
             public readonly ushort Value;

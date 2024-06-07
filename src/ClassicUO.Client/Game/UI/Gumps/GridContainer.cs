@@ -163,9 +163,9 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (e.Button == MouseButtonType.Left && _quickDropBackpack.MouseIsOver)
                 {
-                    if (Client.Game.GameCursor.ItemHold.Enabled)
+                    if (Client.Game.UO.GameCursor.ItemHold.Enabled)
                     {
-                        GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, World.Player.FindItemByLayer(Layer.Backpack));
+                        GameActions.DropItem(Client.Game.UO.GameCursor.ItemHold.Serial, 0xFFFF, 0xFFFF, 0, World.Player.FindItemByLayer(Layer.Backpack));
                         RequestUpdateContents();
                     }
                 }
@@ -176,7 +176,7 @@ namespace ClassicUO.Game.UI.Gumps
             };
             _quickDropBackpack.MouseEnter += (sender, e) =>
             {
-                if (Client.Game.GameCursor.ItemHold.Enabled) _quickDropBackpack.Graphic = quickDropIcon == null ? (ushort)1210 : (ushort)1626;
+                if (Client.Game.UO.GameCursor.ItemHold.Enabled) _quickDropBackpack.Graphic = quickDropIcon == null ? (ushort)1210 : (ushort)1626;
             };
             _quickDropBackpack.MouseExit += (sender, e) => { _quickDropBackpack.Graphic = quickDropIcon == null ? (ushort)1209 : (ushort)1625; };
             _quickDropBackpack.SetTooltip("Drop an item here to send it to your backpack.");
@@ -695,11 +695,11 @@ namespace ClassicUO.Game.UI.Gumps
                 }
                 if (!Keyboard.Ctrl && ProfileManager.CurrentProfile.DoubleClickToLootInsideContainers && _item != null && !_item.IsDestroyed && !_item.ItemData.IsContainer && container != World.Player.FindItemByLayer(Layer.Backpack) && !_item.IsLocked && _item.IsLootable)
                 {
-                    GameActions.GrabItem(_item, _item.Amount);
+                    _world.GameActions.GrabItem(_item, _item.Amount);
                 }
                 else
                 {
-                    GameActions.DoubleClick(LocalSerial);
+                    _world.GameActions.DoubleClick(LocalSerial);
                 }
                 e.Result = true;
             }
@@ -708,22 +708,22 @@ namespace ClassicUO.Game.UI.Gumps
             {
                 if (e.Button == MouseButtonType.Left)
                 {
-                    if (Client.Game.GameCursor.ItemHold.Enabled)
+                    if (Client.Game.UO.GameCursor.ItemHold.Enabled)
                     {
                         if (_item != null && _item.ItemData.IsContainer)
                         {
                             Rectangle containerBounds = ContainerManager.Get(_item.Graphic).Bounds;
-                            GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, containerBounds.X / 2, containerBounds.Y / 2, 0, _item.Serial);
+                            GameActions.DropItem(Client.Game.UO.GameCursor.ItemHold.Serial, containerBounds.X / 2, containerBounds.Y / 2, 0, _item.Serial);
                         }
-                        else if (_item != null && _item.ItemData.IsStackable && _item.Graphic == Client.Game.GameCursor.ItemHold.Graphic)
+                        else if (_item != null && _item.ItemData.IsStackable && _item.Graphic == Client.Game.UO.GameCursor.ItemHold.Graphic)
                         {
-                            GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, _item.X, _item.Y, 0, _item.Serial);
+                            GameActions.DropItem(Client.Game.UO.GameCursor.ItemHold.Serial, _item.X, _item.Y, 0, _item.Serial);
                         }
                         else
                         {
                             Rectangle containerBounds = ContainerManager.Get(container.Graphic).Bounds;
-                            gridContainer.gridSlotManager.AddLockedItemSlot(Client.Game.GameCursor.ItemHold.Serial, slot);
-                            GameActions.DropItem(Client.Game.GameCursor.ItemHold.Serial, containerBounds.X / 2, containerBounds.Y / 2, 0, container.Serial);
+                            gridContainer.gridSlotManager.AddLockedItemSlotClient.Game.UO.GameCursor.ItemHold.Serial, slot);
+                            GameActions.DropItem(Client.Game.UO.GameCursor.ItemHold.Serial, containerBounds.X / 2, containerBounds.Y / 2, 0, container.Serial);
                         }
                     }
                     else if (TargetManager.IsTargeting)
@@ -1070,7 +1070,7 @@ namespace ClassicUO.Game.UI.Gumps
                                 filteredContents.Add(i);
                                 continue;
                             }
-                            if (World.OPL.TryGetNameAndData(i.Serial, out string name, out string data))
+                            if (_world.OPL.TryGetNameAndData(i.Serial, out string name, out string data))
                             {
                                 if (data != null)
                                     if (data.ToLower().Contains(search.ToLower()))

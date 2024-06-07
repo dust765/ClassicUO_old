@@ -315,7 +315,7 @@ namespace ClassicUO.Assets
         }
 
 
-        public unsafe IntPtr CreateCursorSurfacePtr(int index, ushort customHue, out int hotX, out int hotY)
+        private unsafe IntPtr CreateCursorSurfacePtr(int index, ushort customHue, out int hotX, out int hotY)
         {
             hotX = hotY = 0;
 
