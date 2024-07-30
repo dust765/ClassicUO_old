@@ -722,7 +722,7 @@ namespace ClassicUO.Game.Scenes
             // ## BEGIN - END ## // NAMEOVERHEAD
             //var useObjectHandles = NameOverHeadManager.IsToggled || Keyboard.Ctrl && Keyboard.Shift;
             // ## BEGIN - END ## // NAMEOVERHEAD
-            var useObjectHandles = NameOverHeadManager.IsShowing;
+            var useObjectHandles = NameOverHeadManager.IsShowing || Keyboard.Ctrl && Keyboard.Shift;
             // ## BEGIN - END ## // NAMEOVERHEAD
             // ## BEGIN - END ## // NAMEOVERHEAD
             /*

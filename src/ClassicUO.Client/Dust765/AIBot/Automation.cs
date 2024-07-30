@@ -54,7 +54,7 @@ namespace ClassicUO.Game.Cheats.AIBot
             base.Register( new SpellCaster( this ) );
 
             World.Journal.EntryAdded += this.Journal_EntryAdded;
-            chatHandlers.OnSpellCast += this.ChatHandlers_OnSpellCast;
+            ChatHandlers.OnSpellCast += this.ChatHandlers_OnSpellCast;
         }
 
         private void ChatHandlers_OnSpellCast( Mobile mob, SpellAction action )

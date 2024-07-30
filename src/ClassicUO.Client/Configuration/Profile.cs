@@ -248,9 +248,8 @@ namespace ClassicUO.Configuration
         public int DragSelectStartY { get; set; } = 100;
         public bool DragSelectAsAnchor { get; set; } = false;
         // ## BEGIN - END ## // NAMEOVERHEAD
-        //public NameOverheadTypeAllowed NameOverheadTypeAllowed { get; set; } = NameOverheadTypeAllowed.All;
-        // ## BEGIN - END ## // NAMEOVERHEAD
         public string LastActiveNameOverheadOption { get; set; } = "All";
+        // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // NAMEOVERHEAD
         public bool NameOverheadToggled { get; set; } = false;
         public bool ShowTargetRangeIndicator { get; set; }
