@@ -170,16 +170,16 @@ namespace ClassicUO.Game.Cheats.AIBot
 
         public static void Toggle()
         {
-            GameActions.Print( World.Player, String.Format( "5x:{0}abled", ( Automation.IsEnabled = !Automation.IsEnabled ) == true ? "En" : "Dis" ), (ushort)RandomHelper.GetValue( 0, 256 ) );
+            GameActions.Print( World.Player, String.Format( "AIBOT is: {0}abled", ( Automation.IsEnabled = !Automation.IsEnabled ) == true ? "En" : "Dis" ), (ushort)RandomHelper.GetValue( 0, 256 ) );
         }
 
         public static void Update( )
         {
-            DateTime dateTime = DateTime.Now;
-            
+
+           
             if ( !IsEnabled )
                 return;
-            if ( _timer <= dateTime)
+            if ( _timer <= DateTime.Now)
             {
                 Automation.Active = Automation.Bot.Invoke();
             }
