@@ -4526,6 +4526,7 @@ namespace ClassicUO.Game.UI.Gumps
             // ## BEGIN - END ## // LINES
             // ## BEGIN - END ## // AUTOMATIONS
             section.Add(AddLabel(null, "AutoMeditate (toggle on / off automed)", startX, startY));
+            section.Add(AddLabel(null, "Using AIBOT  (toggle on / off usingBot)", startX, startY));
             // ## BEGIN - END ## // AUTOMATIONS
             // ## BEGIN - END ## // MODERNCOOLDOWNBAR
             section.Add(AddLabel(null, "ToggleECBuffGump (toggle on / off EC alike buff gump)", startX, startY));
@@ -4804,6 +4805,7 @@ namespace ClassicUO.Game.UI.Gumps
             section4.Add(AddLabel(null, "write in chat or use macro to enable / disable:", startX, startY));
             section4.Add(AddLabel(null, "(runs in background until disabled)", startX, startY));
             section4.Add(AddLabel(null, "-automed or macro AutoMeditate (auto meditates \n with 2.5s delay and not targeting)", startX, startY));
+            section4.Add(AddLabel(null, "-aibot or macro aibot (auto bot \n)", startX, startY));
             section4.Add(AddLabel(null, "-engange (auto engage and pathfind to last target)", startX, startY));
 
             SettingsSection section5 = AddSettingsSection(box, "-----MISC-----");

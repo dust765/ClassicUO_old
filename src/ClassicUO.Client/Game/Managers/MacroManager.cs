@@ -2329,6 +2329,11 @@ namespace ClassicUO.Game.Managers
                     CommandManager.Execute("automed");
 
                     break;
+                case MacroType.AIBot:
+
+                    CommandManager.Execute("aibot");
+
+                    break;
                 // ## BEGIN - END ## // AUTOMATIONS
                 // ## BEGIN - END ## // LOBBY
                 case MacroType.LobbyConnect:
@@ -3008,6 +3013,8 @@ namespace ClassicUO.Game.Managers
         CureGH, // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // AUTOMATIONS
         AutoMeditate,
+        AIBot,
+        
         // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // ADVMACROS
         CustomInterrupt,
