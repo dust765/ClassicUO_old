@@ -27,7 +27,7 @@ namespace ClassicUO.Game.Cheats.AIBot
         }
 
         public event Action OnSpellChange;
-        public bool IsCasting => Action != SpellAction.Unknown && Elapsed < SpellCaster.GetCursorTime( this.Action );
+        public bool IsCasting => GameActions.iscasting;
         public bool IsActive => Action != SpellAction.Unknown && !IsCasting && Elapsed < SpellTimer.CursorDuration;
     }
 }

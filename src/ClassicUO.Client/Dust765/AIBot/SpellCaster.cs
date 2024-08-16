@@ -105,7 +105,7 @@ namespace ClassicUO.Game.Cheats.AIBot
             {
                 case SpellAction.MiniHeal:
                 case SpellAction.MagicArrow:
-                return TimeSpan.FromSeconds( 0.52 );
+                return TimeSpan.FromSeconds( 0.800 );
 
                 case SpellAction.Clumsy:
                 case SpellAction.Feeblemind:
@@ -126,7 +126,7 @@ namespace ClassicUO.Game.Cheats.AIBot
                 case SpellAction.Telekinesis:
                 case SpellAction.Teleport:
                 case SpellAction.WallOfStone:
-                return TimeSpan.FromSeconds( 1.0 );
+                return TimeSpan.FromSeconds( 1.1 );
 
                 case SpellAction.ArchCure:
                 case SpellAction.ArchProtection:

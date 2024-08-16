@@ -31,6 +31,7 @@
 #endregion
 
 using System;
+using ClassicUO.Assets;
 using ClassicUO.Configuration;
 using ClassicUO.Game.Data;
 using ClassicUO.Game.GameObjects;
@@ -78,6 +79,108 @@ namespace ClassicUO.Game
             }
 
             Socket.Send_ChangeWarMode(war);
+        }
+
+        public static void TargetRelativeClient()
+        {
+
+            int x = World.Player.X;
+            int y = World.Player.Y;
+
+            int offsetX = 0;
+            int offsetY = 0;
+            int destinationX = 0;
+            int destinationY = 0;
+
+            // TODO
+
+   
+            
+            Direction direction = World.Player.Direction;
+
+
+            switch (direction)
+            {
+                case Direction.North:
+                    offsetY = -1;
+
+                    break;
+
+                case Direction.South:
+                    offsetY = 1;
+
+                    break;
+
+                case Direction.East:
+                    offsetX = -1;
+                    offsetY = -1;
+
+                    break;
+
+                case Direction.West:
+                    offsetX = -1;
+                    break;
+
+                case Direction.Right:
+                    offsetX = -1;
+                    offsetY = -1;
+
+                    break;
+
+                case Direction.Left:
+                    offsetX = 1;
+                    offsetY = -1;
+
+                    break;
+
+                case Direction.Up:
+                    offsetX = -1;
+                    offsetY = 1;
+
+                    break;
+
+                case Direction.Down:
+                    offsetX = -1;
+                    offsetY = -1;
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            for (int i = 11; i >= 0; i--)
+            {
+                int totalOffsetX = offsetX * i;
+                int totalOffsetY = offsetY * i;
+                int distX = x + totalOffsetX;
+                int distY = y + totalOffsetY;
+
+                GameObject tile = World.Map.GetTile(distX, distY);
+
+
+                if (tile is Static || tile is Multi || tile is Land)
+                {
+                    ref var itemData = ref TileDataLoader.Instance.StaticData[tile.Graphic];
+                    if (itemData.IsImpassable)
+                    {
+
+                        continue;
+                    }
+                    else
+                    {
+                        Console.WriteLine("teleport: " + " " + distX + " " + " " + distY + " i " + i);
+                        destinationX = x + totalOffsetX;
+                        destinationY = y + totalOffsetY;
+                        break;
+
+                    }
+                }
+
+            }
+
+            TargetManager.Target((ushort)0, (ushort)destinationX, (ushort)destinationY, (short)0);
+
+
         }
 
         public static void OpenMacroGump(string name)

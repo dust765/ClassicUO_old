@@ -1699,6 +1699,7 @@ namespace ClassicUO.Game.GameObjects
             if ((oldDirection & Direction.Mask) == (direction & Direction.Mask))
             {
                 // ## BEGIN - END ## // ONCASTINGGUMP
+        
                 if (GameActions.iscasting) return false;
                 // ## BEGIN - END ## // ONCASTINGGUMP
                 Direction newDir = direction;

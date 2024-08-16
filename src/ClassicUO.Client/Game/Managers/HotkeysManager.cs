@@ -687,6 +687,7 @@ namespace ClassicUO.Game.Managers
         Salute,
         AlwaysRun,
         EquipLastWeapon,
+        TeleportRelative
 
         #endregion
     }
