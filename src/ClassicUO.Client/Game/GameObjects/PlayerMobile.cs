@@ -1701,6 +1701,7 @@ namespace ClassicUO.Game.GameObjects
                 // ## BEGIN - END ## // ONCASTINGGUMP
         
                 if (GameActions.iscasting) return false;
+
                 // ## BEGIN - END ## // ONCASTINGGUMP
                 Direction newDir = direction;
                 int newX = x;

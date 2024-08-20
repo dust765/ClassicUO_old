@@ -402,6 +402,12 @@ namespace ClassicUO.Game.Data
         {
             return g == 0x038A;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsOutStamina()
+        {
+            return World.Player.StaminaMax == 0;
+        }
         // ## BEGIN - END ## // MISC2
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsIgnoreCoT(ushort g)

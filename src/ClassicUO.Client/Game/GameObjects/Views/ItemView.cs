@@ -96,6 +96,16 @@ namespace ClassicUO.Game.GameObjects
             }
             // ## BEGIN - END ## // ART / HUE CHANGES
             // ## BEGIN - END ## // MISC
+
+            if (StaticFilters.IsOutStamina())
+            {
+                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+            }
+            else
+            {
+                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+            }
+
             if (ProfileManager.CurrentProfile.BlockWoS)
             {
                 if (StaticFilters.IsWallOfStone(Graphic) || Graphic == ProfileManager.CurrentProfile.BlockWoSArt)
