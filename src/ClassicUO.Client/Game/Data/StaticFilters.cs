@@ -408,7 +408,7 @@ namespace ClassicUO.Game.Data
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsOutStamina()
         {
-            return World.Player.StaminaMax != World.Player.StaminaMax;
+            return World.Player.Stamina != World.Player.StaminaMax;
         }
         // ## BEGIN - END ## // MISC2
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
