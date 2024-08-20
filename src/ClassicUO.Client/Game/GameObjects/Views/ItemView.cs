@@ -97,13 +97,13 @@ namespace ClassicUO.Game.GameObjects
             // ## BEGIN - END ## // ART / HUE CHANGES
             // ## BEGIN - END ## // MISC
 
-            if (StaticFilters.IsOutStamina())
+            if (StaticFilters.IsOutStamina() && StaticFilters.isHuman(Graphic) || StaticFilters.IsOutStamina() && StaticFilters.isMonster(Graphic))
             {
-                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
             }
             else
             {
-                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
             }
 
             if (ProfileManager.CurrentProfile.BlockWoS)
