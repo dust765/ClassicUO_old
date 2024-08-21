@@ -39,6 +39,7 @@ using ClassicUO.Assets;
 using ClassicUO.Renderer;
 using ClassicUO.Utility;
 using System.Drawing;
+using ClassicUO.Game.GameObjects;
 
 namespace ClassicUO.Game.Data
 {
@@ -412,18 +413,24 @@ namespace ClassicUO.Game.Data
         }
         // ## BEGIN - END ## // MISC2
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool isHuman(ushort g)
+        public static bool isHumanAndMonster()
         {
-            return g >= 0x0190 && g <= 0x0193 || g >= 0x00B7 && g <= 0x00BA || g >= 0x025D && g <= 0x0260 || g == 0x029A || g == 0x029B || g == 0x02B6 || g == 0x02B7 || g == 0x03DB || g == 0x03DF || g == 0x03E2 || g == 0x02E8 || g == 0x02E9 || g == 0x04E5;
+            foreach (Mobile mobile in World.Mobiles.Values)
+            {
+                if (World.Mobiles.Get(mobile.Serial).Distance <= 1 && mobile.IsHuman)
+                {
+                    return true;
+                }
+
+                if (World.Mobiles.Get(mobile.Serial).Distance <= 1 && !mobile.IsHuman)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool isMonster(ushort g)
-        {
-            ANIMATION_GROUPS_TYPE type = AnimationsLoader.Instance.GetAnimType(g);
-
-            return type == ANIMATION_GROUPS_TYPE.MONSTER || type == ANIMATION_GROUPS_TYPE.ANIMAL || type == ANIMATION_GROUPS_TYPE.SEA_MONSTER;
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsIgnoreCoT(ushort g)

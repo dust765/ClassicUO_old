@@ -97,7 +97,16 @@ namespace ClassicUO.Game.GameObjects
             // ## BEGIN - END ## // ART / HUE CHANGES
             // ## BEGIN - END ## // MISC
 
-            if (StaticFilters.IsOutStamina() && StaticFilters.isHuman(Graphic) || StaticFilters.IsOutStamina() && StaticFilters.isMonster(Graphic))
+            if (StaticFilters.IsOutStamina() && StaticFilters.isHumanAndMonster())
+            {
+                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+            }
+            else
+            {
+                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+            }
+
+            if (StaticFilters.IsRock(Graphic) || StaticFilters.IsVegetation(Graphic))
             {
                 TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
             }
@@ -524,7 +533,7 @@ namespace ClassicUO.Game.GameObjects
                          StaticFilters.IsParalyzeField(Graphic) ||
                          StaticFilters.IsEnergyField(Graphic) ||
                          StaticFilters.IsPoisonField(Graphic) ||
-                         StaticFilters.IsWallOfStone(Graphic)))
+                         StaticFilters.IsWallOfStone(Graphic))) 
                     {
                         graphic = Constants.FIELD_REPLACE_GRAPHIC;
                     }
