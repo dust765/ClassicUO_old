@@ -248,8 +248,9 @@ namespace ClassicUO.Configuration
         public int DragSelectStartY { get; set; } = 100;
         public bool DragSelectAsAnchor { get; set; } = false;
         // ## BEGIN - END ## // NAMEOVERHEAD
-        public string LastActiveNameOverheadOption { get; set; } = "All";
+        //public NameOverheadTypeAllowed NameOverheadTypeAllowed { get; set; } = NameOverheadTypeAllowed.All;
         // ## BEGIN - END ## // NAMEOVERHEAD
+        public string LastActiveNameOverheadOption { get; set; } = "All";
         // ## BEGIN - END ## // NAMEOVERHEAD
         public bool NameOverheadToggled { get; set; } = false;
         public bool ShowTargetRangeIndicator { get; set; }
@@ -428,12 +429,10 @@ namespace ClassicUO.Configuration
         public bool ShowJournal2GuildAlly { get; set; } = true;
         // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // NAMEOVERHEAD
+        // ## BEGIN - END ## // NAMEOVERHEAD
         public bool ShowHPLineInNOH { get; set; } = false;
         public bool NameOverheadPinnedToggled { get; set; } = false;
         public bool NameOverheadBackgroundToggled { get; set; } = false;
-
-        [JsonConverter(typeof(Point2Converter))] public Point NameoverPlatePosition { get; set; } = new Point(25, 25);
-
         // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // UI/GUMPS
         public bool UOClassicCombatLTBar { get; set; } = false;
@@ -1050,7 +1049,7 @@ namespace ClassicUO.Configuration
                                     break;
 
                                 case GumpType.NameOverHeadHandler:
-                                    NameOverHeadHandlerGump.LastPosition = new Point(NameoverPlatePosition.X, NameoverPlatePosition.Y);
+                                    NameOverHeadHandlerGump.LastPosition = new Point(x, y);
                                     // Gump gets opened by NameOverHeadManager, we just want to save the last position from profile
                                     break;
                                 // ## BEGIN - END ## // TAZUO
