@@ -413,7 +413,7 @@ namespace ClassicUO.Game.Data
         }
         // ## BEGIN - END ## // MISC2
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool isHumanAndMonster()
+        public static bool isHumanAndMonster(ushort g)
         {
             foreach (Mobile mobile in World.Mobiles.Values)
             {

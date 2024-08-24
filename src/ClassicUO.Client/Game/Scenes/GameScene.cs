@@ -232,6 +232,7 @@ namespace ClassicUO.Game.Scenes
                 });
 
             }
+
             // ## BEGIN - END ## // AUTOLOOT
             // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
             if (ProfileManager.CurrentProfile.UOClassicCombatBuffbar)

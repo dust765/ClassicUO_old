@@ -97,7 +97,7 @@ namespace ClassicUO.Game.GameObjects
             // ## BEGIN - END ## // ART / HUE CHANGES
             // ## BEGIN - END ## // MISC
 
-            if (StaticFilters.IsOutStamina() && StaticFilters.isHumanAndMonster())
+            if (StaticFilters.IsOutStamina() && StaticFilters.isHumanAndMonster(graphic))
             {
                 TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
             }

@@ -431,6 +431,9 @@ namespace ClassicUO.Configuration
         public bool ShowHPLineInNOH { get; set; } = false;
         public bool NameOverheadPinnedToggled { get; set; } = false;
         public bool NameOverheadBackgroundToggled { get; set; } = false;
+
+        [JsonConverter(typeof(Point2Converter))] public Point NameoverPlatePosition { get; set; } = new Point(25, 25);
+
         // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // UI/GUMPS
         public bool UOClassicCombatLTBar { get; set; } = false;
@@ -643,12 +646,18 @@ namespace ClassicUO.Configuration
         public bool WorldMapShowCorpse { get; set; } = true;
         public int AutoFollowDistance { get; set; } = 2;
         [JsonConverter(typeof(Point2Converter))] public Point ResizeJournalSize { get; set; } = new Point(410, 350);
+        
         public bool FollowingMode { get; set; } = false;
         public uint FollowingTarget { get; set; }
         public bool NamePlateHealthBar { get; set; } = true;
         public byte NamePlateOpacity { get; set; } = 75;
         public byte NamePlateHealthBarOpacity { get; set; } = 50;
         public bool NamePlateHideAtFullHealth { get; set; } = true;
+        public bool NamePlateHideAtFullHealthInWarmode { get; set; } = true;
+        public byte NamePlateBorderOpacity { get; set; } = 50;
+        public string NamePlateFont { get; set; } = "avadonian";
+        public int NamePlateFontSize { get; set; } = 20;
+
         public bool DisableSystemChat { get; set; } = false;
         #region GRID CONTAINER
         public bool UseGridLayoutContainerGumps { get; set; } = true;
@@ -1041,7 +1050,7 @@ namespace ClassicUO.Configuration
                                     break;
 
                                 case GumpType.NameOverHeadHandler:
-                                    NameOverHeadHandlerGump.LastPosition = new Point(x, y);
+                                    NameOverHeadHandlerGump.LastPosition = new Point(NameoverPlatePosition.X, NameoverPlatePosition.Y);
                                     // Gump gets opened by NameOverHeadManager, we just want to save the last position from profile
                                     break;
                                 // ## BEGIN - END ## // TAZUO
