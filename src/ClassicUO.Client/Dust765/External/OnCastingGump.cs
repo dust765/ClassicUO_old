@@ -73,7 +73,7 @@ namespace ClassicUO.Dust765.External
                 {
                     protection_delay = 2;
                 }
-                _endTime = _startTime + 400 + (circle + protection_delay) * 200 + _re; // (0.5+ 0.25 * circle) * 1000
+                _endTime = _startTime + 400 + (circle + protection_delay) * 250 + _re; // (0.5+ 0.25 * circle) * 1000
                 GameActions.iscasting = true;
             }
             catch

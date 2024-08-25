@@ -97,23 +97,20 @@ namespace ClassicUO.Game.GameObjects
             // ## BEGIN - END ## // ART / HUE CHANGES
             // ## BEGIN - END ## // MISC
 
-            if (StaticFilters.IsOutStamina() && StaticFilters.isHumanAndMonster(graphic))
+            if  (StaticFilters.isHumanAndMonster(graphic))
             {
-                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
-            }
-            else
-            {
-                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
-            }
+                if (StaticFilters.IsOutStamina())
+                {
+                    TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
 
-            if (StaticFilters.IsRock(Graphic) || StaticFilters.IsVegetation(Graphic))
-            {
-                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+                }
+                else
+                {
+                    TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+                }
+                    
             }
-            else
-            {
-                TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
-            }
+            
 
             if (ProfileManager.CurrentProfile.BlockWoS)
             {

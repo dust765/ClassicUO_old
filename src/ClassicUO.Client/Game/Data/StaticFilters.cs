@@ -415,20 +415,35 @@ namespace ClassicUO.Game.Data
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool isHumanAndMonster(ushort g)
         {
-            foreach (Mobile mobile in World.Mobiles.Values)
+            switch (g)
             {
-                if (World.Mobiles.Get(mobile.Serial).Distance <= 1 && mobile.IsHuman)
-                {
+                case 0x0192:
+                case 0x0193:
                     return true;
-                }
 
-                if (World.Mobiles.Get(mobile.Serial).Distance <= 1 && !mobile.IsHuman)
-                {
+                case 0x02B6:
                     return true;
-                }
-                return false;
+
+                case 0x02B7:
+                    return true;
+
+                default:
+                    return false;
             }
-            return false;
+            // foreach (Mobile mobile in World.Mobiles.Values)
+            // {
+            //     if (World.Mobiles.Get(mobile.Serial).Distance <= 1 && mobile.IsHuman)
+            //     {
+            //         return true;
+            //     }
+
+            //     if (World.Mobiles.Get(mobile.Serial).Distance <= 1 && !mobile.IsHuman)
+            //     {
+            //         return true;
+            //     }
+            //     return false;
+            // }
+            // return false;
         }
 
 

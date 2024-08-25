@@ -1567,10 +1567,6 @@ namespace ClassicUO.Game.Managers
                     NetClient.Socket.Send_EquipLastWeapon();
 
                     break;
-                case MacroType.TeleportRelative:
-                    AttemptTeleport();
-
-                    break;
 
                 case MacroType.KillGumpOpen:
                     // TODO:
@@ -2373,9 +2369,6 @@ namespace ClassicUO.Game.Managers
 
                     break;
 
-                case MacroType.RelativeTarget:
-                    GameActions.TargetRelativeClient();
-                    break;
                 case MacroType.AIBot:
 
                     CommandManager.Execute("aibot");
@@ -2993,7 +2986,6 @@ namespace ClassicUO.Game.Managers
         PrimaryAbility,
         SecondaryAbility,
         EquipLastWeapon,
-        TeleportRelative,
         SetUpdateRange,
         ModifyUpdateRange,
         IncreaseUpdateRange,
@@ -3062,7 +3054,6 @@ namespace ClassicUO.Game.Managers
         // ## BEGIN - END ## // AUTOMATIONS
         AutoMeditate,
         AIBot,
-        RelativeTarget,
         // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // ADVMACROS
         CustomInterrupt,
