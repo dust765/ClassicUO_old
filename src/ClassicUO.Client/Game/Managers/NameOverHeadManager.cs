@@ -48,6 +48,7 @@ using ClassicUO.Game.UI.Gumps;
 // ## BEGIN - END ## // NAMEOVERHEAD IMPROVEMENTS // PKRION
 using ClassicUO.Utility;
 // ## BEGIN - END ## // NAMEOVERHEAD IMPROVEMENTS // PKRION
+using System.Text.RegularExpressions;
 
 namespace ClassicUO.Game.Managers
 {
@@ -165,8 +166,17 @@ namespace ClassicUO.Game.Managers
         // ## BEGIN - END ## // NAMEOVERHEAD
         public static string LastActiveNameOverheadOption
         {
-            get => ProfileManager.CurrentProfile.LastActiveNameOverheadOption;
-            set => ProfileManager.CurrentProfile.LastActiveNameOverheadOption = value;
+            get
+            {
+                string value = ProfileManager.CurrentProfile.LastActiveNameOverheadOption;
+                value = Regex.Unescape(value);
+                return value;
+            }
+            set
+            {
+                string decodedValue = Regex.Unescape(value);
+                ProfileManager.CurrentProfile.LastActiveNameOverheadOption = decodedValue;
+            }
         }
         // ## BEGIN - END ## // NAMEOVERHEAD
 
