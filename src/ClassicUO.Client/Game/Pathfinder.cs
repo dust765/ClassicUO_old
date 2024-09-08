@@ -617,11 +617,11 @@ namespace ClassicUO.Game
             int newX = x;
             int newY = y;
             sbyte newZ = z;
-            byte newDirection = (byte) direction;
-            GetNewXY((byte) direction, ref newX, ref newY);
-            bool passed = CalculateNewZ(newX, newY, ref newZ, (byte) direction);
+            byte newDirection = (byte)direction;
+            GetNewXY((byte)direction, ref newX, ref newY);
+            bool passed = CalculateNewZ(newX, newY, ref newZ, (byte)direction);
 
-            if ((sbyte) direction % 2 != 0)
+            if ((sbyte)direction % 2 != 0)
             {
                 if (passed)
                 {
@@ -630,7 +630,7 @@ namespace ClassicUO.Game
                         int testX = x;
                         int testY = y;
                         sbyte testZ = z;
-                        byte testDir = (byte) (((byte) direction + _dirOffset[i]) % 8);
+                        byte testDir = (byte)(((byte)direction + _dirOffset[i]) % 8);
                         GetNewXY(testDir, ref testX, ref testY);
                         passed = CalculateNewZ(testX, testY, ref testZ, testDir);
                     }
@@ -643,7 +643,7 @@ namespace ClassicUO.Game
                         newX = x;
                         newY = y;
                         newZ = z;
-                        newDirection = (byte) (((byte) direction + _dirOffset[i]) % 8);
+                        newDirection = (byte)(((byte)direction + _dirOffset[i]) % 8);
                         GetNewXY(newDirection, ref newX, ref newY);
                         passed = CalculateNewZ(newX, newY, ref newZ, newDirection);
                     }
@@ -655,11 +655,62 @@ namespace ClassicUO.Game
                 x = newX;
                 y = newY;
                 z = newZ;
-                direction = (Direction) newDirection;
+                direction = (Direction)newDirection;
             }
 
             return passed;
         }
+
+        public static bool CanWalkObstacules(ref Direction direction, ref int x, ref int y, ref sbyte z)
+        {
+            int newX = x;
+            int newY = y;
+            sbyte newZ = z;
+            byte newDirection = (byte)direction;
+            GetNewXY((byte)direction, ref newX, ref newY);
+            bool passed = CalculateNewZ(newX, newY, ref newZ, (byte)direction);
+
+            if ((sbyte)direction % 2 != 0)
+            {
+                if (passed)
+                {
+                    for (int i = 0; i < 2 && passed; i++)
+                    {
+                        int testX = x;
+                        int testY = y;
+                        sbyte testZ = z;
+                        byte testDir = (byte)(((byte)direction + _dirOffset[i]) % 8);
+                        GetNewXY(testDir, ref testX, ref testY);
+                        passed = CalculateNewZ(testX, testY, ref testZ, testDir);
+                    }
+                }
+
+                if (!passed)
+                {
+                    for (int i = 0; i < 2 && !passed; i++)
+                    {
+                        newX = x;
+                        newY = y;
+                        newZ = z;
+                        newDirection = (byte)(((byte)direction + _dirOffset[i]) % 8);
+                        GetNewXY(newDirection, ref newX, ref newY);
+                        passed = CalculateNewZ(newX, newY, ref newZ, newDirection);
+                    }
+                }
+            }
+
+            if (passed)
+            {
+                x = newX;
+                y = newY;
+                z = newZ;
+                direction = (Direction)newDirection;
+            }
+
+            return passed;
+        }
+
+  
 
         private static int GetGoalDistCost(Point point, int cost)
         {

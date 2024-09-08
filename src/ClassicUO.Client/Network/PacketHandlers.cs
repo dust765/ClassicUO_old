@@ -1192,10 +1192,8 @@ namespace ClassicUO.Network
             Direction direction = (Direction)p.ReadUInt8();
             direction &= Direction.Up;
             sbyte z = p.ReadInt8();
-
-            World.Player.Walker.DenyWalk(seq, x, y, z);
-            World.Player.Direction = direction;
-
+            World.Player.Walker.DenyWalk(seq, x, y, z, direction);
+            
             Client.Game.GetScene<GameScene>()?.Weather?.Reset();
         }
 
@@ -6617,7 +6615,7 @@ namespace ClassicUO.Network
                 World.Player.Direction = direction & Direction.Mask;
                 World.Player.FixHue(hue);
                 World.Player.Flags = flags;
-                World.Player.Walker.DenyWalk(0xFF, -1, -1, -1);
+                //World.Player.Walker.DenyWalk(0xFF, -1, -1, -1);
 
                 GameScene gs = Client.Game.GetScene<GameScene>();
 

@@ -112,7 +112,7 @@ namespace ClassicUO.Utility.Collections
         /// <summary>
         ///     Gets a value indicating whether this instance is empty.
         /// </summary>
-        private bool IsEmpty => Count == 0;
+        public bool IsEmpty => Count == 0;
 
         /// <summary>
         ///     Gets a value indicating whether this instance is at full capacity.

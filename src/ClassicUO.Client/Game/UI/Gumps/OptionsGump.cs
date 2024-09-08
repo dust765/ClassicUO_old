@@ -232,7 +232,7 @@ namespace ClassicUO.Game.UI.Gumps
         private InputField _SpecialSetLastTargetClilocText, _blockWoSArt, _blockEnergyFArt;
         // ## BEGIN - END ## // MISC
         // ## BEGIN - END ## // MISC2
-        private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap, _showMapCloseFriend, _drawMobilesWithSurfaceOverhead, _autoAvoidMobiles;
+        private Checkbox _wireframeView, _hueImpassableView, _transparentHouses, _invisibleHouses, _ignoreCoT, _showDeathOnWorldmap, _showMapCloseFriend, _drawMobilesWithSurfaceOverhead, _autoAvoidMobiles, _autoAvoidObstacules;
         private HSliderBar _transparentHousesZ, _transparentHousesTransparency, _invisibleHousesZ, _dontRemoveHouseBelowZ;
         // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // MACROS
@@ -4438,8 +4438,11 @@ namespace ClassicUO.Game.UI.Gumps
             section8.Add(_showMapCloseFriend = AddCheckBox(null, "Show closed friend in World Map:", _currentProfile.ShowMapCloseFriend, startX, startY));
             startY += _showMapCloseFriend.Height + 2;
 
-             section8.Add(_autoAvoidMobiles = AddCheckBox(null, "Auto void Mobiles:", _currentProfile.AutoAvoidMobiles, startX, startY));
+            section8.Add(_autoAvoidMobiles = AddCheckBox(null, "Auto void Mobiles:", _currentProfile.AutoAvoidMobiles, startX, startY));
             startY += _autoAvoidMobiles.Height + 2;
+
+            section8.Add(_autoAvoidObstacules= AddCheckBox(null, "Auto void Obstacules:", _currentProfile.AutoAvoidObstacules, startX, startY));
+            startY += _autoAvoidObstacules.Height + 2;
 
             // ## BEGIN - END ## // MISC2
             // ## BEGIN - END ## // NAMEOVERHEAD
@@ -7844,6 +7847,7 @@ namespace ClassicUO.Game.UI.Gumps
             _currentProfile.OnCastingGump_hidden = _onCastingGump_hidden.IsChecked;
             _currentProfile.ShowMapCloseFriend = _showMapCloseFriend.IsChecked;
             _currentProfile.AutoAvoidMobiles = _autoAvoidMobiles.IsChecked;
+            _currentProfile.AutoAvoidObstacules = _autoAvoidObstacules.IsChecked;
             // ## BEGIN - END ## // ONCASTINGGUMP
             // ## BEGIN - END ## // MISC3 SHOWALLLAYERS
             _currentProfile.ShowAllLayers = _showAllLayers.IsChecked;

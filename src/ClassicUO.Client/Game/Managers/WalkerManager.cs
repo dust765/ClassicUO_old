@@ -30,6 +30,8 @@
 
 #endregion
 
+using ClassicUO.Configuration;
+using ClassicUO.Game.Data;
 using ClassicUO.Network;
 
 namespace ClassicUO.Game.Managers
@@ -105,10 +107,15 @@ namespace ClassicUO.Game.Managers
         public byte WalkSequence;
         public bool WantChangeCoordinates;
 
-        public void DenyWalk(byte sequence, int x, int y, sbyte z)
+        public void DenyWalk(byte sequence, int x, int y, sbyte z, Direction direction)
         {
             World.Player.ClearSteps();
 
+            if (ProfileManager.CurrentProfile.AutoAvoidObstacules)
+            {
+                World.Player.isAvoid = true;
+            }
+            
             Reset();
 
             if (x != -1)
