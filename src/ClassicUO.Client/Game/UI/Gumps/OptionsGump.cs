@@ -4432,13 +4432,13 @@ namespace ClassicUO.Game.UI.Gumps
             section8.Add(_ignoreCoT = AddCheckBox(null, "Enable ignorelist for circle of transparency:", _currentProfile.IgnoreCoTEnabled, startX, startY));
             startY += _ignoreCoT.Height + 2;
 
-            section8.Add(_showDeathOnWorldmap = AddCheckBox(null, "Show death location on world map for 5min:", _currentProfile.ShowDeathOnWorldmap, startX, startY));
+            section8.Add(_showDeathOnWorldmap = AddCheckBox(null, "Show death location on world map for 5min", _currentProfile.ShowDeathOnWorldmap, startX, startY));
             startY += _showDeathOnWorldmap.Height + 2;
 
-            section8.Add(_showMapCloseFriend = AddCheckBox(null, "Show closed friend in World Map:", _currentProfile.ShowMapCloseFriend, startX, startY));
+            section8.Add(_showMapCloseFriend = AddCheckBox(null, "Show closed friend in World Map", _currentProfile.ShowMapCloseFriend, startX, startY));
             startY += _showMapCloseFriend.Height + 2;
 
-             section8.Add(_autoAvoidMobiles = AddCheckBox(null, "Auto void Mobiles:", _currentProfile.AutoAvoidMobiles, startX, startY));
+             section8.Add(_autoAvoidMobiles = AddCheckBox(null, "Auto void Mobiles and Obstacules", _currentProfile.AutoAvoidMobiles, startX, startY));
             startY += _autoAvoidMobiles.Height + 2;
 
             // ## BEGIN - END ## // MISC2
