@@ -1193,6 +1193,7 @@ namespace ClassicUO.Network
             direction &= Direction.Up;
             sbyte z = p.ReadInt8();
             World.Player.Walker.DenyWalk(seq, x, y, z, direction);
+            World.Player.Direction = direction;
             
             Client.Game.GetScene<GameScene>()?.Weather?.Reset();
         }

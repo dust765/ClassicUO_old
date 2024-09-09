@@ -1890,6 +1890,10 @@ namespace ClassicUO.Game.GameObjects
                         if (!IsObstacle(newDir, x, y, z))
                         {
                             direction = newDir;
+                            World.Player.ClearSteps();
+                            
+                            World.Player.SetInWorldTile((ushort)x, (ushort)y, z);
+                            //NetClient.Socket.Send_Resync();
                         }
                         else
                         {
@@ -1968,8 +1972,9 @@ namespace ClassicUO.Game.GameObjects
                 }
                 if (Walker.StepsCount == -1)
                 {
-                    Walker.StepsCount = 0;
+                    Walker.StepsCount = 1;
                 }
+                
 
                 var item = Walker.StepsCount;
 

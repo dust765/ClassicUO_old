@@ -110,19 +110,14 @@ namespace ClassicUO.Game.Managers
         public void DenyWalk(byte sequence, int x, int y, sbyte z, Direction direction)
         {
             World.Player.ClearSteps();
-
-            if (ProfileManager.CurrentProfile.AutoAvoidObstacules)
-            {
-                World.Player.isAvoid = true;
-            }
-            
+            GameActions.Print("deny");
             Reset();
 
             if (x != -1)
             {
                 World.RangeSize.X = x;
                 World.RangeSize.Y = y;
-
+                GameActions.Print("set world");
                 World.Player.SetInWorldTile((ushort) x, (ushort) y, z);
             }
         }
@@ -147,12 +142,13 @@ namespace ClassicUO.Game.Managers
             }
 
             bool isBadStep = stepIndex == StepsCount;
-
+            GameActions.Print("aaaa:   " + stepIndex);
 
             if (!isBadStep)
             {
                 if (stepIndex >= CurrentWalkSequence)
                 {
+                    GameActions.Print(">=:   " + stepIndex);
                     StepInfos[stepIndex].Accepted = true;
 
                     World.RangeSize.X = StepInfos[stepIndex].X;
@@ -160,6 +156,7 @@ namespace ClassicUO.Game.Managers
                 }
                 else if (stepIndex == 0)
                 {
+                    GameActions.Print("==0:   " + stepIndex);
                     World.RangeSize.X = StepInfos[0].X;
                     World.RangeSize.Y = StepInfos[0].Y;
 
@@ -173,6 +170,7 @@ namespace ClassicUO.Game.Managers
                 }
                 else
                 {
+                    GameActions.Print("aaaa");
                     isBadStep = true;
                 }
             }
@@ -181,6 +179,7 @@ namespace ClassicUO.Game.Managers
             {
                 if (!ResendPacketResync)
                 {
+                    GameActions.Print("aaaa");
                     NetClient.Socket.Send_Resync();
                     ResendPacketResync = true;
                 }
