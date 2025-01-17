@@ -316,7 +316,7 @@ namespace ClassicUO.Configuration
         public bool UseLargeContainerGumps { get; set; } = false;
 
         public bool RelativeDragAndDropItems { get; set; }
-        
+
         public bool HighlightContainerWhenSelected { get; set; }
 
         public bool ShowHouseContent { get; set; }
@@ -378,7 +378,7 @@ namespace ClassicUO.Configuration
         public int FlashingHealthbarTreshold { get; set; } = 10;
         // ## BEGIN - END ## // HEALTHBAR
         // ## BEGIN - END ## // CURSOR
-        public Point SpellOnCursorOffset { get; set; } = new Point(25, 30);
+        [JsonConverter(typeof(Point2Converter))] public Point SpellOnCursorOffset { get; set; } = new Point(25, 30);
         public bool SpellOnCursor { get; set; }
         public bool ColorGameCursor { get; set; }
         // ## BEGIN - END ## // CURSOR
@@ -419,6 +419,8 @@ namespace ClassicUO.Configuration
         public bool ShowDeathOnWorldmap { get; set; } = false;
 
         public bool ShowMapCloseFriend { get; set; }
+
+        public bool AutoAvoidMobiles { get; set; }
         // ## BEGIN - END ## // MISC2
         // ## BEGIN - END ## // MACROS
         public int LastTargetRange { get; set; }
@@ -429,15 +431,16 @@ namespace ClassicUO.Configuration
         public bool ShowJournal2GuildAlly { get; set; } = true;
         // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // NAMEOVERHEAD
+        // ## BEGIN - END ## // NAMEOVERHEAD
         public bool ShowHPLineInNOH { get; set; } = false;
         public bool NameOverheadPinnedToggled { get; set; } = false;
         public bool NameOverheadBackgroundToggled { get; set; } = false;
         // ## BEGIN - END ## // NAMEOVERHEAD
         // ## BEGIN - END ## // UI/GUMPS
         public bool UOClassicCombatLTBar { get; set; } = false;
-        public Point UOClassicCombatLTBarLocation { get; set; } = new Point(25, 25);
+        [JsonConverter(typeof(Point2Converter))] public Point UOClassicCombatLTBarLocation { get; set; } = new Point(25, 25);
         public bool UOClassicCombatLTBar_Locked { get; set; } = false;
-        public Point BandageGumpOffset { get; set; } = new Point(0, 0);
+        [JsonConverter(typeof(Point2Converter))] public Point BandageGumpOffset { get; set; } = new Point(0, 0);
         public bool BandageGump { get; set; }
         public bool BandageGumpUpDownToggle { get; set; } = false;
         // ## BEGIN - END ## // UI/GUMPS
@@ -460,7 +463,8 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // TEXTUREMANAGER
         // ## BEGIN - END ## // LINES
         public bool UOClassicCombatLines { get; set; } = false;
-        public Point UOClassicCombatLinesLocation { get; set; } = new Point(25, 25);
+
+        [JsonConverter(typeof(Point2Converter))] public Point UOClassicCombatLinesLocation { get; set; } = new Point(25, 25);
         public bool UOClassicCombatLines_ToggleLastTarget { get; set; } = false;
         public bool UOClassicCombatLines_ToggleHuntingMmode { get; set; } = false;
         public bool UOClassicCombatLines_ToggleHMBlue { get; set; } = false;
@@ -470,7 +474,7 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // LINES
         // ## BEGIN - END ## // AUTOLOOT
         public bool UOClassicCombatAL { get; set; } = false;
-        public Point UOClassicCombatALLocation { get; set; } = new Point(25, 25);
+        [JsonConverter(typeof(Point2Converter))] public Point UOClassicCombatALLocation { get; set; } = new Point(25, 25);
         public bool UOClassicCombatAL_EnableAL { get; set; } = false;
         public bool UOClassicCombatAL_EnableSL { get; set; } = false;
         public bool UOClassicCombatAL_EnableALLow { get; set; } = false;
@@ -488,7 +492,7 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // AUTOLOOT
         // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
         public bool UOClassicCombatBuffbar { get; set; } = false;
-        public Point UOClassicCombatBuffbarLocation { get; set; } = new Point(25, 25);
+        [JsonConverter(typeof(Point2Converter))] public Point UOClassicCombatBuffbarLocation { get; set; } = new Point(25, 25);
         public bool UOClassicCombatBuffbar_SwingEnabled { get; set; } = false;
         public bool UOClassicCombatBuffbar_DoDEnabled { get; set; } = false;
         public bool UOClassicCombatBuffbar_GotDEnabled { get; set; } = false;
@@ -501,7 +505,7 @@ namespace ClassicUO.Configuration
         // ## BEGIN - END ## // BUFFBAR/UCCSETTINGS
         // ## BEGIN - END ## // SELF
         public bool UOClassicCombatSelf { get; set; } = false;
-        public Point UOClassicCombatSelfLocation { get; set; } = new Point(25, 25);
+        [JsonConverter(typeof(Point2Converter))] public Point UOClassicCombatSelfLocation { get; set; } = new Point(25, 25);
         public bool UOClassicCombatSelf_ColoredPouches { get; set; } = false;
         public ushort UOClassicCombatSelf_ColoredPouchesColor { get; set; } = 38;
         public bool UOClassicCombatSelf_AutoEApple { get; set; } = true;
@@ -538,12 +542,12 @@ namespace ClassicUO.Configuration
         public bool UOClassicCombatSelf_ConsiderBalanced { get; set; } = true;
         // ## BEGIN - END ## // SELF
         // ## BEGIN - END ## // ADVMACROS
-        public Point PullEnemyBars { get; set; } = new Point(1630, 214);
-        public Point PullEnemyBarsFinalLocation { get; set; } = new Point(1790, 0); // X difference needs to be 120 to get bars next to one another
-        public Point PullFriendlyBars { get; set; } = new Point(1550, 214);
-        public Point PullFriendlyBarsFinalLocation { get; set; } = new Point(1670, 0); // X difference needs to be 120 to get bars next to one another
-        public Point PullPartyAllyBars { get; set; } = new Point(1470, 214);
-        public Point PullPartyAllyBarsFinalLocation { get; set; } = new Point(1550, 0); // X difference needs to be 120 to get bars next to one another
+        [JsonConverter(typeof(Point2Converter))] public Point PullEnemyBars { get; set; } = new Point(1630, 214);
+        [JsonConverter(typeof(Point2Converter))] public Point PullEnemyBarsFinalLocation { get; set; } = new Point(1790, 0); // X difference needs to be 120 to get bars next to one another
+        [JsonConverter(typeof(Point2Converter))] public Point PullFriendlyBars { get; set; } = new Point(1550, 214);
+        [JsonConverter(typeof(Point2Converter))] public Point PullFriendlyBarsFinalLocation { get; set; } = new Point(1670, 0); // X difference needs to be 120 to get bars next to one another
+        [JsonConverter(typeof(Point2Converter))] public Point PullPartyAllyBars { get; set; } = new Point(1470, 214);
+        [JsonConverter(typeof(Point2Converter))] public Point PullPartyAllyBarsFinalLocation { get; set; } = new Point(1550, 0); // X difference needs to be 120 to get bars next to one another
         public uint CustomSerial { get; set; }
         public uint Mimic_PlayerSerial { get; set; }
         // ## BEGIN - END ## // ADVMACROS
@@ -642,13 +646,19 @@ namespace ClassicUO.Configuration
         public byte ContainerOpacity { get; set; } = 50;
         public bool WorldMapShowCorpse { get; set; } = true;
         public int AutoFollowDistance { get; set; } = 2;
-        public Point ResizeJournalSize { get; set; } = new Point(410, 350);
+        [JsonConverter(typeof(Point2Converter))] public Point ResizeJournalSize { get; set; } = new Point(410, 350);
+        
         public bool FollowingMode { get; set; } = false;
         public uint FollowingTarget { get; set; }
         public bool NamePlateHealthBar { get; set; } = true;
         public byte NamePlateOpacity { get; set; } = 75;
         public byte NamePlateHealthBarOpacity { get; set; } = 50;
         public bool NamePlateHideAtFullHealth { get; set; } = true;
+        public bool NamePlateHideAtFullHealthInWarmode { get; set; } = true;
+        public byte NamePlateBorderOpacity { get; set; } = 50;
+        public string NamePlateFont { get; set; } = "avadonian";
+        public int NamePlateFontSize { get; set; } = 20;
+
         public bool DisableSystemChat { get; set; } = false;
         #region GRID CONTAINER
         public bool UseGridLayoutContainerGumps { get; set; } = true;
@@ -798,11 +808,11 @@ namespace ClassicUO.Configuration
             {
                 SaveItemsGump(parent, xml, list);
 
-                Item first = (Item) parent.Items;
+                Item first = (Item)parent.Items;
 
                 while (first != null)
                 {
-                    Item next = (Item) first.Next;
+                    Item next = (Item)first.Next;
 
                     SaveItemsGumpRecursive(first, xml, list);
 
@@ -876,7 +886,7 @@ namespace ClassicUO.Configuration
 
                         try
                         {
-                            GumpType type = (GumpType) int.Parse(xml.GetAttribute(nameof(type)));
+                            GumpType type = (GumpType)int.Parse(xml.GetAttribute(nameof(type)));
                             int x = int.Parse(xml.GetAttribute(nameof(x)));
                             int y = int.Parse(xml.GetAttribute(nameof(y)));
                             uint serial = uint.Parse(xml.GetAttribute(nameof(serial)));
@@ -1049,7 +1059,7 @@ namespace ClassicUO.Configuration
                                     ushort ogContainer = ushort.Parse(xml.GetAttribute("ogContainer"));
                                     gump = new GridContainer(serial, ogContainer);
                                     break;
-                                // ## BEGIN - END ## // TAZUO
+                                    // ## BEGIN - END ## // TAZUO
                             }
 
                             if (gump == null)
@@ -1090,7 +1100,7 @@ namespace ClassicUO.Configuration
                         {
                             try
                             {
-                                GumpType type = (GumpType) int.Parse(xml.GetAttribute("type"));
+                                GumpType type = (GumpType)int.Parse(xml.GetAttribute("type"));
                                 int x = int.Parse(xml.GetAttribute("x"));
                                 int y = int.Parse(xml.GetAttribute("y"));
                                 uint serial = uint.Parse(xml.GetAttribute("serial"));
@@ -1144,7 +1154,7 @@ namespace ClassicUO.Configuration
                                     case GumpType.WorldMap:
                                         gump = new WorldMapGump();
                                         break;
-                                    // ## BEGIN - END ## // TAZUO
+                                        // ## BEGIN - END ## // TAZUO
                                 }
 
                                 if (gump != null)

@@ -8,6 +8,8 @@ using ClassicUO.Renderer;
 using ClassicUO.Dust765.Managers;
 using System;
 using ClassicUO.Game.Data;
+using ClassicUO.Game.GameObjects;
+using ClassicUO.Game.Managers;
 
 namespace ClassicUO.Dust765.External
 {
@@ -22,6 +24,7 @@ namespace ClassicUO.Dust765.External
         private Label _text;
         //private TextureControl _icon;
         private StaticPic _icon;
+        public SpellAction _spell;
 
         public OnCastingGump() : base(0, 0)
         {
@@ -31,7 +34,6 @@ namespace ClassicUO.Dust765.External
             CanCloseWithRightClick = false;
             GameActions.iscasting = false;
             IsVisible = false;
-
             BuildGump();
         }
 
@@ -62,10 +64,10 @@ namespace ClassicUO.Dust765.External
 
             try
             {
-                SpellAction spell = (SpellAction)_spell_id;
-                circle = (uint)SpellManager.GetCircle(spell);
+                _spell = (SpellAction)_spell_id;
+                circle = (uint)SpellManager.GetCircle(_spell);
                 uint protection_delay = 0;
-                bool ignore_proctetion_delay = (spell == SpellAction.Protection || spell == SpellAction.ArchProtection);
+                bool ignore_proctetion_delay = (_spell == SpellAction.Protection || _spell == SpellAction.ArchProtection);
                 if (World.Player.IsBuffIconExists(BuffIconType.Protection) && !ignore_proctetion_delay
                     || World.Player.IsBuffIconExists(BuffIconType.EssenceOfWind))
                 {
@@ -82,11 +84,11 @@ namespace ClassicUO.Dust765.External
             }
         }
 
+
         public void Stop()
         {
             GameActions.iscasting = false;
-            IsVisible = false;
-            
+            IsVisible = false;   
         }
         /*
         public void OnMessage(string text, uint hue, string name, bool isunicode = true)

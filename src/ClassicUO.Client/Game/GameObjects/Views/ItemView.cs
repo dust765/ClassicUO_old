@@ -96,6 +96,23 @@ namespace ClassicUO.Game.GameObjects
             }
             // ## BEGIN - END ## // ART / HUE CHANGES
             // ## BEGIN - END ## // MISC
+            if (ProfileManager.CurrentProfile.AutoAvoidMobiles) {
+                if  (StaticFilters.isHumanAndMonster(graphic))
+                {
+                    if (StaticFilters.IsOutStamina())
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = true;
+
+                    }
+                    else
+                    {
+                        TileDataLoader.Instance.StaticData[Graphic].IsImpassable = false;
+                    }
+                        
+                }
+            }
+            
+
             if (ProfileManager.CurrentProfile.BlockWoS)
             {
                 if (StaticFilters.IsWallOfStone(Graphic) || Graphic == ProfileManager.CurrentProfile.BlockWoSArt)
@@ -514,7 +531,7 @@ namespace ClassicUO.Game.GameObjects
                          StaticFilters.IsParalyzeField(Graphic) ||
                          StaticFilters.IsEnergyField(Graphic) ||
                          StaticFilters.IsPoisonField(Graphic) ||
-                         StaticFilters.IsWallOfStone(Graphic)))
+                         StaticFilters.IsWallOfStone(Graphic))) 
                     {
                         graphic = Constants.FIELD_REPLACE_GRAPHIC;
                     }

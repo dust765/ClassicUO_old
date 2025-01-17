@@ -690,7 +690,7 @@ namespace ClassicUO.Game.UI.Gumps
             newY = y;
         }
 
-        private void CanvasToWorld
+        public void CanvasToWorld
         (
             int a_x,
             int a_y,
@@ -755,7 +755,7 @@ namespace ClassicUO.Game.UI.Gumps
             return offset + 8;
         }
 
-        internal void HandlePositionTarget()
+        public void HandlePositionTarget()
         {
             var position = Mouse.Position;
             int x = position.X - X - ParentX;

@@ -45,6 +45,7 @@ using ClassicUO.Dust765.Dust765;
 // ## BEGIN - END ## // ADVMACROS
 using ClassicUO.Dust765.Macros;
 using ClassicUO.Dust765.Managers;
+
 // ## BEGIN - END ## // ADVMACROS
 using ClassicUO.Game.GameObjects;
 using ClassicUO.Game.Scenes;
@@ -55,6 +56,9 @@ using ClassicUO.Resources;
 using ClassicUO.Utility;
 using ClassicUO.Utility.Logging;
 using SDL2;
+using System.IO.Ports;
+using ClassicUO.Assets;
+using ClassicUO.Dust765.Autos;
 
 namespace ClassicUO.Game.Managers
 {
@@ -289,6 +293,40 @@ namespace ClassicUO.Game.Managers
             );
         }
 
+        public void AttemptTeleport()
+        {
+            var allowTarget = TargetManager.IsTargeting && TargetManager.TargetingState == CursorTarget.Position;
+            if (allowTarget)
+            {
+                var position = Mouse.Position;
+                int x = position.X;
+                int y = position.Y;
+                GameObject tile = World.Map.GetTile(x, y);
+                if (tile is Static || tile is Multi)
+                {
+                    ref var itemData = ref TileDataLoader.Instance.StaticData[tile.Graphic];
+                    if (itemData.IsImpassable)
+                    {
+                        // Se necess�rio, voc� pode adicionar um atraso ou l�gica para tentar novamente
+                        AttemptTeleport(); // Chama o m�todo novamente
+                        return;
+                    }
+                    else
+                    {
+                        AutoWorldMapMarker.TmapPinXY((ushort)x, (ushort)y);
+                        TargetManager.Target
+                        (
+                            0,
+                            (ushort)x,
+                            (ushort)y,
+                            World.Map.GetTileZ(x, y)
+                        );
+                        return; // Se o alvo for v�lido, termine a execu��o
+                    }
+                }
+            }
+        }
+
 
         public List<Macro> GetAllMacros()
         {
@@ -387,6 +425,7 @@ namespace ClassicUO.Game.Managers
             return obj;
         }
 
+
         public void SetMacroToExecute(MacroObject macro)
         {
             _lastMacro = macro;
@@ -454,7 +493,7 @@ namespace ClassicUO.Game.Managers
                 case MacroType.Yell:
                 case MacroType.RazorMacro:
 
-                    string text = ((MacroObjectString) macro).Text;
+                    string text = ((MacroObjectString)macro).Text;
 
                     if (!string.IsNullOrEmpty(text))
                     {
@@ -493,11 +532,11 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.Walk:
-                    byte dt = (byte) Direction.Up;
+                    byte dt = (byte)Direction.Up;
 
                     if (macro.SubCode != MacroSubType.NW)
                     {
-                        dt = (byte) (macro.SubCode - 2);
+                        dt = (byte)(macro.SubCode - 2);
 
                         if (dt > 7)
                         {
@@ -507,7 +546,7 @@ namespace ClassicUO.Game.Managers
 
                     if (!Pathfinder.AutoWalking)
                     {
-                        World.Player.Walk((Direction) dt, false);
+                        World.Player.Walk((Direction)dt, false);
                     }
 
                     break;
@@ -1132,7 +1171,7 @@ namespace ClassicUO.Game.Managers
                             break;
                         }
 
-                        Item item = World.Player.FindItemByLayer(Layer.OneHanded + (byte) handIndex);
+                        Item item = World.Player.FindItemByLayer(Layer.OneHanded + (byte)handIndex);
 
                         if (item != null)
                         {
@@ -1194,7 +1233,7 @@ namespace ClassicUO.Game.Managers
                     break;
 
                 case MacroType.Delay:
-                    MacroObjectString mosss = (MacroObjectString) macro;
+                    MacroObjectString mosss = (MacroObjectString)macro;
                     string str = mosss.Text;
 
                     if (!string.IsNullOrEmpty(str) && int.TryParse(str, out int rr))
@@ -1494,13 +1533,13 @@ namespace ClassicUO.Game.Managers
                             UIManager.Add(new BuffGump(100, 100));
                         }
 
-                    // ## BEGIN - END ## // TAZUO
+                        // ## BEGIN - END ## // TAZUO
                     }
                     // ## BEGIN - END ## // TAZUO
                     break;
 
                 case MacroType.InvokeVirtue:
-                    byte id = (byte) (macro.SubCode - MacroSubType.Honor + 1);
+                    byte id = (byte)(macro.SubCode - MacroSubType.Honor + 1);
                     NetClient.Socket.Send_InvokeVirtueRequest(id);
 
                     break;
@@ -2329,6 +2368,12 @@ namespace ClassicUO.Game.Managers
                     CommandManager.Execute("automed");
 
                     break;
+
+                case MacroType.AIBot:
+
+                    CommandManager.Execute("aibot");
+
+                    break;
                 // ## BEGIN - END ## // AUTOMATIONS
                 // ## BEGIN - END ## // LOBBY
                 case MacroType.LobbyConnect:
@@ -3008,6 +3053,7 @@ namespace ClassicUO.Game.Managers
         CureGH, // ## BEGIN - END ## // MACROS
         // ## BEGIN - END ## // AUTOMATIONS
         AutoMeditate,
+        AIBot,
         // ## BEGIN - END ## // AUTOMATIONS
         // ## BEGIN - END ## // ADVMACROS
         CustomInterrupt,

@@ -576,7 +576,9 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55 || GameActions.LastSpellIndexCursor == 22)
+
+                
+                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
@@ -809,7 +811,8 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55 || GameActions.LastSpellIndexCursor == 22)
+
+                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
@@ -1043,7 +1046,8 @@ namespace ClassicUO.Dust765.Dust765
                         }
                     }
                 }
-                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55 || GameActions.LastSpellIndexCursor == 22)
+                
+                if (GameActions.LastSpellIndexCursor == 48 || GameActions.LastSpellIndexCursor == 49 || GameActions.LastSpellIndexCursor == 55)
                 {
                     if (SelectedObject.Object != null && (SelectedObject.Object.RealScreenPosition.X + 22) == obj.RealScreenPosition.X && (SelectedObject.Object.RealScreenPosition.Y + 22) == obj.RealScreenPosition.Y)
                     {
