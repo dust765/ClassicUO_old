@@ -26,7 +26,7 @@ dev_dust765_x_tazuo Dust765 and TazUO merged
 
 Discord: dust765#2787
 
-Dust765: 7 Link, 6 Gaechti, 5 Syrupz
+Dust765: 7 Link, 6 Gaechti, 5 Syrupz 4 Astraroth
 
 Join me on TazUO discord:
 <a href="https://discord.gg/SqwtB5g95H">
