@@ -10,8 +10,6 @@ Please use the following updated resources:
 
 <div align="center">
   <img src="https://github.com/dust765/ClassicUO/raw/main/src/ClassicUO.Assets/gumpartassets/logodust.png" alt="Legion Logo" width="250"/>
-  [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
-
 </div>
 
 ## 🎭 **The Dust765 Project**
