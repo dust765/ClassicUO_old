@@ -9,12 +9,7 @@ Please use the following updated resources:
 - 📦 https://github.com/dust765/ClassicUO
 
 <div align="center">
-  <img src="https://github.com/dust765/ClassicUO/raw/main/src/ClassicUO.Assets/gumpartassets/logodust.png" alt="Legion Logo" width="200"/>
-
-  [![.NET Framework](https://img.shields.io/badge/.NET-Framework%204.8-blue.svg)](https://dotnet.microsoft.com/download/dotnet-framework/net48)
-  [![FNA](https://img.shields.io/badge/FNA-21.10-green.svg)](https://github.com/FNA-XNA/FNA)
-  [![Cross-Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-orange.svg)](https://github.com/andreakarasho/ClassicUO)
-  [![Discord](https://img.shields.io/badge/Discord-Join%20us-7289da.svg)](https://discord.gg/9Vh7aqqX)
+  <img src="https://github.com/dust765/ClassicUO/raw/main/src/ClassicUO.Assets/gumpartassets/logodust.png" alt="Legion Logo" width="250"/>
   [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
 </div>
